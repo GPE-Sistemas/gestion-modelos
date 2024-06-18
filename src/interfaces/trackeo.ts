@@ -9,7 +9,7 @@ export interface ITrackeo {
   idCliente?: string;
   idFlota?: string;
   idRecorrido?: string;
-  idColectivo?: string;
+  idVehiculo?: string;
 
   fecha?: string;
   idParada?: string;

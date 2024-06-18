@@ -33,10 +33,10 @@ export interface ITracker {
   vehiculo?: IVehiculo;
 }
 
-type OmitirCreate = "_id" | "cliente" | "colectivo";
+type OmitirCreate = "_id" | "cliente" | "vehiculo";
 
 export interface ICreateTracker extends Omit<Partial<ITracker>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "colectivo";
+type OmitirUpdate = "_id" | "cliente" | "vehiculo";
 
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}

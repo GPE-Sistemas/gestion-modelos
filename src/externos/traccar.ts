@@ -38,7 +38,7 @@ export interface Stop {
 }
 
 export interface IQueryTraccar {
-  idColectivo: string;
+  idVehiculo: string;
   from: string;
   to: string;
 }
