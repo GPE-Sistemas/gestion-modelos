@@ -26,7 +26,7 @@ export interface ICliente {
   activo?: boolean;
   nombre?: string;
   fechaCreacion?: string;
-  nivel: number;
+  nivel?: number;
   config?: IConfigCliente;
   permisos?: IPermisoCliente[];
 }
