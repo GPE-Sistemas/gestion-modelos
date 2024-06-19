@@ -25,6 +25,9 @@ export interface ITracker {
   nombre?: string;
   identificacion?: string;
   asignadoA?: string;
+  /**
+   * Id del tracker fisico
+   */
   uniqueId?: string;
   traccar?: ITraccarDevice;
 
