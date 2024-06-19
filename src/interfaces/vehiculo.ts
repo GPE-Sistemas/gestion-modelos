@@ -31,7 +31,10 @@ export interface IVehiculo {
   idChofer?: string;
   idFlota?: string;
   idRecorrido?: string;
-  idTracker?: string;
+  /**
+   * El id del tracker asignado en la plataforma traccar para obtener el vehiculo rapido con los reportes de traccar
+   */
+  idUnicoTraccar?: string;
   // Populate
   cliente?: ICliente;
   chofer?: IUsuario;
