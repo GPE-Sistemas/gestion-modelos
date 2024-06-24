@@ -2,6 +2,7 @@ export interface IClienteHijo {
   _id?: string;
   idCliente?: string;
   idHijo?: string;
+  nivel?: number;
 }
 
 type OmitirCreate = "_id";
