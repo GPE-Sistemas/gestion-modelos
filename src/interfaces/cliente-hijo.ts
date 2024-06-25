@@ -1,16 +1,18 @@
+import { ICliente } from "./cliente";
+
 export interface IClienteHijo {
   _id?: string;
   idCliente?: string;
   idHijo?: string;
-  nivel?: number;
+  //
+  cliente?: ICliente;
+  hijo?: ICliente;
 }
 
-type OmitirCreate = "_id";
-
+type OmitirCreate = "_id" | "cliente" | "hijo";
 export interface ICreateClienteHijo
   extends Omit<Partial<IClienteHijo>, OmitirCreate> {}
 
-type OmitirUpdate = "_id";
-
+type OmitirUpdate = "_id" | "cliente" | "hijo";
 export interface IUpdateClienteHijo
   extends Omit<Partial<IClienteHijo>, OmitirUpdate> {}

@@ -13,13 +13,21 @@ export interface ITemaCliente {
 export interface IConfigCliente {
   imagenes?: IImagenesCliente;
   tema?: ITemaCliente;
+  moduloFlota?: IModuloFlota;
+  moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
 }
 
-export type IPermisoCliente =
-  | "Administrador"
-  | "Crear clientes"
-  | "Crear trackers"
-  | "Cliente final";
+export type ITipoCliente = "Mayoristas" | "Vendedor" | "Final";
+
+export interface IModuloFlota {
+  crearDispositivos?: boolean;
+  compartirFlota?: boolean;
+}
+
+export interface IModuloAlarmasDomiciliarias {
+  crearDispositivos?: boolean;
+  derivarEventos?: boolean;
+}
 
 export interface ICliente {
   _id?: string;
@@ -28,13 +36,13 @@ export interface ICliente {
   fechaCreacion?: string;
   nivel?: number;
   config?: IConfigCliente;
-  permisos?: IPermisoCliente[];
+  tipoCliente?: ITipoCliente;
 }
 
 type OmitirCreate = "_id";
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
-type OmitirUpdate = "_id";
+type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion";
 
 export interface IUpdateCliente extends Omit<Partial<ICliente>, OmitirUpdate> {}
