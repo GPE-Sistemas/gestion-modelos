@@ -4,6 +4,7 @@ export interface IClienteHijo {
   _id?: string;
   idCliente?: string;
   idHijo?: string;
+  nivelCliente?: number;
   //
   cliente?: ICliente;
   hijo?: ICliente;
