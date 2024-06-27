@@ -5,6 +5,14 @@ export interface IQueryParam {
   filter?: string;
   populate?: string;
   select?: string;
+  /**
+   * Si la query debe incluir las entidades de los clientes hijos
+   */
+  includeChildren?: boolean;
+  /**
+   * Nivel de profundidad de los clientes hijos, si no se especifica se toman todos
+   */
+  childrenLevel?: number;
   [key: string]: any;
 }
 export interface IPopulate {
