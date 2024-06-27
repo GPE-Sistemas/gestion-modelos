@@ -17,7 +17,7 @@ export interface IConfigCliente {
   moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
 }
 
-export type ITipoCliente = "Mayoristas" | "Vendedor" | "Final";
+export type ITipoCliente = 'Mayorista' | 'Vendedor' | 'Final';
 
 export interface IModuloFlota {
   crearDispositivos?: boolean;
@@ -39,10 +39,10 @@ export interface ICliente {
   tipoCliente?: ITipoCliente;
 }
 
-type OmitirCreate = "_id";
+type OmitirCreate = '_id';
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion";
+type OmitirUpdate = '_id' | 'nivel' | 'tipoCliente' | 'fechaCreacion';
 
 export interface IUpdateCliente extends Omit<Partial<ICliente>, OmitirUpdate> {}
