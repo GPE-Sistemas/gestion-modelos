@@ -3,9 +3,9 @@ import {
   ICoordenadas,
   IGeoJSONLineString,
   IGeoJSONPoint,
-} from "../auxiliares";
-import { ICliente } from "./cliente";
-import { IFlota } from "./flota";
+} from '../auxiliares';
+import { ICliente } from './cliente';
+import { IFlota } from './flota';
 
 export interface IParada {
   _id?: string;
@@ -50,12 +50,16 @@ export interface IRecorrido {
   recorridoOl?: ICoordenadaOL[];
 }
 
-type OmitirCreate = "_id" | "cliente" | "flota" | "recorrido" | "recorridoOl";
+type OmitirCreate = '_id' | 'cliente' | 'flota' | 'recorrido' | 'recorridoOl';
 
 export interface ICreateRecorrido
-  extends Omit<Partial<IRecorrido>, OmitirCreate> {}
+  extends Omit<Partial<IRecorrido>, OmitirCreate> {
+  recorridoOl?: ICoordenadaOL[];
+}
 
-type OmitirUpdate = "_id" | "cliente" | "flota" | "recorrido" | "recorridoOl";
+type OmitirUpdate = '_id' | 'cliente' | 'flota' | 'recorrido' | 'recorridoOl';
 
 export interface IUpdateRecorrido
-  extends Omit<Partial<IRecorrido>, OmitirUpdate> {}
+  extends Omit<Partial<IRecorrido>, OmitirUpdate> {
+  recorridoOl?: ICoordenadaOL[];
+}
