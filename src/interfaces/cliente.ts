@@ -17,7 +17,7 @@ export interface IConfigCliente {
   moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
 }
 
-export type ITipoCliente = 'Mayorista' | 'Vendedor' | 'Final';
+export type ITipoCliente = 'Mayorista' | 'Minorista' | 'Final';
 
 export interface IModuloFlota {
   crearDispositivos?: boolean;
