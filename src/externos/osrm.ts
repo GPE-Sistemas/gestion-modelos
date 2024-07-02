@@ -21,6 +21,10 @@ export interface Route {
   duration: number;
   weight_name: string;
   weight: number;
+  geometry: {
+    type: string;
+    coordinates: number[][];
+  };
 }
 
 export interface Leg {
