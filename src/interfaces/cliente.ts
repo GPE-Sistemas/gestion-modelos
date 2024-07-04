@@ -20,13 +20,17 @@ export interface IConfigCliente {
 export type ITipoCliente = 'Mayorista' | 'Minorista' | 'Final';
 
 export interface IModuloFlota {
+  activo?: boolean;
   crearDispositivos?: boolean;
+  derivarEventos?: boolean;
   compartirFlota?: boolean;
 }
 
 export interface IModuloAlarmasDomiciliarias {
+  activo?: boolean;
   crearDispositivos?: boolean;
   derivarEventos?: boolean;
+  compartirAlarmas?: boolean;
 }
 
 export interface ICliente {
