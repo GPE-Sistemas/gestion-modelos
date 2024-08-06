@@ -1,11 +1,11 @@
 import { IUsuario } from "./usuario";
 import { IVehiculo } from "./vehiculo";
 
-export type tipoDocumentacion = "Licencia" | "Seguro";
+export type TipoDocumentacion = "Licencia" | "Seguro";
 
 export interface IDocumentacion {
   _id?: string;
-  tipo?: tipoDocumentacion;
+  tipo?: TipoDocumentacion;
   vencimiento?: string;
   fechaCreacion?: string;
   emision?: string;
