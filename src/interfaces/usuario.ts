@@ -1,5 +1,4 @@
 import { ICliente } from "./cliente";
-import { IDocumentacion } from "./documentacion";
 
 export type Rol = "Administrador" | "Operador" | "Chofer";
 
