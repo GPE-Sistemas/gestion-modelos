@@ -7,6 +7,7 @@ export interface IDocumentacion {
   _id?: string;
   tipo?: tipoDocumentacion;
   vencimiento?: string;
+  fechaCreacion?: string;
   emision?: string;
   descripcion?: string;
   imagenes?: string[];
