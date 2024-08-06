@@ -6,8 +6,8 @@ export type tipoDocumentacion = "Licencia" | "Seguro";
 export interface IDocumentacion {
   _id?: string;
   tipo?: tipoDocumentacion;
-  vencimiento?: Date;
-  emision?: Date;
+  vencimiento?: string;
+  emision?: string;
   descripcion?: string;
   imagenes?: string[];
   idChofer?: string;

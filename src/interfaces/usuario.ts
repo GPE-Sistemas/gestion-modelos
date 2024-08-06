@@ -23,16 +23,14 @@ export interface IUsuario {
   usuario?: string;
   hash?: string;
   datosPersonales?: IDatosPersonales;
-  idDocumentacion?: string;
   // Populate
   cliente?: ICliente;
-  documentacion?: IDocumentacion;
 }
 
-type OmitirCreate = "_id" | "cliente" | "documentacion";
+type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "documentacion";
+type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}
