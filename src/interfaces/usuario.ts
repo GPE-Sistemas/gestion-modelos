@@ -1,4 +1,5 @@
 import { ICliente } from "./cliente";
+import { IDocumentacion } from "./documentacion";
 
 export type Rol = "Administrador" | "Operador" | "Chofer";
 
@@ -22,14 +23,16 @@ export interface IUsuario {
   usuario?: string;
   hash?: string;
   datosPersonales?: IDatosPersonales;
+  idDocumentacion?: string;
   // Populate
   cliente?: ICliente;
+  documentacion?: IDocumentacion;
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = "_id" | "cliente" | "documentacion";
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = "_id" | "cliente" | "documentacion";
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}

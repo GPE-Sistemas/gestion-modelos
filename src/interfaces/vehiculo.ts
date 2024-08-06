@@ -1,4 +1,5 @@
 import { ICliente } from "./cliente";
+import { IDocumentacion } from "./documentacion";
 import { IFlota } from "./flota";
 import { IRecorrido } from "./recorrido";
 import { ITracker } from "./tracker";
@@ -31,6 +32,7 @@ export interface IVehiculo {
   idChofer?: string;
   idFlota?: string;
   idRecorrido?: string;
+  idDocumentacion?: string;
   /**
    * El id del tracker asignado en la plataforma traccar para obtener el vehiculo rapido con los reportes de traccar
    */
@@ -41,6 +43,7 @@ export interface IVehiculo {
   flota?: IFlota;
   recorrido?: IRecorrido;
   tracker?: ITracker;
+  documentacion?: IDocumentacion;
 }
 
 type OmitirCreate =
@@ -49,7 +52,8 @@ type OmitirCreate =
   | "chofer"
   | "flota"
   | "recorrido"
-  | "tracker";
+  | "tracker"
+  | "documentacion";
 
 export interface ICreateVehiculo
   extends Omit<Partial<IVehiculo>, OmitirCreate> {}
@@ -60,7 +64,8 @@ type OmitirUpdate =
   | "chofer"
   | "flota"
   | "recorrido"
-  | "tracker";
+  | "tracker"
+  | "documentacion";
 
 export interface IUpdateVehiculo
   extends Omit<Partial<IVehiculo>, OmitirUpdate> {}
