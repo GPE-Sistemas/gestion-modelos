@@ -1,6 +1,6 @@
-import { ICliente } from "./cliente";
+import { ICliente } from './cliente';
 
-export type Rol = "Administrador" | "Operador" | "Chofer";
+export type Rol = 'Administrador' | 'Operador' | 'Chofer';
 
 export interface IDatosPersonales {
   nombre?: string;
@@ -11,6 +11,7 @@ export interface IDatosPersonales {
   pais?: string;
   telefono?: string;
   fechaNacimiento?: string;
+  foto?: string;
 }
 
 export interface IUsuario {
@@ -26,10 +27,10 @@ export interface IUsuario {
   cliente?: ICliente;
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}
