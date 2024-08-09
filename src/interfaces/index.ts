@@ -5,6 +5,7 @@ export * from "./cliente";
 export * from "./documentacion";
 export * from "./evento-traccar";
 export * from "./flota";
+export * from "./logTrackeo";
 export * from "./recorrido";
 export * from "./reporte";
 export * from "./token";
