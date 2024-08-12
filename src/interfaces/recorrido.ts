@@ -36,6 +36,7 @@ export interface IRecorrido {
   _id?: string;
   idCliente?: string;
   idFlota?: string;
+  nombreFlota?: string;
   nombre?: string;
   geojson?: IGeoJSONLineString;
   paradas?: IParada[];
