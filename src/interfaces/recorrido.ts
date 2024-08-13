@@ -44,6 +44,7 @@ export interface IRecorrido {
   destino?: string;
   por?: string;
   color?: string;
+  duracion?: number;
   // Populate
   cliente?: ICliente;
   flota?: IFlota;
