@@ -20,6 +20,8 @@ export interface IParada {
   direccion?: string;
   destino?: string;
   por?: string;
+  subida?: boolean;
+  bajada?: boolean;
   /**
    * Tiempo que se suma al recorrido, es lo que se estima que tarda el colectivo en esa parada
    */
