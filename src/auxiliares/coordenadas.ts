@@ -11,4 +11,4 @@ export interface ICoordenadas {
  * An array of numbers representing an xy, xyz or xyzm coordinate.
  * @example [-58.3816, -34.6037]
  */
-export type ICoordenadaOL = [number, number];
+export type ICoordenadaOL = number[];
