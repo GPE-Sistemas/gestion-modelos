@@ -8,6 +8,7 @@ export * from "./flota";
 export * from "./logTrackeo";
 export * from "./recorrido";
 export * from "./reporte";
+export * from "./terminal";
 export * from "./token";
 export * from "./trackeo";
 export * from "./tracker";

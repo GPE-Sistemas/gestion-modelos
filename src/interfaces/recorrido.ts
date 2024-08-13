@@ -3,9 +3,10 @@ import {
   ICoordenadas,
   IGeoJSONLineString,
   IGeoJSONPoint,
-} from '../auxiliares';
-import { ICliente } from './cliente';
-import { IFlota } from './flota';
+} from "../auxiliares";
+import { ICliente } from "./cliente";
+import { IFlota } from "./flota";
+import { ITerminal } from "./terminal";
 
 export interface IParada {
   _id?: string;
@@ -45,21 +46,35 @@ export interface IRecorrido {
   por?: string;
   color?: string;
   duracion?: number;
+  idsTerminales?: string[];
   // Populate
   cliente?: ICliente;
   flota?: IFlota;
   recorrido?: ICoordenadas[];
   recorridoOl?: ICoordenadaOL[];
+  terminales?: ITerminal[];
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'flota' | 'recorrido' | 'recorridoOl';
+type OmitirCreate =
+  | "_id"
+  | "cliente"
+  | "flota"
+  | "recorrido"
+  | "recorridoOl"
+  | "terminales";
 
 export interface ICreateRecorrido
   extends Omit<Partial<IRecorrido>, OmitirCreate> {
   recorridoOl?: ICoordenadaOL[];
 }
 
-type OmitirUpdate = '_id' | 'cliente' | 'flota' | 'recorrido' | 'recorridoOl';
+type OmitirUpdate =
+  | "_id"
+  | "cliente"
+  | "flota"
+  | "recorrido"
+  | "recorridoOl"
+  | "terminales";
 
 export interface IUpdateRecorrido
   extends Omit<Partial<IRecorrido>, OmitirUpdate> {
