@@ -31,6 +31,7 @@ export interface IVehiculo {
   idChofer?: string;
   idFlota?: string;
   idRecorrido?: string;
+  idsRecorridos?: string[];
   /**
    * El id del tracker asignado en la plataforma traccar para obtener el vehiculo rapido con los reportes de traccar
    */
@@ -40,6 +41,7 @@ export interface IVehiculo {
   chofer?: IUsuario;
   flota?: IFlota;
   recorrido?: IRecorrido;
+  recorridos?: IRecorrido[];
   tracker?: ITracker;
 }
 
@@ -49,6 +51,7 @@ type OmitirCreate =
   | "chofer"
   | "flota"
   | "recorrido"
+  | "recorridos"
   | "tracker";
 
 export interface ICreateVehiculo
@@ -60,6 +63,7 @@ type OmitirUpdate =
   | "chofer"
   | "flota"
   | "recorrido"
+  | "recorridos"
   | "tracker";
 
 export interface IUpdateVehiculo
