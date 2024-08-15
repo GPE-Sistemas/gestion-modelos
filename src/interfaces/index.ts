@@ -17,3 +17,4 @@ export * from "./vehiculo-flota";
 export * from "./vehiculo-recorrido";
 export * from "./vehiculo-tracker";
 export * from "./vehiculo";
+export * from "./servicio";
