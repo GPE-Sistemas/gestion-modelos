@@ -5,7 +5,7 @@ export type TipoProveedor = "Mecanico" | "Combustible";
 
 export interface IProveedor {
   _id?: string;
-  tipo?: TipoProveedor;
+  tipos?: TipoProveedor[];
   idCliente?: string;
   nombre?: string;
   ubicacion?: ICoordenadas;
