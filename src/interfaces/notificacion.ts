@@ -4,6 +4,7 @@ import { IRecordatorio } from "./recordatorio";
 export interface INotificacion {
   _id?: string;
   idCliente?: string;
+  fechaCreacion?: string;
   archivado: boolean;
   idRecordatorio?: string;
 
