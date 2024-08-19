@@ -8,7 +8,6 @@ export interface IRecordatorio {
   _id?: string;
   idCliente?: string;
   tipo?: TipoRecordatorio;
-  fecha?: string;
   kmLimite?: number;
   idVehiculo?: string;
   idDocumentacion?: string;
