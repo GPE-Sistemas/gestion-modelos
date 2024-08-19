@@ -12,7 +12,7 @@ export interface IRecordatorio {
   idVehiculo?: string;
   idDocumentacion?: string;
 
-  //Virtual
+  // Populate
   cliente?: ICliente;
   vehiculo?: IVehiculo;
   documentacion?: IDocumentacion;
