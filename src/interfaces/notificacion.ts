@@ -7,6 +7,8 @@ export interface INotificacion {
   idCliente?: string;
   idUsuario?: string;
   fechaCreacion?: string;
+  fechaLeido?: string;
+  leido?: boolean;
   archivado?: boolean;
   idRecordatorio?: string;
 
