@@ -3,7 +3,7 @@ import { IVehiculo } from "./vehiculo";
 import { IDocumentacion } from "./documentacion";
 import { IUsuario } from "./usuario";
 
-export type TipoRecordatorio = ["km", "fecha"];
+export type TipoRecordatorio = "km" | "fecha";
 
 export interface IRecordatorio {
   _id?: string;
