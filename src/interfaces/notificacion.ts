@@ -10,20 +10,20 @@ export interface INotificacion {
   fechaLeido?: string;
   leido?: boolean;
   archivado?: boolean;
-  idRecordatorio?: string;
+  titulo?: string;
+  mensaje?: string;
 
   // Populate
   cliente?: ICliente;
   usuario?: IUsuario;
-  recordatorio?: IRecordatorio;
 }
 
-type OmitirCreate = "_id" | "cliente" | "recordatorio" | "usuario";
+type OmitirCreate = "_id" | "cliente" | "usuario";
 
 export interface ICreateNotificacion
   extends Omit<Partial<INotificacion>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "recordatorio" | "usuario";
+type OmitirUpdate = "_id" | "cliente" | "usuario";
 
 export interface IUpdateNotificacion
   extends Omit<Partial<INotificacion>, OmitirUpdate> {}
