@@ -15,7 +15,7 @@ export interface IRecordatorio {
   kmLimite?: number;
   idVehiculo?: string;
   idDocumentacion?: string;
-  detallesDelManteniemiento?: string;
+  detallesDelMantenimiento?: string;
 
   // Populate
   cliente?: ICliente;
