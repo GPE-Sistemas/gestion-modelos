@@ -9,7 +9,8 @@ export interface IRecordatorio {
   _id?: string;
   idCliente?: string;
   idUsuario?: string;
-  tipo?: TipoRecordatorio;
+  tipo?: TipoRecordatorio[];
+  notificado?: boolean;
   fechaLimite?: string;
   fechaCreacion?: string;
   kmLimite?: number;
