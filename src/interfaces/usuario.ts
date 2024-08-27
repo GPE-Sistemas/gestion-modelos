@@ -16,6 +16,7 @@ export interface IDatosPersonales {
 
 export interface IUsuario {
   _id?: string;
+  identificacionInterna?: string;
   idCliente?: string;
   activo?: boolean;
   fechaCreacion?: string;
