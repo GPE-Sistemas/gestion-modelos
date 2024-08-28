@@ -8,6 +8,7 @@ export interface IDespacho {
   idUsuario?: string;
   //
   fechaCreacion?: string;
+  dia?: string;
   fecha?: string;
   idCronograma?: string;
   idVehiculo?: string;
@@ -19,12 +20,12 @@ export interface IDespacho {
   usuario?: IUsuario;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'usuario';
+type OmitirCreate = '_id' | 'cliente' | 'usuario' | 'fechaCreacion';
 
 export interface ICreateDespacho
   extends Omit<Partial<IDespacho>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'usuario';
+type OmitirUpdate = '_id' | 'cliente' | 'usuario' | 'fechaCreacion';
 
 export interface IUpdateDespacho
   extends Omit<Partial<IDespacho>, OmitirUpdate> {}
