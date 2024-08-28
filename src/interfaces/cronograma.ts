@@ -1,4 +1,5 @@
 import { ICliente } from './cliente';
+import { ITerminal } from './terminal';
 
 export interface ICronograma {
   _id?: string;
@@ -15,7 +16,7 @@ export interface ICronograma {
   configuracion?: ConfigCronograma; // Colores, el nombre de de lo que se está mostrando, etc
   // Populate
   cliente?: ICliente;
-  terminal?: ICliente;
+  terminal?: ITerminal;
 }
 
 type OmitirCreate = '_id' | 'cliente' | 'terminal';
