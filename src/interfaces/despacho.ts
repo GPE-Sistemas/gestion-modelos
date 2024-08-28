@@ -1,5 +1,7 @@
 import { ICliente } from './cliente';
+import { IRecorrido } from './recorrido';
 import { IUsuario } from './usuario';
+import { IVehiculo } from './vehiculo';
 
 export interface IDespacho {
   _id?: string;
@@ -8,8 +10,8 @@ export interface IDespacho {
   idUsuario?: string;
   //
   fechaCreacion?: string;
-  dia?: string;
   fecha?: string;
+  hora?: string;
   idCronograma?: string;
   idVehiculo?: string;
   idChofer?: string;
@@ -18,6 +20,9 @@ export interface IDespacho {
   // Populate
   cliente?: ICliente;
   usuario?: IUsuario;
+  vehiculo?: IVehiculo;
+  chofer?: IUsuario;
+  recorridos?: IRecorrido[];
 }
 
 type OmitirCreate = '_id' | 'cliente' | 'usuario' | 'fechaCreacion';
