@@ -11,7 +11,8 @@ export interface IDespacho {
   //
   fechaCreacion?: string;
   fecha?: string;
-  hora?: string;
+  hora?: string; // Sale
+  salio?: string; // Salió
   idCronograma?: string;
   idVehiculo?: string;
   idChofer?: string;
