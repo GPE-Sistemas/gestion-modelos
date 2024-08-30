@@ -1,4 +1,5 @@
 import { ICliente } from './cliente';
+import { ICronograma } from './cronograma';
 import { IRecorrido } from './recorrido';
 import { IUsuario } from './usuario';
 import { IVehiculo } from './vehiculo';
@@ -25,6 +26,7 @@ export interface IDespacho {
   vehiculo?: IVehiculo;
   chofer?: IUsuario;
   recorridos?: IRecorrido[];
+  cronograma?: ICronograma;
 }
 
 type OmitirCreate = '_id' | 'cliente' | 'usuario' | 'fechaCreacion';
