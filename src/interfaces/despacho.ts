@@ -18,6 +18,7 @@ export interface IDespacho {
   idVehiculo?: string;
   idChofer?: string;
   idsRecorridos?: string[];
+  idRecorridoActual?: string;
   completado?: boolean; /// Que los datos son iguales al cronograma
   cancelado?: boolean; /// Que el despacho fue cancelado
   // Populate
