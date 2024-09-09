@@ -1,6 +1,7 @@
 import { ICliente } from "./cliente";
 import { IVehiculo } from "./vehiculo";
 
+export type TipoTracker = "Qualcomm" | "Traccar";
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
@@ -18,6 +19,11 @@ export interface ITraccarDevice {
   attributes?: object;
 }
 
+export interface IQualcommDevice {
+  // Datos de Qualcomm
+  serialNumber?: string;
+}
+
 export interface ITracker {
   _id?: string;
   //
@@ -25,11 +31,13 @@ export interface ITracker {
   nombre?: string;
   identificacion?: string;
   asignadoA?: string;
+  tipo?: TipoTracker;
   /**
    * Id del tracker fisico
    */
   uniqueId?: string;
   traccar?: ITraccarDevice;
+  qualcomm?: IQualcommDevice;
 
   // Populate
   cliente?: ICliente;
