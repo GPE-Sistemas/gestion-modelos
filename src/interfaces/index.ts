@@ -23,3 +23,4 @@ export * from './recordatorio';
 export * from './notificacion';
 export * from './cronograma';
 export * from './despacho';
+export * from './activo';
