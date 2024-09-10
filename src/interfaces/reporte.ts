@@ -15,14 +15,23 @@ export interface IReporte {
   idVehiculo?: string;
   idRecorrido?: string;
   idChofer?: string;
-  // Datos de traccar
-  traccarUniqueId?: string;
+  fechaCreacion?: string;
+  // Datos compartidos
+  geojson?: IGeoJSONPoint;
   fechaDevice?: string;
   fechaServer?: string;
-  fechaCreacion?: string;
-  geojson?: IGeoJSONPoint;
+  // Datos de traccar
+  traccarUniqueId?: string;
   velocidad?: number;
   reporteTraccar?: Record<string, any>;
+  // Datos de Qualcomm
+  serialNumber?: string;
+  tipoMensaje?: string;
+  locationTechType?: string;
+  horizontaluncertainty?: number;
+  deviceReportId?: number;
+  fechaLectura?: string;
+  reporteQualcomm?: Record<string, any>;
   // Populate
   cliente?: ICliente;
   flota?: IFlota;
