@@ -1,4 +1,5 @@
 import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from "../auxiliares";
+import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
 import { IFlota } from "./flota";
 import { IRecorrido } from "./recorrido";
@@ -13,6 +14,7 @@ export interface IReporte {
   idFlota?: string;
   idTracker?: string;
   idVehiculo?: string;
+  idActivo?: string;
   idRecorrido?: string;
   idChofer?: string;
   fechaCreacion?: string;
@@ -37,6 +39,7 @@ export interface IReporte {
   flota?: IFlota;
   tracker?: ITracker;
   vehiculo?: IVehiculo;
+  activo?: IActivo;
   recorrido?: IRecorrido;
   chofer?: IUsuario;
   ubicacion?: ICoordenadas;
@@ -49,6 +52,7 @@ type OmitirCreate =
   | "cliente"
   | "tracker"
   | "vehiculo"
+  | "activo"
   | "recorrido"
   | "flota"
   | "chofer"
@@ -63,6 +67,7 @@ type OmitirUpdate =
   | "cliente"
   | "tracker"
   | "vehiculo"
+  | "activo"
   | "recorrido"
   | "flota"
   | "chofer"
