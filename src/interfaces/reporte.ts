@@ -30,7 +30,7 @@ export interface IReporte {
   serialNumber?: string;
   tipoMensaje?: string;
   locationTechType?: string;
-  horizontaluncertainty?: number;
+  horizontalUncertainity?: number;
   deviceReportId?: number;
   fechaLectura?: string;
   reporteQualcomm?: Record<string, any>;
