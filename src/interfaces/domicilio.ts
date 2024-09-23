@@ -1,9 +1,10 @@
+import { ICoordenadas } from "../auxiliares";
 import { ICliente } from "./cliente";
 export interface IDomicilio {
   _id?: string;
   //
   direccion?: string;
-  ubicacion?: string;
+  ubicacion?: ICoordenadas;
   idCliente?: string;
   // Populate
   cliente?: ICliente;
