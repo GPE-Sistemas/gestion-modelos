@@ -5,8 +5,5 @@
   "description": "Modelos para el sitema de transporte",
   "author": "GPE Sistemas",
   "license": "Private",
-  "repository": "https://github.com/GPE-Sistemas/transporte-modelos",
-  "dependencies": {
-    "transporte-modelos": "file:"
-  }
+  "repository": "https://github.com/GPE-Sistemas/transporte-modelos"
 }
