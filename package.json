@@ -1,9 +1,9 @@
 {
-  "name": "transporte-modelos",
+  "name": "gestion-modelos",
   "packageManager": "yarn@4.1.0",
   "version": "1.0.0",
-  "description": "Modelos para el sitema de transporte",
+  "description": "Modelos para el sitema de gestion",
   "author": "GPE Sistemas",
   "license": "Private",
-  "repository": "https://github.com/GPE-Sistemas/transporte-modelos"
+  "repository": "https://github.com/GPE-Sistemas/gestion-modelos"
 }
