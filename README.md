@@ -1,7 +1,7 @@
 ## _1-_ En package.json agregar la dependencia
 
 ```
-"modelos": "git://github.com/GPE-Sistemas/transporte-modelos.git"
+"modelos": "git://github.com/GPE-Sistemas/gestion-modelos.git"
 ```
 
 ## _2-_ En package.json agregar el script para actualizar
