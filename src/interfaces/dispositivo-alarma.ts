@@ -7,6 +7,7 @@ export interface IDispositivoAlarma {
   idModelo?: string;
   idDomicilio?: string;
   idCliente?: string;
+  nombre?: string;
   // Populate
   domicilio?: IDomicilio;
   modelo?: IModeloAlarma;
