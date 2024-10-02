@@ -8,6 +8,7 @@ export interface IConfigEvento {
   nombre?: string;
   notificar?: boolean;
   codigoEvento?: string;
+  nombreEvento?: string;
   //
   idTipoEvento?: string;
   idTracker?: string;
