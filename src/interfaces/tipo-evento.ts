@@ -2,6 +2,7 @@ export interface ITipoEvento {
   _id?: string;
   //
   nombre?: string;
+  color?: string;
   notificar?: boolean;
 }
 
