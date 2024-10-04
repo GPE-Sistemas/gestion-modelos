@@ -26,5 +26,5 @@ export interface IGeoJSONPolygon {
 
 export interface IGeoJSONMultiPolygon {
   type: "MultiPolygon";
-  coordinates: [[[number, number][]][]];
+  coordinates: number[][][][];
 }
