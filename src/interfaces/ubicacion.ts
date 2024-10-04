@@ -1,9 +1,4 @@
-import {
-  ICoordenadaOL,
-  ICoordenadas,
-  IGeoJSONPoint,
-  IGeoJSONPolygon,
-} from "../auxiliares";
+import { IGeoJSONCircle, IGeoJSONPolygon } from "../auxiliares";
 import { ICliente } from "./cliente";
 
 export type ITipoUbicacion = "Punto" | "Poligono";
@@ -16,20 +11,17 @@ export interface IUbicacion {
   fechaCreacion?: string;
   tipo?: ITipoUbicacion;
   direccion?: string;
-  punto?: IGeoJSONPoint;
-  radio?: number;
-  poligono?: IGeoJSONPolygon;
+  circleGeoJSON?: IGeoJSONCircle;
+  polygonGeoJSON?: IGeoJSONPolygon;
 
   // Virtuals
   cliente?: ICliente;
-  ubicacion?: ICoordenadas;
-  ubicacionOl?: ICoordenadaOL;
 }
 
-type OmitirCreate = "_id" | "cliente" | "ubicacion" | "ubicacionOl";
+type OmitirCreate = "_id" | "cliente";
 export interface ICreateUbicacion
   extends Omit<Partial<IUbicacion>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "ubicacion" | "ubicacionOl";
+type OmitirUpdate = "_id" | "cliente";
 export interface IUpdateUbicacion
   extends Omit<Partial<IUbicacion>, OmitirUpdate> {}
