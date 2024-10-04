@@ -2,7 +2,13 @@ import { ICliente } from "./cliente";
 import { ITracker } from "./tracker";
 import { IConfigEvento } from "./config-evento";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
-export type estadoEvento = "nuevo" | "finalizado" | "espera" | "atendido";
+export type estadoEvento =
+  | "Sin Tratamiento"
+  | "Pendiente"
+  | "En Atención"
+  | "En Espera"
+  | "Liberada"
+  | "Finalizada";
 export interface IEvento {
   _id?: string;
   //
