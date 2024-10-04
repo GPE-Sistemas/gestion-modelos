@@ -16,6 +16,7 @@ export interface IEvento {
   idAlarma?: string;
   idConfigEvento?: string;
   idCliente?: string;
+  idUsuarioAtendiendo?: string;
   // Populate
   alarma?: IDispositivoAlarma;
   tracker?: ITracker;
