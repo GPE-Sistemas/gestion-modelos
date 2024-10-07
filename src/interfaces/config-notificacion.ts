@@ -43,7 +43,7 @@ export interface IConfigNotificacion {
   // Sobre que entidades se reciben las notificaciones
   idCliente?: string;
   idFlota?: string;
-  idsEntidades?: string[];
+  idEntidad?: string;
   // Los usuarios que van a recibir las notificaciones
   idsUsuarios?: string[];
 
@@ -52,8 +52,8 @@ export interface IConfigNotificacion {
   cliente?: ICliente;
   flota?: IFlota;
   // Entidades
-  activos?: IActivo[];
-  vehiculos?: IVehiculo[];
+  activo?: IActivo;
+  vehiculo?: IVehiculo;
 }
 
 type OmitirCreate =
