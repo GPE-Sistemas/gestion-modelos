@@ -42,7 +42,7 @@ export interface IConfigNotificacion {
   agrupacion?: Agrupacion;
   // Sobre que entidades se reciben las notificaciones
   idCliente?: string;
-  idFlotas?: string;
+  idFlota?: string;
   idsEntidades?: string[];
   // Los usuarios que van a recibir las notificaciones
   idsUsuarios?: string[];
