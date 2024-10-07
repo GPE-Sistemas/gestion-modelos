@@ -1,6 +1,7 @@
 import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
 import { IFlota } from "./flota";
+import { IUbicacion } from "./ubicacion";
 import { IUsuario } from "./usuario";
 import { IVehiculo } from "./vehiculo";
 
@@ -16,6 +17,8 @@ export interface CondicionNotificacion {
       idUbicacion: string;
       dentro?: boolean;
       fuera?: boolean;
+      // Virtual
+      ubicacion?: IUbicacion;
     };
   };
   vehiculo?: {
@@ -23,6 +26,8 @@ export interface CondicionNotificacion {
       idUbicacion: string;
       dentro?: boolean;
       fuera?: boolean;
+      // Virtual
+      ubicacion?: IUbicacion;
     };
     velocidad?: {
       "superior a": number;
