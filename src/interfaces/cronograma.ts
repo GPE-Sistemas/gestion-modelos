@@ -1,11 +1,11 @@
 import { ICliente } from './cliente';
-import { ITerminal } from './terminal';
+import { IUbicacion } from './ubicacion';
 
 export interface ICronograma {
   _id?: string;
   //
   idCliente?: string;
-  idTerminal?: string;
+  idUbicacion?: string;
   //
   fechaCreacion?: string;
   nombre?: string;
@@ -16,15 +16,15 @@ export interface ICronograma {
   configuracion?: ConfigCronograma; // Colores, el nombre de de lo que se está mostrando, etc
   // Populate
   cliente?: ICliente;
-  terminal?: ITerminal;
+  ubicacion?: IUbicacion;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'terminal';
+type OmitirCreate = '_id' | 'cliente' | 'ubicacion';
 
 export interface ICreateCronograma
   extends Omit<Partial<ICronograma>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'terminal';
+type OmitirUpdate = '_id' | 'cliente' | 'ubicacion';
 
 export interface IUpdateCronograma
   extends Omit<Partial<ICronograma>, OmitirUpdate> {}
