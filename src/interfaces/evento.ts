@@ -13,6 +13,7 @@ export interface IEvento {
   _id?: string;
   //
   notificar?: boolean;
+  atender?: boolean;
   fechaCreacion?: string;
   posponerHasta?: string;
   estado?: estadoEvento;
