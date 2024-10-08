@@ -35,8 +35,21 @@ export interface CondicionNotificacion {
   };
 }
 
-export interface IConfigNotificacion {
+export interface IConfigEventoUsuario {
   _id?: string;
+  // Para eventos de una sola vez, al cumplirse se desactiva
+  activa?: boolean;
+  // Fechas de vigencia para generar los eventos
+  validaDesde?: string;
+  validaHasta?: string;
+  // Frecuencia de generacion de eventos
+  generarSoloUnaVez?: boolean;
+  // Si pasa el periodo y sigue activa se genera el evento
+  generarSiNoSeCumple?: boolean;
+  // Notificar al usuario
+  notificar?: boolean;
+  // Atender el evento
+  atender?: boolean;
   // Tipo de envio de la notificacion
   tipoEnvio?: TipoEnvio;
   // Tipo de dispositivo
@@ -68,8 +81,8 @@ type OmitirCreate =
   | "flota"
   | "activos"
   | "vehiculos";
-export interface ICreateConfigNotificacion
-  extends Omit<Partial<IConfigNotificacion>, OmitirCreate> {}
+export interface ICreateConfigEventoUsuario
+  extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
 
 type OmitirUpdate =
   | "_id"
@@ -78,5 +91,5 @@ type OmitirUpdate =
   | "flota"
   | "activos"
   | "vehiculos";
-export interface IUpdateConfigNotificacion
-  extends Omit<Partial<IConfigNotificacion>, OmitirUpdate> {}
+export interface IUpdateConfigEventoUsuario
+  extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}

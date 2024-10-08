@@ -2,7 +2,7 @@ export * from "./apikey";
 export * from "./client";
 export * from "./cliente-hijo";
 export * from "./cliente";
-export * from "./config-notificacion";
+export * from "./config-evento-reporte";
 export * from "./documentacion";
 export * from "./evento-traccar";
 export * from "./flota";
