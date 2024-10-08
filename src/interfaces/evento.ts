@@ -9,6 +9,13 @@ export type estadoEvento =
   | "En Espera"
   | "Liberada"
   | "Finalizada";
+
+export interface IValoresEvento {
+  titulo?: string;
+  color?: string;
+  [key: string]: any;
+}
+
 export interface IEvento {
   _id?: string;
   //
@@ -17,7 +24,7 @@ export interface IEvento {
   fechaCreacion?: string;
   posponerHasta?: string;
   estado?: estadoEvento;
-  valores?: Record<string, any>;
+  valores?: IValoresEvento;
   //
   idTracker?: string;
   idAlarma?: string;
