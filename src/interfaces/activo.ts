@@ -22,9 +22,6 @@ export type EstadoVehiculo =
 export type ICategoriaActivo = 'Normal' | 'Vehículo';
 
 export interface IVehiculo {
-  _id?: string;
-  //
-  idCliente?: string;
   tipo?: TipoVehiculo;
   patente?: string;
   estado?: EstadoVehiculo;
@@ -37,11 +34,9 @@ export interface IVehiculo {
    */
   idUnicoTraccar?: number;
   // Populate
-  cliente?: ICliente;
   chofer?: IUsuario;
   recorrido?: IRecorrido;
   recorridos?: IRecorrido[];
-  tracker?: ITracker;
 }
 
 export interface IActivo {
