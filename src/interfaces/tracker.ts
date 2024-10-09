@@ -1,8 +1,7 @@
-import { IActivo } from "./activo";
-import { ICliente } from "./cliente";
-import { IVehiculo } from "./vehiculo";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
 
-export type TipoTracker = "Qualcomm" | "Traccar";
+export type TipoTracker = 'Qualcomm' | 'Traccar';
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
@@ -42,14 +41,13 @@ export interface ITracker {
 
   // Populate
   cliente?: ICliente;
-  vehiculo?: IVehiculo;
   activo?: IActivo;
 }
 
-type OmitirCreate = "_id" | "cliente" | "vehiculo" | "activo";
+type OmitirCreate = '_id' | 'cliente' | 'activo';
 
 export interface ICreateTracker extends Omit<Partial<ITracker>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "vehiculo" | "activo";
+type OmitirUpdate = '_id' | 'cliente' | 'activo';
 
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}

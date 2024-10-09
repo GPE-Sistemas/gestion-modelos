@@ -1,8 +1,8 @@
+import { IActivo } from './activo';
 import { ICliente } from './cliente';
 import { ICronograma } from './cronograma';
 import { IRecorrido } from './recorrido';
 import { IUsuario } from './usuario';
-import { IVehiculo } from './vehiculo';
 
 export interface IDespacho {
   _id?: string;
@@ -15,7 +15,7 @@ export interface IDespacho {
   hora?: string; // Sale
   salio?: string; // Salió
   idCronograma?: string;
-  idVehiculo?: string;
+  idActivo?: string;
   idChofer?: string;
   idsRecorridos?: string[];
   idRecorridoActual?: string;
@@ -24,18 +24,34 @@ export interface IDespacho {
   // Populate
   cliente?: ICliente;
   usuario?: IUsuario;
-  vehiculo?: IVehiculo;
+  activo?: IActivo;
   chofer?: IUsuario;
   recorridos?: IRecorrido[];
   cronograma?: ICronograma;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'usuario' | 'fechaCreacion';
+type OmitirCreate =
+  | '_id'
+  | 'cliente'
+  | 'usuario'
+  | 'fechaCreacion'
+  | 'activo'
+  | 'chofer'
+  | 'recorridos'
+  | 'cronograma';
 
 export interface ICreateDespacho
   extends Omit<Partial<IDespacho>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'usuario' | 'fechaCreacion';
+type OmitirUpdate =
+  | '_id'
+  | 'cliente'
+  | 'usuario'
+  | 'fechaCreacion'
+  | 'activo'
+  | 'chofer'
+  | 'recorridos'
+  | 'cronograma';
 
 export interface IUpdateDespacho
   extends Omit<Partial<IDespacho>, OmitirUpdate> {}

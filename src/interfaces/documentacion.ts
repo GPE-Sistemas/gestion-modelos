@@ -1,8 +1,8 @@
-import { ICliente } from "./cliente";
-import { IUsuario } from "./usuario";
-import { IVehiculo } from "./vehiculo";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IUsuario } from './usuario';
 
-export type TipoDocumentacion = "Licencia" | "Seguro";
+export type TipoDocumentacion = 'Licencia' | 'Seguro';
 
 export interface IDocumentacion {
   _id?: string;
@@ -14,19 +14,19 @@ export interface IDocumentacion {
   imagenes?: string[];
   idCliente?: string;
   idChofer?: string;
-  idVehiculo?: string;
+  idActivo?: string;
   // Populate
   cliente?: ICliente;
   chofer?: IUsuario;
-  vehiculo?: IVehiculo;
+  activo?: IActivo;
 }
 
-type OmitirCreate = "_id" | "chofer" | "vehiculo" | "Cliente";
+type OmitirCreate = '_id' | 'chofer' | 'activo' | 'Cliente';
 
 export interface ICreateDocumentacion
   extends Omit<Partial<IDocumentacion>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "chofer" | "vehiculo" | "Cliente";
+type OmitirUpdate = '_id' | 'chofer' | 'activo' | 'Cliente';
 
 export interface IUpdateDocumentacion
   extends Omit<Partial<IDocumentacion>, OmitirUpdate> {}

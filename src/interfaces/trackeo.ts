@@ -1,7 +1,7 @@
-import { ICliente } from "./cliente";
-import { IFlota } from "./flota";
-import { IParada, IRecorrido } from "./recorrido";
-import { IVehiculo } from "./vehiculo";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IFlota } from './flota';
+import { IParada, IRecorrido } from './recorrido';
 
 export interface ITrackeo {
   _id?: string;
@@ -9,7 +9,7 @@ export interface ITrackeo {
   idCliente?: string;
   idFlota?: string;
   idRecorrido?: string;
-  idVehiculo?: string;
+  idActivo?: string;
 
   fecha?: string;
   idParada?: string;
@@ -19,30 +19,30 @@ export interface ITrackeo {
   // Populate
   cliente?: ICliente;
   flota?: IFlota;
-  vehiculo?: IVehiculo;
+  activo?: IActivo;
   recorrido?: IRecorrido;
   parada?: IParada;
   proximaParada?: IParada;
 }
 
 type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "flota"
-  | "vehiculo"
-  | "recorrido"
-  | "parada"
-  | "proximaParada";
+  | '_id'
+  | 'cliente'
+  | 'flota'
+  | 'activo'
+  | 'recorrido'
+  | 'parada'
+  | 'proximaParada';
 
 export interface ICreateTrackeo extends Omit<Partial<ITrackeo>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "flota"
-  | "vehiculo"
-  | "recorrido"
-  | "parada"
-  | "proximaParada";
+  | '_id'
+  | 'cliente'
+  | 'flota'
+  | 'activo'
+  | 'recorrido'
+  | 'parada'
+  | 'proximaParada';
 
 export interface IUpdateTrackeo extends Omit<Partial<ITrackeo>, OmitirUpdate> {}

@@ -1,9 +1,9 @@
-import { ICliente } from "./cliente";
-import { IVehiculo } from "./vehiculo";
-import { IDocumentacion } from "./documentacion";
-import { IUsuario } from "./usuario";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IDocumentacion } from './documentacion';
+import { IUsuario } from './usuario';
 
-export type TipoRecordatorio = "km" | "fecha";
+export type TipoRecordatorio = 'km' | 'fecha';
 
 export interface IRecordatorio {
   _id?: string;
@@ -14,7 +14,7 @@ export interface IRecordatorio {
   fechaLimite?: string;
   fechaCreacion?: string;
   kmLimite?: number;
-  idVehiculo?: string;
+  idActivo?: string;
   idDocumentacion?: string;
   detallesDelMantenimiento?: string;
   repetible?: boolean;
@@ -23,26 +23,16 @@ export interface IRecordatorio {
   // Populate
   cliente?: ICliente;
   usuario?: IUsuario;
-  vehiculo?: IVehiculo;
+  activo?: IActivo;
   documentacion?: IDocumentacion;
 }
 
-type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "vehiculo"
-  | "documentacion"
-  | "usuario";
+type OmitirCreate = '_id' | 'cliente' | 'activo' | 'documentacion' | 'usuario';
 
 export interface ICreateRecordatorio
   extends Omit<Partial<IRecordatorio>, OmitirCreate> {}
 
-type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "vehiculo"
-  | "documentacion"
-  | "usuario";
+type OmitirUpdate = '_id' | 'cliente' | 'activo' | 'documentacion' | 'usuario';
 
 export interface IUpdateRecordatorio
   extends Omit<Partial<IRecordatorio>, OmitirUpdate> {}

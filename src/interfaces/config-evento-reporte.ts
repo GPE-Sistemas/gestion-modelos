@@ -1,36 +1,26 @@
-import { IActivo } from "./activo";
-import { ICliente } from "./cliente";
-import { IFlota } from "./flota";
-import { IUbicacion } from "./ubicacion";
-import { IUsuario } from "./usuario";
-import { IVehiculo } from "./vehiculo";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IFlota } from './flota';
+import { IUbicacion } from './ubicacion';
+import { IUsuario } from './usuario';
 
-export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
+export type TipoEnvio = 'SMS' | 'WhatsApp' | 'Llamada' | 'Notificacion Push';
 
-export type Agrupacion = "Flota" | "Entidad";
+export type Agrupacion = 'Flota' | 'Entidad';
 
-export type TipoEntidad = "Activo" | "Vehiculo";
+export type TipoEntidad = 'Activo';
 
 export interface CondicionNotificacion {
   activo?: {
-    ubicacion?: {
-      idUbicacion: string;
-      dentro?: boolean;
-      fuera?: boolean;
-      // Virtual
-      ubicacion?: IUbicacion;
-    };
-  };
-  vehiculo?: {
-    ubicacion?: {
-      idUbicacion: string;
-      dentro?: boolean;
-      fuera?: boolean;
-      // Virtual
-      ubicacion?: IUbicacion;
-    };
     velocidad?: {
-      "superior a": number;
+      'superior a': number;
+    };
+    ubicacion?: {
+      idUbicacion: string;
+      dentro?: boolean;
+      fuera?: boolean;
+      // Virtual
+      ubicacion?: IUbicacion;
     };
   };
 }
@@ -71,25 +61,12 @@ export interface IConfigEventoUsuario {
   flota?: IFlota;
   // Entidades
   activo?: IActivo;
-  vehiculo?: IVehiculo;
 }
 
-type OmitirCreate =
-  | "_id"
-  | "usuarios"
-  | "cliente"
-  | "flota"
-  | "activos"
-  | "vehiculos";
+type OmitirCreate = '_id' | 'usuarios' | 'cliente' | 'flota' | 'activos';
 export interface ICreateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
 
-type OmitirUpdate =
-  | "_id"
-  | "usuarios"
-  | "cliente"
-  | "flota"
-  | "activos"
-  | "vehiculos";
+type OmitirUpdate = '_id' | 'usuarios' | 'cliente' | 'flota' | 'activos';
 export interface IUpdateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}

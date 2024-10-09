@@ -1,11 +1,10 @@
-import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from "../auxiliares";
-import { IActivo } from "./activo";
-import { ICliente } from "./cliente";
-import { IFlota } from "./flota";
-import { IRecorrido } from "./recorrido";
-import { ITracker } from "./tracker";
-import { IUsuario } from "./usuario";
-import { IVehiculo } from "./vehiculo";
+import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from '../auxiliares';
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IFlota } from './flota';
+import { IRecorrido } from './recorrido';
+import { ITracker } from './tracker';
+import { IUsuario } from './usuario';
 
 export interface IReporte {
   _id?: string;
@@ -13,7 +12,6 @@ export interface IReporte {
   idCliente?: string;
   idFlota?: string;
   idTracker?: string;
-  idVehiculo?: string;
   idActivo?: string;
   idRecorrido?: string;
   idChofer?: string;
@@ -38,7 +36,6 @@ export interface IReporte {
   cliente?: ICliente;
   flota?: IFlota;
   tracker?: ITracker;
-  vehiculo?: IVehiculo;
   activo?: IActivo;
   recorrido?: IRecorrido;
   chofer?: IUsuario;
@@ -47,31 +44,29 @@ export interface IReporte {
 }
 
 type OmitirCreate =
-  | "_id"
-  | "fechaCreacion"
-  | "cliente"
-  | "tracker"
-  | "vehiculo"
-  | "activo"
-  | "recorrido"
-  | "flota"
-  | "chofer"
-  | "ubicacion"
-  | "ubicacionOl";
+  | '_id'
+  | 'fechaCreacion'
+  | 'cliente'
+  | 'tracker'
+  | 'activo'
+  | 'recorrido'
+  | 'flota'
+  | 'chofer'
+  | 'ubicacion'
+  | 'ubicacionOl';
 
 export interface ICreateReporte extends Omit<Partial<IReporte>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "fechaCreacion"
-  | "cliente"
-  | "tracker"
-  | "vehiculo"
-  | "activo"
-  | "recorrido"
-  | "flota"
-  | "chofer"
-  | "ubicacion"
-  | "ubicacionOl";
+  | '_id'
+  | 'fechaCreacion'
+  | 'cliente'
+  | 'tracker'
+  | 'activo'
+  | 'recorrido'
+  | 'flota'
+  | 'chofer'
+  | 'ubicacion'
+  | 'ubicacionOl';
 
 export interface IUpdateReporte extends Omit<Partial<IReporte>, OmitirUpdate> {}

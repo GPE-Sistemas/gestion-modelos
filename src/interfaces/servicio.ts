@@ -1,15 +1,15 @@
-import { ICoordenadas } from "../auxiliares";
-import { ICliente } from "./cliente";
-import { IProveedor } from "./proveedor";
-import { IVehiculo } from "./vehiculo";
+import { ICoordenadas } from '../auxiliares';
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IProveedor } from './proveedor';
 
-export type TipoServicio = "Gasto" | "Mantenimiento";
+export type TipoServicio = 'Gasto' | 'Mantenimiento';
 
 export interface IServicio {
   _id?: string;
   tipo?: TipoServicio;
   idCliente?: string;
-  idVehiculo?: string;
+  idActivo?: string;
   fechaRealizacion?: string;
   fechaCreacion?: string;
   nombreChofer?: string;
@@ -20,15 +20,15 @@ export interface IServicio {
   // Populate
   cliente?: ICliente;
   proveedor?: IProveedor;
-  vehiculo?: IVehiculo;
+  activo?: IActivo;
 }
 
-type OmitirCreate = "_id" | "cliente" | "vehiculo" | "proveedor";
+type OmitirCreate = '_id' | 'cliente' | 'activo' | 'proveedor';
 
 export interface ICreateServicio
   extends Omit<Partial<IServicio>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "vehiculo" | "proveedor";
+type OmitirUpdate = '_id' | 'cliente' | 'activo' | 'proveedor';
 
 export interface IUpdateServicio
   extends Omit<Partial<IServicio>, OmitirUpdate> {}

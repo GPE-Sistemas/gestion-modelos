@@ -1,11 +1,11 @@
-import { ICliente } from "./cliente";
-import { IVehiculo } from "./vehiculo";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
 
 export interface ILogTrackeo {
   _id?: string;
   //
   idCliente?: string;
-  idVehiculo?: string;
+  idActivo?: string;
   fecha?: string;
   nuevaParada?: boolean;
   indexUltimaParada?: number;
@@ -17,15 +17,15 @@ export interface ILogTrackeo {
 
   // Populate
   cliente?: ICliente;
-  vehiculo?: IVehiculo;
+  activo?: IActivo;
 }
 
-type OmitirCreate = "_id" | "cliente" | "vehiculo";
+type OmitirCreate = '_id' | 'cliente' | 'activo';
 
 export interface ICreateLogTrackeo
   extends Omit<Partial<ILogTrackeo>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "vehiculo";
+type OmitirUpdate = '_id' | 'cliente' | 'activo';
 
 export interface IUpdateLogTrackeo
   extends Omit<Partial<ILogTrackeo>, OmitirUpdate> {}

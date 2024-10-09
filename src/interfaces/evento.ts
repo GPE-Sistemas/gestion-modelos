@@ -1,16 +1,15 @@
-import { ICliente } from "./cliente";
-import { ITracker } from "./tracker";
-import { IDispositivoAlarma } from "./dispositivo-alarma";
-import { IReporte } from "./reporte";
-import { IVehiculo } from "./vehiculo";
-import { IActivo } from "./activo";
+import { ICliente } from './cliente';
+import { ITracker } from './tracker';
+import { IDispositivoAlarma } from './dispositivo-alarma';
+import { IReporte } from './reporte';
+import { IActivo } from './activo';
 export type estadoEvento =
-  | "Sin Tratamiento"
-  | "Pendiente"
-  | "En Atención"
-  | "En Espera"
-  | "Liberada"
-  | "Finalizada";
+  | 'Sin Tratamiento'
+  | 'Pendiente'
+  | 'En Atención'
+  | 'En Espera'
+  | 'Liberada'
+  | 'Finalizada';
 
 export interface IValoresEvento {
   titulo?: string;
@@ -33,35 +32,31 @@ export interface IEvento {
   idCliente?: string;
   idUsuarioAtendiendo?: string;
   idReporte?: string;
-  idVehiculo?: string;
   idActivo?: string;
   // Populate
   alarma?: IDispositivoAlarma;
   tracker?: ITracker;
   cliente?: ICliente;
   reporte?: IReporte;
-  vehiculo?: IVehiculo;
   activo?: IActivo;
 }
 
 type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "tracker"
-  | "alarma"
-  | "reporte"
-  | "vehiculo"
-  | "activo";
+  | '_id'
+  | 'cliente'
+  | 'tracker'
+  | 'alarma'
+  | 'reporte'
+  | 'activo';
 
 export interface ICreateEvento extends Omit<Partial<IEvento>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "tracker"
-  | "alarma"
-  | "reporte"
-  | "vehiculo"
-  | "activo";
+  | '_id'
+  | 'cliente'
+  | 'tracker'
+  | 'alarma'
+  | 'reporte'
+  | 'activo';
 
 export interface IUpdateEvento extends Omit<Partial<IEvento>, OmitirUpdate> {}

@@ -1,40 +1,30 @@
-import { ICliente } from "./cliente";
-import { ITracker } from "./tracker";
-import { IVehiculo } from "./vehiculo";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { ITracker } from './tracker';
 
 export interface IEventoTraccar {
   _id?: string;
   //
   traccarUniqueId?: string;
   idTracker?: string;
-  idVehiculo?: string;
+  idActivo?: string;
   idCliente?: string;
-  tipo?: "events" | "devices";
+  tipo?: 'events' | 'devices';
   //
   fechaCreacion?: string;
   data?: Record<string, any>;
   ///
   tracker?: ITracker;
-  vehiculo?: IVehiculo;
+  activo?: IActivo;
   cliente?: ICliente;
 }
 
-type OmitirCreate =
-  | "_id"
-  | "fechaCreacion"
-  | "cliente"
-  | "tracker"
-  | "vehiculo";
+type OmitirCreate = '_id' | 'fechaCreacion' | 'cliente' | 'tracker' | 'activo';
 
 export interface ICreateEventoTraccar
   extends Omit<Partial<IEventoTraccar>, OmitirCreate> {}
 
-type OmitirUpdate =
-  | "_id"
-  | "fechaCreacion"
-  | "cliente"
-  | "tracker"
-  | "vehiculo";
+type OmitirUpdate = '_id' | 'fechaCreacion' | 'cliente' | 'tracker' | 'activo';
 
 export interface IUpdateEventoTraccar
   extends Omit<Partial<IEventoTraccar>, OmitirUpdate> {}
