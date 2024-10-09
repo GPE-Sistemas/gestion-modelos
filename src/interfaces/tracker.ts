@@ -1,3 +1,4 @@
+import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
 import { IVehiculo } from "./vehiculo";
 
@@ -42,12 +43,13 @@ export interface ITracker {
   // Populate
   cliente?: ICliente;
   vehiculo?: IVehiculo;
+  activo?: IActivo;
 }
 
-type OmitirCreate = "_id" | "cliente" | "vehiculo";
+type OmitirCreate = "_id" | "cliente" | "vehiculo" | "activo";
 
 export interface ICreateTracker extends Omit<Partial<ITracker>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "vehiculo";
+type OmitirUpdate = "_id" | "cliente" | "vehiculo" | "activo";
 
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}
