@@ -8,6 +8,7 @@ export interface ITratamientoEvento {
   notaInterna?: string;
   fechaCreacion?: string;
   estado?: estadoEvento;
+  esperaHasta?: string;
   //
   idEvento?: string;
   idUsuario?: string;
