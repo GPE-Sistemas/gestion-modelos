@@ -3,6 +3,13 @@
 // type es el tipo de objeto a guardar
 //  Point LineString  Polygon  MultiPoint  MultiLineString  MultiPolygon  GeometryCollection
 
+export type IGeoJSON =
+  | IGeoJSONPoint
+  | IGeoJSONCircle
+  | IGeoJSONLineString
+  | IGeoJSONPolygon
+  | IGeoJSONMultiPolygon;
+
 export interface IGeoJSONPoint {
   type: "Point";
   coordinates: [number, number];
