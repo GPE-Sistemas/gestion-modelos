@@ -10,7 +10,7 @@ export interface IReporte {
   _id?: string;
   //
   idCliente?: string;
-  idFlota?: string;
+  idGrupo?: string;
   idTracker?: string;
   idActivo?: string;
   idRecorrido?: string;
@@ -34,7 +34,7 @@ export interface IReporte {
   reporteQualcomm?: Record<string, any>;
   // Populate
   cliente?: ICliente;
-  flota?: IGrupo;
+  grupo?: IGrupo;
   tracker?: ITracker;
   activo?: IActivo;
   recorrido?: IRecorrido;
@@ -50,7 +50,7 @@ type OmitirCreate =
   | "tracker"
   | "activo"
   | "recorrido"
-  | "flota"
+  | "grupo"
   | "chofer"
   | "ubicacion"
   | "ubicacionOl";
@@ -64,7 +64,7 @@ type OmitirUpdate =
   | "tracker"
   | "activo"
   | "recorrido"
-  | "flota"
+  | "grupo"
   | "chofer"
   | "ubicacion"
   | "ubicacionOl";

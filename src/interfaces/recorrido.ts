@@ -38,7 +38,7 @@ export interface IFranjaHoraria {
 export interface IRecorrido {
   _id?: string;
   idCliente?: string;
-  idFlota?: string;
+  idGrupo?: string;
   nombreFlota?: string;
   nombre?: string;
   geojson?: IGeoJSONLineString;
@@ -51,7 +51,7 @@ export interface IRecorrido {
   idsUbicaciones?: string[];
   // Populate
   cliente?: ICliente;
-  flota?: IGrupo;
+  grupo?: IGrupo;
   recorrido?: ICoordenadas[];
   recorridoOl?: ICoordenadaOL[];
   ubicaciones?: IUbicacion[];
@@ -60,7 +60,7 @@ export interface IRecorrido {
 type OmitirCreate =
   | "_id"
   | "cliente"
-  | "flota"
+  | "grupo"
   | "recorrido"
   | "recorridoOl"
   | "ubicaciones";
@@ -73,7 +73,7 @@ export interface ICreateRecorrido
 type OmitirUpdate =
   | "_id"
   | "cliente"
-  | "flota"
+  | "grupo"
   | "recorrido"
   | "recorridoOl"
   | "ubicaciones";

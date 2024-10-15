@@ -7,7 +7,7 @@ export interface ITrackeo {
   _id?: string;
   //
   idCliente?: string;
-  idFlota?: string;
+  idGrupo?: string;
   idRecorrido?: string;
   idActivo?: string;
 
@@ -18,7 +18,7 @@ export interface ITrackeo {
 
   // Populate
   cliente?: ICliente;
-  flota?: IGrupo;
+  grupo?: IGrupo;
   activo?: IActivo;
   recorrido?: IRecorrido;
   parada?: IParada;
@@ -28,7 +28,7 @@ export interface ITrackeo {
 type OmitirCreate =
   | "_id"
   | "cliente"
-  | "flota"
+  | "grupo"
   | "activo"
   | "recorrido"
   | "parada"
@@ -39,7 +39,7 @@ export interface ICreateTrackeo extends Omit<Partial<ITrackeo>, OmitirCreate> {}
 type OmitirUpdate =
   | "_id"
   | "cliente"
-  | "flota"
+  | "grupo"
   | "activo"
   | "recorrido"
   | "parada"

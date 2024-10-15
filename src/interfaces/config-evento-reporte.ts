@@ -50,7 +50,7 @@ export interface IConfigEventoUsuario {
   agrupacion?: Agrupacion;
   // Sobre que entidades se reciben las notificaciones
   idCliente?: string;
-  idFlota?: string;
+  idGrupo?: string;
   idEntidad?: string;
   // Los usuarios que van a recibir las notificaciones
   idsUsuarios?: string[];
@@ -58,15 +58,15 @@ export interface IConfigEventoUsuario {
   // Virtual
   usuarios?: IUsuario[];
   cliente?: ICliente;
-  flota?: IGrupo;
+  grupo?: IGrupo;
   // Entidades
   activo?: IActivo;
 }
 
-type OmitirCreate = "_id" | "usuarios" | "cliente" | "flota" | "activos";
+type OmitirCreate = "_id" | "usuarios" | "cliente" | "grupo" | "activos";
 export interface ICreateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "usuarios" | "cliente" | "flota" | "activos";
+type OmitirUpdate = "_id" | "usuarios" | "cliente" | "grupo" | "activos";
 export interface IUpdateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}

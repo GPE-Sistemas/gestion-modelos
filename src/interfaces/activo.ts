@@ -39,7 +39,7 @@ export interface IActivo {
   _id?: string;
   //
   idCliente?: string;
-  idFlota?: string;
+  idGrupo?: string;
   idTracker?: string;
   /**
    * El id del tracker asignado en la plataforma traccar para obtener el vehiculo rapido con los reportes de traccar
@@ -51,7 +51,7 @@ export interface IActivo {
   // Populate
   cliente?: ICliente;
   tracker?: ITracker;
-  flota?: IGrupo;
+  grupo?: IGrupo;
 }
 
 type OmitirCreate = "_id" | "cliente" | "tracker";
