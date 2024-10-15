@@ -6,7 +6,7 @@ import { IUsuario } from "./usuario";
 
 export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
-export type Agrupacion = "Flota" | "Entidad";
+export type Agrupacion = "Grupo" | "Entidad";
 
 export type TipoEntidad = "Activo";
 
