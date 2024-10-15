@@ -1,19 +1,19 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IFlota } from './flota';
-import { IUbicacion } from './ubicacion';
-import { IUsuario } from './usuario';
+import { IActivo } from "./activo";
+import { ICliente } from "./cliente";
+import { IGrupo } from "./grupo";
+import { IUbicacion } from "./ubicacion";
+import { IUsuario } from "./usuario";
 
-export type TipoEnvio = 'SMS' | 'WhatsApp' | 'Llamada' | 'Notificacion Push';
+export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
-export type Agrupacion = 'Flota' | 'Entidad';
+export type Agrupacion = "Flota" | "Entidad";
 
-export type TipoEntidad = 'Activo';
+export type TipoEntidad = "Activo";
 
 export interface CondicionNotificacion {
   activo?: {
     velocidad?: {
-      'superior a': number;
+      "superior a": number;
     };
     ubicacion?: {
       idUbicacion: string;
@@ -58,15 +58,15 @@ export interface IConfigEventoUsuario {
   // Virtual
   usuarios?: IUsuario[];
   cliente?: ICliente;
-  flota?: IFlota;
+  flota?: IGrupo;
   // Entidades
   activo?: IActivo;
 }
 
-type OmitirCreate = '_id' | 'usuarios' | 'cliente' | 'flota' | 'activos';
+type OmitirCreate = "_id" | "usuarios" | "cliente" | "flota" | "activos";
 export interface ICreateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'usuarios' | 'cliente' | 'flota' | 'activos';
+type OmitirUpdate = "_id" | "usuarios" | "cliente" | "flota" | "activos";
 export interface IUpdateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}

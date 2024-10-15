@@ -1,10 +1,10 @@
-import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from '../auxiliares';
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IFlota } from './flota';
-import { IRecorrido } from './recorrido';
-import { ITracker } from './tracker';
-import { IUsuario } from './usuario';
+import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from "../auxiliares";
+import { IActivo } from "./activo";
+import { ICliente } from "./cliente";
+import { IGrupo } from "./grupo";
+import { IRecorrido } from "./recorrido";
+import { ITracker } from "./tracker";
+import { IUsuario } from "./usuario";
 
 export interface IReporte {
   _id?: string;
@@ -34,7 +34,7 @@ export interface IReporte {
   reporteQualcomm?: Record<string, any>;
   // Populate
   cliente?: ICliente;
-  flota?: IFlota;
+  flota?: IGrupo;
   tracker?: ITracker;
   activo?: IActivo;
   recorrido?: IRecorrido;
@@ -44,29 +44,29 @@ export interface IReporte {
 }
 
 type OmitirCreate =
-  | '_id'
-  | 'fechaCreacion'
-  | 'cliente'
-  | 'tracker'
-  | 'activo'
-  | 'recorrido'
-  | 'flota'
-  | 'chofer'
-  | 'ubicacion'
-  | 'ubicacionOl';
+  | "_id"
+  | "fechaCreacion"
+  | "cliente"
+  | "tracker"
+  | "activo"
+  | "recorrido"
+  | "flota"
+  | "chofer"
+  | "ubicacion"
+  | "ubicacionOl";
 
 export interface ICreateReporte extends Omit<Partial<IReporte>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | '_id'
-  | 'fechaCreacion'
-  | 'cliente'
-  | 'tracker'
-  | 'activo'
-  | 'recorrido'
-  | 'flota'
-  | 'chofer'
-  | 'ubicacion'
-  | 'ubicacionOl';
+  | "_id"
+  | "fechaCreacion"
+  | "cliente"
+  | "tracker"
+  | "activo"
+  | "recorrido"
+  | "flota"
+  | "chofer"
+  | "ubicacion"
+  | "ubicacionOl";
 
 export interface IUpdateReporte extends Omit<Partial<IReporte>, OmitirUpdate> {}

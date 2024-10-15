@@ -1,5 +1,5 @@
 import { ICliente } from "./cliente";
-import { IFlota } from "./flota";
+import { IGrupo } from "./grupo";
 import { IRecorrido } from "./recorrido";
 import { ITracker } from "./tracker";
 import { IUsuario } from "./usuario";
@@ -51,7 +51,7 @@ export interface IActivo {
   // Populate
   cliente?: ICliente;
   tracker?: ITracker;
-  flota?: IFlota;
+  flota?: IGrupo;
 }
 
 type OmitirCreate = "_id" | "cliente" | "tracker";
