@@ -4,6 +4,7 @@ export interface ITipoEvento {
   nombre?: string;
   color?: string;
   notificar?: boolean;
+  atender?: boolean;
 }
 
 type OmitirCreate = "_id";
