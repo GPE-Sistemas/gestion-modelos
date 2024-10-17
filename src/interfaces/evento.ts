@@ -3,6 +3,8 @@ import { ITracker } from "./tracker";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { IReporte } from "./reporte";
 import { IActivo } from "./activo";
+import { IConfigEventoUsuario } from "./config-evento-reporte";
+import { IConfigEvento } from "./config-evento";
 export type estadoEvento =
   | "Sin Tratamiento"
   | "Pendiente"
@@ -34,12 +36,16 @@ export interface IEvento {
   idUsuarioAtendiendo?: string;
   idReporte?: string;
   idActivo?: string;
+  idConfigEvento?: string;
+  idConfigEventoUsuario?: string;
   // Populate
   alarma?: IDispositivoAlarma;
   tracker?: ITracker;
   cliente?: ICliente;
   reporte?: IReporte;
   activo?: IActivo;
+  configEvento?: IConfigEvento;
+  configEventoUsuario?: IConfigEventoUsuario;
 }
 
 type OmitirCreate =
@@ -48,7 +54,9 @@ type OmitirCreate =
   | "tracker"
   | "alarma"
   | "reporte"
-  | "activo";
+  | "activo"
+  | "configEvento"
+  | "configEventoUsuario";
 
 export interface ICreateEvento extends Omit<Partial<IEvento>, OmitirCreate> {}
 
@@ -58,6 +66,8 @@ type OmitirUpdate =
   | "tracker"
   | "alarma"
   | "reporte"
-  | "activo";
+  | "activo"
+  | "configEvento"
+  | "configEventoUsuario";
 
 export interface IUpdateEvento extends Omit<Partial<IEvento>, OmitirUpdate> {}
