@@ -1,3 +1,4 @@
+import { ICliente } from "./cliente";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { ITipoEvento } from "./tipo-evento";
 import { ITracker } from "./tracker";
@@ -15,6 +16,7 @@ export interface IConfigEvento {
   idTipoEvento?: string;
   idTracker?: string;
   idAlarma?: string;
+  idCliente?: string;
   // Los usuarios que van a recibir las notificaciones
   idsUsuarios?: string[];
   //populate
@@ -22,14 +24,15 @@ export interface IConfigEvento {
   tipoEvento?: ITipoEvento;
   alarma?: IDispositivoAlarma;
   usuarios?: IUsuario[];
+  cliente?: ICliente;
 }
 
-type OmitirCreate = "_id" | "tipoEvento" | "alarma" | "tracker";
+type OmitirCreate = "_id" | "tipoEvento" | "alarma" | "tracker" | "cliente";
 
 export interface ICreateConfigEvento
   extends Omit<Partial<IConfigEvento>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "tipoEvento" | "alarma" | "tracker";
+type OmitirUpdate = "_id" | "tipoEvento" | "alarma" | "tracker" | "cliente";
 
 export interface IUpdateConfigEvento
   extends Omit<Partial<IConfigEvento>, OmitirUpdate> {}
