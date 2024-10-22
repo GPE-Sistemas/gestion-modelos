@@ -8,7 +8,14 @@ export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
 export type Agrupacion = "Grupo" | "Entidad";
 
-export type TipoEntidad = "Activo";
+export type TipoEntidad = "Activo" | "Vehiculo" | "Alarma";
+
+export type Frecuencia =
+  | "Unica"
+  | "Continua"
+  | "Unica en un periodo"
+  | "Continua en un periodo"
+  | "Cronograma";
 
 export interface CondicionNotificacion {
   activo?: {
@@ -43,6 +50,7 @@ export interface IConfigEventoUsuario {
   activa?: boolean;
 
   // Agrupaciones temporales
+  frecuencia?: Frecuencia;
   // Fechas de vigencia para generar los eventos
   validaDesde?: string;
   validaHasta?: string;
