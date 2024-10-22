@@ -22,13 +22,27 @@ export interface CondicionNotificacion {
       // Virtual
       ubicacion?: IUbicacion;
     };
+    detenido?: {
+      "mas de": number;
+    };
   };
 }
+
+export type Dia =
+  | "Lunes"
+  | "Martes"
+  | "Miercoles"
+  | "Jueves"
+  | "Viernes"
+  | "Sabado"
+  | "Domingo";
 
 export interface IConfigEventoUsuario {
   _id?: string;
   // Para eventos de una sola vez, al cumplirse se desactiva
   activa?: boolean;
+
+  // Agrupaciones temporales
   // Fechas de vigencia para generar los eventos
   validaDesde?: string;
   validaHasta?: string;
@@ -36,6 +50,12 @@ export interface IConfigEventoUsuario {
   generarSoloUnaVez?: boolean;
   // Si pasa el periodo y sigue activa se genera el evento
   generarSiNoSeCumple?: boolean;
+  // Dentro del cronograma
+  dias?: Dia[];
+  horaInicio?: string;
+  horaFin?: string;
+  //
+
   // Notificar al usuario
   notificar?: boolean;
   // Atender el evento
