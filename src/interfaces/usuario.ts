@@ -3,6 +3,9 @@ import { ICliente } from "./cliente";
 export type Rol = "Administrador" | "Operador" | "Chofer" | "Consultor";
 
 export interface IPermiso {
+  moduloColectivos?: boolean;
+  moduloAlarmasDomiciliarias?: boolean;
+  moduloActivos?: boolean;
   idsEntidades: string[];
 }
 
