@@ -1,4 +1,5 @@
 import { ICliente } from './cliente';
+import { Dia } from './config-evento-reporte';
 import { IUbicacion } from './ubicacion';
 
 export interface ICronograma {
@@ -8,6 +9,8 @@ export interface ICronograma {
   idUbicacion?: string;
   //
   fechaCreacion?: string;
+  automatico?: boolean;
+  dias?: Dia[];
   nombre?: string;
   descripcion?: string;
   tipo?: TipoDeCronograma;
