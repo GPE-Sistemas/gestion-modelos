@@ -54,10 +54,10 @@ export interface ICliente {
   padre?: ICliente;
 }
 
-type OmitirCreate = "_id";
+type OmitirCreate = "_id" | "padre";
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion";
+type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion" | "padre";
 
 export interface IUpdateCliente extends Omit<Partial<ICliente>, OmitirUpdate> {}
