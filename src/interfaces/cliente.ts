@@ -43,12 +43,15 @@ export interface IModuloActivos {
 
 export interface ICliente {
   _id?: string;
+  idPadre?: string;
   activo?: boolean;
   nombre?: string;
   fechaCreacion?: string;
   nivel?: number;
   config?: IConfigCliente;
   tipoCliente?: ITipoCliente;
+
+  padre?: ICliente;
 }
 
 type OmitirCreate = "_id";
