@@ -7,6 +7,7 @@ export interface ITipoEvento {
   color?: string;
   notificar?: boolean;
   atender?: boolean;
+  noDerivar?: boolean;
   idCliente?: string;
   //Populate
   cliente?: ICliente;

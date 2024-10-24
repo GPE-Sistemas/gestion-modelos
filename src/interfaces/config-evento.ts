@@ -10,6 +10,7 @@ export interface IConfigEvento {
   nombre?: string;
   notificar?: boolean;
   atender?: boolean;
+  noDerivar?: boolean;
   codigoEvento?: string;
   nombreEvento?: string;
   //

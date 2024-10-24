@@ -25,6 +25,7 @@ export interface IEvento {
   //
   notificar?: boolean;
   atender?: boolean;
+  noDerivar?: boolean;
   fechaCreacion?: string;
   posponerHasta?: string;
   estado?: estadoEvento;

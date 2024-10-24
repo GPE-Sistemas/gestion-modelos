@@ -1,5 +1,5 @@
 import { ICliente } from "./cliente";
-import { IModeloAlarma } from "./modelo-alarma";
+import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IUbicacion } from "./ubicacion";
 export interface IDispositivoAlarma {
   _id?: string;
@@ -10,7 +10,7 @@ export interface IDispositivoAlarma {
   nombre?: string;
   // Populate
   domicilio?: IUbicacion;
-  modelo?: IModeloAlarma;
+  modelo?: IModeloDispositivo;
   cliente?: ICliente;
 }
 
