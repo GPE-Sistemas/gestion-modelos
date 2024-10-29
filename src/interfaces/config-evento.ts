@@ -7,7 +7,6 @@ import { IUsuario } from "./usuario";
 export interface IConfigEvento {
   _id?: string;
   //
-  nombre?: string;
   notificar?: boolean;
   atender?: boolean;
   noDerivar?: boolean;
