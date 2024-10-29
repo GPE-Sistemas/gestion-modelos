@@ -4,6 +4,7 @@ import { IUbicacion } from "./ubicacion";
 export interface IDispositivoAlarma {
   _id?: string;
   //
+  idComunicador?: string;
   idModelo?: string;
   idDomicilio?: string;
   idCliente?: string;
