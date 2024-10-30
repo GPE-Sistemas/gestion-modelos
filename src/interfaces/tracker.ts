@@ -41,6 +41,15 @@ export interface ITracker {
   traccar?: ITraccarDevice;
   qualcomm?: IQualcommDevice;
 
+  numeroAbonado?: string;
+  sim1: {
+    iccid: string;
+    numero: string;
+  };
+  sim2: {
+    iccid: string;
+    numero: string;
+  };
   // Populate
   cliente?: ICliente;
   activo?: IActivo;

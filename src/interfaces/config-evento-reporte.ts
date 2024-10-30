@@ -33,6 +33,15 @@ export interface CondicionNotificacion {
       "mas de": number;
     };
   };
+  alarma?: {
+    // se le asigna el id del IEventoReporte, y notifica si llega ese evento
+    "llega evento"?: string;
+    // se le asigna el id del IEventoReporte, y notifica si no llega ese evento dentro del periodo
+    "no llega evento"?: string;
+  };
+  usuario?: {
+    "llego en": number;
+  };
 }
 
 export type Dia =
@@ -61,6 +70,9 @@ export interface IConfigEventoUsuario {
   dias?: Dia[];
   horaInicio?: string;
   horaFin?: string;
+
+  // Minutos que se agregan a los periodos de vigencia
+  minutosDeGracia?: number;
 
   // Notificar al usuario
   notificar?: boolean;

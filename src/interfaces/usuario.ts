@@ -21,6 +21,10 @@ export interface IDatosPersonales {
   foto?: string;
 }
 
+export interface IConfigUsuario {
+  notasEnPrimerPlano?: boolean;
+}
+
 export interface IUsuario {
   _id?: string;
   identificacionInterna?: string;
@@ -32,6 +36,7 @@ export interface IUsuario {
   usuario?: string;
   hash?: string;
   datosPersonales?: IDatosPersonales;
+  config?: IConfigUsuario;
   // Populate
   cliente?: ICliente;
 }

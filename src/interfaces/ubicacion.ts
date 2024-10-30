@@ -12,6 +12,7 @@ export interface IUbicacion {
   categoria?: ICategoriaUbicacion;
   direccion?: string;
   geojson?: IGeoJSON;
+  fotos?: string[];
   // Virtuals
   cliente?: ICliente;
 }

@@ -1,3 +1,5 @@
+import { IServicioContratado } from "./servicio-contratado";
+
 export interface IImagenesCliente {
   icono?: string;
   banner?: string;
@@ -19,6 +21,8 @@ export interface IConfigCliente {
 }
 
 export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
+
+export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
 
 export interface IModuloColectivos {
   activo?: boolean;
@@ -50,11 +54,15 @@ export interface ICliente {
   nivel?: number;
   config?: IConfigCliente;
   tipoCliente?: ITipoCliente;
-
+  estadoDeCuenta?: EstadoCuenta;
+  idServiciosContratados?: string[];
+  numeroCliente?: string;
+  // Populate
   padre?: ICliente;
+  serviciosContratados?: IServicioContratado[];
 }
 
-type OmitirCreate = "_id" | "padre";
+type OmitirCreate = "_id" | "padre" | "serviciosContratados";
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 

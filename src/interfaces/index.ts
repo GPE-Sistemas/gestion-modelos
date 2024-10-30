@@ -29,3 +29,5 @@ export * from "./evento";
 export * from "./tratamiento-evento";
 export * from "./ubicacion";
 export * from "./token-push";
+export * from "./nota";
+export * from "./servicio-contratado";
