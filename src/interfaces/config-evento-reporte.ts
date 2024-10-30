@@ -34,14 +34,10 @@ export interface CondicionNotificacion {
     };
   };
   alarma?: {
-    // Notifica si la alarma ES armada dentro del horario
-    armada?: boolean;
-    // Notifica si la alarma NO ES armada dentro del horario
-    "no armada"?: boolean;
-    // Notifica si la alarma ES desarmada dentro del horario
-    desarmada?: boolean;
-    // Notifica si la alarma NO ES desarmada dentro del horario
-    "no desarmada"?: boolean;
+    // se le asigna el id del IEventoReporte, y notifica si llega ese evento
+    "llega evento"?: string;
+    // se le asigna el id del IEventoReporte, y notifica si no llega ese evento dentro del periodo
+    "no llega evento"?: string;
   };
 }
 
@@ -71,6 +67,8 @@ export interface IConfigEventoUsuario {
   dias?: Dia[];
   horaInicio?: string;
   horaFin?: string;
+
+  // Minutos que se agregan a los periodos de vigencia
   minutosDeGracia?: number;
 
   // Notificar al usuario
