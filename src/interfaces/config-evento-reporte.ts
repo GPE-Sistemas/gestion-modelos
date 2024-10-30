@@ -48,7 +48,6 @@ export interface IConfigEventoUsuario {
   _id?: string;
   // Para eventos de una sola vez, al cumplirse se desactiva
   activa?: boolean;
-
   // Agrupaciones temporales
   frecuencia?: Frecuencia;
   // Fechas de vigencia para generar los eventos
@@ -62,12 +61,13 @@ export interface IConfigEventoUsuario {
   dias?: Dia[];
   horaInicio?: string;
   horaFin?: string;
-  //
 
   // Notificar al usuario
   notificar?: boolean;
   // Atender el evento
   atender?: boolean;
+  // Si es true solo el propio cliente lo puede ver/atender
+  noDerivar?: boolean;
   // Tipo de envio de la notificacion
   tipoEnvio?: TipoEnvio;
   // Tipo de dispositivo
