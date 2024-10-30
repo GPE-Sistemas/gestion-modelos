@@ -33,6 +33,16 @@ export interface CondicionNotificacion {
       "mas de": number;
     };
   };
+  alarma?: {
+    // Notifica si la alarma ES armada dentro del horario
+    armada?: boolean;
+    // Notifica si la alarma NO ES armada dentro del horario
+    "no armada"?: boolean;
+    // Notifica si la alarma ES desarmada dentro del horario
+    desarmada?: boolean;
+    // Notifica si la alarma NO ES desarmada dentro del horario
+    "no desarmada"?: boolean;
+  };
 }
 
 export type Dia =
@@ -61,6 +71,7 @@ export interface IConfigEventoUsuario {
   dias?: Dia[];
   horaInicio?: string;
   horaFin?: string;
+  minutosDeGracia?: number;
 
   // Notificar al usuario
   notificar?: boolean;

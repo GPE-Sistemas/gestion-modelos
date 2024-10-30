@@ -9,6 +9,15 @@ export interface IDispositivoAlarma {
   idDomicilio?: string;
   idCliente?: string;
   nombre?: string;
+  numeroAbonado?: string;
+  sim1: {
+    iccid: string;
+    numero: string;
+  };
+  sim2: {
+    iccid: string;
+    numero: string;
+  };
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
