@@ -19,6 +19,8 @@ export interface IConfigEvento {
   idCliente?: string;
   // Los usuarios que van a recibir las notificaciones
   idsUsuarios?: string[];
+  // Los clientes que pueden atender el evento
+  idsClientesQuePuedenAtender?: string[];
   //populate
   tracker?: ITracker;
   tipoEvento?: ITipoEvento;

@@ -94,6 +94,8 @@ export interface IConfigEventoUsuario {
   idEntidad?: string;
   // Los usuarios que van a recibir las notificaciones
   idsUsuarios?: string[];
+  // Los clientes que pueden atender el evento
+  idsClientesQuePuedenAtender?: string[];
 
   // Virtual
   usuarios?: IUsuario[];
