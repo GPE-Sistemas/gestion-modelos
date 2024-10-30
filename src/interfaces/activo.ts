@@ -48,6 +48,7 @@ export interface IActivo {
   identificacion?: string;
   categoria?: ICategoriaActivo;
   vehiculo?: IVehiculo;
+  idsClientesEventos?: string[];
   // Populate
   cliente?: ICliente;
   tracker?: ITracker;

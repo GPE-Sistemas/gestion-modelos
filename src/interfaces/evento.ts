@@ -34,14 +34,16 @@ export interface IEvento {
   idTracker?: string;
   idAlarma?: string;
   idCliente?: string;
-  idUsuarioAtendiendo?: string;
+  idsClientesQuePuedenAtender?: string[];
+  idsClientesAtendiendo?: string[];
+  idsUsuariosAtendiendo?: string[];
   idReporte?: string;
   idActivo?: string;
   idConfigEvento?: string;
   idConfigEventoUsuario?: string;
   // Populate
-  alarma?: IDispositivoAlarma;
   tracker?: ITracker;
+  alarma?: IDispositivoAlarma;
   cliente?: ICliente;
   reporte?: IReporte;
   activo?: IActivo;
