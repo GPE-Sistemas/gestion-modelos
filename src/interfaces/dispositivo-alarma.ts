@@ -10,11 +10,11 @@ export interface IDispositivoAlarma {
   idCliente?: string;
   nombre?: string;
   numeroAbonado?: string;
-  sim1: {
+  sim1?: {
     iccid: string;
     numero: string;
   };
-  sim2: {
+  sim2?: {
     iccid: string;
     numero: string;
   };

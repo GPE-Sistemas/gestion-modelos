@@ -42,11 +42,11 @@ export interface ITracker {
   qualcomm?: IQualcommDevice;
 
   numeroAbonado?: string;
-  sim1: {
+  sim1?: {
     iccid: string;
     numero: string;
   };
-  sim2: {
+  sim2?: {
     iccid: string;
     numero: string;
   };
