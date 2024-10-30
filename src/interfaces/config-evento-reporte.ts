@@ -39,6 +39,9 @@ export interface CondicionNotificacion {
     // se le asigna el id del IEventoReporte, y notifica si no llega ese evento dentro del periodo
     "no llega evento"?: string;
   };
+  usuario?: {
+    "llego en": number;
+  };
 }
 
 export type Dia =
