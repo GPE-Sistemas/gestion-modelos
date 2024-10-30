@@ -18,7 +18,7 @@ export interface IDispositivoAlarma {
     iccid: string;
     numero: string;
   };
-  idsClientesEventos?: string[];
+  idsClientesQuePuedenAtender?: string[];
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
