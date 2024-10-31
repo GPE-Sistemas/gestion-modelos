@@ -1,6 +1,8 @@
 import { ICliente } from "./cliente";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IUbicacion } from "./ubicacion";
+
+export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
 export interface IDispositivoAlarma {
   _id?: string;
   //
@@ -13,10 +15,12 @@ export interface IDispositivoAlarma {
   sim1?: {
     iccid: string;
     numero: string;
+    operador: Operador;
   };
   sim2?: {
     iccid: string;
     numero: string;
+    operador: Operador;
   };
   idsClientesQuePuedenAtender?: string[];
   // Populate

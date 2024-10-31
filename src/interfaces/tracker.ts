@@ -1,5 +1,6 @@
 import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
+import { Operador } from "./dispositivo-alarma";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 
 export type TipoTracker = "Qualcomm" | "Traccar";
@@ -45,10 +46,12 @@ export interface ITracker {
   sim1?: {
     iccid: string;
     numero: string;
+    operador: Operador;
   };
   sim2?: {
     iccid: string;
     numero: string;
+    operador: Operador;
   };
   // Populate
   cliente?: ICliente;
