@@ -7,6 +7,7 @@ export interface IDispositivoAlarma {
   _id?: string;
   //
   idComunicador?: string;
+  idUnicoComunicador?: string;
   idModelo?: string;
   idDomicilio?: string;
   idCliente?: string;
@@ -27,14 +28,15 @@ export interface IDispositivoAlarma {
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
   cliente?: ICliente;
+  comunicador?: IModeloDispositivo;
 }
 
-type OmitirCreate = "_id" | "cliente" | "modelo" | "domicilio";
+type OmitirCreate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
 
 export interface ICreateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "modelo" | "domicilio";
+type OmitirUpdate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
 
 export interface IUpdateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}

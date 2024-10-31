@@ -9,7 +9,7 @@ export interface codigoDispositivo {
   tipoEvento?: ITipoEvento;
 }
 
-export type TipoDispositivo = "Tracker" | "Alarma";
+export type TipoDispositivo = "Tracker" | "Alarma" | "Comunicador";
 
 export interface ICodigosDispositivo {
   _id?: string;
