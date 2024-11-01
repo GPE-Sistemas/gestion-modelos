@@ -16,7 +16,7 @@ export interface IInformacionContacto {
   palabraSeguridadEmergencia?: string;
 }
 
-export type IInformacion = IInformacionNota | IInformacionContacto;
+export type IInformacion = IInformacionNota & IInformacionContacto;
 export interface INota {
   _id?: string;
   idCliente?: string;
