@@ -3,7 +3,7 @@ import { ITracker } from "./tracker";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { IReporte } from "./reporte";
 import { IActivo } from "./activo";
-import { IConfigEventoUsuario } from "./config-evento-reporte";
+import { IConfigEventoUsuario } from "./config-evento-usuario";
 import { IConfigEvento } from "./config-evento";
 export type estadoEvento =
   | "Sin Tratamiento"

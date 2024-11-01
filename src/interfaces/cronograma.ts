@@ -1,6 +1,6 @@
-import { ICliente } from './cliente';
-import { Dia } from './config-evento-reporte';
-import { IUbicacion } from './ubicacion';
+import { ICliente } from "./cliente";
+import { Dia } from "./config-evento-usuario";
+import { IUbicacion } from "./ubicacion";
 
 export interface ICronograma {
   _id?: string;
@@ -22,17 +22,17 @@ export interface ICronograma {
   ubicacion?: IUbicacion;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'ubicacion';
+type OmitirCreate = "_id" | "cliente" | "ubicacion";
 
 export interface ICreateCronograma
   extends Omit<Partial<ICronograma>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'ubicacion';
+type OmitirUpdate = "_id" | "cliente" | "ubicacion";
 
 export interface IUpdateCronograma
   extends Omit<Partial<ICronograma>, OmitirUpdate> {}
 
-export type TipoDeCronograma = 'despacho' | 'turnos';
+export type TipoDeCronograma = "despacho" | "turnos";
 
 export interface Periodo {
   desde?: string; // Sale

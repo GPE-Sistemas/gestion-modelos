@@ -101,8 +101,8 @@ export interface IConfigEventoUsuario {
   usuarios?: IUsuario[];
   cliente?: ICliente;
   grupo?: IGrupo;
-  // Entidades
   activo?: IActivo;
+  clientesQuePuedenAtender?: ICliente[];
 }
 
 type OmitirCreate = "_id" | "usuarios" | "cliente" | "grupo" | "activos";

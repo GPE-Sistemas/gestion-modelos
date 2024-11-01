@@ -27,6 +27,7 @@ export interface IConfigEvento {
   alarma?: IDispositivoAlarma;
   usuarios?: IUsuario[];
   cliente?: ICliente;
+  clientesQuePuedenAtender?: ICliente[];
 }
 
 type OmitirCreate = "_id" | "tipoEvento" | "alarma" | "tracker" | "cliente";
