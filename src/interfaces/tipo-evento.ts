@@ -1,4 +1,5 @@
 import { ICliente } from "./cliente";
+import { ICodigoEvento } from "./codigo-evento";
 
 export interface ITipoEvento {
   _id?: string;
@@ -9,8 +10,10 @@ export interface ITipoEvento {
   atender?: boolean;
   noDerivar?: boolean;
   idCliente?: string;
+  idCodigoEvento?: string;
   //Populate
   cliente?: ICliente;
+  codigoEvento?: ICodigoEvento;
 }
 
 type OmitirCreate = "_id" | "cliente";

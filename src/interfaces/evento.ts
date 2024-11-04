@@ -30,6 +30,8 @@ export interface IEvento {
   posponerHasta?: string;
   estado?: estadoEvento;
   valores?: IValoresEvento;
+  codigoEvento?: string;
+  prioridad?: number;
   //
   idTracker?: string;
   idAlarma?: string;

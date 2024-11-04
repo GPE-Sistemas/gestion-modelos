@@ -3,6 +3,7 @@ export * from "./client";
 export * from "./cliente-hijo";
 export * from "./cliente";
 export * from "./config-evento-usuario";
+export * from "./codigo-evento";
 export * from "./documentacion";
 export * from "./evento-traccar";
 export * from "./grupo";
