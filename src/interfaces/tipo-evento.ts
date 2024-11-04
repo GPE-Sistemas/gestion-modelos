@@ -16,12 +16,12 @@ export interface ITipoEvento {
   codigoEvento?: ICodigoEvento;
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = "_id" | "cliente" | "codigoEvento";
 
 export interface ICreateTipoEvento
   extends Omit<Partial<ITipoEvento>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = "_id" | "cliente" | "codigoEvento";
 
 export interface IUpdateTipoEvento
   extends Omit<Partial<ITipoEvento>, OmitirUpdate> {}
