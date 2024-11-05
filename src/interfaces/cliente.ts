@@ -1,4 +1,4 @@
-import { IServicioContratado } from "./servicio-contratado";
+import { IServicioContratado } from './servicio-contratado';
 
 export interface IImagenesCliente {
   icono?: string;
@@ -9,6 +9,7 @@ export interface ITemaCliente {
   primaryColor?: string;
   accentColor?: string;
   warnColor?: string;
+  backgroundColor?: string;
   typography?: string;
 }
 
@@ -20,9 +21,9 @@ export interface IConfigCliente {
   moduloActivos?: IModuloActivos;
 }
 
-export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
+export type ITipoCliente = 'Mayorista' | 'Minorista' | 'Final';
 
-export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
+export type EstadoCuenta = 'Activo' | 'Suspendido' | 'Moroso';
 
 export interface IModuloColectivos {
   activo?: boolean;
@@ -62,10 +63,10 @@ export interface ICliente {
   serviciosContratados?: IServicioContratado[];
 }
 
-type OmitirCreate = "_id" | "padre" | "serviciosContratados";
+type OmitirCreate = '_id' | 'padre' | 'serviciosContratados';
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion" | "padre";
+type OmitirUpdate = '_id' | 'nivel' | 'tipoCliente' | 'fechaCreacion' | 'padre';
 
 export interface IUpdateCliente extends Omit<Partial<ICliente>, OmitirUpdate> {}
