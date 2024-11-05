@@ -21,7 +21,7 @@ export interface INota {
   _id?: string;
   idCliente?: string;
   idAsignado?: string;
-  permante?: boolean;
+  permanente?: boolean;
   vigenciaDesde?: string;
   vigenciaHasta?: string;
   tipo?: TipoNota;
