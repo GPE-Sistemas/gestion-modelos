@@ -4,6 +4,7 @@ export interface ITipoEvento {
   _id?: string;
   //
   nombre?: string;
+  idCliente?: string;
   //Populate
   cliente?: ICliente;
 }
