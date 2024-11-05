@@ -1,12 +1,14 @@
 import { ICliente } from "./cliente";
+import { ICategoriaEvento } from "./categoria-evento";
 import { ITipoEvento } from "./tipo-evento";
 
-export interface codigoDispositivo {
+export interface ICodigoDispositivo {
   codigo?: string;
   descripcion?: string;
-  idTipoEvento?: string;
+  idCategoriaEvento?: string;
+  mostrarZona?: boolean;
   // Populate
-  tipoEvento?: ITipoEvento;
+  categoriaEvento?: ICategoriaEvento;
 }
 
 export type TipoDispositivo = "Tracker" | "Alarma" | "Comunicador";
@@ -16,7 +18,7 @@ export interface ICodigosDispositivo {
   //
   nombre?: string;
   tipo?: TipoDispositivo;
-  eventos?: codigoDispositivo[];
+  codigos?: ICodigoDispositivo[];
   idCliente?: string;
   // Populate
   cliente?: ICliente;

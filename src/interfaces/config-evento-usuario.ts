@@ -1,6 +1,6 @@
 import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
-import { ICodigoEvento } from "./codigo-evento";
+import { ICategoriaEvento } from "./categoria-evento";
 import { IGrupo } from "./grupo";
 import { IUbicacion } from "./ubicacion";
 import { IUsuario } from "./usuario";
@@ -97,7 +97,7 @@ export interface IConfigEventoUsuario {
   idsUsuarios?: string[];
   // Los clientes que pueden atender el evento
   idsClientesQuePuedenAtender?: string[];
-  idCodigoEvento?: string;
+  idCategoriaEvento?: string;
 
   // Virtual
   usuarios?: IUsuario[];
@@ -105,7 +105,7 @@ export interface IConfigEventoUsuario {
   grupo?: IGrupo;
   activo?: IActivo;
   clientesQuePuedenAtender?: ICliente[];
-  codigoEvento?: ICodigoEvento;
+  categoriaEvento?: ICategoriaEvento;
 }
 
 type OmitirCreate =
@@ -115,7 +115,7 @@ type OmitirCreate =
   | "grupo"
   | "activos"
   | "clientesQuePuedenAtender"
-  | "codigoEvento";
+  | "categoriaEvento";
 export interface ICreateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
 
@@ -126,6 +126,6 @@ type OmitirUpdate =
   | "grupo"
   | "activos"
   | "clientesQuePuedenAtender"
-  | "codigoEvento";
+  | "categoriaEvento";
 export interface IUpdateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}
