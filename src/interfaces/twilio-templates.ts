@@ -13,7 +13,6 @@ export interface ConfigComunicadorNanocomm {
   passComunicador?: string;
   idComunicador?: string;
   apn?: string;
+  usr?: string;
   pwd?: string;
-  ip?: string;
-  port?: string;
 }
