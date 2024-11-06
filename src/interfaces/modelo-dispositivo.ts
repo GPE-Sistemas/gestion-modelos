@@ -7,7 +7,7 @@ export interface IModeloDispositivo {
   tipo?: TipoDispositivo;
   marca?: string;
   modelo?: string;
-  encabezadoNanocomm?: string;
+  formatoMensaje?: string;
   idCodigos?: string;
   idCliente?: string;
   // Populate
