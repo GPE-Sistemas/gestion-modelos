@@ -33,3 +33,4 @@ export * from './token-push';
 export * from './nota';
 export * from './servicio-contratado';
 export * from './log-twilio';
+export * from './twilio-templates';
