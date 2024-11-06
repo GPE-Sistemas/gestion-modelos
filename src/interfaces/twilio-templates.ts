@@ -3,7 +3,7 @@
  *
  *  @example ED5200*1234,ID=6573,igprs.claro.com.ar=clarogprs,PWD=clarogprs999,IP=34.46.185.217,PORT=6000,,,
  *  @example Modelo*PASSComunicador,ID=idComunicador,apn=usuario,PWD=password,IP=server,PORT=portServer,,,
- *  @example `${modelo}*${passComunicador},ID=${idComunicador},apn=${apn},PWD=${pwd},IP=${ip},PORT=${port},,,`
+ *  @example `${modelo}*${passComunicador},ID=${idComunicador},${apn}=${usuario},PWD=${pwd},IP=${ip},PORT=${port},,,`
  */
 
 export interface ConfigComunicadorNanocomm {
