@@ -35,9 +35,9 @@ export interface CondicionNotificacion {
     };
   };
   alarma?: {
-    // se le asigna el id del IEventoReporte, y notifica si llega ese evento
+    // se le asigna el codigo reportado, y notifica si llega ese evento dentro del periodo o cronograma
     "llega evento"?: string;
-    // se le asigna el id del IEventoReporte, y notifica si no llega ese evento dentro del periodo
+    // se le asigna el codigo reportado, y notifica si no llega ese evento dentro del periodo o cronograma
     "no llega evento"?: string;
   };
   usuario?: {
