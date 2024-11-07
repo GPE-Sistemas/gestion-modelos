@@ -7,6 +7,7 @@ export interface ICodigoDispositivo {
   descripcion?: string;
   idCategoriaEvento?: string;
   mostrarZona?: boolean;
+  mostrarUsuario?: boolean;
   // Populate
   categoriaEvento?: ICategoriaEvento;
 }
