@@ -6,7 +6,7 @@ export interface ITipoEvento {
   _id?: string;
   //
   nombre?: string;
-  categoria?: string;
+  categoria?: ICategoriaTipoEvento;
   idCliente?: string;
   //Populate
   cliente?: ICliente;
