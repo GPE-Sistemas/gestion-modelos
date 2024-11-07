@@ -12,8 +12,11 @@ export interface IInformacionContacto {
   contacto?: string;
   telefono?: string;
   email?: string;
+
+  // Solo cuando es contacto de alarma
   palabraSeguridadNormal?: string;
   palabraSeguridadEmergencia?: string;
+  numeroUsuarioAlarma?: number;
 }
 
 export type IInformacion = IInformacionNota & IInformacionContacto;
