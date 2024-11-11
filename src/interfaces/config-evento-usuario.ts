@@ -4,6 +4,7 @@ import { ICategoriaEvento } from "./categoria-evento";
 import { IGrupo } from "./grupo";
 import { IUbicacion } from "./ubicacion";
 import { IUsuario } from "./usuario";
+import { IDispositivoAlarma } from "./dispositivo-alarma";
 
 export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
@@ -104,6 +105,7 @@ export interface IConfigEventoUsuario {
   cliente?: ICliente;
   grupo?: IGrupo;
   activo?: IActivo;
+  alarma?: IDispositivoAlarma;
   clientesQuePuedenAtender?: ICliente[];
   categoriaEvento?: ICategoriaEvento;
 }
@@ -113,7 +115,8 @@ type OmitirCreate =
   | "usuarios"
   | "cliente"
   | "grupo"
-  | "activos"
+  | "activo"
+  | "alarma"
   | "clientesQuePuedenAtender"
   | "categoriaEvento";
 export interface ICreateConfigEventoUsuario
@@ -124,7 +127,8 @@ type OmitirUpdate =
   | "usuarios"
   | "cliente"
   | "grupo"
-  | "activos"
+  | "activo"
+  | "alarma"
   | "clientesQuePuedenAtender"
   | "categoriaEvento";
 export interface IUpdateConfigEventoUsuario
