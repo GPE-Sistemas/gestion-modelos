@@ -5,6 +5,7 @@ import { IReporte } from "./reporte";
 import { IActivo } from "./activo";
 import { IConfigEventoUsuario } from "./config-evento-usuario";
 import { IConfigEvento } from "./config-evento";
+import { SonidoEvento } from "./categoria-evento";
 export type estadoEvento =
   | "Sin Tratamiento"
   | "Pendiente"
@@ -17,6 +18,7 @@ export interface IValoresEvento {
   titulo?: string;
   mensaje?: string;
   color?: string;
+  sonido?: SonidoEvento;
   [key: string]: any;
 }
 
