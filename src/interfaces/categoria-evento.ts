@@ -1,5 +1,7 @@
 import { ICliente } from "./cliente";
 
+export type SonidoEvento = "Silencio" | "Campana" | "Sirena";
+
 export interface ICategoriaEvento {
   _id?: string;
   //
@@ -9,6 +11,7 @@ export interface ICategoriaEvento {
   notificar?: boolean;
   atender?: boolean;
   noDerivar?: boolean;
+  sonido?: SonidoEvento;
   idCliente?: string;
   //Populate
   cliente?: ICliente;
