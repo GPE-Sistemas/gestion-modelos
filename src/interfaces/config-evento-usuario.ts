@@ -5,6 +5,13 @@ import { IGrupo } from "./grupo";
 import { IUbicacion } from "./ubicacion";
 import { IUsuario } from "./usuario";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
+import { ITracker } from "./tracker";
+import { ITipoEvento } from "./tipo-evento";
+
+export interface IConfigZona {
+  particion?: number;
+  zona?: number;
+}
 
 export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
@@ -72,7 +79,6 @@ export interface IConfigEventoUsuario {
   dias?: Dia[];
   horaInicio?: string;
   horaFin?: string;
-
   // Minutos que se agregan a los periodos de vigencia
   minutosDeGracia?: number;
 
@@ -99,6 +105,9 @@ export interface IConfigEventoUsuario {
   // Los clientes que pueden atender el evento
   idsClientesQuePuedenAtender?: string[];
   idCategoriaEvento?: string;
+  codigoReportado?: string;
+  idTipoEvento?: string;
+  configZona?: IConfigZona;
 
   // Virtual
   usuarios?: IUsuario[];
@@ -108,6 +117,8 @@ export interface IConfigEventoUsuario {
   alarma?: IDispositivoAlarma;
   clientesQuePuedenAtender?: ICliente[];
   categoriaEvento?: ICategoriaEvento;
+  tracker?: ITracker;
+  tipoEvento?: ITipoEvento;
 }
 
 type OmitirCreate =
@@ -118,7 +129,9 @@ type OmitirCreate =
   | "activo"
   | "alarma"
   | "clientesQuePuedenAtender"
-  | "categoriaEvento";
+  | "categoriaEvento"
+  | "tracker"
+  | "tipoEvento";
 export interface ICreateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
 
@@ -130,6 +143,8 @@ type OmitirUpdate =
   | "activo"
   | "alarma"
   | "clientesQuePuedenAtender"
-  | "categoriaEvento";
+  | "categoriaEvento"
+  | "tracker"
+  | "tipoEvento";
 export interface IUpdateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}
