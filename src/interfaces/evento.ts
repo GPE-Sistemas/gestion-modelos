@@ -6,6 +6,17 @@ import { IActivo } from "./activo";
 import { IConfigEventoUsuario } from "./config-evento-usuario";
 import { IConfigEvento } from "./config-evento";
 import { SonidoEvento } from "./categoria-evento";
+
+export interface IContactID {
+  numeroCuenta: string;
+  tipoMensaje: string;
+  calificadorDeEvento: string;
+  codigoDeEvento: string;
+  numeroDeParticion: string;
+  numeroDeZona: string;
+  checksum: string;
+}
+
 export type estadoEvento =
   | "Sin Tratamiento"
   | "Pendiente"
@@ -19,6 +30,13 @@ export interface IValoresEvento {
   mensaje?: string;
   color?: string;
   sonido?: SonidoEvento;
+  // Solo para eventos de tracker
+  codigoTracker?: string;
+  // Solo para eventos de alarma
+  contactId?: IContactID;
+  codigoAlarma?: string;
+  codigoComunicador?: string;
+  // Otros campos
   [key: string]: any;
 }
 
