@@ -4,11 +4,7 @@ import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { ITipoEvento } from "./tipo-evento";
 import { ITracker } from "./tracker";
 import { IUsuario } from "./usuario";
-
-export interface IConfigZona {
-  particion?: number;
-  zona?: number;
-}
+import { IConfigZona } from "./config-evento-usuario";
 
 export interface IConfigEvento {
   _id?: string;
