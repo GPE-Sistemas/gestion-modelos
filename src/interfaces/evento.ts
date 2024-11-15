@@ -4,7 +4,6 @@ import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { IReporte } from "./reporte";
 import { IActivo } from "./activo";
 import { IConfigEventoUsuario } from "./config-evento-usuario";
-import { IConfigEvento } from "./config-evento";
 import { SonidoEvento } from "./categoria-evento";
 
 export interface IContactID {
@@ -69,7 +68,6 @@ export interface IEvento {
   cliente?: ICliente;
   reporte?: IReporte;
   activo?: IActivo;
-  configEvento?: IConfigEvento;
   configEventoUsuario?: IConfigEventoUsuario;
 }
 
@@ -80,7 +78,6 @@ type OmitirCreate =
   | "alarma"
   | "reporte"
   | "activo"
-  | "configEvento"
   | "configEventoUsuario";
 
 export interface ICreateEvento extends Omit<Partial<IEvento>, OmitirCreate> {}
@@ -92,7 +89,6 @@ type OmitirUpdate =
   | "alarma"
   | "reporte"
   | "activo"
-  | "configEvento"
   | "configEventoUsuario";
 
 export interface IUpdateEvento extends Omit<Partial<IEvento>, OmitirUpdate> {}
