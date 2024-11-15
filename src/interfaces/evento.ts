@@ -60,7 +60,6 @@ export interface IEvento {
   idsUsuariosAtendiendo?: string[];
   idReporte?: string;
   idActivo?: string;
-  idConfigEvento?: string;
   idConfigEventoUsuario?: string;
   // Populate
   tracker?: ITracker;
