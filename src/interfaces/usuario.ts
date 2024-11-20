@@ -1,11 +1,12 @@
-import { ICliente } from "./cliente";
+import { ICliente } from './cliente';
 
-export type Rol = "Administrador" | "Operador" | "Chofer" | "Consultor";
+export type Rol = 'Administrador' | 'Operador' | 'Chofer' | 'Consultor';
 
 export interface IPermiso {
   moduloColectivos?: boolean;
   moduloAlarmasDomiciliarias?: boolean;
   moduloActivos?: boolean;
+  moduloAdministracion?: boolean;
   idsEntidades: string[];
 }
 
@@ -41,10 +42,10 @@ export interface IUsuario {
   cliente?: ICliente;
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}
