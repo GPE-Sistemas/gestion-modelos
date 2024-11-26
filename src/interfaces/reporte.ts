@@ -48,7 +48,6 @@ export interface IReporte {
 
 type OmitirCreate =
   | "_id"
-  | "fechaCreacion"
   | "cliente"
   | "tracker"
   | "activo"
@@ -62,7 +61,6 @@ export interface ICreateReporte extends Omit<Partial<IReporte>, OmitirCreate> {}
 
 type OmitirUpdate =
   | "_id"
-  | "fechaCreacion"
   | "cliente"
   | "tracker"
   | "activo"
