@@ -24,6 +24,7 @@ export interface IReporte {
   traccarUniqueId?: string;
   velocidad?: number;
   orientacion?: number;
+  odometro?: number;
   // reporteTraccar?: Record<string, any>;
   // Datos de Qualcomm
   serialNumber?: string;
