@@ -1,5 +1,5 @@
 import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from "../auxiliares";
-import { IActivo } from "./activo";
+import { IActivo, TipoVehiculo } from "./activo";
 import { ICliente } from "./cliente";
 import { IGrupo } from "./grupo";
 import { IRecorrido } from "./recorrido";
@@ -16,22 +16,24 @@ export interface IReporte {
   idRecorrido?: string;
   idChofer?: string;
   fechaCreacion?: string;
-  // Datos compartidos
+  tipo?: "Colectivo" | "Activo" | "Tracker";
   geojson?: IGeoJSONPoint;
   fechaDevice?: string;
-  fechaServer?: string;
+  // fechaServer?: string;
   // Datos de traccar
   traccarUniqueId?: string;
   velocidad?: number;
-  reporteTraccar?: Record<string, any>;
+  orientacion?: number;
+  // reporteTraccar?: Record<string, any>;
   // Datos de Qualcomm
   serialNumber?: string;
-  tipoMensaje?: string;
   locationTechType?: string;
+  radioAccessTechnology?: string;
   horizontalUncertainity?: number;
-  deviceReportId?: number;
-  fechaLectura?: string;
-  reporteQualcomm?: Record<string, any>;
+  bateria?: number;
+  // deviceReportId?: number;
+  // fechaLectura?: string;
+  // reporteQualcomm?: Record<string, any>;
   // Populate
   cliente?: ICliente;
   grupo?: IGrupo;
