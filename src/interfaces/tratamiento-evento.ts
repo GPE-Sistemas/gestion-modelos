@@ -16,15 +16,16 @@ export interface ITratamientoEvento {
   idsEventos?: string[];
   idUsuario?: string;
   // Populate
+  eventos: IEvento[];
   usuario?: IUsuario;
 }
 
-type OmitirCreate = "_id" | "evento" | "usuario";
+type OmitirCreate = "_id" | "eventos" | "usuario";
 
 export interface ICreateTratamientoEvento
   extends Omit<Partial<ITratamientoEvento>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "evento" | "usuario";
+type OmitirUpdate = "_id" | "eventos" | "usuario";
 
 export interface IUpdateTratamientoEvento
   extends Omit<Partial<ITratamientoEvento>, OmitirUpdate> {}
