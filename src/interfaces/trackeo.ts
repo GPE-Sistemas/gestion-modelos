@@ -13,6 +13,7 @@ export interface ITrackeo {
 
   fecha?: string;
   idParada?: string;
+  indiceParada?: number;
   fechaProximaParada?: string;
   idProximaParada?: string;
 
