@@ -30,6 +30,7 @@ export interface IModuloColectivos {
   activo?: boolean;
   crearDispositivos?: boolean;
   derivarEventos?: boolean;
+  derivarEventosTecnicos?: boolean;
   compartirFlota?: boolean;
 }
 
@@ -37,6 +38,7 @@ export interface IModuloAlarmasDomiciliarias {
   activo?: boolean;
   crearDispositivos?: boolean;
   derivarEventos?: boolean;
+  derivarEventosTecnicos?: boolean;
   compartirAlarmas?: boolean;
 }
 
@@ -44,6 +46,7 @@ export interface IModuloActivos {
   activo?: boolean;
   crearDispositivos?: boolean;
   derivarEventos?: boolean;
+  derivarEventosTecnicos?: boolean;
   compartirActivos?: boolean;
 }
 
