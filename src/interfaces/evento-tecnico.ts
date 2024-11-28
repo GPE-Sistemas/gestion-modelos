@@ -3,6 +3,8 @@ import { ITracker } from './tracker';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IActivo } from './activo';
 
+export type CategoriaTecnica = 'Alarma' | 'Tracker';
+
 export type estadoEventoTecnico =
   | 'Pendiente'
   | 'Asignado'
@@ -16,6 +18,7 @@ export interface IEventoTecnico {
   fechaCreacion?: string;
   estado?: estadoEventoTecnico;
   descripcion?: string;
+  cateogria?: CategoriaTecnica;
   //
   idTracker?: string;
   idAlarma?: string;
