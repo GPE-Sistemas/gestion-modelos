@@ -16,7 +16,7 @@ export interface ITratamientoEvento {
   idsEventos?: string[];
   idUsuario?: string;
   // Populate
-  eventos: IEvento[];
+  eventos?: IEvento[];
   usuario?: IUsuario;
 }
 
