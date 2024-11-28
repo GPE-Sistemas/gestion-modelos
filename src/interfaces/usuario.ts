@@ -1,6 +1,11 @@
 import { ICliente } from './cliente';
 
-export type Rol = 'Administrador' | 'Operador' | 'Chofer' | 'Consultor';
+export type Rol =
+  | 'Administrador'
+  | 'Operador'
+  | 'Chofer'
+  | 'Consultor'
+  | 'Técnico';
 
 export interface IPermiso {
   moduloColectivos?: boolean;
