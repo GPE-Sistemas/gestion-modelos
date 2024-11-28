@@ -20,6 +20,8 @@ export interface IConfigCliente {
   moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
   moduloActivos?: IModuloActivos;
   moduloAdministracion?: IModuloAdministracion;
+  idsClientesQuePuedenAtenderEventos?: string[];
+  idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
 
 export type ITipoCliente = 'Mayorista' | 'Minorista' | 'Final';
