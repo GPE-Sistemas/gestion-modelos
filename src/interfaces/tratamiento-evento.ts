@@ -1,6 +1,6 @@
-import { IUsuario } from './usuario';
-import { estadoEvento, IEvento } from './evento';
-import { estadoEventoTecnico } from './evento-tecnico';
+import { IUsuario } from "./usuario";
+import { estadoEvento, IEvento } from "./evento";
+import { estadoEventoTecnico } from "./evento-tecnico";
 
 export interface ITratamientoEvento {
   _id?: string;
@@ -13,19 +13,18 @@ export interface ITratamientoEvento {
   estadoTecnico?: estadoEventoTecnico;
   esperaHasta?: string;
   //
-  idEvento?: string;
+  idsEventos?: string[];
   idUsuario?: string;
   // Populate
-  evento?: IEvento;
   usuario?: IUsuario;
 }
 
-type OmitirCreate = '_id' | 'evento' | 'usuario';
+type OmitirCreate = "_id" | "evento" | "usuario";
 
 export interface ICreateTratamientoEvento
   extends Omit<Partial<ITratamientoEvento>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'evento' | 'usuario';
+type OmitirUpdate = "_id" | "evento" | "usuario";
 
 export interface IUpdateTratamientoEvento
   extends Omit<Partial<ITratamientoEvento>, OmitirUpdate> {}
