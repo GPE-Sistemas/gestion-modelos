@@ -3,7 +3,7 @@ import { ITracker } from './tracker';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IActivo } from './activo';
 
-export type estadoEvento =
+export type estadoEventoTecnico =
   | 'Pendiente'
   | 'Asignado'
   | 'En Atención'
@@ -14,7 +14,7 @@ export interface IEventoTecnico {
   _id?: string;
   //
   fechaCreacion?: string;
-  estado?: estadoEvento;
+  estado?: estadoEventoTecnico;
   descripcion?: string;
   //
   idTracker?: string;
