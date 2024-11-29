@@ -26,6 +26,7 @@ export interface IDispositivoAlarma {
   sim1?: ISim;
   sim2?: ISim;
   idsClientesQuePuedenAtender?: string[];
+  idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
