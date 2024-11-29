@@ -18,7 +18,7 @@ export interface IEventoTecnico {
   fechaCreacion?: string;
   estado?: estadoEventoTecnico;
   descripcion?: string;
-  cateogria?: CategoriaTecnica;
+  categoria?: CategoriaTecnica;
   //
   idTracker?: string;
   idAlarma?: string;
