@@ -20,6 +20,7 @@ export interface IConfigCliente {
   moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
   moduloActivos?: IModuloActivos;
   moduloAdministracion?: IModuloAdministracion;
+  moduloEventosTecnicos?: IModuloEventosTecnicos;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
@@ -57,6 +58,10 @@ export interface IModuloAdministracion {
   crearUsuarios?: boolean;
   crearServicios?: boolean;
   crearApikeys?: boolean;
+}
+
+export interface IModuloEventosTecnicos {
+  activo?: boolean;
 }
 
 export interface ICliente {
