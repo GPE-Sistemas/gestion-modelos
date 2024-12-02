@@ -17,6 +17,7 @@ export interface IEventoTecnico {
   //
   fechaCreacion?: string;
   estado?: estadoEventoTecnico;
+  titulo?: string;
   descripcion?: string;
   categoria?: CategoriaTecnica;
   //
