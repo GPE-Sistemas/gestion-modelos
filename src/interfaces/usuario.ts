@@ -12,6 +12,7 @@ export interface IPermiso {
   moduloAlarmasDomiciliarias?: boolean;
   moduloActivos?: boolean;
   moduloAdministracion?: boolean;
+  moduloEventosTecnicos?: boolean;
   idsEntidades: string[];
 }
 
