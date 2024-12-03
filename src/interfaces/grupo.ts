@@ -1,6 +1,10 @@
 import { ICliente } from "./cliente";
 
-export type CategoriaGrupo = "Línea de colectivo" | "Flota" | "Normal";
+export type CategoriaGrupo =
+  | "Línea de colectivo"
+  | "Flota"
+  | "Activo"
+  | "Normal";
 
 export interface IGrupo {
   _id?: string;
