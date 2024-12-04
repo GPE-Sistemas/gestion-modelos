@@ -55,6 +55,7 @@ export interface IEvento {
   idTracker?: string;
   idAlarma?: string;
   idCliente?: string;
+  tipo?: "Colectivo" | "Activo" | "Tracker" | "Vehiculo" | "Alarma";
   idsClientesQuePuedenAtender?: string[];
   idsClientesAtendiendo?: string[];
   idsUsuariosAtendiendo?: string[];
