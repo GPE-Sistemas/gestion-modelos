@@ -12,7 +12,7 @@ export type TipoVehiculo =
   | "Grua"
   | "Otro";
 
-export type FuncionVehiculo =
+export type FuncionActivo =
   | "Transporte"
   | "Bomberos"
   | "Mantenimiento"
@@ -58,7 +58,7 @@ export interface IActivo {
   idUnicoTraccar?: number;
   identificacion?: string;
   categoria?: ICategoriaActivo;
-  funcion?: FuncionVehiculo;
+  funcion?: FuncionActivo;
   vehiculo?: IVehiculo;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
