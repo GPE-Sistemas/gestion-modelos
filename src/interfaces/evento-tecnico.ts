@@ -2,6 +2,7 @@ import { ICliente } from './cliente';
 import { ITracker } from './tracker';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IActivo } from './activo';
+import { IUsuario } from './usuario';
 
 export type CategoriaTecnica = 'Alarma' | 'Tracker';
 
@@ -34,6 +35,7 @@ export interface IEventoTecnico {
   alarma?: IDispositivoAlarma;
   activo?: IActivo;
   cliente?: ICliente;
+  usuario?: IUsuario;
 }
 
 type OmitirCreate =
