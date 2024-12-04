@@ -16,7 +16,7 @@ export interface IReporte {
   idRecorrido?: string;
   idChofer?: string;
   fechaCreacion?: string;
-  tipo?: "Colectivo" | "Activo" | "Tracker";
+  tipo?: "Colectivo" | "Activo" | "Tracker" | "Vehiculo";
   geojson?: IGeoJSONPoint;
   fechaDevice?: string;
   // fechaServer?: string;
