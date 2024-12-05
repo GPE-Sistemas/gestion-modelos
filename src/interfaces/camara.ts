@@ -1,3 +1,4 @@
+import { ICliente } from "./cliente";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 
 export type TipoHabilitacion = "Siempre" | "Con Evento";
@@ -22,13 +23,14 @@ export interface ICamara {
   usuario?: string;
   password?: string;
   // Populate
+  cliente?: ICliente;
   modeloDispositivo?: IModeloDispositivo;
 }
 
-type OmitirCreate = "_id" | "modeloDispositivo";
+type OmitirCreate = "_id" | "cliente" | "modeloDispositivo";
 
 export interface ICreateCamara extends Omit<Partial<ICamara>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "modeloDispositivo";
+type OmitirUpdate = "_id" | "cliente" | "modeloDispositivo";
 
 export interface IUpdateCamara extends Omit<Partial<ICamara>, OmitirUpdate> {}
