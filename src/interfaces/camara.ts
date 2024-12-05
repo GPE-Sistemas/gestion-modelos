@@ -4,8 +4,8 @@ export type TipoHabilitacion = "Siempre" | "Con Evento";
 
 export interface ICanalesCamara {
   [numero: string]: {
-    nombre: string;
-    descripcion: string;
+    nombre?: string;
+    descripcion?: string;
     tipoHabilitacion?: TipoHabilitacion;
   };
 }
