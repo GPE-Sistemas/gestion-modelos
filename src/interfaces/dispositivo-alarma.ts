@@ -1,6 +1,6 @@
-import { ICliente } from './cliente';
-import { IModeloDispositivo } from './modelo-dispositivo';
-import { IUbicacion } from './ubicacion';
+import { ICliente } from "./cliente";
+import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IUbicacion } from "./ubicacion";
 
 export interface ISim {
   iccid?: string;
@@ -11,7 +11,14 @@ export interface ISim {
   password?: string;
 }
 
-export type Operador = 'Personal' | 'Claro' | 'Movistar' | 'Tuenti' | 'Otro';
+export interface ICamaraAlarma {
+  idCamara?: string;
+  canal?: string;
+  particion?: number;
+  zona?: number;
+}
+
+export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
 export interface IDispositivoAlarma {
   _id?: string;
   //
@@ -27,6 +34,7 @@ export interface IDispositivoAlarma {
   sim2?: ISim;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
+  camaras?: ICamaraAlarma[];
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
@@ -34,12 +42,12 @@ export interface IDispositivoAlarma {
   comunicador?: IModeloDispositivo;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'modelo' | 'domicilio' | 'comunicador';
+type OmitirCreate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
 
 export interface ICreateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'modelo' | 'domicilio' | 'comunicador';
+type OmitirUpdate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
 
 export interface IUpdateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}
