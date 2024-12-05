@@ -3,10 +3,10 @@ import {
   ICoordenadas,
   IGeoJSONLineString,
   IGeoJSONPoint,
-} from "../auxiliares";
-import { ICliente } from "./cliente";
-import { IGrupo } from "./grupo";
-import { IUbicacion } from "./ubicacion";
+} from '../auxiliares';
+import { ICliente } from './cliente';
+import { IGrupo } from './grupo';
+import { IUbicacion } from './ubicacion';
 
 export interface IParada {
   _id?: string;
@@ -38,6 +38,8 @@ export interface IFranjaHoraria {
 export interface IRecorrido {
   _id?: string;
   idCliente?: string;
+  //
+  idExterno?: string;
   idGrupo?: string;
   nombreFlota?: string;
   nombre?: string;
@@ -58,12 +60,12 @@ export interface IRecorrido {
 }
 
 type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "grupo"
-  | "recorrido"
-  | "recorridoOl"
-  | "ubicaciones";
+  | '_id'
+  | 'cliente'
+  | 'grupo'
+  | 'recorrido'
+  | 'recorridoOl'
+  | 'ubicaciones';
 
 export interface ICreateRecorrido
   extends Omit<Partial<IRecorrido>, OmitirCreate> {
@@ -71,12 +73,12 @@ export interface ICreateRecorrido
 }
 
 type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "grupo"
-  | "recorrido"
-  | "recorridoOl"
-  | "ubicaciones";
+  | '_id'
+  | 'cliente'
+  | 'grupo'
+  | 'recorrido'
+  | 'recorridoOl'
+  | 'ubicaciones';
 
 export interface IUpdateRecorrido
   extends Omit<Partial<IRecorrido>, OmitirUpdate> {
