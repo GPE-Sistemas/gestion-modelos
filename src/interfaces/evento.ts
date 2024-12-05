@@ -24,6 +24,12 @@ export type estadoEvento =
   | "Liberada"
   | "Finalizada";
 
+export type tipoEvento =
+  | "Colectivo"
+  | "Activo"
+  | "Tracker"
+  | "Vehiculo"
+  | "Alarma";
 export interface IValoresEvento {
   titulo?: string;
   mensaje?: string;
@@ -55,7 +61,7 @@ export interface IEvento {
   idTracker?: string;
   idAlarma?: string;
   idCliente?: string;
-  tipo?: "Colectivo" | "Activo" | "Tracker" | "Vehiculo" | "Alarma";
+  tipo?: tipoEvento;
   idsClientesQuePuedenAtender?: string[];
   idsClientesAtendiendo?: string[];
   idsUsuariosAtendiendo?: string[];
