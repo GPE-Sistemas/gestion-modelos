@@ -4,7 +4,12 @@ import { IModeloDispositivo } from "./modelo-dispositivo";
 export type TipoHabilitacion = "Siempre" | "Con Evento";
 
 export interface ICanalesCamara {
-  numero: string;
+  numero: string; // 1
+  ids: {
+    id: string;
+    width: number;
+    height: number;
+  }[];
   nombre?: string;
   descripcion?: string;
   tipoHabilitacion?: TipoHabilitacion;
