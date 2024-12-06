@@ -7,6 +7,7 @@ export interface ILogDespacho {
   idExternoVehiculo?: string;
   idExternoRecorrido?: string;
   idExternoChofer?: string;
+  fecha?: string;
   // Populate
   cliente?: ICliente;
 }
