@@ -45,12 +45,24 @@ export interface IDispositivoAlarma {
   camaras?: ICamara[];
 }
 
-type OmitirCreate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
+type OmitirCreate =
+  | "_id"
+  | "cliente"
+  | "modelo"
+  | "domicilio"
+  | "comunicador "
+  | "camaras";
 
 export interface ICreateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
+type OmitirUpdate =
+  | "_id"
+  | "cliente"
+  | "modelo"
+  | "domicilio"
+  | "comunicador"
+  | "camaras";
 
 export interface IUpdateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}
