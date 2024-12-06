@@ -42,7 +42,7 @@ export interface IDispositivoAlarma {
   modelo?: IModeloDispositivo;
   cliente?: ICliente;
   comunicador?: IModeloDispositivo;
-  camaras?: ICamara;
+  camaras?: ICamara[];
 }
 
 type OmitirCreate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
