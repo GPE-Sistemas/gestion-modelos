@@ -1,3 +1,4 @@
+import { ICamara } from "./camara";
 import { ICliente } from "./cliente";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IUbicacion } from "./ubicacion";
@@ -34,12 +35,14 @@ export interface IDispositivoAlarma {
   sim2?: ISim;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
-  camaras?: ICamaraAlarma[];
+  camarasPorZona?: ICamaraAlarma[];
+  idsCamaras?: string[];
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
   cliente?: ICliente;
   comunicador?: IModeloDispositivo;
+  camaras?: ICamara;
 }
 
 type OmitirCreate = "_id" | "cliente" | "modelo" | "domicilio" | "comunicador";
