@@ -5,7 +5,8 @@ export type Rol =
   | "Operador"
   | "Chofer"
   | "Consultor"
-  | "Técnico";
+  | "Técnico"
+  | "Final";
 
 export interface IPermiso {
   moduloColectivos?: boolean;
