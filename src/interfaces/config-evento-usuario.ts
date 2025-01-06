@@ -7,6 +7,7 @@ import { IUsuario } from "./usuario";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { ITracker } from "./tracker";
 import { ITipoEvento } from "./tipo-evento";
+import { IGeoJSONPoint } from "../auxiliares";
 
 export interface IConfigZona {
   particion?: number;
@@ -31,6 +32,8 @@ export interface CondicionNotificacion {
     velocidad?: {
       "superior a": number;
     };
+    ubicacionEstacionado?: IGeoJSONPoint;
+    distanciaDeAviso?: number;
     ubicacion?: {
       idUbicacion: string;
       dentro?: boolean;
