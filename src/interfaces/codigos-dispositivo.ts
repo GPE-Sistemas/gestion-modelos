@@ -8,6 +8,8 @@ export interface ICodigoDispositivo {
   idCategoriaEvento?: string;
   mostrarZona?: boolean;
   mostrarUsuario?: boolean;
+  armado?: boolean;
+  desarmado?: boolean;
   minutosEsperaAutomatica?: number; // Los eventos generados se ponen en espera automaticamente por este tiempo
   cierraCodigosEventos?: string[]; // Si se genera un evento con este codigo, se cierran los eventos con estos codigos del array
   // Populate
