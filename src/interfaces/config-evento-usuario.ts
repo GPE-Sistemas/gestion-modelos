@@ -32,8 +32,10 @@ export interface CondicionNotificacion {
     velocidad?: {
       "superior a": number;
     };
-    ubicacionEstacionado?: IGeoJSONPoint;
-    distanciaDeAviso?: number;
+    estacionado?: {
+      ubicacionEstacionado?: IGeoJSONPoint;
+      distanciaDeAviso?: number;
+    };
     ubicacion?: {
       idUbicacion: string;
       dentro?: boolean;
