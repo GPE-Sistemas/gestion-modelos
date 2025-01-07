@@ -37,6 +37,7 @@ export interface IDispositivoAlarma {
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
+  armado?: boolean;
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
