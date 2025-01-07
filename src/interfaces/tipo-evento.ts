@@ -8,6 +8,7 @@ export interface ITipoEvento {
   nombre?: string;
   categoria?: ICategoriaTipoEvento;
   idCliente?: string;
+  default?: boolean;
   //Populate
   cliente?: ICliente;
 }

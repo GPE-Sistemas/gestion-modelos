@@ -13,6 +13,7 @@ export interface ICategoriaEvento {
   noDerivar?: boolean;
   sonido?: SonidoEvento;
   idCliente?: string;
+  default?: boolean;
   //Populate
   cliente?: ICliente;
 }
