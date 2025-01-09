@@ -3,6 +3,7 @@ import { IServicioContratado } from "./servicio-contratado";
 export interface IImagenesCliente {
   icono?: string;
   banner?: string;
+  bannerModoOscuro?: string;
 }
 
 export interface ITemaCliente {
