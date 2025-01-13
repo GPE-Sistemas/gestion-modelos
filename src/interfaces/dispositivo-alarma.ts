@@ -12,6 +12,11 @@ export interface ISim {
   password?: string;
 }
 
+export interface IUltimaConexion {
+  lastIp?: string;
+  lastPort?: string;
+}
+
 export interface ICamaraAlarma {
   idCamara?: string;
   canal?: string;
@@ -38,6 +43,7 @@ export interface IDispositivoAlarma {
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
   armado?: boolean;
+  ultimaConexion?: IUltimaConexion;
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
