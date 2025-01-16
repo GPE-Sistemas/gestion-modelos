@@ -24,6 +24,21 @@ export interface ICamaraAlarma {
   zona?: number;
 }
 
+export interface IModoDesactivado {
+  dispositivoDesactivado?: boolean;
+  permanente?: boolean;
+  desde?: string;
+  hasta?: string;
+  codigos?: string[];
+  alarma?: {
+    particiones?: string[];
+    zonas?: {
+      particion: string;
+      zona: string;
+    }[];
+  };
+}
+
 export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
 export interface IDispositivoAlarma {
   _id?: string;
@@ -44,6 +59,7 @@ export interface IDispositivoAlarma {
   idsCamaras?: string[];
   armado?: boolean;
   ultimaConexion?: IUltimaConexion;
+  modoDesactivado?: IModoDesactivado;
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
