@@ -18,7 +18,7 @@ export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
 export type Agrupacion = "Grupo" | "Entidad";
 
-export type TipoEntidad = "Activo" | "Vehiculo" | "Alarma";
+export type TipoEntidad = "Activo" | "Vehiculo" | "Alarma" | "Usuario";
 
 export type Frecuencia =
   | "Unica"
@@ -54,7 +54,10 @@ export interface CondicionNotificacion {
     "no llega evento"?: string[];
   };
   usuario?: {
-    "llego en": number;
+    llegoEn: {
+      idUsuario: string;
+      tiempo: number;
+    };
   };
 }
 

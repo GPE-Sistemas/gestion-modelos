@@ -5,6 +5,7 @@ import { IReporte } from "./reporte";
 import { IActivo } from "./activo";
 import { IConfigEventoUsuario } from "./config-evento-usuario";
 import { SonidoEvento } from "./categoria-evento";
+import { IUsuario } from "./usuario";
 
 export interface IContactID {
   numeroCuenta: string;
@@ -60,6 +61,7 @@ export interface IEvento {
   //
   idTracker?: string;
   idAlarma?: string;
+  idUsuario?: string;
   idCliente?: string;
   tipo?: tipoEvento;
   idsClientesQuePuedenAtender?: string[];
@@ -71,6 +73,7 @@ export interface IEvento {
   // Populate
   tracker?: ITracker;
   alarma?: IDispositivoAlarma;
+  usuario?: IUsuario;
   cliente?: ICliente;
   reporte?: IReporte;
   activo?: IActivo;
