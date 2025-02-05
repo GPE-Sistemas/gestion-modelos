@@ -58,6 +58,8 @@ export interface IEvento {
   valores?: IValoresEvento;
   codigoEvento?: string;
   prioridad?: number;
+  repetido?: number;
+  fechaUltimoRepetido?: string;
   //
   idTracker?: string;
   idAlarma?: string;
@@ -70,6 +72,7 @@ export interface IEvento {
   idReporte?: string;
   idActivo?: string;
   idConfigEventoUsuario?: string;
+
   // Populate
   tracker?: ITracker;
   alarma?: IDispositivoAlarma;
