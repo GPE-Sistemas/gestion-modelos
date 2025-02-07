@@ -14,7 +14,7 @@ export interface ISim {
 
 export interface IDireccionReenvio {
   name?: string;
-  host?: string;
+  address?: string;
   port?: number;
 }
 
