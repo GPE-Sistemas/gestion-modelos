@@ -12,6 +12,12 @@ export interface ISim {
   password?: string;
 }
 
+export interface IDireccionReenvio {
+  name?: string;
+  host?: string;
+  port?: number;
+}
+
 export interface IUltimaConexion {
   lastIp?: string;
   lastPort?: string;
@@ -61,6 +67,8 @@ export interface IDispositivoAlarma {
   armando?: boolean;
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
+  reenviarMensajes?: boolean;
+  reenviarA?: IDireccionReenvio[];
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
