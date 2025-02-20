@@ -9,6 +9,12 @@ export interface ILogReenvio {
   fecha?: string;
   idEntidad?: string;
 
+  protocolo?: "UDP" | "TCP";
+  host?: string;
+  puerto?: number;
+  body?: string;
+  ack?: boolean;
+
   // Populate
   cliente?: ICliente;
   dispositivoAlarma?: IDispositivoAlarma;
