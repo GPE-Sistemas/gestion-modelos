@@ -6,7 +6,7 @@ export type IAgrupacionReenvio =
   | "Todos los trackers del cliente"
   | "Todas las alarmas del cliente"
   | "Entidad";
-export interface IOpciones {
+export interface IOpcionesReenvio {
   metodo?: "Básico";
   host?: string;
   puerto?: number;
@@ -20,7 +20,7 @@ export interface IConfigReenvio {
   agrupacionReenvio?: IAgrupacionReenvio;
   idClienteReenvio?: string;
   idEntidadReenvio?: string;
-  opcionesReenvio?: IOpciones;
+  opcionesReenvio?: IOpcionesReenvio;
 
   // Virtual
   cliente?: ICliente;
