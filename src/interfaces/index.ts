@@ -35,5 +35,6 @@ export * from "./nota";
 export * from "./servicio-contratado";
 export * from "./log-twilio";
 export * from "./log-despacho";
+export * from "./log-reenvio";
 export * from "./twilio-templates";
 export * from "./evento-tecnico";
