@@ -24,6 +24,7 @@ export interface IConfigReenvio {
 
   // Virtual
   cliente?: ICliente;
+  clienteReenvio?: ICliente;
   dispositivoAlarma?: IDispositivoAlarma;
   tracker?: ITracker;
 }
