@@ -14,6 +14,7 @@ export interface ILogReenvio {
   puerto?: number;
   body?: string;
   ack?: boolean;
+  error?: string;
 
   // Populate
   cliente?: ICliente;
