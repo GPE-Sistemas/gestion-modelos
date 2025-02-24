@@ -8,13 +8,13 @@ import { SonidoEvento } from "./categoria-evento";
 import { IUsuario } from "./usuario";
 
 export interface IContactID {
-  numeroCuenta: string;
-  tipoMensaje: string;
-  calificadorDeEvento: string;
-  codigoDeEvento: string;
-  numeroDeParticion: string;
-  numeroDeZona: string;
-  checksum: string;
+  numeroCuenta?: string;
+  tipoMensaje?: string;
+  calificadorDeEvento?: string;
+  codigoDeEvento?: string;
+  numeroDeParticion?: string;
+  numeroDeZona?: string;
+  checksum?: string;
 }
 
 export type estadoEvento =
