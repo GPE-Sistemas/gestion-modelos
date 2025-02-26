@@ -24,8 +24,8 @@ export interface IEstadoEntidad {
 
 type Omitir = '_id' | 'cliente' | 'usuario' | 'alarma' | 'tracker';
 
-export interface ICreateEstadoCuenta
+export interface ICreateEstadoEntidad
   extends Omit<Partial<IEstadoEntidad>, Omitir> {}
 
-export interface IUpdateEstadoCuenta
+export interface IUpdateEstadoEntidad
   extends Omit<Partial<IEstadoEntidad>, Omitir> {}
