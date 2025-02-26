@@ -1,9 +1,9 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { ISim, Operador } from './dispositivo-alarma';
-import { IModeloDispositivo } from './modelo-dispositivo';
+import { IActivo } from "./activo";
+import { ICliente } from "./cliente";
+import { ISim, Operador } from "./dispositivo-alarma";
+import { IModeloDispositivo } from "./modelo-dispositivo";
 
-export type TipoTracker = 'Qualcomm' | 'Traccar';
+export type TipoTracker = "Qualcomm" | "Traccar";
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
@@ -29,6 +29,8 @@ export interface IQualcommDevice {
 export interface ITracker {
   _id?: string;
   //
+  fechaCreacion?: string;
+  fechaAlta?: string;
   idCliente?: string;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
@@ -53,10 +55,10 @@ export interface ITracker {
   modelo?: IModeloDispositivo;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'activo' | 'modelo';
+type OmitirCreate = "_id" | "cliente" | "activo" | "modelo";
 
 export interface ICreateTracker extends Omit<Partial<ITracker>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'activo' | 'modelo';
+type OmitirUpdate = "_id" | "cliente" | "activo" | "modelo";
 
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}

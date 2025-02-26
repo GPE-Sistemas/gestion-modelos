@@ -49,6 +49,8 @@ export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
 export interface IDispositivoAlarma {
   _id?: string;
   //
+  fechaCreacion?: string;
+  fechaAlta?: string;
   idComunicador?: string;
   idUnicoComunicador?: string;
   passwordComunicador?: string;
