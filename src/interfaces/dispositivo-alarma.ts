@@ -1,7 +1,8 @@
-import { ICamara } from "./camara";
-import { ICliente } from "./cliente";
-import { IModeloDispositivo } from "./modelo-dispositivo";
-import { IUbicacion } from "./ubicacion";
+import { ICamara } from './camara';
+import { ICliente } from './cliente';
+import { estadoCuenta } from './estado-entidad';
+import { IModeloDispositivo } from './modelo-dispositivo';
+import { IUbicacion } from './ubicacion';
 
 export interface ISim {
   iccid?: string;
@@ -45,7 +46,7 @@ export interface IModoDesactivado {
   };
 }
 
-export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
+export type Operador = 'Personal' | 'Claro' | 'Movistar' | 'Tuenti' | 'Otro';
 export interface IDispositivoAlarma {
   _id?: string;
   //
@@ -71,6 +72,8 @@ export interface IDispositivoAlarma {
   modoDesactivado?: IModoDesactivado;
   reenviarMensajes?: boolean;
   reenviarA?: IDireccionReenvio[];
+  //
+  estadoCuenta?: estadoCuenta;
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
@@ -80,23 +83,23 @@ export interface IDispositivoAlarma {
 }
 
 type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "modelo"
-  | "domicilio"
-  | "comunicador "
-  | "camaras";
+  | '_id'
+  | 'cliente'
+  | 'modelo'
+  | 'domicilio'
+  | 'comunicador '
+  | 'camaras';
 
 export interface ICreateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "modelo"
-  | "domicilio"
-  | "comunicador"
-  | "camaras";
+  | '_id'
+  | 'cliente'
+  | 'modelo'
+  | 'domicilio'
+  | 'comunicador'
+  | 'camaras';
 
 export interface IUpdateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}
