@@ -2,14 +2,17 @@ import { ICliente } from "./cliente";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { ITracker } from "./tracker";
 
+export type MetodoReenvio = "Básico" | "Seguridad Evento Externo";
+
 export type IAgrupacionReenvio =
   | "Todos los trackers del cliente"
   | "Todas las alarmas del cliente"
   | "Entidad";
 export interface IOpcionesReenvio {
-  metodo?: "Básico";
+  metodo?: MetodoReenvio;
   host?: string;
   puerto?: number;
+  apikey?: string;
 }
 
 export interface IConfigReenvio {
