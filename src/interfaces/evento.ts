@@ -42,7 +42,7 @@ export interface IValoresEvento {
   contactId?: IContactID;
   codigoAlarma?: string;
   codigoComunicador?: string;
-  tiposEvento?: string[]; // Armado, Desarmado, detonacion, etc
+  tiposEvento?: ("Armado" | "Desarmado" | "Detonación")[]; // Armado, Desarmado, detonacion, etc
   // Otros campos
   [key: string]: any;
 }
