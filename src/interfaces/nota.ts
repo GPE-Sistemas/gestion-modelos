@@ -29,7 +29,7 @@ export interface INota {
   vigenciaHasta?: string;
   tipo?: TipoNota;
   informacion?: IInformacion;
-  orden: number;
+  orden?: number;
   // Populate
   cliente?: ICliente;
   activo?: IActivo;
