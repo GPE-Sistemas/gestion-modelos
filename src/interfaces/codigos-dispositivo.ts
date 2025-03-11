@@ -1,6 +1,5 @@
 import { ICliente } from "./cliente";
 import { ICategoriaEvento } from "./categoria-evento";
-import { ITipoEvento } from "./tipo-evento";
 
 export interface ICodigoDispositivo {
   codigo?: string;
@@ -11,6 +10,7 @@ export interface ICodigoDispositivo {
   armado?: boolean;
   desarmado?: boolean;
   detonacion?: boolean;
+  test?: boolean;
   minutosEsperaAutomatica?: number; // Los eventos generados se ponen en espera automaticamente por este tiempo
   cierraCodigosEventos?: string[]; // Si se genera un evento con este codigo, se cierran los eventos con estos codigos del array
   // Populate
