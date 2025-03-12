@@ -1,5 +1,10 @@
+import { ICliente } from "./cliente";
+
 export interface ISoap {
   _id?: string;
+  idCliente?: string;
+  fechaCreacion?: string;
+
   alta?: ISoapAlta;
   create?: ISoapCreate;
   altaChofer?: ISoapAltaChofer;
@@ -7,13 +12,16 @@ export interface ISoap {
   altaPorMinuta?: ISoapAltaPorMinuta;
   altaPorMinutaChofer?: ISoapAltaPorMinutaChofer;
   baja?: ISoapBaja;
+
+  // Populate
+  cliente?: ICliente;
 }
 
-type OmitirCreate = "_id";
+type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateSoap extends Omit<Partial<ISoap>, OmitirCreate> {}
 
-type OmitirUpdate = "_id";
+type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateSoap extends Omit<Partial<ISoap>, OmitirUpdate> {}
 
