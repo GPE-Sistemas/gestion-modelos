@@ -40,6 +40,12 @@ export interface IModoDesactivado {
   };
 }
 
+export interface IParticionZona {
+  nombre?: string;
+  particion?: number;
+  zona?: number;
+}
+
 export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
 export interface IDispositivoAlarma {
   _id?: string;
@@ -65,6 +71,7 @@ export interface IDispositivoAlarma {
   armando?: boolean;
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
+  infoZonas?: IParticionZona[];
   //
   estadoCuenta?: estadoCuenta;
   frecReporte?: number;
