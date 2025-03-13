@@ -3,7 +3,8 @@ import { ICliente } from "./cliente";
 export type Rol =
   | "Administrador"
   | "Operador"
-  | "Chofer"
+  | "Conductor"
+  | "Chofer Colectivo"
   | "Consultor"
   | "Técnico"
   | "Final";
