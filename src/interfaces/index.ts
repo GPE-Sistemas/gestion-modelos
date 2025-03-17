@@ -40,3 +40,4 @@ export * from "./twilio-templates";
 export * from "./evento-tecnico";
 export * from "./estado-entidad";
 export * from "./soap";
+export * from "./envio-vehiculo";
