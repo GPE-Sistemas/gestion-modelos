@@ -8,6 +8,7 @@
   "repository": "https://github.com/GPE-Sistemas/gestion-modelos",
   "dependencies": {
     "@types/joi": "^17.2.2",
-    "joi": "^17.13.3"
+    "joi": "^17.13.3",
+    "joi-to-swagger": "^6.2.0"
   }
 }
