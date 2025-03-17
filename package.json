@@ -5,5 +5,9 @@
   "description": "Modelos para el sitema de gestion",
   "author": "GPE Sistemas",
   "license": "Private",
-  "repository": "https://github.com/GPE-Sistemas/gestion-modelos"
+  "repository": "https://github.com/GPE-Sistemas/gestion-modelos",
+  "dependencies": {
+    "@types/joi": "^17.2.2",
+    "joi": "^17.13.3"
+  }
 }
