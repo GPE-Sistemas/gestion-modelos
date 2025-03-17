@@ -34,6 +34,7 @@ export const IDeviceProfileChirpstackValidation =
       supportsJoin: joi.boolean(),
       tags: joi.object(),
       uplinkInterval: joi.string(),
+      activationMethod: joi.string().valid("OTAA", "ABP"),
     }),
   });
 
@@ -73,5 +74,6 @@ export interface IDeviceProfileChirpstack {
     supportsJoin?: boolean;
     tags?: Record<string, string>;
     uplinkInterval: string;
+    activationMethod: "OTAA" | "ABP";
   };
 }
