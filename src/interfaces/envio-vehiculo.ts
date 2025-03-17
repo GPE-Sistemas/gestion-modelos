@@ -15,6 +15,7 @@ export interface IEnvioVehiculo {
   fechaFinalizacion?: string;
   descripcion?: string;
   estado?: EstadoEnvioVehiculo;
+  ///
   idCliente?: string;
   idConductor?: string;
   idEvento?: string;
