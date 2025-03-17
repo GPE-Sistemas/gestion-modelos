@@ -18,7 +18,7 @@ export interface IEnvioVehiculo {
   ///
   idCliente?: string;
   idConductor?: string;
-  idEvento?: string;
+  idsEventos?: string[];
   //Usuario que lo crea
   idUsuario?: string;
   idActivo?: string;
@@ -26,7 +26,7 @@ export interface IEnvioVehiculo {
   cliente?: ICliente;
   conductor?: IUsuario;
   usuario?: IUsuario;
-  evento?: IEvento;
+  eventos?: IEvento[];
   activo?: IActivo;
 }
 
@@ -36,7 +36,7 @@ type OmitirCreate =
   | "activo"
   | "cliente"
   | "conductor"
-  | "evento";
+  | "eventos";
 
 export interface ICreateEnvioVehiculo
   extends Omit<Partial<IEnvioVehiculo>, OmitirCreate> {}
@@ -47,7 +47,7 @@ type OmitirUpdate =
   | "activo"
   | "cliente"
   | "conductor"
-  | "evento";
+  | "eventos";
 
 export interface IUpdateEnvioVehiculo
   extends Omit<Partial<IEnvioVehiculo>, OmitirUpdate> {}
