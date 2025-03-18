@@ -1,4 +1,6 @@
-export interface IDispositivo {
+import { ICliente } from "./cliente";
+
+export interface IDispositivoLorawan {
   _id?: string;
   devEUI?: string;
   description?: string;
@@ -10,6 +12,10 @@ export interface IDispositivo {
   nwkKey?: string;
   deviceProfileID?: string;
   activationMethod?: "OTAA" | "ABP";
+  idCliente?: string;
+
+  //Populate
+  cliente?: ICliente;
 }
 
 export interface IDeviceProfile {
@@ -25,3 +31,13 @@ export interface IDeviceProfile {
   updatedAt?: string;
   vendorID?: string;
 }
+
+type OmitirCreate = "_id" | "cliente";
+
+export interface ICreateDispositivoLorawan
+  extends Omit<Partial<IDispositivoLorawan>, OmitirCreate> {}
+
+type OmitirUpdate = "_id" | "cliente";
+
+export interface IUpdateDispositivoLorawan
+  extends Omit<Partial<IDispositivoLorawan>, OmitirUpdate> {}
