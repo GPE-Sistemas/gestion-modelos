@@ -1,6 +1,6 @@
 import { ICliente } from "./cliente";
 
-export interface IDispositivo {
+export interface IDispositivoLorawan {
   _id?: string;
   devEUI?: string;
   description?: string;
@@ -34,10 +34,10 @@ export interface IDeviceProfile {
 
 type OmitirCreate = "_id" | "cliente";
 
-export interface ICreateDispositivo
-  extends Omit<Partial<IDispositivo>, OmitirCreate> {}
+export interface ICreateDispositivoLorawan
+  extends Omit<Partial<IDispositivoLorawan>, OmitirCreate> {}
 
 type OmitirUpdate = "_id" | "cliente";
 
-export interface IUpdateDispositivo
-  extends Omit<Partial<IDispositivo>, OmitirUpdate> {}
+export interface IUpdateDispositivoLorawan
+  extends Omit<Partial<IDispositivoLorawan>, OmitirUpdate> {}
