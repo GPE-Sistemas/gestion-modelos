@@ -8,3 +8,6 @@ export interface ILoraServer {
   serviceProfileID?: string;
   integrationUrl?: string;
 }
+
+export type ICreateLoraServer = ILoraServer;
+export type IUpdateLoraServer = ILoraServer;
