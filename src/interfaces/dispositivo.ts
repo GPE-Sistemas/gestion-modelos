@@ -1,3 +1,5 @@
+import { ICliente } from "./cliente";
+
 export interface IDispositivo {
   _id?: string;
   devEUI?: string;
@@ -10,6 +12,10 @@ export interface IDispositivo {
   nwkKey?: string;
   deviceProfileID?: string;
   activationMethod?: "OTAA" | "ABP";
+  idCliente?: string;
+
+  //Populate
+  cliente?: ICliente;
 }
 
 export interface IDeviceProfile {
@@ -25,3 +31,13 @@ export interface IDeviceProfile {
   updatedAt?: string;
   vendorID?: string;
 }
+
+type OmitirCreate = "_id" | "cliente";
+
+export interface ICreateDispositivo
+  extends Omit<Partial<IDispositivo>, OmitirCreate> {}
+
+type OmitirUpdate = "_id" | "cliente";
+
+export interface IUpdateDispositivo
+  extends Omit<Partial<IDispositivo>, OmitirUpdate> {}

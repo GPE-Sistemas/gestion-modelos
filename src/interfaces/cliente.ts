@@ -19,6 +19,7 @@ export interface IConfigCliente {
   tema?: ITemaCliente;
   moduloColectivos?: IModuloColectivos;
   moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
+  moduloDispositivos: IModuloDispositivos;
   moduloActivos?: IModuloActivos;
   moduloAdministracion?: IModuloAdministracion;
   moduloEventosTecnicos?: IModuloEventosTecnicos;
@@ -47,6 +48,13 @@ export interface IModuloAlarmasDomiciliarias {
   compartirAlarmas?: boolean;
 }
 
+export interface IModuloDispositivos {
+  activo?: boolean;
+  crearDispositivos?: boolean;
+  derivarEventos?: boolean;
+  derivarEventosTecnicos?: boolean;
+  compartirDispositivos?: boolean;
+}
 export interface IModuloActivos {
   activo?: boolean;
   crearDispositivos?: boolean;
