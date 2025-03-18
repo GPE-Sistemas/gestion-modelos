@@ -41,3 +41,12 @@ type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateDispositivoLorawan
   extends Omit<Partial<IDispositivoLorawan>, OmitirUpdate> {}
+
+export interface ICreateDeviceKeysChirpstack {
+  deviceKeys: {
+    appKey: string;
+    devEUI: string;
+    genAppKey?: string;
+    nwkKey: string;
+  };
+}
