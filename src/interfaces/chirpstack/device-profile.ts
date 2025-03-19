@@ -1,4 +1,4 @@
-export interface ICreateDeviceChirpstack {
+export interface ICreateDeviceProfileChirpstack {
   deviceProfile: {
     abpRx1Delay?: number;
     abpRx1DrOffset?: number;
