@@ -18,21 +18,6 @@ export interface IDispositivoLorawan {
   cliente?: ICliente;
 }
 
-export interface IDeviceProfile {
-  createdAt?: string;
-  id?: string;
-  macVersion?: string;
-  name: string;
-  regParamsRevision?: string;
-  region?: string;
-  supportsClassB?: boolean;
-  supportsClassC?: boolean;
-  supportsOtaa?: boolean;
-  updatedAt?: string;
-  vendorID?: string;
-  activationMethod?: "OTAA" | "ABP";
-}
-
 type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateDispositivoLorawan
