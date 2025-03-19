@@ -3,7 +3,7 @@ import { ICliente } from "./cliente";
 export interface IDispositivoLorawan {
   _id?: string;
   deveui?: string;
-  appeui?: string;
+  joineui?: string;
   appkey?: string;
   description?: string;
   name?: string;
