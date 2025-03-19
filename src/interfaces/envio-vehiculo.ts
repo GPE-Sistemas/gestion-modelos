@@ -7,7 +7,8 @@ export type EstadoEnvioVehiculo =
   | "Asignado"
   | "En Camino"
   | "Rechazado"
-  | "Finalizado";
+  | "Finalizado"
+  | "En Destino";
 
 export interface IEnvioVehiculo {
   _id?: string;
