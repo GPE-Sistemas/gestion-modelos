@@ -1,9 +1,7 @@
 export interface ICreateDeviceKeysChirpstack {
   deviceKeys: {
-    appkey: string;
-    deveui: string;
-    genAppKey?: string;
+    appKey: string;
+    devEui: string;
     nwkKey: string;
-    joineui?: string;
   };
 }
