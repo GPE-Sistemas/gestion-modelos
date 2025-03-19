@@ -2,16 +2,16 @@ import { ICliente } from "./cliente";
 
 export interface IDispositivoLorawan {
   _id?: string;
-  devEUI?: string;
+  deveui?: string;
+  appeui?: string;
+  appkey?: string;
   description?: string;
   name?: string;
   tags?: Record<string, string>;
-  applicationID?: string;
-  appKey?: string;
+  applicationId?: string;
   genAppKey?: string;
   nwkKey?: string;
-  deviceProfileID?: string;
-  activationMethod?: "OTAA" | "ABP";
+  deviceProfileId?: string;
   idCliente?: string;
 
   //Populate
@@ -30,6 +30,7 @@ export interface IDeviceProfile {
   supportsOtaa?: boolean;
   updatedAt?: string;
   vendorID?: string;
+  activationMethod?: "OTAA" | "ABP";
 }
 
 type OmitirCreate = "_id" | "cliente";
@@ -41,12 +42,3 @@ type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateDispositivoLorawan
   extends Omit<Partial<IDispositivoLorawan>, OmitirUpdate> {}
-
-export interface ICreateDeviceKeysChirpstack {
-  deviceKeys: {
-    appKey: string;
-    devEUI: string;
-    genAppKey?: string;
-    nwkKey: string;
-  };
-}
