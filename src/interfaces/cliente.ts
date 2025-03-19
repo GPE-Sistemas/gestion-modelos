@@ -19,7 +19,7 @@ export interface IConfigCliente {
   tema?: ITemaCliente;
   moduloColectivos?: IModuloColectivos;
   moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
-  moduloDispositivosLorawan: IModuloDispositivosLorawan;
+  moduloDispositivosLorawan?: IModuloDispositivosLorawan;
   moduloActivos?: IModuloActivos;
   moduloAdministracion?: IModuloAdministracion;
   moduloEventosTecnicos?: IModuloEventosTecnicos;
