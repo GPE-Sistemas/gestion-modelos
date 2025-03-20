@@ -7,7 +7,7 @@ export interface ICreateDeviceChirpstack {
     isDisabled?: boolean;
     joinEui?: string;
     name?: string;
-    skipFCntCheck?: boolean;
+    skipFcntCheck?: boolean;
     tags?: Record<string, string>;
     variables?: Record<string, string>;
   };
