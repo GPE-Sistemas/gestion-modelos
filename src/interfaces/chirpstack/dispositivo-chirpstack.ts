@@ -1,6 +1,6 @@
 export interface ICreateDeviceChirpstack {
   device: {
-    applicationID?: string;
+    applicationId?: string;
     description?: string;
     devEui?: string;
     deviceProfileId?: string;
