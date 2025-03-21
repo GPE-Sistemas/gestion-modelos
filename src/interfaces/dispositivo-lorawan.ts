@@ -12,7 +12,10 @@ export interface IDispositivoLorawan {
   genAppKey?: string;
   nwkKey?: string;
   deviceProfileId?: string;
+  variables?: Record<string, string>;
   idCliente?: string;
+  isDisabled?: boolean;
+  skipFcntCheck?: boolean;
 
   //Populate
   cliente?: ICliente;
