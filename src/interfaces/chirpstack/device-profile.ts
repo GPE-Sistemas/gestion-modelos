@@ -1,3 +1,19 @@
+export interface IGetDeviceProfileChirpstack {
+  totalCount?: number;
+  results: {
+    id?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    name?: string;
+    region?: string;
+    macVersion?: string;
+    regParamsRevision?: string;
+    supportsOtaa?: boolean;
+    supportsClassB?: boolean;
+    supportsClassC?: boolean;
+  };
+}
+
 export interface ICreateDeviceProfileChirpstack {
   deviceProfile: {
     abpRx1Delay?: number;
