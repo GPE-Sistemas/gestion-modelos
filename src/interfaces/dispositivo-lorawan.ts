@@ -1,7 +1,20 @@
 import { ICliente } from "./cliente";
+import { IReporteDispositivo } from "./reporte-dispositivo";
+
+export interface IConfigDispositivoLuminaria {
+  // TODO: Definir los tipos de las propiedades cuando sean conocidos
+  [key: string]: any;
+}
 
 export interface IDispositivoLorawan {
   _id?: string;
+  idCliente?: string;
+  fechaCreacion?: string;
+  config?: IConfigDispositivoLuminaria;
+  fechaUltimaComunicacion?: string;
+  ultimoReporte?: IReporteDispositivo;
+
+  // Datos para el lora server
   deveui?: string;
   joineui?: string;
   appkey?: string;
@@ -13,7 +26,6 @@ export interface IDispositivoLorawan {
   nwkKey?: string;
   deviceProfileId?: string;
   variables?: Record<string, string>;
-  idCliente?: string;
   isDisabled?: boolean;
   skipFcntCheck?: boolean;
 
