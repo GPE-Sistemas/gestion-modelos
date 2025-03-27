@@ -33,7 +33,7 @@ export interface IDispositivoLorawan {
   devAddr?: string;
   appSKey?: string;
   fCntUp?: number;
-  nFCntDown?: string;
+  nFCntDown?: number;
   nwkskey?: string; //Con esta se completa fNwkSIntKey, nwkSEncKey y sNwkSIntKey para activationKeys
 
   //Populate
