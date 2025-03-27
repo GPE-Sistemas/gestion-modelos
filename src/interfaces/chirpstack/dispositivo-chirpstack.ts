@@ -1,5 +1,5 @@
-export interface ICreateDeviceChirpstack {
-  device: {
+export interface ICreateUpdateDeviceChirpstack {
+  device?: {
     applicationId?: string;
     description?: string;
     devEui?: string;
