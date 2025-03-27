@@ -1,6 +1,6 @@
 export interface IGetDeviceProfileChirpstack {
   totalCount?: number;
-  results: {
+  results?: {
     id?: string;
     createdAt?: string;
     updatedAt?: string;
