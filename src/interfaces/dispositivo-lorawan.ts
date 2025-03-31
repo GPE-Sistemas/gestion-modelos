@@ -9,7 +9,7 @@ export interface IConfigDispositivoLuminaria {
 export interface IDispositivoLorawan {
   _id?: string;
   idCliente?: string;
-  fechaCreacion?: string;
+  fechaCreacion?: string; // Dafault: Date.now
   config?: IConfigDispositivoLuminaria;
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteDispositivo;

@@ -11,9 +11,9 @@ export type IEstadoComando =
 export interface IComando {
   _id?: string;
   // Downlink
-  deveui: string;
-  puerto: number;
-  payload: string;
+  deveui?: string;
+  puerto?: number;
+  payload?: string;
   //
   nombre?: string; // Ej: Cambio dimerizacion
   descripcion?: string; /// Cambio dimerizacion 50%

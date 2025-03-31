@@ -10,6 +10,7 @@ export interface ILuminaria {
   deveui?: string; // Deveui del dispositivo lorawan
   identificacion?: string;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria
+  direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   // Virtuals
   cliente?: ICliente;
