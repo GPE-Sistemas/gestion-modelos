@@ -6,6 +6,8 @@ export * from "./client";
 export * from "./cliente";
 export * from "./cliente-hijo";
 export * from "./codigos-dispositivo";
+export * from "./comando";
+export * from "./config-dispositivo";
 export * from "./config-evento-usuario";
 export * from "./config-reenvios";
 export * from "./cronograma";
