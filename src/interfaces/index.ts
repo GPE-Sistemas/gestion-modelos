@@ -25,6 +25,7 @@ export * from "./log-despacho";
 export * from "./log-reenvio";
 export * from "./log-trackeo";
 export * from "./log-twilio";
+export * from "./luminaria";
 export * from "./modelo-dispositivo";
 export * from "./nota";
 export * from "./notificacion";
