@@ -24,6 +24,7 @@ export interface IConfigCliente {
   moduloAdministracion?: IModuloAdministracion;
   moduloEventosTecnicos?: IModuloEventosTecnicos;
   moduloVehiculos?: IModuloVehiculos;
+  moduloLuminarias?: IModuloLuminarias;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
@@ -31,6 +32,14 @@ export interface IConfigCliente {
 export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
 
 export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
+
+export interface IModuloLuminarias {
+  activo?: boolean;
+  crearDispositivos?: boolean;
+  derivarEventos?: boolean;
+  derivarEventosTecnicos?: boolean;
+  compartirLuminarias?: boolean;
+}
 
 export interface IModuloColectivos {
   activo?: boolean;
