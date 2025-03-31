@@ -11,6 +11,7 @@ export * from "./config-reenvios";
 export * from "./cronograma";
 export * from "./despacho";
 export * from "./dispositivo-alarma";
+export * from "./dispositivo-lorawan";
 export * from "./documentacion";
 export * from "./envio-vehiculo";
 export * from "./estado-entidad";
@@ -42,3 +43,6 @@ export * from "./tratamiento-evento";
 export * from "./twilio-templates";
 export * from "./ubicacion";
 export * from "./usuario";
+
+// Chripstack
+export * from "./chirpstack";
