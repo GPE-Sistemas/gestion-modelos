@@ -23,7 +23,7 @@ export interface ICamara {
   identificacion?: string;
   canales?: ICanalesCamara[];
   idModeloDispositivo?: string;
-  tipo?: MarcaCamara;
+  tipo?: TipoCamara;
   host?: string;
   puertoRTSP?: number;
   puertoHTTP?: number;
