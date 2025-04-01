@@ -2,6 +2,9 @@ import { IGeoJSONPoint } from "../auxiliares";
 import { ICliente } from "./cliente";
 import { IDispositivoLorawan } from "./dispositivo-lorawan";
 import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IReporteDispositivo } from "./reporte-dispositivo";
+
+export type EstadoLuminaria = "Operativa" | "Mantenimiento";
 
 export interface ILuminaria {
   _id?: string;
@@ -12,6 +15,9 @@ export interface ILuminaria {
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria
   direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
+  // Estado actual de la luminaria
+  estado?: EstadoLuminaria;
+  ultimoReporte?: IReporteDispositivo;
   // Virtuals
   cliente?: ICliente;
   dispositivo?: IDispositivoLorawan;

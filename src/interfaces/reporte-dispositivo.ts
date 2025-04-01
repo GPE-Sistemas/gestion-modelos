@@ -1,7 +1,8 @@
 import { ICliente } from "./cliente";
-import { IDispositivoLorawan } from "./dispositivo-lorawan";
 
 export interface IReporteLuminaria {
+  encendido?: boolean; // Encendido o apagado
+  estado?: "Normal" | "Falla"; // Estado de la luminaria
   // TODO: Definir los tipos de las propiedades cuando sean conocidos
   [key: string]: any;
 }
