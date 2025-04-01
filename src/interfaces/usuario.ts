@@ -12,6 +12,7 @@ export type Rol =
 export interface IPermiso {
   moduloColectivos?: boolean;
   moduloAlarmasDomiciliarias?: boolean;
+  moduloLuminarias?: boolean;
   moduloActivos?: boolean;
   moduloAdministracion?: boolean;
   moduloEventosTecnicos?: boolean;
