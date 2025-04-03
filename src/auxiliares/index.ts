@@ -1,4 +1,5 @@
 export * from "./coordenadas";
+export * from "./downlink";
 export * from "./exactly";
 export * from "./geojson";
 export * from "./listado";
