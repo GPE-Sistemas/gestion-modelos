@@ -1,6 +1,6 @@
 export interface IUplink {
   deduplicationId?: string;
-  time?: Date;
+  time?: string;
   deviceInfo?: DeviceInfo;
   devAddr?: string;
   adr?: boolean;
@@ -34,8 +34,8 @@ export interface Tags {
 export interface RxInfo {
   gatewayId?: string;
   uplinkId?: number;
-  gwTime?: Date;
-  nsTime?: Date;
+  gwTime?: string;
+  nsTime?: string;
   timeSinceGpsEpoch?: string;
   rssi?: number;
   snr?: number;
@@ -63,3 +63,48 @@ export interface Lora {
   spreadingFactor?: number;
   codeRate?: string;
 }
+
+export const EXAMPLE_UPLINK: IUplink = {
+  deduplicationId: "8dc86175-520c-4b1e-9f12-1bd8fa2756c8",
+  time: "2025-04-04T12:34:42.762964+00:00",
+  deviceInfo: {
+    tenantId: "edfcd90d-91e2-451f-ae92-b8182ba61188",
+    tenantName: "Grupo Control",
+    applicationId: "d4dd9bfb-cca4-469d-b776-9582331d2908",
+    applicationName: "prueba",
+    deviceProfileId: "16208f33-dd9c-4f5c-b060-6c65df471087",
+    deviceProfileName: "LoRaWAN LC SHUNCOM",
+    deviceName: "SHUNCOM_8679",
+    devEui: "6af03b46f5628679",
+    deviceClassEnabled: "CLASS_C",
+    tags: {},
+  },
+  devAddr: "018c0f49",
+  adr: true,
+  dr: 5,
+  fCnt: 86,
+  fPort: 10,
+  confirmed: false,
+  data: "ER0AAAABBBBkBQQAACAMVj4C0QYoABATiAACoHw=",
+  rxInfo: [
+    {
+      gatewayId: "ac1f09fffe103e25",
+      uplinkId: 618823116,
+      gwTime: "2025-04-04T12:34:42.762964+00:00",
+      nsTime: "2025-04-04T12:34:42.866232204+00:00",
+      timeSinceGpsEpoch: "1427805300.762964s",
+      rssi: -57,
+      snr: 14.0,
+      location: { latitude: -35.57379087247274, longitude: -58.01321928243111 },
+      context: "AAAAAAAAAAAAswA1TEVsMA==",
+      crcStatus: "CRC_OK",
+    },
+  ],
+  txInfo: {
+    frequency: 915400000,
+    modulation: {
+      lora: { bandwidth: 125000, spreadingFactor: 7, codeRate: "CR_4_5" },
+    },
+  },
+  regionConfigId: "au915_0",
+};
