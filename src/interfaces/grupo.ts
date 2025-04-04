@@ -4,7 +4,8 @@ export type CategoriaGrupo =
   | "Línea de colectivo"
   | "Flota"
   | "Activo"
-  | "Normal";
+  | "Normal"
+  | "Luminaria";
 
 export interface IGrupo {
   _id?: string;
