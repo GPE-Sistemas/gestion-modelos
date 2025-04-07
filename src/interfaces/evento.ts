@@ -6,6 +6,7 @@ import { IActivo } from "./activo";
 import { IConfigEventoUsuario } from "./config-evento-usuario";
 import { SonidoEvento } from "./categoria-evento";
 import { IUsuario } from "./usuario";
+import { ILuminaria } from "./luminaria";
 
 export interface IContactID {
   numeroCuenta?: string;
@@ -30,7 +31,8 @@ export type tipoEvento =
   | "Activo"
   | "Tracker"
   | "Vehiculo"
-  | "Alarma";
+  | "Alarma"
+  | "Luminaria";
 export interface IValoresEvento {
   titulo?: string;
   mensaje?: string;
@@ -65,6 +67,7 @@ export interface IEvento {
   idTracker?: string;
   idAlarma?: string;
   idUsuario?: string;
+  idLuminaria?: string;
   idCliente?: string;
   tipo?: tipoEvento;
   idsClientesQuePuedenAtender?: string[];
@@ -77,6 +80,7 @@ export interface IEvento {
   // Populate
   tracker?: ITracker;
   alarma?: IDispositivoAlarma;
+  luminaria?: ILuminaria;
   usuario?: IUsuario;
   cliente?: ICliente;
   reporte?: IReporte;
