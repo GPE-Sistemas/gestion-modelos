@@ -8,6 +8,7 @@ import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { ITracker } from "./tracker";
 import { ITipoEvento } from "./tipo-evento";
 import { IGeoJSONPoint } from "../auxiliares";
+import { ILuminaria } from "./luminaria";
 
 export interface IConfigZona {
   particion?: number;
@@ -127,6 +128,7 @@ export interface IConfigEventoUsuario {
   cliente?: ICliente;
   grupo?: IGrupo;
   activo?: IActivo;
+  luminaria?: ILuminaria;
   alarma?: IDispositivoAlarma;
   clientesQuePuedenAtender?: ICliente[];
   categoriaEvento?: ICategoriaEvento;
@@ -140,6 +142,7 @@ type OmitirCreate =
   | "cliente"
   | "grupo"
   | "activo"
+  | "luminaria"
   | "alarma"
   | "clientesQuePuedenAtender"
   | "categoriaEvento"
@@ -154,6 +157,7 @@ type OmitirUpdate =
   | "cliente"
   | "grupo"
   | "activo"
+  | "luminaria"
   | "alarma"
   | "clientesQuePuedenAtender"
   | "categoriaEvento"
