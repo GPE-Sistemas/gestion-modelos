@@ -1,6 +1,7 @@
 import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
+import { ILuminaria } from "./luminaria";
 
 export type TipoNota = "Contacto" | "Nota";
 
@@ -34,6 +35,7 @@ export interface INota {
   cliente?: ICliente;
   activo?: IActivo;
   alarma?: IDispositivoAlarma;
+  luminaria?: ILuminaria;
 }
 
 type OmitirCreate = "_id" | "cliente";
