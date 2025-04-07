@@ -17,7 +17,12 @@ export interface ICodigoDispositivo {
   categoriaEvento?: ICategoriaEvento;
 }
 
-export type TipoDispositivo = "Tracker" | "Alarma" | "Comunicador" | "Cámara";
+export type TipoDispositivo =
+  | "Tracker"
+  | "Alarma"
+  | "Comunicador"
+  | "Cámara"
+  | "Luminaria";
 
 export interface ICodigosDispositivo {
   _id?: string;
