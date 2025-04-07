@@ -18,7 +18,12 @@ export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
 export type Agrupacion = "Grupo" | "Entidad";
 
-export type TipoEntidad = "Activo" | "Vehiculo" | "Alarma" | "Usuario";
+export type TipoEntidad =
+  | "Activo"
+  | "Vehiculo"
+  | "Alarma"
+  | "Usuario"
+  | "Luminaria";
 
 export type Frecuencia =
   | "Unica"
