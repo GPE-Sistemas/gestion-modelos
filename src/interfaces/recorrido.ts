@@ -8,6 +8,8 @@ import { ICliente } from './cliente';
 import { IGrupo } from './grupo';
 import { IUbicacion } from './ubicacion';
 
+export type ITipoParada = 'refugio' | 'parada';
+
 export interface IParada {
   _id?: string;
   /**
@@ -22,6 +24,7 @@ export interface IParada {
   por?: string;
   subida?: boolean;
   bajada?: boolean;
+  tipo?: ITipoParada;
   /**
    * Tiempo que se suma al recorrido, es lo que se estima que tarda el colectivo en esa parada
    */
