@@ -4,7 +4,7 @@ import { ISim, Operador } from "./dispositivo-alarma";
 import { estadoCuenta } from "./estado-entidad";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 
-export type TipoTracker = "Qualcomm" | "Traccar";
+export type TipoTracker = "Qualcomm" | "Traccar" | "T1000-B";
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
