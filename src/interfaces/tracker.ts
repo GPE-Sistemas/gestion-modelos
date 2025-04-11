@@ -22,6 +22,9 @@ export interface ITraccarDevice {
   attributes?: object;
 }
 
+export interface IT100bDevice {
+  deveui?: string;
+}
 export interface IQualcommDevice {
   // Datos de Qualcomm
   serialNumber?: string;
@@ -46,6 +49,7 @@ export interface ITracker {
   uniqueId?: string;
   traccar?: ITraccarDevice;
   qualcomm?: IQualcommDevice;
+  t1000b?: IT100bDevice;
   estadoCuenta?: estadoCuenta;
   numeroAbonado?: string;
   sim1?: ISim;
