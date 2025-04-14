@@ -69,6 +69,7 @@ export interface IDispositivoAlarma {
   idsCamaras?: string[];
   armado?: boolean;
   armando?: boolean;
+  imagenes?: string[];
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
