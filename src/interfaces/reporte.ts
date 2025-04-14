@@ -31,10 +31,16 @@ export interface IReporte {
   locationTechType?: string;
   radioAccessTechnology?: string;
   horizontalUncertainity?: number;
-  bateria?: number;
   // deviceReportId?: number;
   // fechaLectura?: string;
   // reporteQualcomm?: Record<string, any>;
+
+  //Datos t1000b
+  devEui?: string;
+
+  //Qualcom y t100b
+  bateria?: number;
+
   // Populate
   cliente?: ICliente;
   grupo?: IGrupo;
