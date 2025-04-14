@@ -9,6 +9,7 @@ export interface IUplink {
   fPort?: number;
   confirmed?: boolean;
   data?: string;
+  object?: IObjectUplink;
   rxInfo?: RxInfo[];
   txInfo?: TxInfo;
   regionConfigId?: string;
@@ -31,6 +32,25 @@ export interface Tags {
   [key: string]: string;
 }
 
+export interface IObjectUplink {
+  err?: number;
+  valid?: boolean;
+  payload?: string;
+  messages?: Array<IMessageUplink[]>;
+}
+
+export interface IMessageUplink {
+  measurementValue?: IMeasurementValueElementUplink[] | number;
+  timestamp?: number;
+  measurementId?: string;
+  motionId?: number;
+  type?: string;
+}
+
+export interface IMeasurementValueElementUplink {
+  mac?: string;
+  rssi?: number;
+}
 export interface RxInfo {
   gatewayId?: string;
   uplinkId?: number;
