@@ -59,7 +59,7 @@ export type CodigoTipoSensor =
   | "TAM"
   | "OCR"
   | "HUM"
-  | "PRU"
+  | "PFU"
   | "ELE"
   | "BUM"
   | "CEM"
