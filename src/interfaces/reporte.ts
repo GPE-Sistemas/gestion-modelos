@@ -6,6 +6,7 @@ import { IRecorrido } from "./recorrido";
 import { ITracker } from "./tracker";
 import { IUsuario } from "./usuario";
 
+export type TipoTriangulacion = "GNSS" | "Wifi";
 export interface IReporte {
   _id?: string;
   //
@@ -19,6 +20,7 @@ export interface IReporte {
   tipo?: "Colectivo" | "Activo" | "Tracker" | "Vehiculo";
   geojson?: IGeoJSONPoint;
   fechaDevice?: string;
+  tipoTriangulacion?: TipoTriangulacion;
   // fechaServer?: string;
   // Datos de traccar
   traccarUniqueId?: string;

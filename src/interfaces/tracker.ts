@@ -6,7 +6,6 @@ import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IServicioContratado } from "./servicio-contratado";
 
 export type TipoTracker = "Qualcomm" | "Traccar" | "T1000-B";
-export type TipoTriangulacion = "GNSS" | "Wifi";
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
@@ -57,7 +56,6 @@ export interface ITracker {
   sim1?: ISim;
   sim2?: ISim;
   frecReporte?: number;
-  tipoTriangulacion?: TipoTriangulacion;
   //
   idServiciosContratados?: string[];
   // Populate
