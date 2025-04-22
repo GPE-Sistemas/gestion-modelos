@@ -1,11 +1,12 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { ISim } from './dispositivo-alarma';
-import { estadoCuenta } from './estado-entidad';
-import { IModeloDispositivo } from './modelo-dispositivo';
-import { IServicioContratado } from './servicio-contratado';
+import { IActivo } from "./activo";
+import { ICliente } from "./cliente";
+import { ISim } from "./dispositivo-alarma";
+import { estadoCuenta } from "./estado-entidad";
+import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IServicioContratado } from "./servicio-contratado";
 
-export type TipoTracker = 'Qualcomm' | 'Traccar' | 'T1000-B';
+export type TipoTracker = "Qualcomm" | "Traccar" | "T1000-B";
+export type TipoTriangulacion = "GNSS" | "Wifi";
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
@@ -56,6 +57,7 @@ export interface ITracker {
   sim1?: ISim;
   sim2?: ISim;
   frecReporte?: number;
+  tipoTriangulacion?: TipoTriangulacion;
   //
   idServiciosContratados?: string[];
   // Populate
@@ -66,19 +68,19 @@ export interface ITracker {
 }
 
 type OmitirCreate =
-  | '_id'
-  | 'cliente'
-  | 'activo'
-  | 'modelo'
-  | 'serviciosContratados';
+  | "_id"
+  | "cliente"
+  | "activo"
+  | "modelo"
+  | "serviciosContratados";
 
 export interface ICreateTracker extends Omit<Partial<ITracker>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | '_id'
-  | 'cliente'
-  | 'activo'
-  | 'modelo'
-  | 'serviciosContratados';
+  | "_id"
+  | "cliente"
+  | "activo"
+  | "modelo"
+  | "serviciosContratados";
 
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}
