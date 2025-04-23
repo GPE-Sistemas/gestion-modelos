@@ -13,6 +13,7 @@ export interface IPermiso {
   moduloColectivos?: boolean;
   moduloAlarmasDomiciliarias?: boolean;
   moduloLuminarias?: boolean;
+  moduloEmergenciasMedicas?: boolean;
   moduloActivos?: boolean;
   moduloAdministracion?: boolean;
   moduloEventosTecnicos?: boolean;
