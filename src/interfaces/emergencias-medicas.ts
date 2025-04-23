@@ -23,3 +23,13 @@ export interface IEmergenciaMedica {
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del destinatario de la asistencia
 }
+
+type OmitirCreate = "_id";
+
+export interface ICreateEmergenciaMedica
+  extends Omit<Partial<IEmergenciaMedica>, OmitirCreate> {}
+
+type OmitirUpdate = "_id";
+
+export interface IUpdateEmergenciaMedica
+  extends Omit<Partial<IEmergenciaMedica>, OmitirUpdate> {}
