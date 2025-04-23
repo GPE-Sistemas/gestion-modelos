@@ -1,0 +1,25 @@
+import { IDestinatarioAsistencia } from "./destinatario-asistencia";
+
+type EstadoEmergencia = "Pendiente" | "En Camino" | "Atendida" | "Cancelada";
+
+type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica";
+
+export interface IEmergenciaMedica {
+  _id?: string;
+  fechaCreacion?: Date;
+  ultimaActualizacion?: Date;
+  codigo?: string; // Código único del caso de emergencia
+  solicitante?: string; // Nombre del solicitante de la emergencia
+  telefono?: string; // Teléfono de contacto del solicitante
+  sintomas?: string[]; // Lista de síntomas reportados
+  estado?: EstadoEmergencia;
+  prioridad?: PrioridadEmergencia;
+  movil?: string; // Identificador del móvil asignado
+  medico?: string; // Médico asignado
+  enfermero?: string; // Enfermero asignado
+  chofer?: string; // Chofer del móvil
+  observaciones?: string; // Notas adicionales sobre el caso
+
+  //Populate
+  destinatarioAsistencia?: IDestinatarioAsistencia; // Información del destinatario de la asistencia
+}
