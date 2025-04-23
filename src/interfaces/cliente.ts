@@ -1,4 +1,4 @@
-import { IServicioContratado } from './servicio-contratado';
+import { IServicioContratado } from "./servicio-contratado";
 
 export interface IImagenesCliente {
   icono?: string;
@@ -25,13 +25,14 @@ export interface IConfigCliente {
   moduloEventosTecnicos?: IModuloEventosTecnicos;
   moduloVehiculos?: IModuloVehiculos;
   moduloLuminarias?: IModuloLuminarias;
+  moduloEmergenciasMedicas?: IModuloEmergenciasMedicas;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
 
-export type ITipoCliente = 'Mayorista' | 'Minorista' | 'Final';
+export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
 
-export type EstadoCuenta = 'Activo' | 'Suspendido' | 'Moroso';
+export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
 
 export interface IModuloLuminarias {
   activo?: boolean;
@@ -39,6 +40,11 @@ export interface IModuloLuminarias {
   derivarEventos?: boolean;
   derivarEventosTecnicos?: boolean;
   compartirLuminarias?: boolean;
+}
+
+export interface IModuloEmergenciasMedicas {
+  activo?: boolean;
+  crearEmergenciasMedicas?: boolean;
 }
 
 export interface IModuloColectivos {
@@ -107,10 +113,10 @@ export interface ICliente {
   padre?: ICliente;
 }
 
-type OmitirCreate = '_id' | 'padre';
+type OmitirCreate = "_id" | "padre";
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'nivel' | 'tipoCliente' | 'fechaCreacion' | 'padre';
+type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion" | "padre";
 
 export interface IUpdateCliente extends Omit<Partial<ICliente>, OmitirUpdate> {}
