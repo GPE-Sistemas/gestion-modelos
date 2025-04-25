@@ -1,4 +1,4 @@
-export interface IUbicaciónDestinatario {
+export interface IUbicacionDestinatario {
   calle?: string;
   entreCalles?: string;
   numero: string;
@@ -24,5 +24,5 @@ export interface IDestinatarioAsistencia {
   telefono?: string; // Teléfono del destinatario
   email?: string; // Correo electrónico del destinatario
   telefonosAlternativos?: string[]; // Array de teléfonos alternativos
-  ubicacion?: IUbicaciónDestinatario; // Ubicación del destinatario
+  ubicacion?: IUbicacionDestinatario; // Ubicación del destinatario
 }
