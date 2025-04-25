@@ -13,6 +13,7 @@ export interface IInfoAdicional {
 }
 
 export interface IDestinatarioAsistencia {
+  _id?: string; // ID único del destinatario
   nombre?: string;
   apellido?: string;
   sexo?: "masculino" | "femenino" | "otro";
