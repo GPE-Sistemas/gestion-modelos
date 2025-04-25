@@ -34,5 +34,5 @@ export interface ICreateDestinatarioAsistencia
 
 type OmitirUpdate = "_id";
 
-export interface IUpdateEmergenciaMedica
+export interface IUpdateDestinatarioAsistencia
   extends Omit<Partial<IDestinatarioAsistencia>, OmitirUpdate> {}
