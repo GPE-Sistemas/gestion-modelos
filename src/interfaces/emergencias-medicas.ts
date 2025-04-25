@@ -6,6 +6,7 @@ type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica";
 
 export interface IEmergenciaMedica {
   _id?: string;
+  idDestinatarioAsistencia?: string; // ID del destinatario de la asistencia
   fechaCreacion?: string;
   ultimaActualizacion?: string;
   codigo?: string; // Código único del caso de emergencia
