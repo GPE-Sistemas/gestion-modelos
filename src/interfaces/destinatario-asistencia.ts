@@ -26,3 +26,13 @@ export interface IDestinatarioAsistencia {
   telefonosAlternativos?: string[]; // Array de teléfonos alternativos
   ubicacion?: IUbicacionDestinatario; // Ubicación del destinatario
 }
+
+type OmitirCreate = "_id";
+
+export interface ICreateDestinatarioAsistencia
+  extends Omit<Partial<IDestinatarioAsistencia>, OmitirCreate> {}
+
+type OmitirUpdate = "_id";
+
+export interface IUpdateEmergenciaMedica
+  extends Omit<Partial<IDestinatarioAsistencia>, OmitirUpdate> {}
