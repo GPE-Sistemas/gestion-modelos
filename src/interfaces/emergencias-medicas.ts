@@ -5,6 +5,15 @@ type EstadoEmergencia = "Pendiente" | "En Camino" | "Atendida" | "Cancelada";
 
 type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica";
 
+export interface IUbicacionEmergencia {
+  calle?: string;
+  entreCalles?: string;
+  numero?: string;
+  piso?: string;
+  depto?: string;
+  localidad?: string;
+}
+
 export interface IEmergenciaMedica {
   _id?: string;
   idDestinatarioAsistencia?: string; // ID del destinatario de la asistencia
@@ -22,12 +31,7 @@ export interface IEmergenciaMedica {
   observaciones?: string; // Notas adicionales sobre el caso
 
   //Ubicación de la emergencia
-  calle?: string;
-  entreCalles?: string;
-  numero?: string;
-  piso?: string;
-  depto?: string;
-  localidad?: string;
+  ubicacion?: IUbicacionEmergencia;
 
   //Personal asociado
   movil?: string; // Identificador del móvil asignado
