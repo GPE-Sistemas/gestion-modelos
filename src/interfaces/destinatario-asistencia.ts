@@ -1,3 +1,5 @@
+import { ICliente } from "./cliente";
+
 export interface IUbicacionDestinatario {
   calle?: string;
   entreCalles?: string;
@@ -14,9 +16,10 @@ export interface IInfoAdicional {
 
 export interface IDestinatarioAsistencia {
   _id?: string; // ID único del destinatario
+  idCliente?: string;
   nombre?: string;
   apellido?: string;
-  sexo?: "masculino" | "femenino" | "otro";
+  sexo?: "M" | "F" | "X";
   dni?: string;
   edad?: number;
   obraSocial?: string;
@@ -25,6 +28,9 @@ export interface IDestinatarioAsistencia {
   email?: string; // Correo electrónico del destinatario
   telefonosAlternativos?: string[]; // Array de teléfonos alternativos
   ubicacion?: IUbicacionDestinatario; // Ubicación del destinatario
+
+  //Populate
+  cliente?: ICliente;
 }
 
 type OmitirCreate = "_id";
