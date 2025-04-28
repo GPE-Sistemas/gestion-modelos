@@ -27,7 +27,7 @@ export interface IEmergenciaMedica {
   numero?: string;
   piso?: string;
   depto?: string;
-  localidad: string;
+  localidad?: string;
 
   //Personal asociado
   movil?: string; // Identificador del móvil asignado
