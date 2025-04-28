@@ -6,7 +6,7 @@ export interface IUbicacionDestinatario {
   numero?: string;
   piso?: string;
   depto?: string;
-  localidad: string;
+  localidad?: string;
 }
 
 export interface IInfoAdicional {
