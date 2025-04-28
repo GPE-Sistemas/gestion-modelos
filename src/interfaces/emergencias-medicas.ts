@@ -24,7 +24,7 @@ export interface IEmergenciaMedica {
   //Ubicación de la emergencia
   calle?: string;
   entreCalles?: string;
-  numero: string;
+  numero?: string;
   piso?: string;
   depto?: string;
   localidad: string;
