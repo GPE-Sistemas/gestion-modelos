@@ -3,7 +3,7 @@ import { ICliente } from "./cliente";
 export interface IUbicacionDestinatario {
   calle?: string;
   entreCalles?: string;
-  numero: string;
+  numero?: string;
   piso?: string;
   depto?: string;
   localidad: string;
