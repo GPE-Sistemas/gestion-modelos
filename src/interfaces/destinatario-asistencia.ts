@@ -17,6 +17,7 @@ export interface IInfoAdicional {
 export interface IDestinatarioAsistencia {
   _id?: string; // ID único del destinatario
   idCliente?: string;
+  fechaCreacion?: string;
   nombre?: string;
   apellido?: string;
   sexo?: "M" | "F" | "X";
@@ -26,7 +27,7 @@ export interface IDestinatarioAsistencia {
   infoAdicional?: IInfoAdicional; // Información adicional del destinatario
   telefono?: string; // Teléfono del destinatario
   email?: string; // Correo electrónico del destinatario
-  telefonosAlternativos?: string[]; // Array de teléfonos alternativos
+  telefonoAlternativo?: string;
   ubicacion?: IUbicacionDestinatario; // Ubicación del destinatario
 
   //Populate
