@@ -1,3 +1,4 @@
+import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 
 type EstadoEmergencia = "Pendiente" | "En Camino" | "Atendida" | "Cancelada";
@@ -8,6 +9,8 @@ export interface IEmergenciaMedica {
   _id?: string;
   idDestinatarioAsistencia?: string; // ID del destinatario de la asistencia
   idCliente?: string;
+
+  //Información básica
   fechaCreacion?: string;
   ultimaActualizacion?: string;
   codigo?: string; // Código único del caso de emergencia
@@ -16,14 +19,25 @@ export interface IEmergenciaMedica {
   sintomas?: string[]; // Lista de síntomas reportados
   estado?: EstadoEmergencia;
   prioridad?: PrioridadEmergencia;
+  observaciones?: string; // Notas adicionales sobre el caso
+
+  //Ubicación de la emergencia
+  calle?: string;
+  entreCalles?: string;
+  numero: string;
+  piso?: string;
+  depto?: string;
+  localidad: string;
+
+  //Personal asociado
   movil?: string; // Identificador del móvil asignado
   medico?: string; // Médico asignado
   enfermero?: string; // Enfermero asignado
   chofer?: string; // Chofer del móvil
-  observaciones?: string; // Notas adicionales sobre el caso
 
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del destinatario de la asistencia
+  cliente?: ICliente;
 }
 
 type OmitirCreate = "_id";
