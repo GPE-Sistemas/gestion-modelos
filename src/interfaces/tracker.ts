@@ -31,6 +31,10 @@ export interface IQualcommDevice {
   serialNumber?: string;
 }
 
+export interface ITelefono {
+  deviceId?: string;
+}
+
 export interface ITracker {
   _id?: string;
   //
@@ -51,6 +55,7 @@ export interface ITracker {
   traccar?: ITraccarDevice;
   qualcomm?: IQualcommDevice;
   t1000b?: IT100bDevice;
+  telefono?: ITelefono;
   estadoCuenta?: estadoCuenta;
   numeroAbonado?: string;
   sim1?: ISim;
