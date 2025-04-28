@@ -5,7 +5,7 @@ import { estadoCuenta } from "./estado-entidad";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IServicioContratado } from "./servicio-contratado";
 
-export type TipoTracker = "Qualcomm" | "Traccar" | "T1000-B";
+export type TipoTracker = "Qualcomm" | "Traccar" | "T1000-B" | "Telefono";
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
