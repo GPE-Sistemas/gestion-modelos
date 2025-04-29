@@ -11,7 +11,7 @@ export interface IPersonalSalud {
   dni?: string;
   telefono?: string;
   email?: string;
-  activo: boolean; // Disponibilidad laboral
+  activo?: boolean; // Disponibilidad laboral
 
   //Populate
   cliente?: ICliente;
