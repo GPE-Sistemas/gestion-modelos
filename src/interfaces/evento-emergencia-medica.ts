@@ -18,12 +18,11 @@ export interface IEventoEmergenciaMedica {
   idEnfermero?: string; //referencia al enfermero
   idHospital?: string;
 
-  //Estado y fecha
+  //Estado y timestamp
   estado?: EstadoEmergencia;
   timestamp?: string; // ISO timestamp del evento
 
-  //Ubicaciones
-  ubicacionActual?: DireccionV2;
+  //Ubicación de la emergencia
   ubicacionDestino?: DireccionV2;
 
   //Descripciones
