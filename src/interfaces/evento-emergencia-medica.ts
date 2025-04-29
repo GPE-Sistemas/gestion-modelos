@@ -5,10 +5,12 @@ import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 import { IEmergenciaMedica } from "./emergencias-medicas";
 import { IHospital } from "./hospitales";
 import { IPersonalSalud } from "./personal-salud";
+import { IUsuario } from "./usuario";
 
 export interface IEventoEmergenciaMedica {
   _id?: string; // UUID del evento
   idCliente?: string;
+  idDestinarioAsistencia?: string;
   idEmergencia?: string; // referencia a la emergencia
   idActivo?: string; //referencia al vehículo
   idChofer?: string; //referencia al chofer
@@ -31,8 +33,9 @@ export interface IEventoEmergenciaMedica {
 
   //Populate: Asignaciones
   emergencia?: IEmergenciaMedica;
-  paciente?: IDestinatarioAsistencia;
-  activo?: IActivo; //Activo tiene la información de vehículo, y este a su vez, tiene la información de chofer también
+  destinatarioAsistencia?: IDestinatarioAsistencia;
+  activo?: IActivo; //Activo tiene la información de vehículo
+  chofer?: IUsuario; //Usuario tiene la información de chofer
   medico?: IPersonalSalud;
   enfermero?: IPersonalSalud;
   hospital?: IHospital;
