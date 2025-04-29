@@ -1,5 +1,5 @@
 import { DireccionV2 } from "../auxiliares";
-import { IVehiculo } from "./activo";
+import { IActivo, IVehiculo } from "./activo";
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 import { IEmergenciaMedica } from "./emergencias-medicas";
@@ -10,7 +10,7 @@ export interface IEventoEmergenciaMedica {
   _id?: string; // UUID del evento
   idCliente?: string;
   idEmergencia?: string; // referencia a la emergencia
-  idVehiculo?: string; //referencia al vehículo
+  idActivo?: string; //referencia al vehículo
   idChofer?: string; //referencia al chofer
   idMedico?: string; //referencia al medico
   idEnfermero?: string; //referencia al enfermero
@@ -32,7 +32,7 @@ export interface IEventoEmergenciaMedica {
   //Populate: Asignaciones
   emergencia?: IEmergenciaMedica;
   paciente?: IDestinatarioAsistencia;
-  vehiculo?: IVehiculo; //Vehículo tiene la información de chofer también
+  activo?: IActivo; //Activo tiene la información de vehículo, y este a su vez, tiene la información de chofer también
   medico?: IPersonalSalud;
   enfermero?: IPersonalSalud;
   hospital?: IHospital;
