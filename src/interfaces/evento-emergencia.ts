@@ -1,5 +1,6 @@
 import { DireccionV2 } from "../auxiliares";
 import { IVehiculo } from "./activo";
+import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 import { IEmergenciaMedica } from "./emergencias-medicas";
 import { IHospital } from "./hospitales";
@@ -7,6 +8,7 @@ import { IPersonalSalud } from "./personal-salud";
 
 export interface IEventoEmergenciaMedica {
   _id?: string; // UUID del evento
+  idCliente?: string;
   idEmergencia?: string; // referencia a la emergencia
   idVehiculo?: string; //referencia al vehículo
   idChofer?: string; //referencia al chofer
@@ -34,6 +36,7 @@ export interface IEventoEmergenciaMedica {
   medico?: IPersonalSalud;
   enfermero?: IPersonalSalud;
   hospital?: IHospital;
+  cliente?: ICliente;
 }
 
 type EstadoEmergencia =
