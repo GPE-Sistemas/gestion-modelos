@@ -1,4 +1,3 @@
-import { DireccionV2 } from "../auxiliares";
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 import { IEventoEmergenciaMedica } from "./evento-emergencia";

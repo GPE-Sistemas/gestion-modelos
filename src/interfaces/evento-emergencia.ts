@@ -16,7 +16,7 @@ export interface IEventoEmergenciaMedica {
 
   //Estado y fecha
   estado?: EstadoEmergencia;
-  timestamp: string; // ISO timestamp del evento
+  timestamp?: string; // ISO timestamp del evento
 
   //Ubicaciones
   ubicacionActual?: DireccionV2;
