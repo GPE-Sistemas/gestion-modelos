@@ -6,7 +6,7 @@ import { IEventoEmergenciaMedica } from "./evento-emergencia";
 export interface IEmergenciaMedica {
   _id?: string;
   idDestinatarioAsistencia?: string;
-  idsEventosEmergenciaMedica?: string;
+  idsEventosEmergenciaMedica?: string[];
   idCliente?: string;
 
   //Información básica
