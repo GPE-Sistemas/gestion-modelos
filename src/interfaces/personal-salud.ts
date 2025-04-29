@@ -1,5 +1,9 @@
+import { ICliente } from "./cliente";
+
 export interface IPersonalSalud {
   _id?: string;
+  idCliente?: string;
+
   nombre?: string; // Nombre completo
   rol?: "medico" | "enfermero";
   matricula?: string; // Matrícula profesional
@@ -7,6 +11,9 @@ export interface IPersonalSalud {
   telefono?: string;
   email?: string;
   activo: boolean; // Disponibilidad laboral
+
+  //Populate
+  cliente?: ICliente;
 }
 
 type OmitirCreate = "_id";
