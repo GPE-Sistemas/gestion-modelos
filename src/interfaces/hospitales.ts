@@ -5,6 +5,7 @@ export interface IHospital {
   _id?: string;
   idCliente?: string;
 
+  fechaCreacion?: string;
   nombre?: string; // Nombre del hospital
   direccion?: DireccionV2; //Es autoexplicativo no?
   telefono?: string; // Teléfono de contacto
