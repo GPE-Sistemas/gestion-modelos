@@ -4,6 +4,7 @@ export interface IPersonalSalud {
   _id?: string;
   idCliente?: string;
 
+  fechaCreacion?: string;
   nombre?: string; // Nombre completo
   rol?: "medico" | "enfermero";
   matricula?: string; // Matrícula profesional
