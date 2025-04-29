@@ -1,6 +1,6 @@
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
-import { IEventoEmergenciaMedica } from "./evento-emergencia";
+import { IEventoEmergenciaMedica } from "./evento-emergencia-medica";
 
 //EMERGENCIA MÉDICA
 export interface IEmergenciaMedica {
