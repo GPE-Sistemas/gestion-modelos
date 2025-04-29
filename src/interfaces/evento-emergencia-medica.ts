@@ -51,3 +51,13 @@ type EstadoEmergencia =
   | "Llegada a hospital" //Llegó al hospital
   | "Finalizada" // La emergencia fue tratada. Ya sea porque se llegó al hospital o no
   | "Cancelada"; // La emergencia se canceló
+
+type OmitirCreate = "_id";
+
+export interface ICreateEventoEmergenciaMedica
+  extends Omit<Partial<IEventoEmergenciaMedica>, OmitirCreate> {}
+
+type OmitirUpdate = "_id";
+
+export interface IUpdateEventoEmergenciaMedica
+  extends Omit<Partial<IEventoEmergenciaMedica>, OmitirUpdate> {}
