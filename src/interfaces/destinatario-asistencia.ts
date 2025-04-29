@@ -1,13 +1,5 @@
 import { ICliente } from "./cliente";
-
-export interface IUbicacionDestinatario {
-  calle?: string;
-  entreCalles?: string;
-  numero?: string;
-  piso?: string;
-  depto?: string;
-  localidad?: string;
-}
+import { DireccionV2 } from "../auxiliares";
 
 export interface IInfoAdicional {
   descripcion?: string;
@@ -17,6 +9,7 @@ export interface IInfoAdicional {
 export interface IDestinatarioAsistencia {
   _id?: string; // ID único del destinatario
   idCliente?: string;
+
   fechaCreacion?: string;
   nombre?: string;
   apellido?: string;
@@ -28,7 +21,7 @@ export interface IDestinatarioAsistencia {
   telefono?: string; // Teléfono del destinatario
   email?: string; // Correo electrónico del destinatario
   telefonoAlternativo?: string;
-  ubicacion?: IUbicacionDestinatario; // Ubicación del destinatario
+  ubicacion?: DireccionV2; // Ubicación del destinatario
 
   //Populate
   cliente?: ICliente;

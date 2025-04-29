@@ -1,22 +1,12 @@
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
+import { IEventoEmergenciaMedica } from "./evento-emergencia";
 
-type EstadoEmergencia = "Pendiente" | "En Camino" | "Atendida" | "Cancelada";
-
-type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica";
-
-export interface IUbicacionEmergencia {
-  calle?: string;
-  entreCalles?: string;
-  numero?: string;
-  piso?: string;
-  depto?: string;
-  localidad?: string;
-}
-
+//EMERGENCIA MÉDICA
 export interface IEmergenciaMedica {
   _id?: string;
-  idDestinatarioAsistencia?: string; // ID del destinatario de la asistencia
+  idDestinatarioAsistencia?: string;
+  idsEventosEmergenciaMedica?: string;
   idCliente?: string;
 
   //Información básica
@@ -26,23 +16,16 @@ export interface IEmergenciaMedica {
   solicitante?: string; // Nombre del solicitante de la emergencia
   telefono?: string; // Teléfono de contacto del solicitante
   sintomas?: string[]; // Lista de síntomas reportados
-  estado?: EstadoEmergencia;
   prioridad?: PrioridadEmergencia;
   observaciones?: string; // Notas adicionales sobre el caso
 
-  //Ubicación de la emergencia
-  ubicacion?: IUbicacionEmergencia;
-
-  //Personal asociado
-  movil?: string; // Identificador del móvil asignado
-  medico?: string; // Médico asignado
-  enfermero?: string; // Enfermero asignado
-  chofer?: string; // Chofer del móvil
-
   //Populate
-  destinatarioAsistencia?: IDestinatarioAsistencia; // Información del destinatario de la asistencia
+  destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
+  eventosEmergenciaMedica?: IEventoEmergenciaMedica[]; //El evento contiene la información sobre la ubicación actual del vehículo que atiende la emergencia, la ubicación destino, el estado y las reasignaciones
   cliente?: ICliente;
 }
+
+type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica";
 
 type OmitirCreate = "_id";
 

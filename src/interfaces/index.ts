@@ -48,6 +48,9 @@ export * from "./ubicacion";
 export * from "./usuario";
 export * from "./destinatario-asistencia";
 export * from "./emergencias-medicas";
+export * from "./evento-emergencia";
+export * from "./personal-salud";
+export * from "./hospitales";
 
 // Chripstack
 export * from "./chirpstack";
