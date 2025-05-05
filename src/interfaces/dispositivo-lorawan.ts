@@ -6,6 +6,8 @@ export interface IConfigDispositivoLuminaria {
   [key: string]: any;
 }
 
+export type TipoDispositivoLorawan = "GPE" | "Wellness";
+
 export interface IDispositivoLorawan {
   _id?: string;
   idCliente?: string;
@@ -13,6 +15,7 @@ export interface IDispositivoLorawan {
   config?: IConfigDispositivoLuminaria;
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteDispositivo;
+  tipo?: TipoDispositivoLorawan;
 
   // Datos para el lora server
   deveui?: string;
