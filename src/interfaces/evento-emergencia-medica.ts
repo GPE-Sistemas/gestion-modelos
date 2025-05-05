@@ -1,5 +1,5 @@
 import { DireccionV2 } from "../auxiliares";
-import { IActivo, IVehiculo } from "./activo";
+import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 import { IEmergenciaMedica } from "./emergencias-medicas";
