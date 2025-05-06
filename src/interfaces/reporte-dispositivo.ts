@@ -1,4 +1,5 @@
 import { ICliente } from "./cliente";
+import { IDispositivoLorawan } from "./dispositivo-lorawan";
 
 export type ModoForzado =
   | "No Forzado"
@@ -40,7 +41,7 @@ export interface IReporteDispositivo {
 
   // Virtuals
   cliente?: ICliente;
-  // dispositivoLorawan?: IDispositivoLorawan;
+  dispositivoLorawan?: IDispositivoLorawan;
 }
 
 type OmitirCreate = "_id" | "fechaCreacion" | "cliente";
