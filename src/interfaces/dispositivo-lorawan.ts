@@ -1,9 +1,17 @@
 import { ICliente } from "./cliente";
-import { IReporteDispositivo } from "./reporte-dispositivo";
+import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
 
 export interface IConfigDispositivoLuminaria {
   // TODO: Definir los tipos de las propiedades cuando sean conocidos
   [key: string]: any;
+}
+
+//Si se trata de una luminaria Wellness, esta es la info que se va a cargar en la config del dispositivo
+export interface IDispositivoLuminariaWellness {
+  mode?: IModoLuminaria;
+  activePowerTotal?: number; // kWh - acumulada
+  reactivePowerTotal?: number; // kWh - acumulada
+  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
 }
 
 export type TipoDispositivoLorawan = "GPE" | "Wellness";
