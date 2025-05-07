@@ -2,7 +2,7 @@ import { ICliente } from "./cliente";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 
 export type TipoHabilitacion = "Siempre" | "Con Evento";
-export type TipoCamara = "Hikvision" | "Dahua";
+export type TipoCamara = "Hikvision" | "Dahua" | "Hikvision P2P" | "Dahua P2P";
 
 export interface ICanalesCamara {
   numero: string; // 1
