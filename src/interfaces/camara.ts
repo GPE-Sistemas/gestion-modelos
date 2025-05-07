@@ -24,6 +24,7 @@ export interface ICamara {
   canales?: ICanalesCamara[];
   idModeloDispositivo?: string;
   tipo?: TipoCamara;
+  numeroSerie?: string;
   host?: string;
   puertoRTSP?: number;
   puertoHTTP?: number;
