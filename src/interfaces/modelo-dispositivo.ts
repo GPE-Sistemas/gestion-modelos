@@ -1,5 +1,5 @@
-import { ICliente } from './cliente';
-import { ICodigosDispositivo, TipoDispositivo } from './codigos-dispositivo';
+import { ICliente } from "./cliente";
+import { ICodigosDispositivo, TipoDispositivo } from "./codigos-dispositivo";
 
 export interface IModeloDispositivo {
   _id?: string;
@@ -10,17 +10,23 @@ export interface IModeloDispositivo {
   formatoMensaje?: string;
   idCodigos?: string;
   idCliente?: string;
+
+  //Datos técnicos para luminarias
+  luminarias?: {
+    potencia?: string;
+    horasVida?: string;
+  };
   // Populate
   cliente?: ICliente;
   codigos?: ICodigosDispositivo;
 }
 
-type OmitirCreate = '_id' | 'codigos' | 'cliente';
+type OmitirCreate = "_id" | "codigos" | "cliente";
 
 export interface ICreateModeloDispositivo
   extends Omit<Partial<IModeloDispositivo>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'codigos' | 'cliente';
+type OmitirUpdate = "_id" | "codigos" | "cliente";
 
 export interface IUpdateModeloDispositivo
   extends Omit<Partial<IModeloDispositivo>, OmitirUpdate> {}
