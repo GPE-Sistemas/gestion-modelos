@@ -18,12 +18,6 @@ export interface ILuminaria {
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idGrupo?: string;
 
-  //Información técnica
-  marca?: string;
-  modelo?: string;
-  potencia?: number;
-  horasVida?: number;
-
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
   ultimoReporte?: IReporteDispositivo;
