@@ -1,6 +1,10 @@
 import { ICliente } from "./cliente";
 import { ICodigosDispositivo, TipoDispositivo } from "./codigos-dispositivo";
 
+export interface IDetallesLuminarias {
+  horasVida?: string;
+  potencia?: string;
+}
 export interface IModeloDispositivo {
   _id?: string;
   //
@@ -12,10 +16,7 @@ export interface IModeloDispositivo {
   idCliente?: string;
 
   //Datos técnicos para luminarias
-  luminarias?: {
-    potencia?: string;
-    horasVida?: string;
-  };
+  luminarias?: IDetallesLuminarias;
   // Populate
   cliente?: ICliente;
   codigos?: ICodigosDispositivo;
