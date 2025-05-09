@@ -1,4 +1,5 @@
 import { ICliente } from "./cliente";
+import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
 
 export interface IConfigDispositivoLuminaria {
@@ -20,6 +21,7 @@ export type TipoDispositivoLorawan = "GPE" | "Wellness";
 export interface IDispositivoLorawan {
   _id?: string;
   idCliente?: string;
+  idModeloDispositivo?: string;
   fechaCreacion?: string; // Dafault: Date.now
   config?: IConfigDispositivoLuminaria;
   fechaUltimaComunicacion?: string;
@@ -50,6 +52,7 @@ export interface IDispositivoLorawan {
 
   //Populate
   cliente?: ICliente;
+  modeloDispositivo?: IModeloDispositivo;
 }
 
 type OmitirCreate = "_id" | "cliente";
