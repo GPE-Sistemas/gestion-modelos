@@ -76,6 +76,7 @@ export interface IModuloDispositivosLorawan {
   derivarEventosTecnicos?: boolean;
   compartirDispositivosLorawan?: boolean;
 }
+
 export interface IModuloActivos {
   activo?: boolean;
   crearDispositivos?: boolean;
@@ -89,6 +90,7 @@ export interface IModuloAdministracion {
   crearUsuarios?: boolean;
   crearServicios?: boolean;
   crearApikeys?: boolean;
+  crearDispositivosLorawan?: boolean;
 }
 
 export interface IModuloVehiculos {
