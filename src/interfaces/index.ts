@@ -51,6 +51,7 @@ export * from "./emergencias-medicas";
 export * from "./evento-emergencia-medica";
 export * from "./personal-salud";
 export * from "./hospitales";
+export * from "./informacion-tecnica";
 
 // Chripstack
 export * from "./chirpstack";
