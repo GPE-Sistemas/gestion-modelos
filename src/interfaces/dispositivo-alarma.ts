@@ -17,7 +17,7 @@ export interface ISim {
 export interface IUltimaConexion {
   lastIp?: string;
   lastPort?: string;
-  Sequence: number;
+  sequence: number;
 }
 
 export interface ICamaraAlarma {
