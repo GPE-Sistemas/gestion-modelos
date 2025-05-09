@@ -12,7 +12,7 @@ export interface IDispositivoLuminariaWellness {
   activePowerTotal?: number; // kWh - acumulada
   reactivePowerTotal?: number; // kWh - acumulada
   turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
-  alarma;
+  alarma?: string;
 }
 
 export type TipoDispositivoLorawan = "GPE" | "Wellness";
