@@ -1,19 +1,13 @@
-export interface IInfoTecnica {
-  titulo?: string;
-  descripcion?: string;
-}
-
 export interface IInfoEndPoint {
-  titulo?: string;
-  descripcion?: string;
   url?: string;
   ip?: string;
-  puerto?: { info: string; puerto: string };
+  puerto?: { protocolo: string; info?: string; puerto: string };
 }
 
 export interface IInformacionTecnica {
   _id?: string;
-  infoTecnica?: IInfoTecnica[];
+  titulo?: string;
+  descripcion?: string;
   infoEndPoints?: IInfoEndPoint[];
 }
 
