@@ -1,7 +1,7 @@
 export interface IInfoEndPoint {
   url?: string;
   ip?: string;
-  puerto?: { protocolo: string; info?: string; puerto: string };
+  puerto?: { protocolo: string; info?: string; puerto: string }[];
 }
 
 export interface IInformacionTecnica {
