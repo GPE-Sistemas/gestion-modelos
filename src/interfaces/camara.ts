@@ -30,6 +30,7 @@ export interface ICamara {
   puertoHTTP?: number;
   usuario?: string;
   password?: string;
+  claveDeEncriptacion?: string;
   // Populate
   cliente?: ICliente;
   modeloDispositivo?: IModeloDispositivo;
