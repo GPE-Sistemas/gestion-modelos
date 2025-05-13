@@ -6,6 +6,7 @@ import { IRecorrido } from "./recorrido";
 import { ITracker } from "./tracker";
 import { IUsuario } from "./usuario";
 
+export type TipoTriangulacion = "GNSS" | "Wifi";
 export interface IReporte {
   _id?: string;
   //
@@ -19,6 +20,7 @@ export interface IReporte {
   tipo?: "Colectivo" | "Activo" | "Tracker" | "Vehiculo";
   geojson?: IGeoJSONPoint;
   fechaDevice?: string;
+  tipoTriangulacion?: TipoTriangulacion;
   // fechaServer?: string;
   // Datos de traccar
   traccarUniqueId?: string;
@@ -31,10 +33,16 @@ export interface IReporte {
   locationTechType?: string;
   radioAccessTechnology?: string;
   horizontalUncertainity?: number;
-  bateria?: number;
   // deviceReportId?: number;
   // fechaLectura?: string;
   // reporteQualcomm?: Record<string, any>;
+
+  //Datos t1000b
+  devEui?: string;
+
+  //Qualcom y t100b
+  bateria?: number;
+
   // Populate
   cliente?: ICliente;
   grupo?: IGrupo;

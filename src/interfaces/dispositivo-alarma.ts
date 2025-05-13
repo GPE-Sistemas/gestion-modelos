@@ -2,6 +2,7 @@ import { ICamara } from "./camara";
 import { ICliente } from "./cliente";
 import { estadoCuenta } from "./estado-entidad";
 import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IServicioContratado } from "./servicio-contratado";
 import { IUbicacion } from "./ubicacion";
 
 export interface ISim {
@@ -16,6 +17,7 @@ export interface ISim {
 export interface IUltimaConexion {
   lastIp?: string;
   lastPort?: string;
+  sequence: number;
 }
 
 export interface ICamaraAlarma {
@@ -44,8 +46,29 @@ export interface IParticionZona {
   nombre?: string;
   particion?: number;
   zona?: number;
+  marca?: string;
+  tipo?: CodigoTipoSensor;
+  modo?: ModoSensor;
 }
-
+export type CodigoTipoSensor =
+  | "PIR"
+  | "DRV"
+  | "MMG"
+  | "BIR"
+  | "PAS"
+  | "PPC"
+  | "TAM"
+  | "OCR"
+  | "HUM"
+  | "PFU"
+  | "ELE"
+  | "BUM"
+  | "CEM"
+  | "VOL"
+  | "DTS"
+  | "SIS"
+  | "AMK";
+export type ModoSensor = "Seguidor" | "Demorado" | "Instantaneo";
 export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
 export interface IDispositivoAlarma {
   _id?: string;
@@ -69,18 +92,21 @@ export interface IDispositivoAlarma {
   idsCamaras?: string[];
   armado?: boolean;
   armando?: boolean;
+  imagenes?: string[];
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
   //
   estadoCuenta?: estadoCuenta;
   frecReporte?: number;
+  idServiciosContratados?: string[];
   // Populate
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
   cliente?: ICliente;
   comunicador?: IModeloDispositivo;
   camaras?: ICamara[];
+  serviciosContratados?: IServicioContratado[];
 }
 
 type OmitirCreate =
@@ -89,7 +115,8 @@ type OmitirCreate =
   | "modelo"
   | "domicilio"
   | "comunicador "
-  | "camaras";
+  | "camaras"
+  | "serviciosContratados";
 
 export interface ICreateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
@@ -100,7 +127,8 @@ type OmitirUpdate =
   | "modelo"
   | "domicilio"
   | "comunicador"
-  | "camaras";
+  | "camaras"
+  | "serviciosContratados";
 
 export interface IUpdateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}

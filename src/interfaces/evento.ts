@@ -51,7 +51,9 @@ export interface IValoresEvento {
 
 export interface IEvento {
   _id?: string;
+  idCliente?: string;
   //
+
   notificar?: boolean;
   atender?: boolean;
   noDerivar?: boolean;
@@ -64,11 +66,11 @@ export interface IEvento {
   repetido?: number;
   fechaUltimoRepetido?: string;
   //
+  //ids Asignados
   idTracker?: string;
   idAlarma?: string;
   idUsuario?: string;
   idLuminaria?: string;
-  idCliente?: string;
   tipo?: tipoEvento;
   idsClientesQuePuedenAtender?: string[];
   idsClientesAtendiendo?: string[];

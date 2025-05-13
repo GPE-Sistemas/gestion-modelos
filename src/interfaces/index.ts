@@ -46,6 +46,12 @@ export * from "./tratamiento-evento";
 export * from "./twilio-templates";
 export * from "./ubicacion";
 export * from "./usuario";
+export * from "./destinatario-asistencia";
+export * from "./emergencias-medicas";
+export * from "./evento-emergencia-medica";
+export * from "./personal-salud";
+export * from "./hospitales";
+export * from "./informacion-tecnica";
 
 // Chripstack
 export * from "./chirpstack";

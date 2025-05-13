@@ -1,10 +1,32 @@
 import { ICliente } from "./cliente";
+import { IDispositivoLorawan } from "./dispositivo-lorawan";
+
+export type ModoForzado =
+  | "No Forzado"
+  | "Forzado Encendido"
+  | "Forzado Apagado";
+
+export type IModoLuminaria =
+  | "Indeterminado"
+  | "Fotocélula"
+  | "Calendario"
+  | "Manual"
+  | "GPS";
 
 export interface IReporteLuminaria {
-  encendido?: boolean; // Encendido o apagado
-  estado?: "Normal" | "Falla"; // Estado de la luminaria
-  // TODO: Definir los tipos de las propiedades cuando sean conocidos
-  [key: string]: any;
+  //Esta es la info que reportan las luminarias Wellness
+  dimmingValue?: number; // %
+  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
+  voltage?: number; // V
+  current?: number; // A
+  activePower?: number; // kwH - acumulada, se resetea cuando el nodo se reinicia
+  reactivePower?: number; // kwH - acumulada, se resetea cuando el nodo se reinicia
+  activePowerTotal?: number; // kWh - acumulada
+  reactivePowerTotal?: number; // kWh - acumulada
+  temperature?: number; // Grados Celsius
+  lumenes?: number; // Lux
+  modo?: IModoLuminaria;
+  modoForzado?: ModoForzado;
 }
 
 export interface IReporteDispositivo {
@@ -19,7 +41,7 @@ export interface IReporteDispositivo {
 
   // Virtuals
   cliente?: ICliente;
-  // dispositivoLorawan?: IDispositivoLorawan;
+  dispositivoLorawan?: IDispositivoLorawan;
 }
 
 type OmitirCreate = "_id" | "fechaCreacion" | "cliente";

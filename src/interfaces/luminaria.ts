@@ -17,6 +17,7 @@ export interface ILuminaria {
   direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idGrupo?: string;
+
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
   ultimoReporte?: IReporteDispositivo;

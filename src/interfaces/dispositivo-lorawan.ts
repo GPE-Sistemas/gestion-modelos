@@ -1,19 +1,33 @@
 import { ICliente } from "./cliente";
-import { IReporteDispositivo } from "./reporte-dispositivo";
+import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
 
 export interface IConfigDispositivoLuminaria {
   // TODO: Definir los tipos de las propiedades cuando sean conocidos
   [key: string]: any;
 }
 
+//Si se trata de una luminaria Wellness, esta es la info que se va a cargar en la config del dispositivo
+export interface IDispositivoLuminariaWellness {
+  mode?: IModoLuminaria;
+  activePowerTotal?: number; // kWh - acumulada
+  reactivePowerTotal?: number; // kWh - acumulada
+  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
+  alarma?: string;
+}
+
+export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
+
 export interface IDispositivoLorawan {
   _id?: string;
   idCliente?: string;
+  idModeloDispositivo?: string;
   fechaCreacion?: string; // Dafault: Date.now
   config?: IConfigDispositivoLuminaria;
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteDispositivo;
   frecReporte?: number;
+  tipo?: TipoDispositivoLorawan;
 
   // Datos para el lora server
   deveui?: string;
@@ -39,6 +53,7 @@ export interface IDispositivoLorawan {
 
   //Populate
   cliente?: ICliente;
+  modeloDispositivo?: IModeloDispositivo;
 }
 
 type OmitirCreate = "_id" | "cliente";

@@ -25,6 +25,8 @@ export interface IConfigCliente {
   moduloEventosTecnicos?: IModuloEventosTecnicos;
   moduloVehiculos?: IModuloVehiculos;
   moduloLuminarias?: IModuloLuminarias;
+  moduloEmergenciasMedicas?: IModuloEmergenciasMedicas;
+  moduloDestinatariosAsistencia?: IModuloDestinatariosAsistencia;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
@@ -39,6 +41,16 @@ export interface IModuloLuminarias {
   derivarEventos?: boolean;
   derivarEventosTecnicos?: boolean;
   compartirLuminarias?: boolean;
+}
+
+export interface IModuloEmergenciasMedicas {
+  activo?: boolean;
+  crearEmergenciasMedicas?: boolean;
+}
+
+export interface IModuloDestinatariosAsistencia {
+  activo?: boolean;
+  crearDestinatarioAsistencia?: boolean;
 }
 
 export interface IModuloColectivos {
@@ -64,6 +76,7 @@ export interface IModuloDispositivosLorawan {
   derivarEventosTecnicos?: boolean;
   compartirDispositivosLorawan?: boolean;
 }
+
 export interface IModuloActivos {
   activo?: boolean;
   crearDispositivos?: boolean;
@@ -77,6 +90,7 @@ export interface IModuloAdministracion {
   crearUsuarios?: boolean;
   crearServicios?: boolean;
   crearApikeys?: boolean;
+  crearDispositivosLorawan?: boolean;
 }
 
 export interface IModuloVehiculos {
@@ -101,15 +115,13 @@ export interface ICliente {
   config?: IConfigCliente;
   tipoCliente?: ITipoCliente;
   estadoDeCuenta?: EstadoCuenta;
-  idServiciosContratados?: string[];
   numeroCliente?: string;
   habilitado?: boolean;
   // Populate
   padre?: ICliente;
-  serviciosContratados?: IServicioContratado[];
 }
 
-type OmitirCreate = "_id" | "padre" | "serviciosContratados";
+type OmitirCreate = "_id" | "padre";
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
