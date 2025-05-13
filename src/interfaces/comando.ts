@@ -24,6 +24,7 @@ export interface IComando {
   estado?: IEstadoComando; // Default: Enviado
   fallos?: number;
   fCnt?: string;
+  idChirpstack?: string;
 
   // Virtuals
   cliente?: ICliente;
