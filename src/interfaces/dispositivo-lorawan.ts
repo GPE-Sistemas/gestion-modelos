@@ -26,6 +26,7 @@ export interface IDispositivoLorawan {
   config?: IConfigDispositivoLuminaria;
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteDispositivo;
+  frecReporte?: number;
   tipo?: TipoDispositivoLorawan;
 
   // Datos para el lora server
