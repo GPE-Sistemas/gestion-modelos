@@ -16,7 +16,7 @@ export interface IDispositivoLuminariaWellness {
   alarma?: string;
 }
 
-export type TipoDispositivoLorawan = "GPE" | "Wellness";
+export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
 
 export interface IDispositivoLorawan {
   _id?: string;
