@@ -16,7 +16,7 @@ export interface IReporteDispositivo {
   idsAsignados?: string[];
   // Datos especificos de acuerdo al tipo de dispositivo
   valores?: IReporteLuminaria;
-  esDeDia?: boolean; // Indica si el reporte es de dia o de noche
+  esDeDia?: boolean; // Indica si el reporte es de día o de noche
 
   // Virtuals
   cliente?: ICliente;
