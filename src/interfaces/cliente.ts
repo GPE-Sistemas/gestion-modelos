@@ -34,6 +34,7 @@ export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
 
 export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
 export interface IModulosIntegraciones {
+  activo?: boolean;
   moduloBotonDePanico?: IModuloBotonDePanico;
 }
 
