@@ -1,5 +1,3 @@
-import { IServicioContratado } from "./servicio-contratado";
-
 export interface IImagenesCliente {
   icono?: string;
   banner?: string;
@@ -27,6 +25,7 @@ export interface IConfigCliente {
   moduloLuminarias?: IModuloLuminarias;
   moduloEmergenciasMedicas?: IModuloEmergenciasMedicas;
   moduloDestinatariosAsistencia?: IModuloDestinatariosAsistencia;
+  modulosIntegraciones?: IModulosIntegraciones;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
@@ -34,6 +33,14 @@ export interface IConfigCliente {
 export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
 
 export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
+export interface IModulosIntegraciones {
+  moduloBotonDePanico?: IModuloBotonDePanico;
+}
+
+export interface IModuloBotonDePanico {
+  appkey?: string;
+  activo?: boolean;
+}
 
 export interface IModuloLuminarias {
   activo?: boolean;
