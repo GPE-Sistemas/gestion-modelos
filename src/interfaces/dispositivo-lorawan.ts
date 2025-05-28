@@ -25,8 +25,8 @@ export interface IDispositivoLuminariaGPE {
 }
 export interface IDispositivoLuminariaWellness {
   mode?: IModoLuminaria;
-  activePowerTotal?: number; // kWh - acumulada
-  reactivePowerTotal?: number; // kWh - acumulada
+  activePowerTotal?: number; // kW - acumulada
+  reactivePowerTotal?: number; // kW - acumulada
   turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
   alarma?: string;
 }
