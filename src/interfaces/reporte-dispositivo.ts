@@ -14,7 +14,18 @@ export type IModoLuminaria =
   | "GPS";
 
 export interface IReporteLuminaria {
-  //Esta es la info que reportan las luminarias Wellness
+  // TODO: Definir los tipos de las propiedades cuando sean conocidos
+  [key: string]: any;
+}
+export interface IReporteLuminariaGPE {
+  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
+  modo?: IModoLuminaria;
+  estadoRele?: boolean;
+  dimmerHabilitado?: boolean;
+  energiaExterna?: boolean;
+  potencia?: number;
+}
+export interface IReporteLuminariaWellness {
   dimmingValue?: number; // %
   turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
   voltage?: number; // V
