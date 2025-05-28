@@ -52,6 +52,7 @@ export * from "./evento-emergencia-medica";
 export * from "./personal-salud";
 export * from "./hospitales";
 export * from "./informacion-tecnica";
+export * from "./reporte-consumo-luminaria-gpe";
 
 // Chripstack
 export * from "./chirpstack";
