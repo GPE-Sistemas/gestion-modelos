@@ -21,6 +21,7 @@ export interface IDispositivoLuminariaGPE {
   timeZone?: number;
   frecReporte?: number;
   dataRate?: number;
+  alarma?: string;
 }
 export interface IDispositivoLuminariaWellness {
   mode?: IModoLuminaria;
