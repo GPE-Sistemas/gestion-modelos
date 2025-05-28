@@ -8,6 +8,20 @@ export interface IConfigDispositivoLuminaria {
 }
 
 //Si se trata de una luminaria Wellness, esta es la info que se va a cargar en la config del dispositivo
+export interface IDispositivoLuminariaGPE {
+  mode?: IModoLuminaria;
+  estadoRele?: boolean;
+  dimmerHabilitado?: boolean;
+  energiaExterna?: boolean;
+  adrHabilitado?: boolean;
+  limLuzInferior?: number;
+  limLuzSuperior?: number;
+  offsetGPSAmanecer?: number;
+  offsetGPSAtardecer?: number;
+  timeZone?: number;
+  frecReporte?: number;
+  dataRate?: number;
+}
 export interface IDispositivoLuminariaWellness {
   mode?: IModoLuminaria;
   activePowerTotal?: number; // kWh - acumulada
