@@ -53,6 +53,7 @@ export * from "./personal-salud";
 export * from "./hospitales";
 export * from "./informacion-tecnica";
 export * from "./reporte-consumo-luminaria-gpe";
+export * from "./alerta-boton-ble";
 
 // Chripstack
 export * from "./chirpstack";
