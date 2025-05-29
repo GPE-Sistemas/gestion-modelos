@@ -6,6 +6,7 @@ export interface IConsumoLuminariaGPE {
   voltaje: number; // V
   potencia: number; // W
   energia: number; // kWh
+  energiaTotal: number; //kWh acumulado
   factorPotencia: number; //factor de potencia de la luminaria (dividido por 100)
 }
 
