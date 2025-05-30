@@ -50,6 +50,7 @@ export interface IReporteDispositivo {
   // Datos especificos de acuerdo al tipo de dispositivo
   valores?: IReporteLuminaria;
   esDeDia?: boolean; // Indica si el reporte es de día o de noche
+  fCnt?: number;
 
   // Virtuals
   cliente?: ICliente;
