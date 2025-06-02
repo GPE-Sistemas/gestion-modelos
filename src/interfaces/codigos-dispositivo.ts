@@ -13,6 +13,7 @@ export interface ICodigoDispositivo {
   test?: boolean;
   minutosEsperaAutomatica?: number; // Los eventos generados se ponen en espera automaticamente por este tiempo
   cierraCodigosEventos?: string[]; // Si se genera un evento con este codigo, se cierran los eventos con estos codigos del array
+  global?: boolean;
   // Populate
   categoriaEvento?: ICategoriaEvento;
 }

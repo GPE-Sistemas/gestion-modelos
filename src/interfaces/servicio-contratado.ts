@@ -1,4 +1,4 @@
-import { ICliente } from './cliente';
+import { ICliente } from "./cliente";
 
 export interface IServicioContratado {
   _id?: string;
@@ -6,16 +6,17 @@ export interface IServicioContratado {
   nombre?: string;
   icono?: string;
   costo?: number;
+  global?: boolean;
   // Populate
   cliente?: ICliente;
 }
 
-type OmitirCreate = '_id' | 'cliente';
+type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateServicioContratado
   extends Omit<Partial<IServicioContratado>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente';
+type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateServicioContratado
   extends Omit<Partial<IServicioContratado>, OmitirUpdate> {}

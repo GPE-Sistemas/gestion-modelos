@@ -14,9 +14,9 @@ export interface IModeloDispositivo {
   formatoMensaje?: string;
   idCodigos?: string;
   idCliente?: string;
-
   //Datos técnicos para luminarias
   luminarias?: IDetallesLuminarias;
+  global?: boolean;
   // Populate
   cliente?: ICliente;
   codigos?: ICodigosDispositivo;
