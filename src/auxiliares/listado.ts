@@ -1,4 +1,6 @@
 export interface IListado<T> {
-  totalCount: number;
+  totalCount?: number;
   datos: T[];
+  duration?: number;
+  executionStats?: object;
 }
