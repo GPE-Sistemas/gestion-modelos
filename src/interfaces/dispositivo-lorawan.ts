@@ -5,7 +5,24 @@ import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
 //Notas: En el caso de estos dispositivos:
 // Potencia de dispositivo GPE = consumo instantáneo (W)
 // Energía de dispositivo GPE = Reactive Power de dispositivo Wellness = Consumo acumulado (kWh)
+//Esta es la estructura de la config de un dispositivoGPE. A partir de sus valores se va a generar un payload para cambiar la configuración del dispositivo
+export interface IConfigDispositivoGPEPayload {
+  //Config byte
+  mode?: IModoLuminaria;
+  estadoRele?: boolean;
+  dimmerHabilitado?: boolean;
+  energiaExterna?: boolean;
+  adrHabilitado?: boolean;
 
+  //Otros
+  limLuzInferior?: number;
+  limLuzSuperior?: number;
+  offsetGPSAmanecer?: number;
+  offsetGPSAtardecer?: number;
+  timeZone?: number;
+  frecReporte?: number;
+  dataRate?: number;
+}
 export interface IConfigDispositivoLuminaria {
   // TODO: Definir los tipos de las propiedades cuando sean conocidos
   [key: string]: any;
