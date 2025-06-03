@@ -9,6 +9,7 @@ export interface ITipoEvento {
   categoria?: ICategoriaTipoEvento;
   idCliente?: string;
   default?: boolean;
+  global?: boolean;
   //Populate
   cliente?: ICliente;
 }

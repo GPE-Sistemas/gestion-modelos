@@ -4,7 +4,7 @@ import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { IActivo } from "./activo";
 import { IUsuario } from "./usuario";
 
-export type CategoriaTecnica = "Alarma" | "Tracker";
+export type CategoriaTecnica = "Alarma" | "Tracker" | "Luminaria";
 
 export type estadoEventoTecnico =
   | "Pendiente"
@@ -25,6 +25,7 @@ export interface IEventoTecnico {
   idTracker?: string;
   idAlarma?: string;
   idActivo?: string;
+  idLuminaria?: string;
   idCliente?: string;
   //
   idsClientesQuePuedenAtender?: string[];
@@ -35,6 +36,7 @@ export interface IEventoTecnico {
   tracker?: ITracker;
   alarma?: IDispositivoAlarma;
   activo?: IActivo;
+  luminaria?: IActivo;
   cliente?: ICliente;
   usuario?: IUsuario;
   tecnico?: IUsuario;

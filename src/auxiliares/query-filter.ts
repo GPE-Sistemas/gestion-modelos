@@ -13,6 +13,8 @@ export interface IQueryParam {
    * Nivel de profundidad de los clientes hijos, si no se especifica se toman todos
    */
   childrenLevel?: number;
+  excludeTotalCount?: boolean;
+  executionStats?: boolean;
   [key: string]: any;
 }
 export interface IPopulate {

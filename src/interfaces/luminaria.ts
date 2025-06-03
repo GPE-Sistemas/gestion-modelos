@@ -3,6 +3,9 @@ import { ICliente } from "./cliente";
 import { IDispositivoLorawan } from "./dispositivo-lorawan";
 import { IGrupo } from "./grupo";
 import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IReporteDispositivo } from "./reporte-dispositivo";
+
+export type EstadoLuminaria = "Operativa" | "Mantenimiento";
 
 export interface ILuminaria {
   _id?: string;
@@ -15,6 +18,9 @@ export interface ILuminaria {
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idGrupo?: string;
 
+  // Estado actual de la luminaria
+  estado?: EstadoLuminaria;
+  ultimoReporte?: IReporteDispositivo;
   // Virtuals
   cliente?: ICliente;
   dispositivo?: IDispositivoLorawan;

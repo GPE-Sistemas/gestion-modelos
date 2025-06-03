@@ -14,6 +14,7 @@ export interface ICategoriaEvento {
   sonido?: SonidoEvento;
   idCliente?: string;
   default?: boolean;
+  global?: boolean;
   //Populate
   cliente?: ICliente;
 }

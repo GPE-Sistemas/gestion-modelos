@@ -1,5 +1,3 @@
-import { IServicioContratado } from "./servicio-contratado";
-
 export interface IImagenesCliente {
   icono?: string;
   banner?: string;
@@ -24,6 +22,10 @@ export interface IConfigCliente {
   moduloAdministracion?: IModuloAdministracion;
   moduloEventosTecnicos?: IModuloEventosTecnicos;
   moduloVehiculos?: IModuloVehiculos;
+  moduloLuminarias?: IModuloLuminarias;
+  moduloEmergenciasMedicas?: IModuloEmergenciasMedicas;
+  moduloDestinatariosAsistencia?: IModuloDestinatariosAsistencia;
+  modulosIntegraciones?: IModulosIntegraciones;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
@@ -31,6 +33,33 @@ export interface IConfigCliente {
 export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
 
 export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
+export interface IModulosIntegraciones {
+  activo?: boolean;
+  moduloBotonDePanico?: IModuloBotonDePanico;
+}
+
+export interface IModuloBotonDePanico {
+  appkey?: string;
+  activo?: boolean;
+}
+
+export interface IModuloLuminarias {
+  activo?: boolean;
+  crearDispositivos?: boolean;
+  derivarEventos?: boolean;
+  derivarEventosTecnicos?: boolean;
+  compartirLuminarias?: boolean;
+}
+
+export interface IModuloEmergenciasMedicas {
+  activo?: boolean;
+  crearEmergenciasMedicas?: boolean;
+}
+
+export interface IModuloDestinatariosAsistencia {
+  activo?: boolean;
+  crearDestinatarioAsistencia?: boolean;
+}
 
 export interface IModuloColectivos {
   activo?: boolean;
@@ -55,6 +84,7 @@ export interface IModuloDispositivosLorawan {
   derivarEventosTecnicos?: boolean;
   compartirDispositivosLorawan?: boolean;
 }
+
 export interface IModuloActivos {
   activo?: boolean;
   crearDispositivos?: boolean;
@@ -68,6 +98,7 @@ export interface IModuloAdministracion {
   crearUsuarios?: boolean;
   crearServicios?: boolean;
   crearApikeys?: boolean;
+  crearDispositivosLorawan?: boolean;
 }
 
 export interface IModuloVehiculos {
@@ -92,15 +123,13 @@ export interface ICliente {
   config?: IConfigCliente;
   tipoCliente?: ITipoCliente;
   estadoDeCuenta?: EstadoCuenta;
-  idServiciosContratados?: string[];
   numeroCliente?: string;
   habilitado?: boolean;
   // Populate
   padre?: ICliente;
-  serviciosContratados?: IServicioContratado[];
 }
 
-type OmitirCreate = "_id" | "padre" | "serviciosContratados";
+type OmitirCreate = "_id" | "padre";
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 

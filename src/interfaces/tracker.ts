@@ -1,10 +1,11 @@
 import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
-import { ISim, Operador } from "./dispositivo-alarma";
+import { ISim } from "./dispositivo-alarma";
 import { estadoCuenta } from "./estado-entidad";
 import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IServicioContratado } from "./servicio-contratado";
 
-export type TipoTracker = "Qualcomm" | "Traccar";
+export type TipoTracker = "Qualcomm" | "Traccar" | "T1000-B" | "Telefono";
 export interface ITraccarDevice {
   // Datos de traccar
   id?: number;
@@ -22,9 +23,16 @@ export interface ITraccarDevice {
   attributes?: object;
 }
 
+export interface IT100bDevice {
+  deveui?: string;
+}
 export interface IQualcommDevice {
   // Datos de Qualcomm
   serialNumber?: string;
+}
+
+export interface ITelefono {
+  deviceId?: string;
 }
 
 export interface ITracker {
@@ -46,21 +54,36 @@ export interface ITracker {
   uniqueId?: string;
   traccar?: ITraccarDevice;
   qualcomm?: IQualcommDevice;
+  t1000b?: IT100bDevice;
+  telefono?: ITelefono;
   estadoCuenta?: estadoCuenta;
   numeroAbonado?: string;
   sim1?: ISim;
   sim2?: ISim;
   frecReporte?: number;
+  //
+  idServiciosContratados?: string[];
   // Populate
   cliente?: ICliente;
   activo?: IActivo;
   modelo?: IModeloDispositivo;
+  serviciosContratados?: IServicioContratado[];
 }
 
-type OmitirCreate = "_id" | "cliente" | "activo" | "modelo";
+type OmitirCreate =
+  | "_id"
+  | "cliente"
+  | "activo"
+  | "modelo"
+  | "serviciosContratados";
 
 export interface ICreateTracker extends Omit<Partial<ITracker>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "activo" | "modelo";
+type OmitirUpdate =
+  | "_id"
+  | "cliente"
+  | "activo"
+  | "modelo"
+  | "serviciosContratados";
 
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}

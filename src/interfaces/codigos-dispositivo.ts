@@ -17,7 +17,13 @@ export interface ICodigoDispositivo {
   categoriaEvento?: ICategoriaEvento;
 }
 
-export type TipoDispositivo = "Tracker" | "Alarma" | "Comunicador" | "Cámara";
+export type TipoDispositivo =
+  | "Tracker"
+  | "Alarma"
+  | "Comunicador"
+  | "Cámara"
+  | "Luminaria"
+  | "DispositivoLorawan";
 
 export interface ICodigosDispositivo {
   _id?: string;
@@ -26,6 +32,7 @@ export interface ICodigosDispositivo {
   tipo?: TipoDispositivo;
   codigos?: ICodigoDispositivo[];
   idCliente?: string;
+  global?: boolean;
   // Populate
   cliente?: ICliente;
 }

@@ -8,6 +8,7 @@ import { IDispositivoAlarma } from "./dispositivo-alarma";
 import { ITracker } from "./tracker";
 import { ITipoEvento } from "./tipo-evento";
 import { IGeoJSONPoint } from "../auxiliares";
+import { ILuminaria } from "./luminaria";
 
 export interface IConfigZona {
   particion?: number;
@@ -18,7 +19,12 @@ export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
 export type Agrupacion = "Grupo" | "Entidad";
 
-export type TipoEntidad = "Activo" | "Vehiculo" | "Alarma" | "Usuario";
+export type TipoEntidad =
+  | "Activo"
+  | "Vehiculo"
+  | "Alarma"
+  | "Usuario"
+  | "Luminaria";
 
 export type Frecuencia =
   | "Unica"
@@ -122,6 +128,7 @@ export interface IConfigEventoUsuario {
   cliente?: ICliente;
   grupo?: IGrupo;
   activo?: IActivo;
+  luminaria?: ILuminaria;
   alarma?: IDispositivoAlarma;
   clientesQuePuedenAtender?: ICliente[];
   categoriaEvento?: ICategoriaEvento;
@@ -135,6 +142,7 @@ type OmitirCreate =
   | "cliente"
   | "grupo"
   | "activo"
+  | "luminaria"
   | "alarma"
   | "clientesQuePuedenAtender"
   | "categoriaEvento"
@@ -149,6 +157,7 @@ type OmitirUpdate =
   | "cliente"
   | "grupo"
   | "activo"
+  | "luminaria"
   | "alarma"
   | "clientesQuePuedenAtender"
   | "categoriaEvento"
