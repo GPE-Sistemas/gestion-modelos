@@ -40,6 +40,7 @@ export interface ITracker {
   //
   fechaCreacion?: string;
   fechaAlta?: string;
+  imagenes?: string[];
   idCliente?: string;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
