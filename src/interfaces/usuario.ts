@@ -18,6 +18,7 @@ export interface IPermiso {
   moduloAdministracion?: boolean;
   moduloEventosTecnicos?: boolean;
   moduloVehiculos?: boolean;
+  moduloHerramientas?: boolean;
   idsEntidades: string[];
 }
 
