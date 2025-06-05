@@ -1,11 +1,16 @@
 import { IDispositivoLorawan } from "./dispositivo-lorawan";
 
+type TipoLogEvento = "up" | "status" | "join" | "ack" | "txack";
 export interface ILogEvento {
   _id?: string;
   fechaCreacion?: string;
+  tipo?: TipoLogEvento;
   deveui?: string;
   deviceName?: string;
   payload?: string;
+  puerto?: number;
+  battery?: number;
+  fCnt?: number;
 
   //Populate
   dispositivoLorawan?: IDispositivoLorawan;
