@@ -54,7 +54,7 @@ export * from "./hospitales";
 export * from "./informacion-tecnica";
 export * from "./reporte-consumo-luminaria-gpe";
 export * from "./alerta-boton-ble";
-export * from "./log-uplink";
+export * from "./log-evento";
 export * from "./log-https";
 // Chripstack
 export * from "./chirpstack";
