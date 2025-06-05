@@ -26,6 +26,7 @@ export interface IConfigCliente {
   moduloEmergenciasMedicas?: IModuloEmergenciasMedicas;
   moduloDestinatariosAsistencia?: IModuloDestinatariosAsistencia;
   modulosIntegraciones?: IModulosIntegraciones;
+  moduloHerramientas?: IModuloHerramientas;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
 }
@@ -110,6 +111,10 @@ export interface IModuloVehiculos {
 }
 
 export interface IModuloEventosTecnicos {
+  activo?: boolean;
+}
+
+export interface IModuloHerramientas {
   activo?: boolean;
 }
 
