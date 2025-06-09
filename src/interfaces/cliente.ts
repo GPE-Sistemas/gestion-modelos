@@ -54,6 +54,8 @@ export interface IModuloLuminarias {
 
 export interface IModuloEmergenciasMedicas {
   activo?: boolean;
+  administrarEmergenciasMedicas?: boolean;
+  asignarEmergenciasMedicas?: boolean;
   crearEmergenciasMedicas?: boolean;
 }
 
