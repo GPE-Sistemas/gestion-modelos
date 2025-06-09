@@ -6,7 +6,7 @@ export interface IPersonalSalud {
 
   fechaCreacion?: string;
   nombre?: string; // Nombre completo
-  rol?: "medico" | "enfermero";
+  rol?: "Médico" | "Enfermero";
   matricula?: string; // Matrícula profesional
   dni?: string;
   telefono?: string;
