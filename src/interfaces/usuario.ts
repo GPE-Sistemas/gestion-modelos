@@ -7,7 +7,9 @@ export type Rol =
   | "Chofer Colectivo"
   | "Consultor"
   | "Técnico"
-  | "Final";
+  | "Final"
+  | "Coordinador Emergencias Médicas"
+  | "Registrador Emergencias Médicas";
 
 export interface IPermiso {
   moduloColectivos?: boolean;
