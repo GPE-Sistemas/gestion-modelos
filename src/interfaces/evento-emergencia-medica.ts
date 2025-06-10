@@ -35,8 +35,8 @@ export interface IEventoEmergenciaMedica {
   destinatarioAsistencia?: IDestinatarioAsistencia;
   activo?: IActivo; //Activo tiene la información de vehículo
   chofer?: IUsuario; //Usuario tiene la información de chofer
-  medico?: IPersonalSalud[];
-  enfermero?: IPersonalSalud[];
+  medicos?: IPersonalSalud[];
+  enfermeros?: IPersonalSalud[];
   hospital?: IHospital;
   cliente?: ICliente;
 }
