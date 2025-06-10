@@ -14,8 +14,8 @@ export interface IEventoEmergenciaMedica {
   idEmergencia?: string; // referencia a la emergencia
   idActivo?: string; //referencia al vehículo
   idChofer?: string; //referencia al chofer
-  idMedico?: string; //referencia al medico
-  idEnfermero?: string; //referencia al enfermero
+  idsMedicos?: string[]; //referencia al medico
+  idsEnfermeros?: string[]; //referencia al enfermero
   idHospital?: string;
 
   //Estado y timestamp
@@ -35,8 +35,8 @@ export interface IEventoEmergenciaMedica {
   destinatarioAsistencia?: IDestinatarioAsistencia;
   activo?: IActivo; //Activo tiene la información de vehículo
   chofer?: IUsuario; //Usuario tiene la información de chofer
-  medico?: IPersonalSalud;
-  enfermero?: IPersonalSalud;
+  medico?: IPersonalSalud[];
+  enfermero?: IPersonalSalud[];
   hospital?: IHospital;
   cliente?: ICliente;
 }
@@ -45,7 +45,7 @@ type EstadoEmergencia =
   | "Pendiente" // Recién creada
   | "Asignada" // Se asignó vehículo/médico/enfermero
   | "Reasignada" //Se reasignó vehículo/médico/enfermero
-  | "En transito" // Salió del centro
+  | "En tránsito" // Salió del centro
   | "Llego a destino" // Llegó al lugar de la emergencia
   | "Rumbo a hospital" // Sale hacia hospital
   | "Llegada a hospital" //Llegó al hospital
