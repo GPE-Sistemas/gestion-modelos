@@ -1,7 +1,10 @@
 import { DireccionV2 } from "../auxiliares";
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
-import { IEventoEmergenciaMedica } from "./evento-emergencia-medica";
+import {
+  EstadoEmergencia,
+  IEventoEmergenciaMedica,
+} from "./evento-emergencia-medica";
 
 //EMERGENCIA MÉDICA
 export interface IEmergenciaMedica {
@@ -11,6 +14,7 @@ export interface IEmergenciaMedica {
 
   //Información básica
   fechaCreacion?: string;
+  estadoActual?: EstadoEmergencia; //Este estado será el del último evento asociado a la emergencia
   ultimaActualizacion?: string;
   codigo?: string; // Código único del caso de emergencia
   solicitante?: string; // Nombre del solicitante de la emergencia

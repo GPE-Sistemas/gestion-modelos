@@ -41,7 +41,7 @@ export interface IEventoEmergenciaMedica {
   cliente?: ICliente;
 }
 
-type EstadoEmergencia =
+export type EstadoEmergencia =
   | "Pendiente" // Recién creada
   | "Asignada" // Se asignó vehículo/médico/enfermero
   | "Reasignada" //Se reasignó vehículo/médico/enfermero
