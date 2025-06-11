@@ -7,7 +7,6 @@ import { IEventoEmergenciaMedica } from "./evento-emergencia-medica";
 export interface IEmergenciaMedica {
   _id?: string;
   idDestinatarioAsistencia?: string;
-  idsEventosEmergenciaMedica?: string[];
   idCliente?: string;
 
   //Información básica
@@ -23,7 +22,6 @@ export interface IEmergenciaMedica {
 
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
-  eventosEmergenciaMedica?: IEventoEmergenciaMedica[]; //El evento contiene la información sobre la ubicación actual del vehículo que atiende la emergencia, la ubicación destino, el estado y las reasignaciones
   cliente?: ICliente;
 }
 
