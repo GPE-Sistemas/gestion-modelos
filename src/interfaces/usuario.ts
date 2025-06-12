@@ -42,7 +42,7 @@ export interface IConfigUsuario {
 
 export interface IPermiso {
   idCliente?: string;
-  idsEntidades: string[];
+  idsEntidades?: string[];
   roles?: Rol[];
   modulos?: IModulos;
   activo?: boolean;
