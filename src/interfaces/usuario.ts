@@ -11,7 +11,7 @@ export type Rol =
   | "Coordinador Emergencias Médicas"
   | "Registrador Emergencias Médicas";
 
-export interface IPermiso {
+export interface IModulos {
   moduloColectivos?: boolean;
   moduloAlarmasDomiciliarias?: boolean;
   moduloLuminarias?: boolean;
@@ -41,30 +41,35 @@ export interface IConfigUsuario {
   cantMapasVehiculos?: number;
 }
 
+export interface IPermiso {
+  idCliente?: string;
+  roles: Rol[];
+  modulos: IModulos;
+  activo?: boolean;
+  // Virtual
+  cliente?: ICliente;
+}
+
 export interface IUsuario {
   _id?: string;
   identificacionInterna?: string;
   idCliente?: string;
-  idsClientes?: string[];
+  permisos?: IPermiso[];
   //
   idExterno?: string;
-  activo?: boolean;
   fechaCreacion?: string;
-  roles?: Rol[];
-  permisos?: IPermiso;
   usuario?: string;
   hash?: string;
   datosPersonales?: IDatosPersonales;
   config?: IConfigUsuario;
   // Populate
   cliente?: ICliente;
-  clientes?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente" | "fechaCreacion" | "clientes";
+type OmitirCreate = "_id" | "cliente" | "fechaCreacion";
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "fechaCreacion" | "clientes";
+type OmitirUpdate = "_id" | "cliente" | "fechaCreacion";
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}
