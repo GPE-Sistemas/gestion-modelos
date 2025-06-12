@@ -37,14 +37,23 @@ export interface IObjectUplink {
   valid?: boolean;
   payload?: string;
   messages?: Array<IMessageUplink[]>;
+  errMessage?: string;
 }
 
 export interface IMessageUplink {
-  measurementValue?: IMeasurementValueElementUplink[] | number;
+  measurementValue?:
+    | IMeasurementValueElementUplink[]
+    | IPositioningStatus
+    | number;
   timestamp?: number;
   measurementId?: string;
   motionId?: number;
   type?: string;
+}
+
+export interface IPositioningStatus {
+  id?: number;
+  statusName?: string;
 }
 
 export interface IMeasurementValueElementUplink {
