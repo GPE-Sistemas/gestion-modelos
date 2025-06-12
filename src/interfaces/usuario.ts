@@ -45,6 +45,7 @@ export interface IUsuario {
   _id?: string;
   identificacionInterna?: string;
   idCliente?: string;
+  idsClientes?: string[];
   //
   idExterno?: string;
   activo?: boolean;
@@ -57,12 +58,13 @@ export interface IUsuario {
   config?: IConfigUsuario;
   // Populate
   cliente?: ICliente;
+  clientes?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = "_id" | "cliente" | "fechaCreacion" | "clientes";
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = "_id" | "cliente" | "fechaCreacion" | "clientes";
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}
