@@ -43,8 +43,8 @@ export interface IConfigUsuario {
 
 export interface IPermiso {
   idCliente?: string;
-  roles: Rol[];
-  modulos: IModulos;
+  roles?: Rol[];
+  modulos?: IModulos;
   activo?: boolean;
   // Virtual
   cliente?: ICliente;
