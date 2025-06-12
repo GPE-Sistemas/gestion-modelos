@@ -37,6 +37,7 @@ export interface IObjectUplink {
   valid?: boolean;
   payload?: string;
   messages?: Array<IMessageUplink[]>;
+  errMessage?: string;
 }
 
 export interface IMessageUplink {
