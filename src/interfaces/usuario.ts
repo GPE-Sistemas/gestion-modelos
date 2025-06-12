@@ -21,7 +21,6 @@ export interface IModulos {
   moduloEventosTecnicos?: boolean;
   moduloVehiculos?: boolean;
   moduloHerramientas?: boolean;
-  idsEntidades: string[];
 }
 
 export interface IDatosPersonales {
@@ -43,6 +42,7 @@ export interface IConfigUsuario {
 
 export interface IPermiso {
   idCliente?: string;
+  idsEntidades: string[];
   roles?: Rol[];
   modulos?: IModulos;
   activo?: boolean;
