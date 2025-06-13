@@ -1,6 +1,6 @@
 import { ICliente } from "./cliente";
 
-export interface IBotonBlueTooth {
+export interface IBotonBluetooth {
   _id?: string;
   idCliente?: string;
   mac?: string;
@@ -13,9 +13,9 @@ export interface IBotonBlueTooth {
 type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateBotonBluetooth
-  extends Omit<Partial<IBotonBlueTooth>, OmitirCreate> {}
+  extends Omit<Partial<IBotonBluetooth>, OmitirCreate> {}
 
 type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateBotonBluetooth
-  extends Omit<Partial<IBotonBlueTooth>, OmitirUpdate> {}
+  extends Omit<Partial<IBotonBluetooth>, OmitirUpdate> {}
