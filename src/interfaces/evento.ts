@@ -7,6 +7,7 @@ import { IConfigEventoUsuario } from "./config-evento-usuario";
 import { SonidoEvento } from "./categoria-evento";
 import { IUsuario } from "./usuario";
 import { ILuminaria } from "./luminaria";
+import { IBotonBlueTooth } from "./boton-bluetooth";
 
 export interface IContactID {
   numeroCuenta?: string;
@@ -77,6 +78,7 @@ export interface IEvento {
   idsUsuariosAtendiendo?: string[];
   idReporte?: string;
   idActivo?: string;
+  idBotonBluetooth?: string;
   idConfigEventoUsuario?: string;
 
   // Populate
@@ -88,6 +90,7 @@ export interface IEvento {
   reporte?: IReporte;
   activo?: IActivo;
   configEventoUsuario?: IConfigEventoUsuario;
+  botonBluetooth?: IBotonBlueTooth;
 }
 
 type OmitirCreate =
