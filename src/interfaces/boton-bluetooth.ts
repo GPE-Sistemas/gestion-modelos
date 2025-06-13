@@ -2,6 +2,7 @@ import { ICliente } from "./cliente";
 
 export interface IBotonBluetooth {
   _id?: string;
+  fechaCreacion?: string;
   idCliente?: string;
   mac?: string;
   serialNumber?: string;

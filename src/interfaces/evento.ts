@@ -100,6 +100,7 @@ type OmitirCreate =
   | "alarma"
   | "reporte"
   | "activo"
+  | "botonBluetooth"
   | "configEventoUsuario";
 
 export interface ICreateEvento extends Omit<Partial<IEvento>, OmitirCreate> {}
@@ -111,6 +112,7 @@ type OmitirUpdate =
   | "alarma"
   | "reporte"
   | "activo"
+  | "botonBluetooth"
   | "configEventoUsuario";
 
 export interface IUpdateEvento extends Omit<Partial<IEvento>, OmitirUpdate> {}
