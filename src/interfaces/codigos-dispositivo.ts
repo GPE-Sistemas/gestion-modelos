@@ -23,7 +23,8 @@ export type TipoDispositivo =
   | "Comunicador"
   | "Cámara"
   | "Luminaria"
-  | "DispositivoLorawan";
+  | "DispositivoLorawan"
+  | "BotonBLE";
 
 export interface ICodigosDispositivo {
   _id?: string;
