@@ -9,3 +9,13 @@ export interface IBotonBlueTooth {
   //Populate
   cliente?: ICliente;
 }
+
+type OmitirCreate = "_id" | "cliente";
+
+export interface ICreateBotonBluetooth
+  extends Omit<Partial<IBotonBlueTooth>, OmitirCreate> {}
+
+type OmitirUpdate = "_id" | "cliente";
+
+export interface IUpdateBotonBluetooth
+  extends Omit<Partial<IBotonBlueTooth>, OmitirUpdate> {}
