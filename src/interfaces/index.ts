@@ -56,5 +56,6 @@ export * from "./reporte-consumo-luminaria-gpe";
 export * from "./alerta-boton-ble";
 export * from "./log-evento";
 export * from "./log-https";
+export * from "./boton-bluetooth";
 // Chripstack
 export * from "./chirpstack";
