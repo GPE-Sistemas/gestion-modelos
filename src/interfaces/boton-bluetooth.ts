@@ -1,7 +1,10 @@
 import { ICliente } from "./cliente";
+import { IModeloDispositivo } from "./modelo-dispositivo";
 
 export interface IBotonBluetooth {
   _id?: string;
+  idModeloDispositivo?: string;
+
   fechaCreacion?: string;
   idCliente?: string;
   mac?: string;
@@ -9,6 +12,7 @@ export interface IBotonBluetooth {
 
   //Populate
   cliente?: ICliente;
+  modeloDispositivo?: IModeloDispositivo;
 }
 
 type OmitirCreate = "_id" | "cliente";
