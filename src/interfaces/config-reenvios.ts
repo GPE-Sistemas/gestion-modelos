@@ -19,6 +19,7 @@ export interface IConfigReenvio {
   _id?: string;
   activo?: boolean;
   idCliente?: string;
+  fechaCreacion?: string;
   // Configuracion
   agrupacionReenvio?: IAgrupacionReenvio;
   idClienteReenvio?: string;
