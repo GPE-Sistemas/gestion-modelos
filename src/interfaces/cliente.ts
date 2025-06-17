@@ -24,6 +24,7 @@ export interface IConfigCliente {
   moduloVehiculos?: IModuloVehiculos;
   moduloLuminarias?: IModuloLuminarias;
   moduloEmergenciasMedicas?: IModuloEmergenciasMedicas;
+  moduloBotonBLE?: IModuloBotonBLE;
   modulosIntegraciones?: IModulosIntegraciones;
   moduloHerramientas?: IModuloHerramientas;
   idsClientesQuePuedenAtenderEventos?: string[];
@@ -40,6 +41,10 @@ export interface IModulosIntegraciones {
 
 export interface IModuloBotonDePanico {
   appkey?: string;
+  activo?: boolean;
+}
+
+export interface IModuloBotonBLE {
   activo?: boolean;
 }
 
