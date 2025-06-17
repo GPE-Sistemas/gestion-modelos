@@ -1,3 +1,4 @@
+import { IGeoJSONPoint } from "../auxiliares";
 import { ICliente } from "./cliente";
 import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
@@ -75,6 +76,7 @@ export interface IDispositivoLorawan {
   ultimoReporte?: IReporteDispositivo;
   frecReporte?: number;
   tipo?: TipoDispositivoLorawan;
+  ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
 
   // Datos para el lora server
   deveui?: string;
