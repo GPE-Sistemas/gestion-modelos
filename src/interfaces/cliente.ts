@@ -129,6 +129,7 @@ export interface ICliente {
   estadoDeCuenta?: EstadoCuenta;
   numeroCliente?: string;
   habilitado?: boolean;
+  apikeyBotonBLE?: string;
   // Populate
   padre?: ICliente;
 }
