@@ -33,7 +33,8 @@ export type tipoEvento =
   | "Tracker"
   | "Vehiculo"
   | "Alarma"
-  | "Luminaria";
+  | "Luminaria"
+  | "BotonBLE";
 export interface IValoresEvento {
   titulo?: string;
   mensaje?: string;
