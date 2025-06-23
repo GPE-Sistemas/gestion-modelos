@@ -1,6 +1,6 @@
 import { ICliente } from "./cliente";
 
-export type ICategoriaTipoEvento = "Alarma" | "Tracker";
+export type ICategoriaTipoEvento = "Alarma" | "Tracker" | "Luminaria";
 
 export interface ITipoEvento {
   _id?: string;
