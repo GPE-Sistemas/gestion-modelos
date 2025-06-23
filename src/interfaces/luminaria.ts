@@ -16,7 +16,7 @@ export interface ILuminaria {
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria
   direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
-  idGrupo?: string;
+  idsGrupos?: string[];
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
@@ -25,7 +25,7 @@ export interface ILuminaria {
   cliente?: ICliente;
   dispositivo?: IDispositivoLorawan;
   modeloDispositivo?: IModeloDispositivo;
-  grupo?: IGrupo;
+  grupos?: IGrupo[];
 }
 
 ////// CREATE
