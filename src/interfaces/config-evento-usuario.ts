@@ -53,6 +53,18 @@ export interface CondicionNotificacion {
       "mas de": number;
     };
   };
+
+  luminaria?: {
+    potencia?: {
+      "superior a": number;
+      "inferior a": number;
+    };
+    voltaje?: {
+      "superior a": number;
+      "inferior a": number;
+    };
+  };
+
   alarma?: {
     // se le asigna el codigo reportado, y notifica si llega ese evento dentro del periodo o cronograma
     "llega evento"?: string[];
