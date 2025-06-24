@@ -4,6 +4,7 @@ import { ICodigosDispositivo, TipoDispositivo } from "./codigos-dispositivo";
 export interface IDetallesLuminarias {
   horasVida?: string;
   potencia?: string;
+  voltaje?: string;
 }
 export interface IModeloDispositivo {
   _id?: string;
