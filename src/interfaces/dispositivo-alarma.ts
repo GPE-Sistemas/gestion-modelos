@@ -97,6 +97,9 @@ export interface IDispositivoAlarma {
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
   //
+  nroDeSistema?: string;
+  claveDeSistema?: string;
+  //
   estadoCuenta?: estadoCuenta;
   frecReporte?: number;
   idServiciosContratados?: string[];

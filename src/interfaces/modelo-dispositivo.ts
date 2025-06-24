@@ -7,10 +7,6 @@ export interface IDetallesLuminarias {
   voltaje?: string;
 }
 
-export interface IDetallesComunicador {
-  nroDeSistema?: string;
-  claveDeSistema?: string;
-}
 export interface IModeloDispositivo {
   _id?: string;
   //
@@ -20,8 +16,6 @@ export interface IModeloDispositivo {
   formatoMensaje?: string;
   idCodigos?: string;
   idCliente?: string;
-  // Datos Comunicador
-  comunicador?: IDetallesComunicador;
   //Datos técnicos para luminarias
   luminarias?: IDetallesLuminarias;
   global?: boolean;
