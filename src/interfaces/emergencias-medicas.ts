@@ -23,6 +23,7 @@ export interface IEmergenciaMedica {
   prioridad?: PrioridadEmergencia;
   observaciones?: string; // Notas adicionales sobre el caso
   direccion?: DireccionV2; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones de seguimiento de la emergencia en los eventos.
+  asignada?: boolean;
 
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
