@@ -24,6 +24,7 @@ export interface IEmergenciaMedica {
   observaciones?: string; // Notas adicionales sobre el caso
   direccion?: DireccionV2; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones de seguimiento de la emergencia en los eventos.
   asignada?: boolean;
+  ultimoEventoEmergenciaMedica?: IEventoEmergenciaMedica; //Acá se carga el último evento para hacer el seguimiento
 
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
