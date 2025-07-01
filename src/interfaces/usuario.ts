@@ -38,6 +38,13 @@ export interface IDatosPersonales {
 export interface IConfigUsuario {
   notasEnPrimerPlano?: boolean;
   cantMapasVehiculos?: number;
+  noMostrarGuardarClaveAlarma?: boolean;
+  clavesAlarma?: IClaveUsuarioAlarma[];
+}
+
+export interface IClaveUsuarioAlarma {
+  idAlarma?: string;
+  clave?: string;
 }
 
 export interface IPermiso {
