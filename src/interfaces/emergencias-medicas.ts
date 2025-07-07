@@ -16,7 +16,7 @@ export interface IEmergenciaMedica {
   fechaCreacion?: string;
   estadoActual?: EstadoEmergencia; //Este estado será el del último evento asociado a la emergencia
   ultimaActualizacion?: string;
-  codigo?: string; // Código único del caso de emergencia
+  codigo?: number; // Código único del caso de emergencia, es incremental
   solicitante?: string; // Nombre del solicitante de la emergencia
   telefono?: string; // Teléfono de contacto del solicitante
   sintomas?: string[]; // Lista de síntomas reportados
