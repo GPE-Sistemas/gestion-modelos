@@ -12,26 +12,29 @@ export interface IEmergenciaMedica {
   idDestinatarioAsistencia?: string;
   idCliente?: string;
 
-  //Información básica
+  //Información básica para auxilio o para llamada de emergencia
   fechaCreacion?: string;
   estadoActual?: EstadoEmergencia; //Este estado será el del último evento asociado a la emergencia
-  ultimaActualizacion?: string;
   codigo?: number; // Código único del caso de emergencia, es incremental
   solicitante?: string; // Nombre del solicitante de la emergencia
   telefono?: string; // Teléfono de contacto del solicitante
   sintomas?: string[]; // Lista de síntomas reportados
   prioridad?: PrioridadEmergencia;
-  observaciones?: string; // Notas adicionales sobre el caso
+  observaciones?: string; // Notas adicionales sobre el auxilio/llamada
+
+  //Información exclusiva de auxilio
+  esAuxilio?: boolean;
   direccion?: DireccionV2; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones de seguimiento de la emergencia en los eventos.
   asignada?: boolean;
-  ultimoEventoEmergenciaMedica?: IEventoEmergenciaMedica; //Acá se carga el último evento para hacer el seguimiento
+  ultimaActualizacion?: string;
+  ultimoEventoEmergenciaMedica?: IEventoEmergenciaMedica; //Acá se carga el último evento para hacer el seguimiento del auxilio
 
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
   cliente?: ICliente;
 }
 
-type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica";
+type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica" | "Óbito";
 
 type OmitirCreate = "_id";
 

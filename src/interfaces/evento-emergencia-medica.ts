@@ -42,13 +42,17 @@ export interface IEventoEmergenciaMedica {
 }
 
 export type EstadoEmergencia =
-  | "Pendiente" // Recién creada
+  //LLAMADAS DE EMERGENCIA
+  | "Atendida" //La llamada se atendió exitosamente
+
+  //AUXILIOS
+  | "Pendiente" // Auxilio recién creado
   | "Asignada" // Se asignó vehículo/médico/enfermero
   | "Reasignada" //Se reasignó vehículo/médico/enfermero
-  | "En tránsito" // Salió del centro
-  | "Llego a destino" // Llegó al lugar de la emergencia
-  | "Rumbo a hospital" // Sale hacia hospital
-  | "Llegada a hospital" //Llegó al hospital
+  | "En tránsito" // El vehículo salió del centro
+  | "Llego a destino" // El vehículo llegó al lugar de la emergencia
+  | "Rumbo a hospital" // El vehículo sale hacia el hospital
+  | "Llegada a hospital" //El vehículo Llegó al hospital
   | "Finalizada" // La emergencia fue tratada. Ya sea porque se llegó al hospital o no
   | "Cancelada"; // La emergencia se canceló
 
