@@ -9,7 +9,7 @@ import {
 export interface IArchivosAdjuntos {
   fechaSubida?: string;
   descripcion?: string;
-  adjuntos?: string; //url del archivo
+  archivo?: string; //url del archivo
   usuario?: string; //usuario que subió el archivo
 }
 
