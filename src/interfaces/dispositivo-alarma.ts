@@ -78,6 +78,7 @@ export interface IDispositivoAlarma {
   fechaUltimaComunicacion?: string;
   idComunicador?: string;
   idUnicoComunicador?: string;
+  passwordComunicador?: string;
   idModelo?: string;
   idDomicilio?: string;
   idCliente?: string;
