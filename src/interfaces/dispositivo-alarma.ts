@@ -78,7 +78,6 @@ export interface IDispositivoAlarma {
   fechaUltimaComunicacion?: string;
   idComunicador?: string;
   idUnicoComunicador?: string;
-  passwordComunicador?: string;
   idModelo?: string;
   idDomicilio?: string;
   idCliente?: string;
@@ -98,7 +97,6 @@ export interface IDispositivoAlarma {
   infoZonas?: IParticionZona[];
   //
   nroDeSistema?: string;
-  claveDeSistema?: string;
   //
   estadoCuenta?: estadoCuenta;
   frecReporte?: number;
