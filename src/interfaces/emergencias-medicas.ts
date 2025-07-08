@@ -6,6 +6,13 @@ import {
   IEventoEmergenciaMedica,
 } from "./evento-emergencia-medica";
 
+export interface IArchivosAdjuntos {
+  fechaSubida?: string;
+  descripcion?: string;
+  adjuntos?: string; //url del archivo
+  usuario?: string; //usuario que subió el archivo
+}
+
 //EMERGENCIA MÉDICA
 export interface IEmergenciaMedica {
   _id?: string;
@@ -21,6 +28,7 @@ export interface IEmergenciaMedica {
   sintomas?: string[]; // Lista de síntomas reportados
   prioridad?: PrioridadEmergencia;
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
+  archivosAdjuntos?: IArchivosAdjuntos[];
 
   //Información exclusiva de auxilio
   esAuxilio?: boolean;
