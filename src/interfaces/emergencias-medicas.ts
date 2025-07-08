@@ -11,6 +11,7 @@ export interface IArchivosAdjuntos {
   descripcion?: string;
   archivo?: string; //url del archivo
   usuario?: string; //usuario que subió el archivo
+  nombreOriginal?: string; //El nombre del archivo que se subió
 }
 
 //EMERGENCIA MÉDICA
