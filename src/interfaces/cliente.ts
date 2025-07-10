@@ -1,3 +1,5 @@
+import { DireccionV2 } from "../auxiliares";
+
 export interface IImagenesCliente {
   icono?: string;
   banner?: string;
@@ -130,6 +132,7 @@ export interface ICliente {
   numeroCliente?: string;
   habilitado?: boolean;
   apikeyBotonBLE?: string;
+  centroMedico?: DireccionV2;
   // Populate
   padre?: ICliente;
 }
