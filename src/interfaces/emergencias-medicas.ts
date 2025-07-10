@@ -35,6 +35,7 @@ export interface IEmergenciaMedica {
   esAuxilio?: boolean;
   direccion?: DireccionV2; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones de seguimiento de la emergencia en los eventos.
   asignada?: boolean;
+  irAHospital?: boolean; //Esto se marca una vez que la ambulancia haya llegado a la dirección de auxilio y se dé el ok para ir al hospital
   ultimaActualizacion?: string;
   ultimoEventoEmergenciaMedica?: IEventoEmergenciaMedica; //Acá se carga el último evento para hacer el seguimiento del auxilio
 

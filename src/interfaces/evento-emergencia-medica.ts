@@ -50,7 +50,7 @@ export type EstadoEmergencia =
   | "Asignada" // Se asignó vehículo/médico/enfermero
   | "Reasignada" //Se reasignó vehículo/médico/enfermero
   | "En tránsito" // El vehículo salió del centro
-  | "Llego a destino" // El vehículo llegó al lugar de la emergencia
+  | "Llegó a destino" // El vehículo llegó al lugar de la emergencia
   | "Rumbo a hospital" // El vehículo sale hacia el hospital
   | "Llegada a hospital" //El vehículo Llegó al hospital
   | "Finalizada" // La emergencia fue tratada. Ya sea porque se llegó al hospital o no
