@@ -57,5 +57,6 @@ export * from "./alerta-boton-ble";
 export * from "./log-evento";
 export * from "./log-https";
 export * from "./boton-bluetooth";
+export * from "./centro-medico";
 // Chripstack
 export * from "./chirpstack";

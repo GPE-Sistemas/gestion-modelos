@@ -1,4 +1,5 @@
 import { DireccionV2 } from "../auxiliares";
+import { ICentroMedico } from "./centro-medico";
 
 export interface IImagenesCliente {
   icono?: string;
@@ -132,7 +133,7 @@ export interface ICliente {
   numeroCliente?: string;
   habilitado?: boolean;
   apikeyBotonBLE?: string;
-  centroMedico?: DireccionV2;
+  centroMedico?: ICentroMedico;
   // Populate
   padre?: ICliente;
 }
