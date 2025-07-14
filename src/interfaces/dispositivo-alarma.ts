@@ -5,6 +5,194 @@ import { IModeloDispositivo } from "./modelo-dispositivo";
 import { IServicioContratado } from "./servicio-contratado";
 import { IUbicacion } from "./ubicacion";
 
+export interface IStatusAlarmaGarnet {
+  particion?: number;
+  problemas1?: {
+    falloSalidaSirena?: boolean;
+    falloLineaTelefonica?: boolean;
+    falloAlimentacionAuxiliarPanel?: boolean;
+    falloAlimentacionAuxiliarDatos?: boolean;
+    falloEnSupSirena?: boolean;
+    fuenteAuxiliarBateriaBaja?: boolean;
+    bateriaBaja?: boolean;
+    falloDeRed?: boolean;
+  };
+  problemas2?: {
+    relojNoProgramado?: boolean;
+    falloLinkInternet?: boolean;
+    falloLinkGPRS?: boolean;
+    falloComInternet?: boolean;
+    falloComSMS?: boolean;
+    falloComGPRS?: boolean;
+    falloComTelefono2?: boolean;
+    falloComTelefono1?: boolean;
+  };
+  estadosParticiones?: {
+    part4Armada?: boolean;
+    part3Armada?: boolean;
+    part2Armada?: boolean;
+    part1Armada?: boolean;
+    part4ListaParaArmar?: boolean;
+    part3ListaParaArmar?: boolean;
+    part2ListaParaArmar?: boolean;
+    part1ListaParaArmar?: boolean;
+  };
+  estadosSalidas?: {
+    pgm4Activada?: boolean;
+    pgm3Activada?: boolean;
+    pgm2Activada?: boolean;
+    pgm1Activada?: boolean;
+    sirenaActivada?: boolean;
+  };
+  estadosAlarmas?: {
+    alarma1Activada?: boolean;
+    alarma2Activada?: boolean;
+    alarma3Activada?: boolean;
+    alarma4Activada?: boolean;
+  };
+  zonasAbiertas1?: {
+    zona1Abierta?: boolean;
+    zona2Abierta?: boolean;
+    zona3Abierta?: boolean;
+    zona4Abierta?: boolean;
+    zona5Abierta?: boolean;
+    zona6Abierta?: boolean;
+    zona7Abierta?: boolean;
+    zona8Abierta?: boolean;
+  };
+  zonasAbiertas2?: {
+    zona9Abierta?: boolean;
+    zona10Abierta?: boolean;
+    zona11Abierta?: boolean;
+    zona12Abierta?: boolean;
+    zona13Abierta?: boolean;
+    zona14Abierta?: boolean;
+    zona15Abierta?: boolean;
+    zona16Abierta?: boolean;
+  };
+  zonasAbiertas3?: {
+    zona17Abierta?: boolean;
+    zona18Abierta?: boolean;
+    zona19Abierta?: boolean;
+    zona20Abierta?: boolean;
+    zona21Abierta?: boolean;
+    zona22Abierta?: boolean;
+    zona23Abierta?: boolean;
+    zona24Abierta?: boolean;
+  };
+  zonasAbiertas4?: {
+    zona25Abierta?: boolean;
+    zona26Abierta?: boolean;
+    zona27Abierta?: boolean;
+    zona28Abierta?: boolean;
+    zona29Abierta?: boolean;
+    zona30Abierta?: boolean;
+    zona31Abierta?: boolean;
+    zona32Abierta?: boolean;
+  };
+  zonasAlarma1?: {
+    zona1Alarma?: boolean;
+    zona2Alarma?: boolean;
+    zona3Alarma?: boolean;
+    zona4Alarma?: boolean;
+    zona5Alarma?: boolean;
+    zona6Alarma?: boolean;
+    zona7Alarma?: boolean;
+    zona8Alarma?: boolean;
+  };
+  zonasAlarma2?: {
+    zona9Alarma?: boolean;
+    zona10Alarma?: boolean;
+    zona11Alarma?: boolean;
+    zona12Alarma?: boolean;
+    zona13Alarma?: boolean;
+    zona14Alarma?: boolean;
+    zona15Alarma?: boolean;
+    zona16Alarma?: boolean;
+  };
+  zonasAlarma3?: {
+    zona17Alarma?: boolean;
+    zona18Alarma?: boolean;
+    zona19Alarma?: boolean;
+    zona20Alarma?: boolean;
+    zona21Alarma?: boolean;
+    zona22Alarma?: boolean;
+    zona23Alarma?: boolean;
+    zona24Alarma?: boolean;
+  };
+  zonasAlarma4?: {
+    zona25Alarma?: boolean;
+    zona26Alarma?: boolean;
+    zona27Alarma?: boolean;
+    zona28Alarma?: boolean;
+    zona29Alarma?: boolean;
+    zona30Alarma?: boolean;
+    zona31Alarma?: boolean;
+    zona32Alarma?: boolean;
+  };
+  zonasInhibidas1?: {
+    zona1?: boolean;
+    zona2?: boolean;
+    zona3?: boolean;
+    zona4?: boolean;
+    zona5?: boolean;
+    zona6?: boolean;
+    zona7?: boolean;
+    zona8?: boolean;
+  };
+  zonasInhibidas2?: {
+    zona9?: boolean;
+    zona10?: boolean;
+    zona11?: boolean;
+    zona12?: boolean;
+    zona13?: boolean;
+    zona14?: boolean;
+    zona15?: boolean;
+    zona16?: boolean;
+  };
+  zonasInhibidas3?: {
+    zona17?: boolean;
+    zona18?: boolean;
+    zona19?: boolean;
+    zona20?: boolean;
+    zona21?: boolean;
+    zona22?: boolean;
+    zona23?: boolean;
+    zona24?: boolean;
+  };
+  zonasInhibidas4?: {
+    zona25?: boolean;
+    zona26?: boolean;
+    zona27?: boolean;
+    zona28?: boolean;
+    zona29?: boolean;
+    zona30?: boolean;
+    zona31?: boolean;
+    zona32?: boolean;
+  };
+  estadosSalidasInalambricas?: {
+    PGMW1?: boolean;
+    PGMW2?: boolean;
+    PGMW3?: boolean;
+    PGMW4?: boolean;
+  };
+  estadoPanel2?: {
+    armadoPresenteDemoradoPart1?: boolean;
+    armadoPresenteDemoradoPart2?: boolean;
+    armadoPresenteDemoradoPart3?: boolean;
+    armadoPresenteDemoradoPart4?: boolean;
+    armadoPresenteInstantaneoPart1?: boolean;
+    armadoPresenteInstantaneoPart2?: boolean;
+    armadoPresenteInstantaneoPart3?: boolean;
+    armadoPresenteInstantaneoPart4?: boolean;
+  };
+  registroDeDemoras?: {
+    demoraPart1?: boolean;
+    demoraPart2?: boolean;
+    demoraPart3?: boolean;
+    demoraPart4?: boolean;
+  };
+}
 export interface ISim {
   iccid?: string;
   numero?: string;
