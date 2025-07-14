@@ -134,6 +134,10 @@ export interface ICliente {
   habilitado?: boolean;
   apikeyBotonBLE?: string;
   centroMedico?: ICentroMedico;
+  poligono?: {
+    type: "MultiPolygon";
+    coordinates: [number, number][][][];
+  };
   // Populate
   padre?: ICliente;
 }
