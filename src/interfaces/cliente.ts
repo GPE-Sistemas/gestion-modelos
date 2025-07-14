@@ -102,6 +102,7 @@ export interface IModuloAdministracion {
   crearServicios?: boolean;
   crearApikeys?: boolean;
   crearDispositivosLorawan?: boolean;
+  compartirDispositivosLorawan?: boolean;
 }
 
 export interface IModuloVehiculos {
