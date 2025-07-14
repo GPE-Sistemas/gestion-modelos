@@ -50,7 +50,7 @@ export interface IStatusAlarmaGarnet {
     alarma3Activada?: boolean;
     alarma4Activada?: boolean;
   };
-  zonasAbiertas1?: {
+  zonasAbiertas?: {
     zona1Abierta?: boolean;
     zona2Abierta?: boolean;
     zona3Abierta?: boolean;
@@ -59,8 +59,6 @@ export interface IStatusAlarmaGarnet {
     zona6Abierta?: boolean;
     zona7Abierta?: boolean;
     zona8Abierta?: boolean;
-  };
-  zonasAbiertas2?: {
     zona9Abierta?: boolean;
     zona10Abierta?: boolean;
     zona11Abierta?: boolean;
@@ -69,8 +67,6 @@ export interface IStatusAlarmaGarnet {
     zona14Abierta?: boolean;
     zona15Abierta?: boolean;
     zona16Abierta?: boolean;
-  };
-  zonasAbiertas3?: {
     zona17Abierta?: boolean;
     zona18Abierta?: boolean;
     zona19Abierta?: boolean;
@@ -79,8 +75,6 @@ export interface IStatusAlarmaGarnet {
     zona22Abierta?: boolean;
     zona23Abierta?: boolean;
     zona24Abierta?: boolean;
-  };
-  zonasAbiertas4?: {
     zona25Abierta?: boolean;
     zona26Abierta?: boolean;
     zona27Abierta?: boolean;
@@ -90,7 +84,7 @@ export interface IStatusAlarmaGarnet {
     zona31Abierta?: boolean;
     zona32Abierta?: boolean;
   };
-  zonasAlarma1?: {
+  zonasAlarma?: {
     zona1Alarma?: boolean;
     zona2Alarma?: boolean;
     zona3Alarma?: boolean;
@@ -99,8 +93,6 @@ export interface IStatusAlarmaGarnet {
     zona6Alarma?: boolean;
     zona7Alarma?: boolean;
     zona8Alarma?: boolean;
-  };
-  zonasAlarma2?: {
     zona9Alarma?: boolean;
     zona10Alarma?: boolean;
     zona11Alarma?: boolean;
@@ -109,8 +101,6 @@ export interface IStatusAlarmaGarnet {
     zona14Alarma?: boolean;
     zona15Alarma?: boolean;
     zona16Alarma?: boolean;
-  };
-  zonasAlarma3?: {
     zona17Alarma?: boolean;
     zona18Alarma?: boolean;
     zona19Alarma?: boolean;
@@ -119,8 +109,6 @@ export interface IStatusAlarmaGarnet {
     zona22Alarma?: boolean;
     zona23Alarma?: boolean;
     zona24Alarma?: boolean;
-  };
-  zonasAlarma4?: {
     zona25Alarma?: boolean;
     zona26Alarma?: boolean;
     zona27Alarma?: boolean;
@@ -130,7 +118,7 @@ export interface IStatusAlarmaGarnet {
     zona31Alarma?: boolean;
     zona32Alarma?: boolean;
   };
-  zonasInhibidas1?: {
+  zonasInhibidas?: {
     zona1?: boolean;
     zona2?: boolean;
     zona3?: boolean;
@@ -139,8 +127,6 @@ export interface IStatusAlarmaGarnet {
     zona6?: boolean;
     zona7?: boolean;
     zona8?: boolean;
-  };
-  zonasInhibidas2?: {
     zona9?: boolean;
     zona10?: boolean;
     zona11?: boolean;
@@ -149,8 +135,6 @@ export interface IStatusAlarmaGarnet {
     zona14?: boolean;
     zona15?: boolean;
     zona16?: boolean;
-  };
-  zonasInhibidas3?: {
     zona17?: boolean;
     zona18?: boolean;
     zona19?: boolean;
@@ -159,8 +143,6 @@ export interface IStatusAlarmaGarnet {
     zona22?: boolean;
     zona23?: boolean;
     zona24?: boolean;
-  };
-  zonasInhibidas4?: {
     zona25?: boolean;
     zona26?: boolean;
     zona27?: boolean;
