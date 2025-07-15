@@ -17,7 +17,7 @@ export interface IConfigZona {
 
 export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
 
-export type Agrupacion = "Grupo" | "Entidad";
+export type Agrupacion = "Grupo" | "Entidad" | "Global";
 
 export type TipoEntidad =
   | "Activo"
