@@ -7,167 +7,181 @@ import { IUbicacion } from "./ubicacion";
 
 /// Lepra ( interfaces para las respuestas de HSI )
 
-interface CameraLink {
-  appName: string;
-  appPackage: string;
-  appStoreUrl: string;
-  appPlayStoreUri: string;
-  appBundleId: string;
-}
-
-interface SharedPartitions {
-  [key: string]: boolean;
-}
-
-interface Atributos {
-  puedeArmar: boolean;
-  puedeDesarmar: boolean;
-  puedeInhibirZonas: boolean;
-  puedeInteractuarConSalidas: boolean;
-  puedeInteractuarConSirena: boolean;
-  puedeVerCamaras: boolean;
-  sharedPartitions: SharedPartitions;
-}
-
-interface Configuraciones {
-  users: boolean;
-  automations: boolean;
-  timeZone: boolean;
-}
-
-interface Eventos {
-  recibeAlarmas: boolean;
-  recibeAperturasYCierres: boolean;
-  recibeEventosDeEnergia: boolean;
-  recibeEventosDePanico: boolean;
-  recibeOtrosEventos: boolean;
-  sharedPartitions: SharedPartitions;
-}
-
-interface UserPermissions {
-  atributos: Atributos;
-  configuraciones: Configuraciones;
-  eventos: Eventos;
-  userType: number;
-}
-
-interface SubscriptionInfo {
-  planType: number;
-  status: number;
-  freeUsers: any[];
-  freeCards: any[];
-  orders: any[];
-  planId: string;
-  validThru: string;
-}
-
-interface Owner {
-  configuraciones: Configuraciones;
-  atributos: Atributos;
-  eventos: Eventos;
-  email: string;
-  nombre: string;
-  apellido: string;
-  avatar: number;
-  verified: boolean;
-  location: boolean;
-  userType: number;
-  number: number;
-}
-
-interface User {
-  configuraciones: Configuraciones;
-  atributos: Atributos;
-  eventos: Eventos;
-  email: string;
-  nombre: string;
-  apellido: string;
-  avatar: number;
-  verified: boolean;
-  location: boolean;
-  userType: number;
-  number: number;
-}
-
-interface ExtraProgrammation {
-  modulesEnabled: string;
-  reportsOne: string;
-  reportsTwo: string;
-  reportsThree: string;
-  stageOne: string;
-  stageTwo: string;
-}
-
-interface AlarmPanel {
-  brand: number;
-  isNewVersion: boolean;
-  model: number;
-  modelName: string;
-  version: number;
-  versionName: string;
-  isYoMonitoreo: boolean;
-}
-
-interface Zone {
-  number: number;
-  name: string;
-  icon: string;
-  associatedCamera: number;
-  configuration: string;
-  attributes: string;
-  enabled: boolean;
-  isPresentZone: boolean;
-}
-
-interface Output {
-  number: number;
-  name: string;
-  icon: string;
-  configuration: string;
-  enabled: boolean;
-}
-
-interface Automation {
-  number: number;
-  hours: number;
-  minutes: number;
-  action: number;
-  option: number;
-  enabled: boolean;
-  days: boolean[];
-}
-
-interface Partition {
-  name: string;
-  number: number;
-  enabled: boolean;
-}
-
-interface ProgramationData {
-  extraProgrammation: ExtraProgrammation;
-  alarmPanel: AlarmPanel;
-  zones: Zone[];
-  outputs: Output[];
-  automations: Automation[];
-  partitions: Partition[];
-}
-
-interface Programation {
-  lastEvent: string;
-  data: ProgramationData;
-  lastUpdate: string;
-}
-
-interface IConfigAlarmaHSI {
+export interface IConfigAlarmaHSI {
   id: string;
   lastEventReport: string;
-  cameraLink: CameraLink;
-  userPermissions: UserPermissions;
-  subscriptionInfo: SubscriptionInfo;
-  owner: Owner;
-  users: User[];
+  cameraLink: {
+    appName: string;
+    appPackage: string;
+    appStoreUrl: string;
+    appPlayStoreUri: string;
+    appBundleId: string;
+  };
+  userPermissions: {
+    atributos: {
+      puedeArmar: boolean;
+      puedeDesarmar: boolean;
+      puedeInhibirZonas: boolean;
+      puedeInteractuarConSalidas: boolean;
+      puedeInteractuarConSirena: boolean;
+      puedeVerCamaras: boolean;
+      sharedPartitions: {
+        [key: string]: boolean;
+      };
+    };
+    configuraciones: {
+      users: boolean;
+      automations: boolean;
+      timeZone: boolean;
+    };
+    eventos: {
+      recibeAlarmas: boolean;
+      recibeAperturasYCierres: boolean;
+      recibeEventosDeEnergia: boolean;
+      recibeEventosDePanico: boolean;
+      recibeOtrosEventos: boolean;
+      sharedPartitions: {
+        [key: string]: boolean;
+      };
+    };
+    userType: number;
+  };
+  subscriptionInfo: {
+    planType: number;
+    status: number;
+    freeUsers: any[];
+    freeCards: any[];
+    orders: any[];
+    planId: string;
+    validThru: string;
+  };
+  owner: {
+    configuraciones: {
+      users: boolean;
+      automations: boolean;
+      timeZone: boolean;
+    };
+    atributos: {
+      puedeArmar: boolean;
+      puedeDesarmar: boolean;
+      puedeInhibirZonas: boolean;
+      puedeInteractuarConSalidas: boolean;
+      puedeInteractuarConSirena: boolean;
+      puedeVerCamaras: boolean;
+      sharedPartitions: {
+        [key: string]: boolean;
+      };
+    };
+    eventos: {
+      recibeAlarmas: boolean;
+      recibeAperturasYCierres: boolean;
+      recibeEventosDeEnergia: boolean;
+      recibeEventosDePanico: boolean;
+      recibeOtrosEventos: boolean;
+      sharedPartitions: {
+        [key: string]: boolean;
+      };
+    };
+    email: string;
+    nombre: string;
+    apellido: string;
+    avatar: number;
+    verified: boolean;
+    location: boolean;
+    userType: number;
+    number: number;
+  };
+  users: {
+    configuraciones: {
+      users: boolean;
+      automations: boolean;
+      timeZone: boolean;
+    };
+    atributos: {
+      puedeArmar: boolean;
+      puedeDesarmar: boolean;
+      puedeInhibirZonas: boolean;
+      puedeInteractuarConSalidas: boolean;
+      puedeInteractuarConSirena: boolean;
+      puedeVerCamaras: boolean;
+      sharedPartitions: {
+        [key: string]: boolean;
+      };
+    };
+    eventos: {
+      recibeAlarmas: boolean;
+      recibeAperturasYCierres: boolean;
+      recibeEventosDeEnergia: boolean;
+      recibeEventosDePanico: boolean;
+      recibeOtrosEventos: boolean;
+      sharedPartitions: {
+        [key: string]: boolean;
+      };
+    };
+    email: string;
+    nombre: string;
+    apellido: string;
+    avatar: number;
+    verified: boolean;
+    location: boolean;
+    userType: number;
+    number: number;
+  }[];
   timeZone: string;
-  programation: Programation;
+  programation: {
+    lastEvent: string;
+    data: {
+      extraProgrammation: {
+        modulesEnabled: string;
+        reportsOne: string;
+        reportsTwo: string;
+        reportsThree: string;
+        stageOne: string;
+        stageTwo: string;
+      };
+      alarmPanel: {
+        brand: number;
+        isNewVersion: boolean;
+        model: number;
+        modelName: string;
+        version: number;
+        versionName: string;
+        isYoMonitoreo: boolean;
+      };
+      zones: {
+        number: number;
+        name: string;
+        icon: string;
+        associatedCamera: number;
+        configuration: string;
+        attributes: string;
+        enabled: boolean;
+        isPresentZone: boolean;
+      }[];
+      outputs: {
+        number: number;
+        name: string;
+        icon: string;
+        configuration: string;
+        enabled: boolean;
+      }[];
+      automations: {
+        number: number;
+        hours: number;
+        minutes: number;
+        action: number;
+        option: number;
+        enabled: boolean;
+        days: boolean[];
+      }[];
+      partitions: {
+        name: string;
+        number: number;
+        enabled: boolean;
+      }[];
+    };
+    lastUpdate: string;
+  };
   programmers: any[];
   nombre: string;
   icono: number;
