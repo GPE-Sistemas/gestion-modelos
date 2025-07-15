@@ -158,7 +158,7 @@ interface Programation {
   lastUpdate: string;
 }
 
-interface Sistema {
+interface IConfigAlarmaHSI {
   id: string;
   lastEventReport: string;
   cameraLink: CameraLink;
