@@ -1,10 +1,17 @@
 import { ICliente } from "./cliente";
 import { ICodigosDispositivo, TipoDispositivo } from "./codigos-dispositivo";
 
+export interface PotenciasDimerizacionLuminarias {
+  dim20?: number;
+  dim40?: number;
+  dim60?: number;
+  dim80?: number;
+  dim100?: number;
+}
 export interface IDetallesLuminarias {
-  horasVida?: string;
-  potencia?: string;
-  voltaje?: string;
+  horasVida?: number;
+  potencia?: PotenciasDimerizacionLuminarias;
+  voltaje?: number;
 }
 
 export interface IModeloDispositivo {
