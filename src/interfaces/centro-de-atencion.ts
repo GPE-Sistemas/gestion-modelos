@@ -1,7 +1,7 @@
 import { DireccionV2 } from "../auxiliares";
 import { ICliente } from "./cliente";
 
-export interface ICentroMedico {
+export interface ICentroDeAtencion {
   _id?: string;
   idCliente?: string;
 
@@ -18,10 +18,10 @@ export interface ICentroMedico {
 
 type OmitirCreate = "_id";
 
-export interface ICreateCentroMedico
-  extends Omit<Partial<ICentroMedico>, OmitirCreate> {}
+export interface ICreateCentroDeAtencion
+  extends Omit<Partial<ICentroDeAtencion>, OmitirCreate> {}
 
 type OmitirUpdate = "_id";
 
-export interface IUpdateCentroMedico
-  extends Omit<Partial<ICentroMedico>, OmitirUpdate> {}
+export interface IUpdateCentroDeAtencion
+  extends Omit<Partial<ICentroDeAtencion>, OmitirUpdate> {}

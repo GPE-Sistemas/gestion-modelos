@@ -1,5 +1,4 @@
-import { DireccionV2 } from "../auxiliares";
-import { ICentroMedico } from "./centro-medico";
+import { ICentroDeAtencion } from "./centro-de-atencion";
 
 export interface IImagenesCliente {
   icono?: string;
@@ -134,7 +133,7 @@ export interface ICliente {
   numeroCliente?: string;
   habilitado?: boolean;
   apikeyBotonBLE?: string;
-  centroMedico?: ICentroMedico;
+  centroDeAtencion?: ICentroDeAtencion;
   poligono?: {
     type: "MultiPolygon";
     coordinates: [number, number][][][];

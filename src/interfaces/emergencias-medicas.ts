@@ -1,5 +1,5 @@
 import { DireccionV2 } from "../auxiliares";
-import { ICentroMedico } from "./centro-medico";
+import { ICentroDeAtencion } from "./centro-de-atencion";
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 import {
@@ -31,7 +31,7 @@ export interface IEmergenciaMedica {
   prioridad?: PrioridadEmergencia;
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   archivosAdjuntos?: IArchivosAdjuntos[];
-  centroMedico?: ICentroMedico;
+  centroDeAtencion?: ICentroDeAtencion;
 
   //Información exclusiva de auxilio
   esAuxilio?: boolean;
