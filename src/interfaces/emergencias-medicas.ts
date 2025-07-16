@@ -31,7 +31,7 @@ export interface IEmergenciaMedica {
   prioridad?: PrioridadEmergencia;
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   archivosAdjuntos?: IArchivosAdjuntos[];
-  centroDeAtencion?: ICentroDeAtencion;
+  centroMedico?: ICentroDeAtencion;
 
   //Información exclusiva de auxilio
   esAuxilio?: boolean;
