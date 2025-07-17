@@ -36,7 +36,12 @@ export interface IEmergencia {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-type PrioridadEmergencia = "Baja" | "Media" | "Alta" | "Crítica" | "Óbito"; //Óbito es exclusiva de emergencia médica
+export type PrioridadEmergencia =
+  | "Baja"
+  | "Media"
+  | "Alta"
+  | "Crítica"
+  | "Óbito"; //Óbito es exclusiva de emergencia médica
 
 export type TipoEmergencia = "Médica" | "Bombero";
 
