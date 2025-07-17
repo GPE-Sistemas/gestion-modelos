@@ -6,7 +6,7 @@ import { IServicioContratado } from "./servicio-contratado";
 import { IUbicacion } from "./ubicacion";
 
 /// Lepra ( interfaces para las respuestas de HSI )
-
+export type TipoEmergenciaAlarma = "Pánico" | "Médica" | "Incendio";
 export interface IConfigAlarmaHSI {
   id: string;
   lastEventReport: string;
