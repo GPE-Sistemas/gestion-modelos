@@ -11,6 +11,10 @@ export interface ICentroDeAtencion {
   telefono?: string; // Teléfono de contacto
   email?: string; // Email institucional
   activo?: boolean; // Si está operativo
+  poligono?: {
+    type: "MultiPolygon";
+    coordinates: [number, number][][][];
+  }; //Polígono del centro de atención
 
   //Populate
   cliente?: ICliente;

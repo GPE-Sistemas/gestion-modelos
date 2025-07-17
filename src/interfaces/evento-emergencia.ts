@@ -2,24 +2,27 @@ import { DireccionV2 } from "../auxiliares";
 import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
-import { IEmergenciaMedica } from "./emergencias-medicas";
+import { IEmergencia, IEmergenciaMedica } from "./emergencias";
 import { IHospital } from "./hospitales";
 import { IPersonalSalud } from "./personal-salud";
 import { IUsuario } from "./usuario";
 
-export interface IEventoEmergenciaMedica {
+export interface IEventoEmergencia {
   _id?: string; // UUID del evento
   idCliente?: string;
   idDestinarioAsistencia?: string;
   idEmergencia?: string; // referencia a la emergencia
+
   idActivo?: string; //referencia al vehículo
   idChofer?: string; //referencia al chofer
+
+  //Exclusivas de emergencias médicas
   idsMedicos?: string[]; //referencia al medico
   idsEnfermeros?: string[]; //referencia al enfermero
   idHospital?: string;
 
   //Estado y timestamp
-  estado?: EstadoEmergencia;
+  estado?: EstadoEmergenciaMedica | EstadoEmergenciaBomberos;
   timestamp?: string; // ISO timestamp del evento
 
   //Ubicación de la emergencia
@@ -31,7 +34,7 @@ export interface IEventoEmergenciaMedica {
   observaciones?: string;
 
   //Populate: Asignaciones
-  emergencia?: IEmergenciaMedica;
+  emergencia?: IEmergencia;
   destinatarioAsistencia?: IDestinatarioAsistencia;
   activo?: IActivo; //Activo tiene la información de vehículo
   chofer?: IUsuario; //Usuario tiene la información de chofer
@@ -41,7 +44,7 @@ export interface IEventoEmergenciaMedica {
   cliente?: ICliente;
 }
 
-export type EstadoEmergencia =
+export type EstadoEmergenciaMedica =
   //LLAMADAS DE EMERGENCIA
   | "Atendida" //La llamada se atendió exitosamente
 
@@ -56,12 +59,25 @@ export type EstadoEmergencia =
   | "Finalizada" // La emergencia fue tratada. Ya sea porque se llegó al hospital o no
   | "Cancelada"; // La emergencia se canceló
 
+export type EstadoEmergenciaBomberos =
+  //LLAMADAS DE EMERGENCIA
+  | "Atendida" //La llamada se atendió exitosamente
+
+  //AUXILIOS
+  | "Pendiente" // Auxilio recién creado
+  | "Asignada" // Se asignó vehículo
+  | "Reasignada" //Se reasignó vehículo
+  | "En tránsito" // El vehículo salió del centro
+  | "Llegó a destino" // El vehículo llegó al lugar de la emergencia
+  | "Finalizada" // La emergencia fue tratada
+  | "Cancelada"; // La emergencia se canceló
+
 type OmitirCreate = "_id";
 
-export interface ICreateEventoEmergenciaMedica
-  extends Omit<Partial<IEventoEmergenciaMedica>, OmitirCreate> {}
+export interface ICreateEventoEmergencia
+  extends Omit<Partial<IEventoEmergencia>, OmitirCreate> {}
 
 type OmitirUpdate = "_id";
 
-export interface IUpdateEventoEmergenciaMedica
-  extends Omit<Partial<IEventoEmergenciaMedica>, OmitirUpdate> {}
+export interface IUpdateEventoEmergencia
+  extends Omit<Partial<IEventoEmergencia>, OmitirUpdate> {}
