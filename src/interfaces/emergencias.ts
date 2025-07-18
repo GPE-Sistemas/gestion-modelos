@@ -27,8 +27,8 @@ export interface IEmergencia {
   salioDelCentro?: boolean; //En caso de que sea un auxilio, se indica cuando el móvil asignado (ambulancia, camión de bomberos, etc) salió del centro de atención.
 
   //2-Datos específicos según el tipo de emergencia
-  emergenciaMedica: IEmergenciaMedica;
-  emergenciaBomberos: IEmergenciaBomberos;
+  emergenciaMedica?: IEmergenciaMedica;
+  emergenciaBomberos?: IEmergenciaBomberos;
 
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
