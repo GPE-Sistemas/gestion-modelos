@@ -11,7 +11,8 @@ export interface IEmergencia {
   idDestinatarioAsistencia?: string;
   idCliente?: string;
   tipo?: TipoEmergencia;
-  prioridad?: PrioridadEmergencia;
+  prioridadApertura?: PrioridadEmergencia; //Prioridad de apertura de la emergencia
+  prioridadCierre?: PrioridadEmergencia; //Prioridad asignada por el personal correspondiente
   fechaCreacion?: string;
   codigo?: number; // Código único del caso de emergencia médica es incremental
   solicitante?: string; // Nombre del solicitante de la emergencia
