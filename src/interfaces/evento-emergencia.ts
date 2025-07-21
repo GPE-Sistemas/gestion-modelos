@@ -23,7 +23,6 @@ export interface IEventoEmergencia {
 
   //Estado y timestamp
   estado?: EstadoEmergenciaMedica | EstadoEmergenciaBomberos;
-  idUsuarioResponsable?: string; // Usuario que registró el evento
   timestamp?: string; // ISO timestamp del evento
 
   //Ubicación de la emergencia
@@ -32,7 +31,6 @@ export interface IEventoEmergencia {
   //Descripciones
   motivoCancelacion?: string;
   motivoReasignacion?: string;
-  diagnostico?: string;
   observaciones?: string;
 
   //Populate: Asignaciones
@@ -44,7 +42,6 @@ export interface IEventoEmergencia {
   enfermeros?: IPersonalSalud[];
   hospital?: IHospital;
   cliente?: ICliente;
-  usuarioResponsable?: IUsuario;
 }
 
 export type EstadoEmergenciaMedica =
