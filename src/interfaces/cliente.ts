@@ -31,6 +31,7 @@ export interface IConfigCliente {
   moduloHerramientas?: IModuloHerramientas;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
+  solicitantesEmergencias?: string[];
 }
 
 export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
