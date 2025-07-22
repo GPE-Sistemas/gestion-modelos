@@ -25,7 +25,7 @@ export interface IConfigCliente {
   moduloEventosTecnicos?: IModuloEventosTecnicos;
   moduloVehiculos?: IModuloVehiculos;
   moduloLuminarias?: IModuloLuminarias;
-  moduloEmergenciasMedicas?: IModuloEmergenciasMedicas;
+  moduloEmergencias?: IModuloEmergencias;
   moduloBotonBLE?: IModuloBotonBLE;
   modulosIntegraciones?: IModulosIntegraciones;
   moduloHerramientas?: IModuloHerramientas;
@@ -59,9 +59,12 @@ export interface IModuloLuminarias {
   compartirLuminarias?: boolean;
 }
 
-export interface IModuloEmergenciasMedicas {
-  activo?: boolean;
+export interface IModuloEmergencias {
+  activoEmergenciasMedicas?: boolean;
   crearEmergenciasMedicas?: boolean;
+  activoEmergenciasBomberos?: boolean;
+  crearEmergenciasBomberos?: boolean;
+  //Acá pueden ir otros tipos de emergencias...
 }
 
 export interface IModuloColectivos {
