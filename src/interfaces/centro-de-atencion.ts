@@ -1,5 +1,6 @@
-import { DireccionV2 } from "../auxiliares";
+import { DireccionV2, ICoordenadas } from "../auxiliares";
 import { ICliente } from "./cliente";
+import { TipoEmergencia } from "./emergencias";
 
 export interface ICentroDeAtencion {
   _id?: string;
@@ -7,14 +8,16 @@ export interface ICentroDeAtencion {
 
   fechaCreacion?: string;
   nombre?: string;
+  tipoEmergencia?: TipoEmergencia;
   direccion?: DireccionV2;
   telefono?: string; // Teléfono de contacto
   email?: string; // Email institucional
   activo?: boolean; // Si está operativo
-  poligono?: {
-    type: "MultiPolygon";
-    coordinates: [number, number][][][];
-  }; //Polígono del centro de atención
+  circuloArea?: {
+    type?: "Circle";
+    center?: ICoordenadas;
+    radius?: number;
+  }; //círculo del centro de atención
 
   //Populate
   cliente?: ICliente;
