@@ -15,7 +15,7 @@ export interface IModulos {
   moduloColectivos?: boolean;
   moduloAlarmasDomiciliarias?: boolean;
   moduloLuminarias?: boolean;
-  moduloEmergenciasMedicas?: boolean;
+  moduloEmergencias?: boolean;
   moduloActivos?: boolean;
   moduloAdministracion?: boolean;
   moduloEventosTecnicos?: boolean;
