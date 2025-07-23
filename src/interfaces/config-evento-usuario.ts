@@ -1,42 +1,42 @@
-import { IActivo } from "./activo";
-import { ICliente } from "./cliente";
-import { ICategoriaEvento } from "./categoria-evento";
-import { IGrupo } from "./grupo";
-import { IUbicacion } from "./ubicacion";
-import { IUsuario } from "./usuario";
-import { IDispositivoAlarma } from "./dispositivo-alarma";
-import { ITracker } from "./tracker";
-import { ITipoEvento } from "./tipo-evento";
-import { IGeoJSONPoint } from "../auxiliares";
-import { ILuminaria } from "./luminaria";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { ICategoriaEvento } from './categoria-evento';
+import { IGrupo } from './grupo';
+import { IUbicacion } from './ubicacion';
+import { IUsuario } from './usuario';
+import { IDispositivoAlarma } from './dispositivo-alarma';
+import { ITracker } from './tracker';
+import { ITipoEvento } from './tipo-evento';
+import { IGeoJSONPoint } from '../auxiliares';
+import { ILuminaria } from './luminaria';
 
 export interface IConfigZona {
   particion?: number;
   zona?: number;
 }
 
-export type TipoEnvio = "SMS" | "WhatsApp" | "Llamada" | "Notificacion Push";
+export type TipoEnvio = 'SMS' | 'WhatsApp' | 'Llamada' | 'Notificacion Push';
 
-export type Agrupacion = "Grupo" | "Entidad" | "Global";
+export type Agrupacion = 'Grupo' | 'Entidad' | 'Global';
 
 export type TipoEntidad =
-  | "Activo"
-  | "Vehiculo"
-  | "Alarma"
-  | "Usuario"
-  | "Luminaria";
+  | 'Activo'
+  | 'Vehiculo'
+  | 'Alarma'
+  | 'Usuario'
+  | 'Luminaria';
 
 export type Frecuencia =
-  | "Unica"
-  | "Continua"
-  | "Unica en un periodo"
-  | "Continua en un periodo"
-  | "Cronograma";
+  | 'Unica'
+  | 'Continua'
+  | 'Unica en un periodo'
+  | 'Continua en un periodo'
+  | 'Cronograma';
 
 export interface CondicionNotificacion {
   activo?: {
     velocidad?: {
-      "superior a": number;
+      'superior a': number;
     };
     estacionado?: {
       ubicacionEstacionado?: IGeoJSONPoint;
@@ -50,26 +50,26 @@ export interface CondicionNotificacion {
       ubicacion?: IUbicacion;
     };
     detenido?: {
-      "mas de": number;
+      'mas de': number;
     };
   };
 
   luminaria?: {
     potencia?: {
-      "superior a": number;
-      "inferior a": number;
+      'superior a': number;
+      'inferior a': number;
     };
     voltaje?: {
-      "superior a": number;
-      "inferior a": number;
+      'superior a': number;
+      'inferior a': number;
     };
   };
 
   alarma?: {
     // se le asigna el codigo reportado, y notifica si llega ese evento dentro del periodo o cronograma
-    "llega evento"?: string[];
+    'llega evento'?: string[];
     // se le asigna el codigo reportado, y notifica si no llega ese evento dentro del periodo o cronograma
-    "no llega evento"?: string[];
+    'no llega evento'?: string[];
   };
   usuario?: {
     llegoEn: {
@@ -80,16 +80,17 @@ export interface CondicionNotificacion {
 }
 
 export type Dia =
-  | "Lunes"
-  | "Martes"
-  | "Miercoles"
-  | "Jueves"
-  | "Viernes"
-  | "Sabado"
-  | "Domingo";
+  | 'Lunes'
+  | 'Martes'
+  | 'Miercoles'
+  | 'Jueves'
+  | 'Viernes'
+  | 'Sabado'
+  | 'Domingo';
 
 export interface IConfigEventoUsuario {
   _id?: string;
+  fechaCreacion?: string;
   // Para eventos de una sola vez, al cumplirse se desactiva
   activa?: boolean;
   // Agrupaciones temporales
@@ -149,31 +150,31 @@ export interface IConfigEventoUsuario {
 }
 
 type OmitirCreate =
-  | "_id"
-  | "usuarios"
-  | "cliente"
-  | "grupo"
-  | "activo"
-  | "luminaria"
-  | "alarma"
-  | "clientesQuePuedenAtender"
-  | "categoriaEvento"
-  | "tracker"
-  | "tipoEvento";
+  | '_id'
+  | 'usuarios'
+  | 'cliente'
+  | 'grupo'
+  | 'activo'
+  | 'luminaria'
+  | 'alarma'
+  | 'clientesQuePuedenAtender'
+  | 'categoriaEvento'
+  | 'tracker'
+  | 'tipoEvento';
 export interface ICreateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "usuarios"
-  | "cliente"
-  | "grupo"
-  | "activo"
-  | "luminaria"
-  | "alarma"
-  | "clientesQuePuedenAtender"
-  | "categoriaEvento"
-  | "tracker"
-  | "tipoEvento";
+  | '_id'
+  | 'usuarios'
+  | 'cliente'
+  | 'grupo'
+  | 'activo'
+  | 'luminaria'
+  | 'alarma'
+  | 'clientesQuePuedenAtender'
+  | 'categoriaEvento'
+  | 'tracker'
+  | 'tipoEvento';
 export interface IUpdateConfigEventoUsuario
   extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}
