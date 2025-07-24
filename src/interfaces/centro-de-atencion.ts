@@ -15,7 +15,7 @@ export interface ICentroDeAtencion {
   activo?: boolean; // Si está operativo
   circuloArea?: {
     type?: "Circle";
-    center?: ICoordenadas;
+    center?: number[];
     radius?: number;
   }; //círculo del centro de atención
 
