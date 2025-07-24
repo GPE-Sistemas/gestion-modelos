@@ -32,6 +32,7 @@ export interface IConfigCliente {
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   solicitantesEmergencias?: string[];
+  centroDeAtencion?: ICentroDeAtencion;
 }
 
 export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
@@ -137,7 +138,6 @@ export interface ICliente {
   numeroCliente?: string;
   habilitado?: boolean;
   apikeyBotonBLE?: string;
-  centroDeAtencion?: ICentroDeAtencion;
   poligono?: {
     type: "MultiPolygon";
     coordinates: [number, number][][][];
