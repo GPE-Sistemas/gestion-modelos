@@ -13,7 +13,14 @@ export interface IEmergencia {
   tipo?: TipoEmergencia;
   prioridadApertura?: PrioridadEmergencia; //Prioridad de apertura de la emergencia
   prioridadCierre?: PrioridadEmergencia; //Prioridad asignada por el personal correspondiente
+
+  //Fechas clave de la emergencia
   fechaCreacion?: string;
+  fechaFinalizacion?: string;
+  fechaPrimeraAsignacion?: string;
+  fechaLlegadaDestino?: string;
+
+  cantidadReasignaciones?: number; //Cuenta la cantidad de reasignaciones que tuvo la emergencia
   codigo?: number; // Código único del caso de emergencia médica es incremental
   solicitante?: string; // Nombre del solicitante de la emergencia
   telefono?: string; // Teléfono de contacto del solicitante
@@ -58,6 +65,7 @@ export interface IEmergenciaMedica {
   sintomas?: string[]; // Lista de síntomas reportados
   diagnostico?: string; // Diagnóstico hecho
   irAHospital?: boolean; //Esto se marca una vez que la ambulancia haya llegado a la dirección de auxilio y se dé el ok para ir al hospital (se indica manualmente)
+  fechaLlegadaHospital?: string;
 }
 
 export interface IEmergenciaBomberos {
