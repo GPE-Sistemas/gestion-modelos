@@ -30,6 +30,9 @@ yarn-error.log*
 .env.local
 .env.*.local
 
+# Cache de construcción de protobuf
+.proto-hashes.json
+
 # Archivos Protocol Buffers generados
 # Los archivos .proto se incluyen por defecto para versionado
 # Descomenta la siguiente línea si no quieres versionar los archivos .proto

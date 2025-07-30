@@ -46,13 +46,15 @@ scripts/               # Scripts de automatización
 yarn install
 ```
 
+> 📋 **Nota**: Los archivos Protocol Buffers se generan automáticamente durante `npm install` / `yarn install`
+
 #### 4. Importar modelos requeridos
 
 ```typescript
 import { ICoordenadas, IUsuario } from 'modelos/src';
 ```
 
-### Para generar archivos Protocol Buffers
+### Para regenerar archivos Protocol Buffers manualmente
 
 #### Generar archivos Protocol Buffers
 
@@ -84,6 +86,14 @@ Para generar, validar y crear el índice en un solo comando:
 
 ```bash
 npm run proto:all
+```
+
+#### Sistema inteligente de cache
+
+El sistema incluye detección automática de cambios:
+
+```bash
+npm run proto:build  # Solo regenera si hay cambios en las interfaces TS
 ```
 
 ## 🔄 Proceso de Conversión TypeScript → Protocol Buffers

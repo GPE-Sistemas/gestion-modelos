@@ -232,6 +232,8 @@ async function main() {
   }
 }
 
+export { ProtoIndexGenerator };
+
 if (require.main === module) {
   main();
 }

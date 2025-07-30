@@ -401,6 +401,8 @@ async function main() {
   }
 }
 
+export { TypeScriptToProtoConverter };
+
 if (require.main === module) {
   main();
 }

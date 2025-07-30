@@ -236,6 +236,8 @@ async function main() {
   }
 }
 
+export { ProtoValidator };
+
 if (require.main === module) {
   main();
 }

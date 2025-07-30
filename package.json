@@ -11,6 +11,8 @@
     "validate-proto": "ts-node scripts/validate-proto.ts",
     "generate-index": "ts-node scripts/generate-index.ts",
     "proto:all": "npm run generate-proto && npm run validate-proto && npm run generate-index",
+    "proto:build": "ts-node scripts/proto-builder.ts",
+    "postinstall": "npm run proto:build",
     "dev": "ts-node scripts/generate-proto.ts"
   },
   "devDependencies": {

@@ -8,6 +8,7 @@ export type Rol =
   | "Consultor"
   | "Técnico"
   | "Final"
+  | "Super Admin"
   | "Coordinador Emergencias"
   | "Registrador Emergencias"
   | "Móvil Emergencias";
