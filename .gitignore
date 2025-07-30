@@ -1,2 +1,40 @@
-dist
+# Directorio de compilación
+dist/
 **.js
+
+# Dependencias
+node_modules/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de configuración local
+.env
+.env.local
+.env.*.local
+
+# Archivos Protocol Buffers generados
+# Los archivos .proto se incluyen por defecto para versionado
+# Descomenta la siguiente línea si no quieres versionar los archivos .proto
+# proto/
+
+# Mantener archivos de documentación Proto
+!proto/README.md
+!proto/INDEX.md

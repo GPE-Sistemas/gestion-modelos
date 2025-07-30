@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message InfoEndPoint {
+  optional string url = 1;
+  optional string ip = 2;
+  optional string puerto = 3;
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "canales-camara.proto";
+import "cliente.proto";
+import "modelo-dispositivo.proto";
+
+message Camara {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional string identificacion = 4;
+  repeated CanalesCamara canales = 5;
+  optional string id_modelo_dispositivo = 6;
+  optional TipoCamara tipo = 7;
+  optional string numero_serie = 8;
+  optional string host = 9;
+  optional double puerto_rtsp = 10;
+  optional double puerto_http = 11;
+  optional string usuario = 12;
+  optional string password = 13;
+  optional string clave_de_encriptacion = 14;
+  optional Cliente cliente = 15;
+  optional ModeloDispositivo modelo_dispositivo = 16;
+}

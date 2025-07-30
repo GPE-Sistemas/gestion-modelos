@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ContactID {
+  optional string numero_cuenta = 1;
+  optional string tipo_mensaje = 2;
+  optional string calificador_de_evento = 3;
+  optional string codigo_de_evento = 4;
+  optional string numero_de_particion = 5;
+  optional string numero_de_zona = 6;
+  optional string checksum = 7;
+}

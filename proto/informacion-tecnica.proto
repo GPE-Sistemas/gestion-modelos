@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "info-end-point.proto";
+
+message InformacionTecnica {
+  optional string _id = 1;
+  optional string titulo = 2;
+  optional string descripcion = 3;
+  repeated InfoEndPoint info_end_points = 4;
+}

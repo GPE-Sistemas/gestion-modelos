@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+
+message CategoriaEvento {
+  optional string _id = 1;
+  optional string nombre = 2;
+  optional double prioridad = 3;
+  optional string color = 4;
+  optional bool notificar = 5;
+  optional bool atender = 6;
+  optional bool no_derivar = 7;
+  optional SonidoEvento sonido = 8;
+  optional string id_cliente = 9;
+  optional bool default = 10;
+  optional bool global = 11;
+  optional Cliente cliente = 12;
+}

@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message QualcommDevice {
+  optional string serial_number = 1;
+}

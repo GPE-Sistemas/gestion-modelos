@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message PotenciasDimerizacionLuminarias {
+  optional double dim20 = 1;
+  optional double dim40 = 2;
+  optional double dim60 = 3;
+  optional double dim80 = 4;
+  optional double dim100 = 5;
+}

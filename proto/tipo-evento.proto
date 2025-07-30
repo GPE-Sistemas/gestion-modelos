@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+
+message TipoEvento {
+  optional string _id = 1;
+  optional string nombre = 2;
+  optional ICategoriaTipoEvento categoria = 3;
+  optional string id_cliente = 4;
+  optional bool default = 5;
+  optional bool global = 6;
+  optional Cliente cliente = 7;
+}

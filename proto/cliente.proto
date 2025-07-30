@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "config-cliente.proto";
+
+message Cliente {
+  optional string _id = 1;
+  optional string id_padre = 2;
+  optional bool activo = 3;
+  optional string nombre = 4;
+  optional string fecha_creacion = 5;
+  optional double nivel = 6;
+  optional ConfigCliente config = 7;
+  optional ITipoCliente tipo_cliente = 8;
+  optional EstadoCuenta estado_de_cuenta = 9;
+  optional string numero_cliente = 10;
+  optional bool habilitado = 11;
+  optional string apikey_boton_ble = 12;
+  optional string poligono = 13;
+  string type = 14;
+  repeated string coordinates = 15;
+}

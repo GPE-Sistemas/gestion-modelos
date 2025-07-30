@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+import "usuario.proto";
+import "evento.proto";
+import "activo.proto";
+
+message EnvioVehiculo {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string fecha_finalizacion = 3;
+  optional string descripcion = 4;
+  optional EstadoEnvioVehiculo estado = 5;
+  optional string id_cliente = 6;
+  optional string id_conductor = 7;
+  repeated string ids_eventos = 8;
+  optional string id_usuario = 9;
+  optional string id_activo = 10;
+  optional Cliente cliente = 11;
+  optional Usuario conductor = 12;
+  optional Usuario usuario = 13;
+  repeated Evento eventos = 14;
+  optional Activo activo = 15;
+}

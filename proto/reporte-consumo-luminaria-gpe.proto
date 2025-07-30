@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "consumo-luminaria-gpe.proto";
+import "cliente.proto";
+import "dispositivo-lorawan.proto";
+
+message ReporteConsumoLuminariaGPE {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string id_cliente = 3;
+  optional string id_dispositivo_lorawan = 4;
+  repeated string ids_asignados = 5;
+  optional ConsumoLuminariaGPE valores = 6;
+  optional bool es_de_dia = 7;
+  optional Cliente cliente = 8;
+  optional DispositivoLorawan dispositivo_lorawan = 9;
+}

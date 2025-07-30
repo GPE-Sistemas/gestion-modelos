@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+
+message LogTwilio {
+  string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string id_cliente = 3;
+  optional string phone = 4;
+  optional string sid = 5;
+  optional string body = 6;
+  optional string direction = 7;
+  optional string status = 8;
+  optional bool error = 9;
+  optional string error_code = 10;
+  optional string error_message = 11;
+  optional Cliente cliente = 12;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+
+message ReporteLuminariaGPE {
+  optional bool turn_on_off_status = 1;
+  optional IModoLuminaria modo = 2;
+  optional bool estado_rele = 3;
+  optional bool dimmer_habilitado = 4;
+  optional bool energia_externa = 5;
+  optional double potencia = 6;
+}

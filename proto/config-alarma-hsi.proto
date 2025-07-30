@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ConfigAlarmaHSI {
+  string id = 1;
+  string last_event_report = 2;
+  string camera_link = 3;
+  string app_name = 4;
+  string app_package = 5;
+  string app_store_url = 6;
+  string app_play_store_uri = 7;
+  string app_bundle_id = 8;
+}

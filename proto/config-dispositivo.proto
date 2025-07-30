@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "config-dispositivo-luminaria.proto";
+import "dispositivo-lorawan.proto";
+import "cliente.proto";
+
+message ConfigDispositivo {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional string fecha_aplicacion = 4;
+  optional string deveui = 5;
+  optional ConfigDispositivoLuminaria config = 6;
+  optional DispositivoLorawan dispositivo = 7;
+  optional Cliente cliente = 8;
+}

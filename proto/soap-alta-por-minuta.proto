@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message SoapAltaPorMinuta {
+  optional double grupo_economico = 1;
+  optional double empresa = 2;
+  optional double linea = 3;
+  optional double nro_interno = 4;
+  optional double legajo_chofer = 5;
+  optional string salida_date_time = 6;
+  optional double id_minuta_sauron = 7;
+}

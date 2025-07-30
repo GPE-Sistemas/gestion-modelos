@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "reporte-dispositivo.proto";
+import "cliente.proto";
+import "dispositivo-lorawan.proto";
+import "modelo-dispositivo.proto";
+import "grupo.proto";
+
+message Luminaria {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string id_cliente = 3;
+  optional string deveui = 4;
+  optional string identificacion = 5;
+  optional string ubicacion = 6;
+  optional string direccion = 7;
+  optional string id_modelo_dispositivo = 8;
+  repeated string ids_grupos = 9;
+  optional EstadoLuminaria estado = 10;
+  optional ReporteDispositivo ultimo_reporte = 11;
+  optional Cliente cliente = 12;
+  optional DispositivoLorawan dispositivo = 13;
+  optional ModeloDispositivo modelo_dispositivo = 14;
+  repeated Grupo grupos = 15;
+}

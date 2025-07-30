@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message SoapAlta {
+  optional double grupo_economico = 1;
+  optional double empresa = 2;
+  optional double linea = 3;
+  optional double nro_interno = 4;
+  optional double legajo_chofer = 5;
+  optional string salida_date_time = 6;
+  optional double codigo_ramal = 7;
+  optional double sentido = 8;
+  optional string llegada_date_time = 9;
+  optional double numero_vuelta_turno = 10;
+  optional double id_diagrama_daz = 11;
+  optional double id_turno_daz = 12;
+  optional string turno = 13;
+  optional string seccionado_csv = 14;
+}

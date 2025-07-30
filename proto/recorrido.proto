@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "parada.proto";
+import "franja-horaria.proto";
+import "cliente.proto";
+import "grupo.proto";
+import "ubicacion.proto";
+
+message Recorrido {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_externo = 3;
+  optional string id_grupo = 4;
+  optional string nombre_flota = 5;
+  optional string nombre = 6;
+  optional string geojson = 7;
+  repeated Parada paradas = 8;
+  repeated FranjaHoraria franja_horaria = 9;
+  optional string destino = 10;
+  optional string por = 11;
+  optional string color = 12;
+  optional double duracion = 13;
+  repeated string ids_ubicaciones = 14;
+  optional Cliente cliente = 15;
+  optional Grupo grupo = 16;
+  repeated string recorrido = 17;
+  repeated string recorrido_ol = 18;
+  repeated Ubicacion ubicaciones = 19;
+}

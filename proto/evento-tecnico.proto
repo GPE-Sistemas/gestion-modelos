@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "tracker.proto";
+import "dispositivo-alarma.proto";
+import "activo.proto";
+import "cliente.proto";
+import "usuario.proto";
+
+message EventoTecnico {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional estadoEventoTecnico estado = 3;
+  optional string titulo = 4;
+  optional string descripcion = 5;
+  optional CategoriaTecnica categoria = 6;
+  optional string id_tracker = 7;
+  optional string id_alarma = 8;
+  optional string id_activo = 9;
+  optional string id_luminaria = 10;
+  optional string id_cliente = 11;
+  repeated string ids_clientes_que_pueden_atender = 12;
+  repeated string ids_clientes_atendiendo = 13;
+  optional string id_tecnico_asignado = 14;
+  optional string id_usuario = 15;
+  optional Tracker tracker = 16;
+  optional DispositivoAlarma alarma = 17;
+  optional Activo activo = 18;
+  optional Activo luminaria = 19;
+  optional Cliente cliente = 20;
+  optional Usuario usuario = 21;
+  optional Usuario tecnico = 22;
+}

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "vehiculo.proto";
+import "modo-desactivado.proto";
+import "cliente.proto";
+import "tracker.proto";
+import "grupo.proto";
+
+message Activo {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_grupo = 3;
+  optional string id_tracker = 4;
+  optional double id_unico_traccar = 5;
+  optional string identificacion = 6;
+  optional ICategoriaActivo categoria = 7;
+  optional FuncionActivo funcion = 8;
+  optional Vehiculo vehiculo = 9;
+  repeated string ids_clientes_que_pueden_atender = 10;
+  repeated string ids_clientes_que_pueden_atender_eventos_tecnicos = 11;
+  optional ModoDesactivado modo_desactivado = 12;
+  optional string estado_cuenta = 13;
+  optional Cliente cliente = 14;
+  optional Tracker tracker = 15;
+  optional Grupo grupo = 16;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ConsumoLuminariaGPE {
+  double corriente = 1;
+  double voltaje = 2;
+  double potencia = 3;
+  double energia = 4;
+  double energia_total = 5;
+  double factor_potencia = 6;
+}

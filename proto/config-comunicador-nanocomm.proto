@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ConfigComunicadorNanocomm {
+  optional string modelo = 1;
+  optional string pass_comunicador = 2;
+  optional string id_comunicador = 3;
+  optional string apn = 4;
+  optional string usr = 5;
+  optional string pwd = 6;
+  optional string ip = 7;
+  optional string port = 8;
+}

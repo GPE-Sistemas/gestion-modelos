@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message LogHttp {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string method = 3;
+  optional string url = 4;
+  optional string path = 5;
+  optional string body = 6;
+  optional string headers = 7;
+  optional string query = 8;
+  optional string params = 9;
+}

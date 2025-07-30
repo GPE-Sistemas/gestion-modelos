@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "modulo-boton-de-panico.proto";
+
+message ModulosIntegraciones {
+  optional bool activo = 1;
+  optional ModuloBotonDePanico modulo_boton_de_panico = 2;
+}

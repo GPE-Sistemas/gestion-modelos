@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "potencias-dimerizacion-luminarias.proto";
+
+message DetallesLuminarias {
+  optional double horas_vida = 1;
+  optional PotenciasDimerizacionLuminarias potencia = 2;
+  optional double voltaje = 3;
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message FranjaHoraria {
+  optional double dia = 1;
+  optional string desde = 2;
+  optional string hasta = 3;
+  optional double frecuencia_minutos = 4;
+}

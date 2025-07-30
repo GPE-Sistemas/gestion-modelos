@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ImagenesCliente {
+  optional string icono = 1;
+  optional string banner = 2;
+  optional string banner_modo_oscuro = 3;
+}

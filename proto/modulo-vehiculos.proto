@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ModuloVehiculos {
+  optional bool activo = 1;
+  optional bool crear_vehiculos = 2;
+  optional bool derivar_eventos = 3;
+  optional bool derivar_eventos_tecnicos = 4;
+  optional bool compartir_vehiculos = 5;
+}

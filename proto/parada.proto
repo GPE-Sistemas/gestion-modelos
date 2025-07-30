@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message Parada {
+  optional string _id = 1;
+  optional string ubicacion = 2;
+  optional string ubicacion_ol = 3;
+  optional string geojson = 4;
+  optional string nombre = 5;
+  optional string direccion = 6;
+  optional string destino = 7;
+  optional string por = 8;
+  optional bool subida = 9;
+  optional bool bajada = 10;
+  optional string tipo = 11;
+  optional double tiempo_parada = 12;
+}

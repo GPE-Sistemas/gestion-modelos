@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "dispositivo-alarma.proto";
+import "tracker.proto";
+
+message LogReenvio {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha = 3;
+  optional string id_entidad = 4;
+  optional string protocolo = 5;
+  optional string host = 6;
+  optional double puerto = 7;
+  optional string body = 8;
+  optional bool ack = 9;
+  optional string error = 10;
+  optional Cliente cliente = 11;
+  optional DispositivoAlarma dispositivo_alarma = 12;
+  optional Tracker tracker = 13;
+}

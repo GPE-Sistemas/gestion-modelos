@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message Client {
+  optional string _id = 1;
+  optional string id = 2;
+  optional string client_secret = 3;
+  repeated string grants = 4;
+  repeated string redirect_uris = 5;
+  optional double access_token_lifetime = 6;
+  optional double refresh_token_lifetime = 7;
+}

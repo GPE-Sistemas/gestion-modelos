@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+import "activo.proto";
+import "dispositivo-alarma.proto";
+import "luminaria.proto";
+
+message Nota {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_asignado = 3;
+  optional bool permanente = 4;
+  optional string vigencia_desde = 5;
+  optional string vigencia_hasta = 6;
+  optional TipoNota tipo = 7;
+  optional string informacion = 8;
+  optional double orden = 9;
+  optional Cliente cliente = 10;
+  optional Activo activo = 11;
+  optional DispositivoAlarma alarma = 12;
+  optional Luminaria luminaria = 13;
+}

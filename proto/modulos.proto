@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message Modulos {
+  optional bool modulo_colectivos = 1;
+  optional bool modulo_alarmas_domiciliarias = 2;
+  optional bool modulo_luminarias = 3;
+  optional bool modulo_emergencias_medicas = 4;
+  optional bool modulo_emergencias_bomberos = 5;
+  optional bool modulo_activos = 6;
+  optional bool modulo_administracion = 7;
+  optional bool modulo_eventos_tecnicos = 8;
+  optional bool modulo_vehiculos = 9;
+  optional bool modulo_herramientas = 10;
+}

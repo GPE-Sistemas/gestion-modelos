@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "opciones-reenvio.proto";
+import "cliente.proto";
+import "dispositivo-alarma.proto";
+import "tracker.proto";
+
+message ConfigReenvio {
+  optional string _id = 1;
+  optional bool activo = 2;
+  optional string id_cliente = 3;
+  optional string fecha_creacion = 4;
+  optional IAgrupacionReenvio agrupacion_reenvio = 5;
+  optional string id_cliente_reenvio = 6;
+  optional string id_entidad_reenvio = 7;
+  optional OpcionesReenvio opciones_reenvio = 8;
+  optional Cliente cliente = 9;
+  optional Cliente cliente_reenvio = 10;
+  optional DispositivoAlarma dispositivo_alarma = 11;
+  optional Tracker tracker = 12;
+}

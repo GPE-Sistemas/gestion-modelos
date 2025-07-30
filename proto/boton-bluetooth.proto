@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "modelo-dispositivo.proto";
+
+message BotonBluetooth {
+  optional string _id = 1;
+  optional string id_modelo_dispositivo = 2;
+  optional string fecha_creacion = 3;
+  optional string id_cliente = 4;
+  optional string mac = 5;
+  optional string serial_number = 6;
+  optional Cliente cliente = 7;
+  optional ModeloDispositivo modelo_dispositivo = 8;
+}

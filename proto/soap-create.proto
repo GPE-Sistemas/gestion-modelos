@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message SoapCreate {
+  optional string grupo_economico = 1;
+  optional string empresa = 2;
+  optional string linea = 3;
+  optional string nro_interno = 4;
+  optional string legajo_chofer = 5;
+  optional string salida = 6;
+  optional string codigo_ramal = 7;
+  optional string sentido = 8;
+  optional string llegada = 9;
+  optional string numero_vuelta_turno = 10;
+  optional string id_diagrama_daz = 11;
+  optional string id_turno_daz = 12;
+  optional double turno = 13;
+  optional string seccionado = 14;
+}

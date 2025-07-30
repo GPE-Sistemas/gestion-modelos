@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message CondicionNotificacion {
+  optional string activo = 1;
+  optional string velocidad = 2;
+}

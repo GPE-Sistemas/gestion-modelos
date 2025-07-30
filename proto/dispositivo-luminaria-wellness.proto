@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+
+message DispositivoLuminariaWellness {
+  optional IModoLuminaria mode = 1;
+  optional double active_power_total = 2;
+  optional double reactive_power_total = 3;
+  optional bool turn_on_off_status = 4;
+  optional string alarma = 5;
+}

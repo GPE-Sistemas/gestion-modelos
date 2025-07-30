@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "centro-de-atencion.proto";
+import "archivos-adjuntos.proto";
+import "evento-emergencia.proto";
+import "emergencia-medica.proto";
+import "emergencia-bomberos.proto";
+import "destinatario-asistencia.proto";
+import "cliente.proto";
+
+message Emergencia {
+  optional string _id = 1;
+  optional string id_destinatario_asistencia = 2;
+  optional string id_cliente = 3;
+  optional TipoEmergencia tipo = 4;
+  optional PrioridadEmergencia prioridad_apertura = 5;
+  optional PrioridadEmergencia prioridad_cierre = 6;
+  optional string fecha_creacion = 7;
+  optional string fecha_finalizacion = 8;
+  optional string fecha_primera_asignacion = 9;
+  optional string fecha_llegada_destino = 10;
+  optional double cantidad_reasignaciones = 11;
+  optional double codigo = 12;
+  optional string solicitante = 13;
+  optional string telefono = 14;
+  optional CentroDeAtencion centro_de_atencion = 15;
+  repeated ArchivosAdjuntos archivos_adjuntos = 16;
+  optional string observaciones = 17;
+  optional bool es_auxilio = 18;
+  optional string direccion = 19;
+  optional bool asignada = 20;
+  optional string ultima_actualizacion = 21;
+  optional EventoEmergencia ultimo_evento_emergencia = 22;
+  optional bool salio_del_centro = 23;
+  optional EmergenciaMedica emergencia_medica = 24;
+  optional EmergenciaBomberos emergencia_bomberos = 25;
+  optional DestinatarioAsistencia destinatario_asistencia = 26;
+  optional Cliente cliente = 27;
+}

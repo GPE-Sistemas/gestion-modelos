@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "soap-alta.proto";
+import "soap-create.proto";
+import "soap-alta-chofer.proto";
+import "soap-obtener-choferes.proto";
+import "soap-alta-por-minuta.proto";
+import "soap-alta-por-minuta-chofer.proto";
+import "soap-baja.proto";
+import "cliente.proto";
+
+message Soap {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional SoapAlta alta = 4;
+  optional SoapCreate create = 5;
+  optional SoapAltaChofer alta_chofer = 6;
+  optional SoapObtenerChoferes obtener_choferes = 7;
+  optional SoapAltaPorMinuta alta_por_minuta = 8;
+  optional SoapAltaPorMinutaChofer alta_por_minuta_chofer = 9;
+  optional SoapBaja baja = 10;
+  optional Cliente cliente = 11;
+}

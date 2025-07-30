@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message EmergenciaMedica {
+  repeated string sintomas = 1;
+  optional string diagnostico = 2;
+  optional bool ir_ahospital = 3;
+  optional string fecha_llegada_hospital = 4;
+}

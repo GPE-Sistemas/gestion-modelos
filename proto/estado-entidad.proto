@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "usuario.proto";
+import "dispositivo-alarma.proto";
+import "tracker.proto";
+
+message EstadoEntidad {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string estado = 3;
+  optional string id_entidad = 4;
+  optional string id_cliente = 5;
+  optional string id_usuario = 6;
+  optional string nota = 7;
+  repeated string motivos = 8;
+  optional string vigencia = 9;
+  optional Cliente cliente = 10;
+  optional Usuario usuario = 11;
+  optional DispositivoAlarma alarma = 12;
+  optional Tracker tracker = 13;
+}

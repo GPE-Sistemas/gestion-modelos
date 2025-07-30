@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message CamaraAlarma {
+  optional string id_camara = 1;
+  optional string canal = 2;
+  optional double particion = 3;
+  optional double zona = 4;
+}

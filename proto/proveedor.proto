@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+
+message Proveedor {
+  optional string _id = 1;
+  repeated TipoProveedor tipos = 2;
+  optional string id_cliente = 3;
+  optional string nombre = 4;
+  optional string ubicacion = 5;
+  optional Cliente cliente = 6;
+}

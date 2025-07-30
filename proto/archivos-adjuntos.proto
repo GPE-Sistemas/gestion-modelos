@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ArchivosAdjuntos {
+  optional string fecha_subida = 1;
+  optional string descripcion = 2;
+  optional string archivo = 3;
+  optional string usuario = 4;
+  optional string nombre_original = 5;
+}

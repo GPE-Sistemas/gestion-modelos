@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "grupo.proto";
+import "activo.proto";
+import "recorrido.proto";
+import "parada.proto";
+
+message Trackeo {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_grupo = 3;
+  optional string id_recorrido = 4;
+  optional string id_activo = 5;
+  optional string fecha = 6;
+  optional string id_parada = 7;
+  optional double indice_parada = 8;
+  optional string fecha_proxima_parada = 9;
+  optional string id_proxima_parada = 10;
+  optional Cliente cliente = 11;
+  optional Grupo grupo = 12;
+  optional Activo activo = 13;
+  optional Recorrido recorrido = 14;
+  optional Parada parada = 15;
+  optional Parada proxima_parada = 16;
+}

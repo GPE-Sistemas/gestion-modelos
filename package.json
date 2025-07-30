@@ -4,5 +4,21 @@
   "description": "Modelos para el sitema de gestión",
   "author": "GPE Sistemas",
   "license": "Private",
-  "repository": "https://github.com/GPE-Sistemas/gestion-modelos"
+  "repository": "https://github.com/GPE-Sistemas/gestion-modelos",
+  "scripts": {
+    "build": "tsc",
+    "generate-proto": "ts-node scripts/generate-proto.ts",
+    "validate-proto": "ts-node scripts/validate-proto.ts",
+    "generate-index": "ts-node scripts/generate-index.ts",
+    "proto:all": "npm run generate-proto && npm run validate-proto && npm run generate-index",
+    "dev": "ts-node scripts/generate-proto.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  },
+  "dependencies": {
+    "typescript-parser": "^2.6.1"
+  }
 }

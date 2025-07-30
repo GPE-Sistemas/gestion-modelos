@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message Periodo {
+  optional string desde = 1;
+  optional string hasta = 2;
+  optional string datos = 3;
+}

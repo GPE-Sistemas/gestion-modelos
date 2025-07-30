@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "dispositivo-lorawan.proto";
+import "luminaria.proto";
+
+message AlertaBotonBLE {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string id_dispositivo_lorawan = 3;
+  optional string id_luminaria = 4;
+  optional string mac = 5;
+  optional DispositivoLorawan dispositivo_lorawan = 6;
+  optional Luminaria luminaria = 7;
+}

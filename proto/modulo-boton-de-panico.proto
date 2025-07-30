@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ModuloBotonDePanico {
+  optional string appkey = 1;
+  optional bool activo = 2;
+}

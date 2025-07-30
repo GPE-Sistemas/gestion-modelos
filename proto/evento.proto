@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "valores-evento.proto";
+import "tracker.proto";
+import "dispositivo-alarma.proto";
+import "luminaria.proto";
+import "usuario.proto";
+import "cliente.proto";
+import "reporte.proto";
+import "activo.proto";
+import "config-evento-usuario.proto";
+import "boton-bluetooth.proto";
+
+message Evento {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional bool notificar = 3;
+  optional bool atender = 4;
+  optional bool no_derivar = 5;
+  optional string fecha_creacion = 6;
+  optional string posponer_hasta = 7;
+  optional estadoEvento estado = 8;
+  optional ValoresEvento valores = 9;
+  optional string codigo_evento = 10;
+  optional double prioridad = 11;
+  optional double repetido = 12;
+  optional string fecha_ultimo_repetido = 13;
+  optional string id_tracker = 14;
+  optional string id_alarma = 15;
+  optional string id_usuario = 16;
+  optional string id_luminaria = 17;
+  optional tipoEvento tipo = 18;
+  repeated string ids_clientes_que_pueden_atender = 19;
+  repeated string ids_clientes_atendiendo = 20;
+  repeated string ids_usuarios_atendiendo = 21;
+  optional string id_reporte = 22;
+  optional string id_activo = 23;
+  optional string id_boton_bluetooth = 24;
+  optional string id_config_evento_usuario = 25;
+  optional Tracker tracker = 26;
+  optional DispositivoAlarma alarma = 27;
+  optional Luminaria luminaria = 28;
+  optional Usuario usuario = 29;
+  optional Cliente cliente = 30;
+  optional Reporte reporte = 31;
+  optional Activo activo = 32;
+  optional ConfigEventoUsuario config_evento_usuario = 33;
+  optional BotonBluetooth boton_bluetooth = 34;
+}

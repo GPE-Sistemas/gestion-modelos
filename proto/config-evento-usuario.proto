@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "condicion-notificacion.proto";
+import "config-zona.proto";
+import "usuario.proto";
+import "cliente.proto";
+import "grupo.proto";
+import "activo.proto";
+import "luminaria.proto";
+import "dispositivo-alarma.proto";
+import "categoria-evento.proto";
+import "tracker.proto";
+import "tipo-evento.proto";
+
+message ConfigEventoUsuario {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional bool activa = 3;
+  optional string frecuencia = 4;
+  optional string valida_desde = 5;
+  optional string valida_hasta = 6;
+  optional bool generar_solo_una_vez = 7;
+  optional bool generar_si_no_se_cumple = 8;
+  repeated string dias = 9;
+  optional string hora_inicio = 10;
+  optional string hora_fin = 11;
+  optional double minutos_de_gracia = 12;
+  optional bool notificar = 13;
+  optional bool atender = 14;
+  optional bool no_derivar = 15;
+  optional string tipo_envio = 16;
+  optional string tipo_entidad = 17;
+  optional CondicionNotificacion condicion = 18;
+  optional string agrupacion = 19;
+  optional string id_cliente = 20;
+  optional string id_grupo = 21;
+  optional string id_entidad = 22;
+  repeated string ids_usuarios = 23;
+  repeated string ids_clientes_que_pueden_atender = 24;
+  optional string id_categoria_evento = 25;
+  optional string codigo_reportado = 26;
+  optional string id_tipo_evento = 27;
+  optional ConfigZona config_zona = 28;
+  repeated Usuario usuarios = 29;
+  optional Cliente cliente = 30;
+  optional Grupo grupo = 31;
+  optional Activo activo = 32;
+  optional Luminaria luminaria = 33;
+  optional DispositivoAlarma alarma = 34;
+  repeated Cliente clientes_que_pueden_atender = 35;
+  optional CategoriaEvento categoria_evento = 36;
+  optional Tracker tracker = 37;
+  optional TipoEvento tipo_evento = 38;
+}

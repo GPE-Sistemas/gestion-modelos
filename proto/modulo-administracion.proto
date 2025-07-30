@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ModuloAdministracion {
+  optional bool activo = 1;
+  optional bool crear_usuarios = 2;
+  optional bool crear_servicios = 3;
+  optional bool crear_apikeys = 4;
+  optional bool crear_dispositivos_lorawan = 5;
+  optional bool compartir_dispositivos_lorawan = 6;
+}

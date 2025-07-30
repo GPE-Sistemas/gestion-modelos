@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+
+message ConfigDispositivoGPEPayload {
+  optional IModoLuminaria mode = 1;
+  optional bool estado_rele = 2;
+  optional bool dimmer_habilitado = 3;
+  optional bool energia_externa = 4;
+  optional bool adr_habilitado = 5;
+  optional double lim_luz_inferior = 6;
+  optional double lim_luz_superior = 7;
+  optional double offset_gpsamanecer = 8;
+  optional double offset_gpsatardecer = 9;
+  optional double time_zone = 10;
+  optional double frec_reporte = 11;
+  optional double data_rate = 12;
+}
