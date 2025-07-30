@@ -14,7 +14,8 @@ export interface IEventoEmergencia {
   idEmergencia?: string; // referencia a la emergencia
 
   idActivo?: string; //referencia al vehículo
-  idChofer?: string; //referencia al chofer
+  idChofer?: string; //referencia al
+  idMovilUsuario?: string; //Usuario asignado para el móvil de emergencia médica
 
   //Exclusivas de emergencias médicas
   idsMedicos?: string[]; //referencia al medico
@@ -40,6 +41,7 @@ export interface IEventoEmergencia {
   destinatarioAsistencia?: IDestinatarioAsistencia;
   activo?: IActivo; //Activo tiene la información de vehículo
   chofer?: IUsuario; //Usuario tiene la información de chofer
+  movilUsuario?: IUsuario;
   medicos?: IPersonalSalud[];
   enfermeros?: IPersonalSalud[];
   hospital?: IHospital;
