@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ModoDesactivado {
+  optional bool dispositivo_desactivado = 1;
+  optional bool permanente = 2;
+  optional string desde = 3;
+  optional string hasta = 4;
+  repeated string codigos = 5;
+  optional string alarma = 6;
+  repeated string particiones = 7;
+  optional string zonas = 8;
+  string particion = 9;
+  string zona = 10;
+}

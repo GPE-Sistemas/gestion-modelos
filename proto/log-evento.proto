@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "dispositivo-lorawan.proto";
+
+message LogEvento {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional TipoLogEvento tipo = 3;
+  optional string deveui = 4;
+  optional string device_name = 5;
+  optional string payload = 6;
+  optional double puerto = 7;
+  optional double battery = 8;
+  optional double f_cnt = 9;
+  optional DispositivoLorawan dispositivo_lorawan = 10;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message Sim {
+  optional string iccid = 1;
+  optional string numero = 2;
+  optional string operador = 3;
+  optional string apn = 4;
+  optional string usuario = 5;
+  optional string password = 6;
+}

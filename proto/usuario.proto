@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "permiso.proto";
+import "datos-personales.proto";
+import "config-usuario.proto";
+import "cliente.proto";
+
+message Usuario {
+  optional string _id = 1;
+  optional string identificacion_interna = 2;
+  optional string id_cliente = 3;
+  repeated Permiso permisos = 4;
+  optional string id_externo = 5;
+  optional string fecha_creacion = 6;
+  optional string usuario = 7;
+  optional string hash = 8;
+  optional DatosPersonales datos_personales = 9;
+  optional ConfigUsuario config = 10;
+  optional Cliente cliente = 11;
+}

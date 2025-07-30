@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+import "usuario.proto";
+import "dispositivo-lorawan.proto";
+
+message Comando {
+  optional string _id = 1;
+  optional string deveui = 2;
+  optional double puerto = 3;
+  optional string payload = 4;
+  optional string nombre = 5;
+  optional string descripcion = 6;
+  optional string id_cliente = 7;
+  optional string id_usuario = 8;
+  optional string fecha_creacion = 9;
+  optional string fecha_actualizacion = 10;
+  optional IEstadoComando estado = 11;
+  optional double fallos = 12;
+  optional string f_cnt = 13;
+  optional string id_chirpstack = 14;
+  optional Cliente cliente = 15;
+  optional Usuario usuario = 16;
+  optional DispositivoLorawan dispositivo = 17;
+}

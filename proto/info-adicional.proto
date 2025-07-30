@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message InfoAdicional {
+  optional string descripcion = 1;
+  repeated string adjuntos = 2;
+}

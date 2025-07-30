@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "activo.proto";
+
+message LogTrackeo {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_activo = 3;
+  optional string fecha = 4;
+  optional bool nueva_parada = 5;
+  optional double index_ultima_parada = 6;
+  optional double index_parada_actual = 7;
+  optional string ultima_parada = 8;
+  optional string parada_actual = 9;
+  optional double total_paradas = 10;
+  optional string motivo = 11;
+  optional Cliente cliente = 12;
+  optional Activo activo = 13;
+}

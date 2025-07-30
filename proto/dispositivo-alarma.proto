@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "sim.proto";
+import "camara-alarma.proto";
+import "ultima-conexion.proto";
+import "modo-desactivado.proto";
+import "particion-zona.proto";
+import "ubicacion.proto";
+import "modelo-dispositivo.proto";
+import "cliente.proto";
+import "camara.proto";
+import "servicio-contratado.proto";
+
+message DispositivoAlarma {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string fecha_alta = 3;
+  optional string fecha_ultima_comunicacion = 4;
+  optional string id_comunicador = 5;
+  optional string id_unico_comunicador = 6;
+  optional string password_comunicador = 7;
+  optional string id_modelo = 8;
+  optional string id_domicilio = 9;
+  optional string id_cliente = 10;
+  optional string nombre = 11;
+  optional string numero_abonado = 12;
+  optional Sim sim1 = 13;
+  optional Sim sim2 = 14;
+  repeated string ids_clientes_que_pueden_atender = 15;
+  repeated string ids_clientes_que_pueden_atender_eventos_tecnicos = 16;
+  repeated CamaraAlarma camaras_por_zona = 17;
+  repeated string ids_camaras = 18;
+  optional bool armado = 19;
+  optional bool armando = 20;
+  repeated string imagenes = 21;
+  optional UltimaConexion ultima_conexion = 22;
+  optional ModoDesactivado modo_desactivado = 23;
+  repeated ParticionZona info_zonas = 24;
+  optional string nro_de_sistema = 25;
+  optional string estado_cuenta = 26;
+  optional double frec_reporte = 27;
+  repeated string id_servicios_contratados = 28;
+  optional string clave = 29;
+  optional string contra_clave = 30;
+  optional string tipo_comercio = 31;
+  optional string tipo_categoria = 32;
+  optional Ubicacion domicilio = 33;
+  optional ModeloDispositivo modelo = 34;
+  optional Cliente cliente = 35;
+  optional ModeloDispositivo comunicador = 36;
+  repeated Camara camaras = 37;
+  repeated ServicioContratado servicios_contratados = 38;
+}

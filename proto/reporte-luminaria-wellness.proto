@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+
+message ReporteLuminariaWellness {
+  optional double dimming_value = 1;
+  optional bool turn_on_off_status = 2;
+  optional double voltage = 3;
+  optional double current = 4;
+  optional double active_power = 5;
+  optional double reactive_power = 6;
+  optional double active_power_total = 7;
+  optional double reactive_power_total = 8;
+  optional double temperature = 9;
+  optional double lumenes = 10;
+  optional IModoLuminaria modo = 11;
+  optional ModoForzado modo_forzado = 12;
+}

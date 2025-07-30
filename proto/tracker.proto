@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "traccar-device.proto";
+import "qualcomm-device.proto";
+import "t100b-device.proto";
+import "telefono.proto";
+import "sim.proto";
+import "cliente.proto";
+import "activo.proto";
+import "modelo-dispositivo.proto";
+import "servicio-contratado.proto";
+
+message Tracker {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string fecha_alta = 3;
+  repeated string imagenes = 4;
+  optional string id_cliente = 5;
+  repeated string ids_clientes_que_pueden_atender_eventos = 6;
+  repeated string ids_clientes_que_pueden_atender_eventos_tecnicos = 7;
+  optional string id_modelo = 8;
+  optional string nombre = 9;
+  optional string identificacion = 10;
+  optional string asignado_a = 11;
+  optional TipoTracker tipo = 12;
+  optional string unique_id = 13;
+  optional TraccarDevice traccar = 14;
+  optional QualcommDevice qualcomm = 15;
+  optional T100bDevice t1000b = 16;
+  optional Telefono telefono = 17;
+  optional string estado_cuenta = 18;
+  optional string numero_abonado = 19;
+  optional Sim sim1 = 20;
+  optional Sim sim2 = 21;
+  optional double frec_reporte = 22;
+  repeated string id_servicios_contratados = 23;
+  optional Cliente cliente = 24;
+  optional Activo activo = 25;
+  optional ModeloDispositivo modelo = 26;
+  repeated ServicioContratado servicios_contratados = 27;
+}

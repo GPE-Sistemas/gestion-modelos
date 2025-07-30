@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+
+message Grupo {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string nombre = 3;
+  optional string color = 4;
+  optional CategoriaGrupo categoria = 5;
+  optional Cliente cliente = 6;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message CreateUpdateDeviceActivation {
+  optional string device_activation = 1;
+  optional string description = 2;
+  optional double a_fcnt_down = 3;
+  optional string app_skey = 4;
+  optional string dev_addr = 5;
+  optional double f_cnt_up = 6;
+  optional string f_nwk_sint_key = 7;
+  optional double n_fcnt_down = 8;
+  optional string nwk_senc_key = 9;
+  optional string s_nwk_sint_key = 10;
+}

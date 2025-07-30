@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message CreateUpdateDeviceChirpstack {
+  optional string device = 1;
+  optional string application_id = 2;
+  optional string description = 3;
+  optional string dev_eui = 4;
+  optional string device_profile_id = 5;
+  optional bool is_disabled = 6;
+  optional string join_eui = 7;
+  optional string name = 8;
+  optional bool skip_fcnt_check = 9;
+  optional string tags = 10;
+  optional string variables = 11;
+}

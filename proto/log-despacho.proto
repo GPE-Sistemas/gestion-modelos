@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+
+message LogDespacho {
+  string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional string id_externo_vehiculo = 4;
+  optional string id_externo_recorrido = 5;
+  optional string id_externo_chofer = 6;
+  optional string fecha = 7;
+  optional Cliente cliente = 8;
+}

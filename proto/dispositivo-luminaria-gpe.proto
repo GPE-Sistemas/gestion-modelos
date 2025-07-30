@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+
+message DispositivoLuminariaGPE {
+  optional double lim_luz_inferior = 1;
+  optional double lim_luz_superior = 2;
+  optional double offset_gpsamanecer = 3;
+  optional double offset_gpsatardecer = 4;
+  optional double time_zone = 5;
+  optional double frec_reporte = 6;
+  optional double data_rate = 7;
+  optional IModoLuminaria mode = 8;
+  optional bool estado_rele = 9;
+  optional bool dimmer_habilitado = 10;
+  optional bool energia_externa = 11;
+  optional bool adr_habilitado = 12;
+  optional string alarma = 13;
+  optional double corriente = 14;
+  optional double voltaje = 15;
+  optional double potencia = 16;
+  optional double energia = 17;
+  optional double energia_total = 18;
+  optional double factor_potencia = 19;
+}

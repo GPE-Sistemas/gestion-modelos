@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "clave-usuario-alarma.proto";
+
+message ConfigUsuario {
+  optional bool notas_en_primer_plano = 1;
+  optional double cant_mapas_vehiculos = 2;
+  optional bool no_mostrar_guardar_clave_alarma = 3;
+  repeated ClaveUsuarioAlarma claves_alarma = 4;
+}

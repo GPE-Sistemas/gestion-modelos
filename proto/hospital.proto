@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+
+message Hospital {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional string nombre = 4;
+  optional string direccion = 5;
+  optional string telefono = 6;
+  optional string email = 7;
+  optional string tipo = 8;
+  optional bool activo = 9;
+  optional Cliente cliente = 10;
+}

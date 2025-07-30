@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message SoapBaja {
+  optional double id_horario_ojo_sauron = 1;
+  optional double motivo = 2;
+  optional string descripcion_motivo = 3;
+  optional double linea_daz = 4;
+  optional double nro_interno = 5;
+}

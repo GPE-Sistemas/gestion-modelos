@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message SoapAltaChofer {
+  optional double grupo_economico = 1;
+  optional double empresa = 2;
+  optional double linea = 3;
+  optional double legajo_chofer = 4;
+  optional string nombre_chofer = 5;
+}

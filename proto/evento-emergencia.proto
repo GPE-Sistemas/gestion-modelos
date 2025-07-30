@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "emergencia.proto";
+import "destinatario-asistencia.proto";
+import "activo.proto";
+import "usuario.proto";
+import "personal-salud.proto";
+import "hospital.proto";
+import "cliente.proto";
+
+message EventoEmergencia {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_destinario_asistencia = 3;
+  optional string id_emergencia = 4;
+  optional string id_activo = 5;
+  optional string id_chofer = 6;
+  optional string id_movil_usuario = 7;
+  repeated string ids_medicos = 8;
+  repeated string ids_enfermeros = 9;
+  optional string id_hospital = 10;
+  optional EstadoEmergenciaMedica estado = 11;
+  optional string id_usuario_responsable = 12;
+  optional string timestamp = 13;
+  optional string ubicacion_destino = 14;
+  optional string motivo_cancelacion = 15;
+  optional string motivo_reasignacion = 16;
+  optional string observaciones = 17;
+  optional string diagnostico = 18;
+  optional Emergencia emergencia = 19;
+  optional DestinatarioAsistencia destinatario_asistencia = 20;
+  optional Activo activo = 21;
+  optional Usuario chofer = 22;
+  optional Usuario movil_usuario = 23;
+  repeated PersonalSalud medicos = 24;
+  repeated PersonalSalud enfermeros = 25;
+  optional Hospital hospital = 26;
+  optional Cliente cliente = 27;
+  optional Usuario usuario_responsable = 28;
+}

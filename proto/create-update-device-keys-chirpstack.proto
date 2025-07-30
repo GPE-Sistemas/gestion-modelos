@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message CreateUpdateDeviceKeysChirpstack {
+  optional string device_keys = 1;
+  optional string app_key = 2;
+  optional string nwk_key = 3;
+}

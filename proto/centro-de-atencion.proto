@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+
+message CentroDeAtencion {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional string nombre = 4;
+  optional TipoEmergencia tipo_emergencia = 5;
+  optional string direccion = 6;
+  optional string telefono = 7;
+  optional string email = 8;
+  optional bool activo = 9;
+  optional string circulo_area = 10;
+  optional string type = 11;
+  repeated double center = 12;
+  optional double radius = 13;
+}

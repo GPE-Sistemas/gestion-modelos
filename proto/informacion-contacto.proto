@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message InformacionContacto {
+  optional string contacto = 1;
+  optional string telefono = 2;
+  optional string email = 3;
+  optional string palabra_seguridad_normal = 4;
+  optional string palabra_seguridad_emergencia = 5;
+  optional double numero_usuario_alarma = 6;
+}

@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message UltimaConexion {
+  optional string last_ip = 1;
+  optional string last_port = 2;
+  double sequence = 3;
+}

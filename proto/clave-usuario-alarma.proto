@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ClaveUsuarioAlarma {
+  optional string id_alarma = 1;
+  optional string clave = 2;
+}

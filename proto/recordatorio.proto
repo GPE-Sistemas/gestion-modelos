@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "usuario.proto";
+import "activo.proto";
+import "documentacion.proto";
+
+message Recordatorio {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_usuario = 3;
+  repeated string tipo = 4;
+  optional bool notificado = 5;
+  optional string fecha_limite = 6;
+  optional string fecha_creacion = 7;
+  optional double km_limite = 8;
+  optional string id_activo = 9;
+  optional string id_documentacion = 10;
+  optional string detalles_del_mantenimiento = 11;
+  optional bool repetible = 12;
+  optional double frecuencia = 13;
+  optional Cliente cliente = 14;
+  optional Usuario usuario = 15;
+  optional Activo activo = 16;
+  optional Documentacion documentacion = 17;
+}

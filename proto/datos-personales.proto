@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message DatosPersonales {
+  optional string nombre = 1;
+  optional string dni = 2;
+  optional bool sexo = 3;
+  optional string email = 4;
+  optional string direccion = 5;
+  optional string pais = 6;
+  optional string telefono = 7;
+  optional string fecha_nacimiento = 8;
+  optional string foto = 9;
+}

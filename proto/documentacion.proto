@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "usuario.proto";
+import "activo.proto";
+
+message Documentacion {
+  optional string _id = 1;
+  optional string tipo = 2;
+  optional string vencimiento = 3;
+  optional string fecha_creacion = 4;
+  optional string emision = 5;
+  optional string descripcion = 6;
+  repeated string imagenes = 7;
+  optional string id_cliente = 8;
+  optional string id_chofer = 9;
+  optional string id_activo = 10;
+  optional Cliente cliente = 11;
+  optional Usuario chofer = 12;
+  optional Activo activo = 13;
+}

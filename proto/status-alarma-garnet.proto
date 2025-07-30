@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message StatusAlarmaGarnet {
+  optional double particion = 1;
+  optional string problemas1 = 2;
+  optional bool fallo_salida_sirena = 3;
+  optional bool fallo_linea_telefonica = 4;
+  optional bool fallo_alimentacion_auxiliar_panel = 5;
+  optional bool fallo_alimentacion_auxiliar_datos = 6;
+  optional bool fallo_en_sup_sirena = 7;
+  optional bool fuente_auxiliar_bateria_baja = 8;
+  optional bool bateria_baja = 9;
+  optional bool fallo_de_red = 10;
+}

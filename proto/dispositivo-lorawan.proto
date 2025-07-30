@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "config-dispositivo-luminaria.proto";
+import "reporte-dispositivo.proto";
+import "cliente.proto";
+import "modelo-dispositivo.proto";
+
+message DispositivoLorawan {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_modelo_dispositivo = 3;
+  optional string fecha_creacion = 4;
+  optional ConfigDispositivoLuminaria config = 5;
+  optional string fecha_ultima_comunicacion = 6;
+  optional ReporteDispositivo ultimo_reporte = 7;
+  optional double frec_reporte = 8;
+  optional TipoDispositivoLorawan tipo = 9;
+  optional string ubicacion = 10;
+  optional string deveui = 11;
+  optional string joineui = 12;
+  optional string description = 13;
+  optional string name = 14;
+  optional string tags = 15;
+  optional string application_id = 16;
+  optional string device_profile_id = 17;
+  optional string variables = 18;
+  optional bool is_disabled = 19;
+  optional bool skip_fcnt_check = 20;
+  optional string appkey = 21;
+  optional string dev_addr = 22;
+  optional string app_skey = 23;
+  optional double f_cnt_up = 24;
+  optional double n_fcnt_down = 25;
+  optional string nwkskey = 26;
+  optional Cliente cliente = 27;
+  optional ModeloDispositivo modelo_dispositivo = 28;
+}

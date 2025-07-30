@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "proveedor.proto";
+import "activo.proto";
+
+message Servicio {
+  optional string _id = 1;
+  optional string tipo = 2;
+  optional string id_cliente = 3;
+  optional string id_activo = 4;
+  optional string fecha_realizacion = 5;
+  optional string fecha_creacion = 6;
+  optional string nombre_chofer = 7;
+  optional string detalles = 8;
+  optional double km_del_mantenimiento = 9;
+  optional double costo = 10;
+  optional string id_proveedor = 11;
+  optional Cliente cliente = 12;
+  optional Proveedor proveedor = 13;
+  optional Activo activo = 14;
+}

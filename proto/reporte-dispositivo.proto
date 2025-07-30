@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "reporte-luminaria.proto";
+import "cliente.proto";
+import "dispositivo-lorawan.proto";
+
+message ReporteDispositivo {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string id_cliente = 3;
+  optional string id_dispositivo_lorawan = 4;
+  repeated string ids_asignados = 5;
+  optional ReporteLuminaria valores = 6;
+  optional bool es_de_dia = 7;
+  optional double f_cnt = 8;
+  optional Cliente cliente = 9;
+  optional DispositivoLorawan dispositivo_lorawan = 10;
+}

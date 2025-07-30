@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message TraccarDevice {
+  optional double id = 1;
+  optional string name = 2;
+  optional string unique_id = 3;
+  optional string status = 4;
+  optional string disabled = 5;
+  optional string last_update = 6;
+  optional double position_id = 7;
+  optional double group_id = 8;
+  optional string phone = 9;
+  optional string model = 10;
+  optional string contact = 11;
+  optional string category = 12;
+  optional string attributes = 13;
+}

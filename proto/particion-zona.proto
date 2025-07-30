@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ParticionZona {
+  optional string nombre = 1;
+  optional double particion = 2;
+  optional double zona = 3;
+  optional string marca = 4;
+  optional string tipo = 5;
+  optional string modo = 6;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+
+message OpcionesReenvio {
+  optional MetodoReenvio metodo = 1;
+  optional string host = 2;
+  optional double puerto = 3;
+  optional string apikey = 4;
+}

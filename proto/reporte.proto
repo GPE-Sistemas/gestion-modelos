@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "cliente.proto";
+import "grupo.proto";
+import "tracker.proto";
+import "activo.proto";
+import "recorrido.proto";
+import "usuario.proto";
+
+message Reporte {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_grupo = 3;
+  optional string id_tracker = 4;
+  optional string id_activo = 5;
+  optional string id_recorrido = 6;
+  optional string id_chofer = 7;
+  optional string fecha_creacion = 8;
+  optional string tipo = 9;
+  optional string geojson = 10;
+  optional string fecha_device = 11;
+  optional TipoTriangulacion tipo_triangulacion = 12;
+  optional string traccar_unique_id = 13;
+  optional double velocidad = 14;
+  optional double orientacion = 15;
+  optional double odometro = 16;
+  optional string serial_number = 17;
+  optional string location_tech_type = 18;
+  optional string radio_access_technology = 19;
+  optional double horizontal_uncertainity = 20;
+  optional string dev_eui = 21;
+  optional double bateria = 22;
+  optional Cliente cliente = 23;
+  optional Grupo grupo = 24;
+  optional Tracker tracker = 25;
+  optional Activo activo = 26;
+  optional Recorrido recorrido = 27;
+  optional Usuario chofer = 28;
+  optional string ubicacion = 29;
+  optional string ubicacion_ol = 30;
+}

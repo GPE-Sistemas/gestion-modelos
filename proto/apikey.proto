@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+
+message Apikey {
+  optional string _id = 1;
+  optional string identificacion = 2;
+  optional string key = 3;
+  optional bool global = 4;
+  optional string id_creador = 5;
+  repeated string id_clientes = 6;
+  repeated string modulos = 7;
+  optional Cliente cliente = 8;
+  repeated Cliente clientes = 9;
+}

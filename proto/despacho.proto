@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "usuario.proto";
+import "activo.proto";
+import "recorrido.proto";
+import "cronograma.proto";
+
+message Despacho {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_usuario = 3;
+  optional string fecha_creacion = 4;
+  optional string fecha = 5;
+  optional string hora = 6;
+  optional string salio = 7;
+  optional string id_cronograma = 8;
+  optional string id_activo = 9;
+  optional string id_chofer = 10;
+  repeated string ids_recorridos = 11;
+  optional string id_recorrido_actual = 12;
+  optional bool completado = 13;
+  optional bool cancelado = 14;
+  optional Cliente cliente = 15;
+  optional Usuario usuario = 16;
+  optional Activo activo = 17;
+  optional Usuario chofer = 18;
+  repeated Recorrido recorridos = 19;
+  optional Cronograma cronograma = 20;
+}

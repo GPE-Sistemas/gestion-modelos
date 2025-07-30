@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+import "usuario.proto";
+
+message Notificacion {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_usuario = 3;
+  optional string fecha_creacion = 4;
+  optional string fecha_leido = 5;
+  optional bool leido = 6;
+  optional bool archivado = 7;
+  optional string titulo = 8;
+  optional string mensaje = 9;
+  optional Cliente cliente = 10;
+  optional Usuario usuario = 11;
+}

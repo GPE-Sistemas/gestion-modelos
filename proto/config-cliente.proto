@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "imagenes-cliente.proto";
+import "tema-cliente.proto";
+import "modulo-colectivos.proto";
+import "modulo-alarmas-domiciliarias.proto";
+import "modulo-dispositivos-lorawan.proto";
+import "modulo-activos.proto";
+import "modulo-administracion.proto";
+import "modulo-eventos-tecnicos.proto";
+import "modulo-vehiculos.proto";
+import "modulo-luminarias.proto";
+import "modulo-emergencias.proto";
+import "modulo-boton-ble.proto";
+import "modulos-integraciones.proto";
+import "modulo-herramientas.proto";
+import "centro-de-atencion.proto";
+
+message ConfigCliente {
+  optional ImagenesCliente imagenes = 1;
+  optional TemaCliente tema = 2;
+  optional ModuloColectivos modulo_colectivos = 3;
+  optional ModuloAlarmasDomiciliarias modulo_alarmas_domiciliarias = 4;
+  optional ModuloDispositivosLorawan modulo_dispositivos_lorawan = 5;
+  optional ModuloActivos modulo_activos = 6;
+  optional ModuloAdministracion modulo_administracion = 7;
+  optional ModuloEventosTecnicos modulo_eventos_tecnicos = 8;
+  optional ModuloVehiculos modulo_vehiculos = 9;
+  optional ModuloLuminarias modulo_luminarias = 10;
+  optional ModuloEmergencias modulo_emergencias = 11;
+  optional ModuloBotonBLE modulo_boton_ble = 12;
+  optional ModulosIntegraciones modulos_integraciones = 13;
+  optional ModuloHerramientas modulo_herramientas = 14;
+  repeated string ids_clientes_que_pueden_atender_eventos = 15;
+  repeated string ids_clientes_que_pueden_atender_eventos_tecnicos = 16;
+  repeated string solicitantes_emergencias = 17;
+  optional CentroDeAtencion centro_de_atencion = 18;
+}

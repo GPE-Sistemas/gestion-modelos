@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "categoria-evento.proto";
+
+message CodigoDispositivo {
+  optional string codigo = 1;
+  optional string descripcion = 2;
+  optional string id_categoria_evento = 3;
+  optional bool mostrar_zona = 4;
+  optional bool mostrar_usuario = 5;
+  optional bool armado = 6;
+  optional bool desarmado = 7;
+  optional bool detonacion = 8;
+  optional bool test = 9;
+  optional double minutos_espera_automatica = 10;
+  repeated string cierra_codigos_eventos = 11;
+  optional CategoriaEvento categoria_evento = 12;
+}

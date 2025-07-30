@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "tracker.proto";
+import "activo.proto";
+import "cliente.proto";
+
+message EventoTraccar {
+  optional string _id = 1;
+  optional string traccar_unique_id = 2;
+  optional string id_tracker = 3;
+  optional string id_activo = 4;
+  optional string id_cliente = 5;
+  optional string tipo = 6;
+  optional string fecha_creacion = 7;
+  optional string data = 8;
+  optional Tracker tracker = 9;
+  optional Activo activo = 10;
+  optional Cliente cliente = 11;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "client.proto";
+import "usuario.proto";
+
+message Token {
+  optional string _id = 1;
+  optional string access_token = 2;
+  optional string access_token_expires_at = 3;
+  optional string refresh_token = 4;
+  optional string refresh_token_expires_at = 5;
+  repeated string scope = 6;
+  optional Client client = 7;
+  optional Usuario user = 8;
+}

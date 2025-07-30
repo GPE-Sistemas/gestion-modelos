@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "periodo.proto";
+import "config-cronograma.proto";
+import "cliente.proto";
+import "ubicacion.proto";
+
+message Cronograma {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string id_ubicacion = 3;
+  optional string fecha_creacion = 4;
+  optional bool automatico = 5;
+  repeated string dias = 6;
+  optional string nombre = 7;
+  optional string descripcion = 8;
+  optional TipoDeCronograma tipo = 9;
+  repeated Periodo periodos = 10;
+  optional ConfigCronograma configuracion = 11;
+  optional Cliente cliente = 12;
+  optional Ubicacion ubicacion = 13;
+}

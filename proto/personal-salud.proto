@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "cliente.proto";
+
+message PersonalSalud {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional string nombre = 4;
+  optional string rol = 5;
+  optional string matricula = 6;
+  optional string dni = 7;
+  optional string telefono = 8;
+  optional string email = 9;
+  optional bool activo = 10;
+  optional Cliente cliente = 11;
+}

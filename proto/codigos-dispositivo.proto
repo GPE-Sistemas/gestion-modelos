@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "codigo-dispositivo.proto";
+import "cliente.proto";
+
+message CodigosDispositivo {
+  optional string _id = 1;
+  optional string nombre = 2;
+  optional TipoDispositivo tipo = 3;
+  repeated CodigoDispositivo codigos = 4;
+  optional string id_cliente = 5;
+  optional bool global = 6;
+  optional Cliente cliente = 7;
+}

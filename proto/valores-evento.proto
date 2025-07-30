@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "contact-id.proto";
+
+message ValoresEvento {
+  optional string titulo = 1;
+  optional string mensaje = 2;
+  optional string color = 3;
+  optional SonidoEvento sonido = 4;
+  optional string codigo_tracker = 5;
+  optional ContactID contact_id = 6;
+  optional string codigo_alarma = 7;
+  optional string codigo_comunicador = 8;
+  repeated string tipos_evento = 9;
+}

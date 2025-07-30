@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "evento.proto";
+import "usuario.proto";
+
+message TratamientoEvento {
+  optional string _id = 1;
+  optional string nota = 2;
+  optional string nota_interna = 3;
+  optional string fecha_creacion = 4;
+  optional estadoEvento estado = 5;
+  optional estadoEventoTecnico estado_tecnico = 6;
+  optional string espera_hasta = 7;
+  repeated string ids_eventos = 8;
+  optional string id_usuario = 9;
+  repeated Evento eventos = 10;
+  optional Usuario usuario = 11;
+}

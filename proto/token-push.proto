@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message TokenPush {
+  optional string _id = 1;
+  optional string fecha_creacion = 2;
+  optional string fecha_actualizacion = 3;
+  optional string token_push = 4;
+  optional string id_usuario = 5;
+}

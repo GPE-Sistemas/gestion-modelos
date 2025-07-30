@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "modulos.proto";
+import "cliente.proto";
+
+message Permiso {
+  optional string id_cliente = 1;
+  repeated string ids_entidades = 2;
+  repeated Rol roles = 3;
+  optional Modulos modulos = 4;
+  optional bool activo = 5;
+  optional Cliente cliente = 6;
+}

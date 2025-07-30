@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message CreateUpdateDeviceProfileChirpstack {
+  optional string device_profile = 1;
+  optional double abp_rx1delay = 2;
+  optional double abp_rx1dr_offset = 3;
+  optional double abp_rx2dr = 4;
+  optional double abp_rx2freq = 5;
+  optional string adr_algorithm_id = 6;
+  optional bool allow_roaming = 7;
+  optional bool auto_detect_measurements = 8;
+  optional double class_bping_slot_dr = 9;
+  optional double class_bping_slot_freq = 10;
+  optional double class_bping_slot_nb_k = 11;
+  optional double class_btimeout = 12;
+  optional double class_ctimeout = 13;
+  optional string description = 14;
+  optional double device_status_req_interval = 15;
+  optional bool flush_queue_on_activate = 16;
+  optional string id = 17;
+  optional bool is_relay = 18;
+  optional bool is_relay_ed = 19;
+  optional string mac_version = 20;
+  optional string measurements = 21;
+}

@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ConfigZona {
+  optional double particion = 1;
+  optional double zona = 2;
+}

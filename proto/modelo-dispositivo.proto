@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "detalles-luminarias.proto";
+import "cliente.proto";
+import "codigos-dispositivo.proto";
+
+message ModeloDispositivo {
+  optional string _id = 1;
+  optional TipoDispositivo tipo = 2;
+  optional string marca = 3;
+  optional string modelo = 4;
+  optional string formato_mensaje = 5;
+  optional string id_codigos = 6;
+  optional string id_cliente = 7;
+  optional DetallesLuminarias luminarias = 8;
+  optional bool global = 9;
+  optional Cliente cliente = 10;
+  optional CodigosDispositivo codigos = 11;
+}

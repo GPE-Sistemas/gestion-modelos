@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message ConfigCronograma {
+  optional string color = 1;
+  optional string nombre_para_mostrar = 2;
+}

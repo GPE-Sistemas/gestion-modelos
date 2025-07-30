@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "enums.proto";
+import "usuario.proto";
+import "recorrido.proto";
+
+message Vehiculo {
+  optional TipoVehiculo tipo = 1;
+  optional string patente = 2;
+  optional EstadoVehiculo estado = 3;
+  optional string modelo = 4;
+  optional string marca = 5;
+  optional string anio = 6;
+  optional string id_chofer = 7;
+  optional string id_recorrido = 8;
+  repeated string ids_recorridos = 9;
+  optional string id_externo = 10;
+  optional Usuario chofer = 11;
+  optional Recorrido recorrido = 12;
+  repeated Recorrido recorridos = 13;
+}

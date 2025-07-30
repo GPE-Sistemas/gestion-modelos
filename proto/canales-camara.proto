@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+message CanalesCamara {
+  string numero = 1;
+  string ids = 2;
+  string id = 3;
+  double width = 4;
+  double height = 5;
+}

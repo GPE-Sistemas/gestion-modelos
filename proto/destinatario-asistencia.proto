@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package gestion.modelos;
+
+import "info-adicional.proto";
+import "cliente.proto";
+
+message DestinatarioAsistencia {
+  optional string _id = 1;
+  optional string id_cliente = 2;
+  optional string fecha_creacion = 3;
+  optional string nombre = 4;
+  optional string apellido = 5;
+  optional string sexo = 6;
+  optional string dni = 7;
+  optional double edad = 8;
+  optional string obra_social = 9;
+  optional InfoAdicional info_adicional = 10;
+  optional string telefono = 11;
+  optional string email = 12;
+  optional string telefono_alternativo = 13;
+  optional string ubicacion = 14;
+  optional Cliente cliente = 15;
+}
