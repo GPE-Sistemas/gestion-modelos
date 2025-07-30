@@ -8,8 +8,9 @@ export type Rol =
   | "Consultor"
   | "Técnico"
   | "Final"
-  | "Coordinador Emergencias Médicas"
-  | "Registrador Emergencias Médicas";
+  | "Coordinador Emergencias"
+  | "Registrador Emergencias"
+  | "Móvil Emergencias";
 
 export interface IModulos {
   moduloColectivos?: boolean;
