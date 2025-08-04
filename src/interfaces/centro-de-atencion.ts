@@ -14,7 +14,6 @@ export interface ICentroDeAtencion {
   email?: string; // Email institucional
   activo?: boolean; // Si está operativo
   circuloArea?: {
-    type?: "Circle";
     center?: number[];
     radius?: number;
   }; //círculo del centro de atención
