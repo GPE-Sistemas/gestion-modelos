@@ -1,5 +1,6 @@
 import { ICliente } from "./cliente";
 import { DireccionV2 } from "../auxiliares";
+import { TipoEmergencia } from "./emergencias";
 
 export interface IInfoAdicional {
   descripcion?: string;
@@ -12,6 +13,7 @@ export interface IDestinatarioAsistencia {
 
   fechaCreacion?: string;
   nombre?: string;
+  tipoEmergencia?: TipoEmergencia;
   apellido?: string;
   sexo?: "M" | "F" | "X";
   dni?: string;
