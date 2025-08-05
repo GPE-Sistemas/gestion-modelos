@@ -9,6 +9,7 @@ export interface IEventoTraccar {
   idTracker?: string;
   idActivo?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   tipo?: 'events' | 'devices';
   //
   fechaCreacion?: string;
@@ -17,6 +18,7 @@ export interface IEventoTraccar {
   tracker?: ITracker;
   activo?: IActivo;
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
 type OmitirCreate = '_id' | 'fechaCreacion' | 'cliente' | 'tracker' | 'activo';

@@ -1,8 +1,9 @@
-import { ICliente } from "./cliente";
+import { ICliente } from './cliente';
 
 export interface ISoap {
   _id?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   fechaCreacion?: string;
 
   alta?: ISoapAlta;
@@ -15,13 +16,14 @@ export interface ISoap {
 
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateSoap extends Omit<Partial<ISoap>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateSoap extends Omit<Partial<ISoap>, OmitirUpdate> {}
 

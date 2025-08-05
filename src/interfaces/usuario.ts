@@ -1,16 +1,16 @@
-import { ICliente } from "./cliente";
+import { ICliente } from './cliente';
 
 export type Rol =
-  | "Administrador"
-  | "Operador"
-  | "Conductor"
-  | "Chofer Colectivo"
-  | "Consultor"
-  | "Técnico"
-  | "Final"
-  | "Coordinador Emergencias"
-  | "Registrador Emergencias"
-  | "Móvil Emergencias";
+  | 'Administrador'
+  | 'Operador'
+  | 'Conductor'
+  | 'Chofer Colectivo'
+  | 'Consultor'
+  | 'Técnico'
+  | 'Final'
+  | 'Coordinador Emergencias'
+  | 'Registrador Emergencias'
+  | 'Móvil Emergencias';
 
 export interface IModulos {
   moduloColectivos?: boolean;
@@ -51,18 +51,21 @@ export interface IClaveUsuarioAlarma {
 
 export interface IPermiso {
   idCliente?: string;
+  idsAncestros?: string[];
   idsEntidades?: string[];
   roles?: Rol[];
   modulos?: IModulos;
   activo?: boolean;
   // Virtual
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
 export interface IUsuario {
   _id?: string;
   identificacionInterna?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   permisos?: IPermiso[];
   //
   idExterno?: string;
@@ -73,12 +76,13 @@ export interface IUsuario {
   config?: IConfigUsuario;
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente" | "fechaCreacion";
+type OmitirCreate = '_id' | 'cliente' | 'fechaCreacion';
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "fechaCreacion";
+type OmitirUpdate = '_id' | 'cliente' | 'fechaCreacion';
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}

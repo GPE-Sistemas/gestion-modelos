@@ -1,11 +1,12 @@
-import { ICliente } from "./cliente";
-import { Dia } from "./config-evento-usuario";
-import { IUbicacion } from "./ubicacion";
+import { ICliente } from './cliente';
+import { Dia } from './config-evento-usuario';
+import { IUbicacion } from './ubicacion';
 
 export interface ICronograma {
   _id?: string;
   //
   idCliente?: string;
+  idsAncestros?: string[];
   idUbicacion?: string;
   //
   fechaCreacion?: string;
@@ -19,20 +20,21 @@ export interface ICronograma {
   configuracion?: ConfigCronograma; // Colores, el nombre de de lo que se está mostrando, etc
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   ubicacion?: IUbicacion;
 }
 
-type OmitirCreate = "_id" | "cliente" | "ubicacion";
+type OmitirCreate = '_id' | 'cliente' | 'ubicacion';
 
 export interface ICreateCronograma
   extends Omit<Partial<ICronograma>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "ubicacion";
+type OmitirUpdate = '_id' | 'cliente' | 'ubicacion';
 
 export interface IUpdateCronograma
   extends Omit<Partial<ICronograma>, OmitirUpdate> {}
 
-export type TipoDeCronograma = "despacho" | "turnos";
+export type TipoDeCronograma = 'despacho' | 'turnos';
 
 export interface Periodo {
   desde?: string; // Sale

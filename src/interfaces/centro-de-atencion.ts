@@ -1,10 +1,11 @@
-import { DireccionV2, ICoordenadas } from "../auxiliares";
-import { ICliente } from "./cliente";
-import { TipoEmergencia } from "./emergencias";
+import { DireccionV2, ICoordenadas } from '../auxiliares';
+import { ICliente } from './cliente';
+import { TipoEmergencia } from './emergencias';
 
 export interface ICentroDeAtencion {
   _id?: string;
   idCliente?: string;
+  idsAncestros?: string[];
 
   fechaCreacion?: string;
   nombre?: string;
@@ -14,21 +15,22 @@ export interface ICentroDeAtencion {
   email?: string; // Email institucional
   activo?: boolean; // Si está operativo
   circuloArea?: {
-    type?: "Circle";
+    type?: 'Circle';
     center?: number[];
     radius?: number;
   }; //círculo del centro de atención
 
   //Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id";
+type OmitirCreate = '_id';
 
 export interface ICreateCentroDeAtencion
   extends Omit<Partial<ICentroDeAtencion>, OmitirCreate> {}
 
-type OmitirUpdate = "_id";
+type OmitirUpdate = '_id';
 
 export interface IUpdateCentroDeAtencion
   extends Omit<Partial<ICentroDeAtencion>, OmitirUpdate> {}

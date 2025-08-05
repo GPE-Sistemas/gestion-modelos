@@ -1,5 +1,5 @@
-import { ICliente } from "./cliente";
-import { IDispositivoLorawan } from "./dispositivo-lorawan";
+import { ICliente } from './cliente';
+import { IDispositivoLorawan } from './dispositivo-lorawan';
 
 export interface IConsumoLuminariaGPE {
   corriente: number; // mA
@@ -14,6 +14,7 @@ export interface IReporteConsumoLuminariaGPE {
   _id?: string;
   fechaCreacion?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   idDispositivoLorawan?: string;
   // Ids de otras entidades que tienen asignado el dispositivo
   idsAsignados?: string[];
@@ -23,15 +24,16 @@ export interface IReporteConsumoLuminariaGPE {
 
   // Virtuals
   cliente?: ICliente;
+  ancestros?: ICliente[];
   dispositivoLorawan?: IDispositivoLorawan;
 }
 
-type OmitirCreate = "_id" | "fechaCreacion" | "cliente";
+type OmitirCreate = '_id' | 'fechaCreacion' | 'cliente';
 
 export interface ICreateReporteConsumoLuminariaGPE
   extends Omit<Partial<IReporteConsumoLuminariaGPE>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "fechaCreacion" | "cliente";
+type OmitirUpdate = '_id' | 'fechaCreacion' | 'cliente';
 
 export interface IUpdateReporteConsumoLuminariaGPE
   extends Omit<Partial<IReporteConsumoLuminariaGPE>, OmitirUpdate> {}

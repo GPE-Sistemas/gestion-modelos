@@ -125,6 +125,7 @@ export interface IConfigEventoUsuario {
   agrupacion?: Agrupacion;
   // Sobre que entidades se reciben las notificaciones
   idCliente?: string;
+  idsAncestros?: string[];
   idGrupo?: string;
   idEntidad?: string;
   // Los usuarios que van a recibir las notificaciones
@@ -139,6 +140,7 @@ export interface IConfigEventoUsuario {
   // Virtual
   usuarios?: IUsuario[];
   cliente?: ICliente;
+  ancestros?: ICliente[];
   grupo?: IGrupo;
   activo?: IActivo;
   luminaria?: ILuminaria;

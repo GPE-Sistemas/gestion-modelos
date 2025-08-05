@@ -1,17 +1,17 @@
-import { ICliente } from "./cliente";
-import { ITracker } from "./tracker";
-import { IDispositivoAlarma } from "./dispositivo-alarma";
-import { IActivo } from "./activo";
-import { IUsuario } from "./usuario";
+import { ICliente } from './cliente';
+import { ITracker } from './tracker';
+import { IDispositivoAlarma } from './dispositivo-alarma';
+import { IActivo } from './activo';
+import { IUsuario } from './usuario';
 
-export type CategoriaTecnica = "Alarma" | "Tracker" | "Luminaria";
+export type CategoriaTecnica = 'Alarma' | 'Tracker' | 'Luminaria';
 
 export type estadoEventoTecnico =
-  | "Pendiente"
-  | "Asignado"
-  | "En Atención"
-  | "Pendiente de Aprobación"
-  | "Finalizado";
+  | 'Pendiente'
+  | 'Asignado'
+  | 'En Atención'
+  | 'Pendiente de Aprobación'
+  | 'Finalizado';
 
 export interface IEventoTecnico {
   _id?: string;
@@ -27,6 +27,7 @@ export interface IEventoTecnico {
   idActivo?: string;
   idLuminaria?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   //
   idsClientesQuePuedenAtender?: string[];
   idsClientesAtendiendo?: string[];
@@ -38,28 +39,29 @@ export interface IEventoTecnico {
   activo?: IActivo;
   luminaria?: IActivo;
   cliente?: ICliente;
+  ancestros?: ICliente[];
   usuario?: IUsuario;
   tecnico?: IUsuario;
 }
 
 type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "tracker"
-  | "alarma"
-  | "reporte"
-  | "activo";
+  | '_id'
+  | 'cliente'
+  | 'tracker'
+  | 'alarma'
+  | 'reporte'
+  | 'activo';
 
 export interface ICreateEventoTecnico
   extends Omit<Partial<IEventoTecnico>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "tracker"
-  | "alarma"
-  | "reporte"
-  | "activo";
+  | '_id'
+  | 'cliente'
+  | 'tracker'
+  | 'alarma'
+  | 'reporte'
+  | 'activo';
 
 export interface IUpdateEventoTecnico
   extends Omit<Partial<IEventoTecnico>, OmitirUpdate> {}

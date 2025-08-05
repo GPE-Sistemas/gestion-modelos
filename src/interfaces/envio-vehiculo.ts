@@ -1,14 +1,14 @@
-import { IActivo } from "./activo";
-import { ICliente } from "./cliente";
-import { IEvento } from "./evento";
-import { IUsuario } from "./usuario";
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IEvento } from './evento';
+import { IUsuario } from './usuario';
 
 export type EstadoEnvioVehiculo =
-  | "Asignado"
-  | "En Camino"
-  | "Rechazado"
-  | "Finalizado"
-  | "En Destino";
+  | 'Asignado'
+  | 'En Camino'
+  | 'Rechazado'
+  | 'Finalizado'
+  | 'En Destino';
 
 export interface IEnvioVehiculo {
   _id?: string;
@@ -18,6 +18,7 @@ export interface IEnvioVehiculo {
   estado?: EstadoEnvioVehiculo;
   ///
   idCliente?: string;
+  idsAncestros?: string[];
   idConductor?: string;
   idsEventos?: string[];
   //Usuario que lo crea
@@ -25,6 +26,7 @@ export interface IEnvioVehiculo {
   idActivo?: string;
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   conductor?: IUsuario;
   usuario?: IUsuario;
   eventos?: IEvento[];
@@ -32,23 +34,23 @@ export interface IEnvioVehiculo {
 }
 
 type OmitirCreate =
-  | "_id"
-  | "usuario"
-  | "activo"
-  | "cliente"
-  | "conductor"
-  | "eventos";
+  | '_id'
+  | 'usuario'
+  | 'activo'
+  | 'cliente'
+  | 'conductor'
+  | 'eventos';
 
 export interface ICreateEnvioVehiculo
   extends Omit<Partial<IEnvioVehiculo>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "usuario"
-  | "activo"
-  | "cliente"
-  | "conductor"
-  | "eventos";
+  | '_id'
+  | 'usuario'
+  | 'activo'
+  | 'cliente'
+  | 'conductor'
+  | 'eventos';
 
 export interface IUpdateEnvioVehiculo
   extends Omit<Partial<IEnvioVehiculo>, OmitirUpdate> {}
