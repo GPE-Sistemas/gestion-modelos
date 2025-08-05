@@ -41,6 +41,7 @@ export interface IFranjaHoraria {
 export interface IRecorrido {
   _id?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   //
   idExterno?: string;
   idGrupo?: string;
@@ -56,6 +57,7 @@ export interface IRecorrido {
   idsUbicaciones?: string[];
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   grupo?: IGrupo;
   recorrido?: ICoordenadas[];
   recorridoOl?: ICoordenadaOL[];

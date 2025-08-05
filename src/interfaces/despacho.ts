@@ -8,6 +8,7 @@ export interface IDespacho {
   _id?: string;
   //
   idCliente?: string;
+  idsAncestros?: string[];
   idUsuario?: string;
   //
   fechaCreacion?: string;
@@ -23,6 +24,7 @@ export interface IDespacho {
   cancelado?: boolean; /// Que el despacho fue cancelado
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   usuario?: IUsuario;
   activo?: IActivo;
   chofer?: IUsuario;

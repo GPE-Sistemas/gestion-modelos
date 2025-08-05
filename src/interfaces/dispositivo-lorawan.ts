@@ -1,7 +1,7 @@
-import { IGeoJSONPoint } from "../auxiliares";
-import { ICliente } from "./cliente";
-import { IModeloDispositivo } from "./modelo-dispositivo";
-import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
+import { IGeoJSONPoint } from '../auxiliares';
+import { ICliente } from './cliente';
+import { IModeloDispositivo } from './modelo-dispositivo';
+import { IModoLuminaria, IReporteDispositivo } from './reporte-dispositivo';
 
 //Notas: En el caso de estos dispositivos:
 // Potencia de dispositivo GPE = consumo instantáneo (W)
@@ -64,11 +64,12 @@ export interface IDispositivoLuminariaWellness {
   alarma?: string;
 }
 
-export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
+export type TipoDispositivoLorawan = 'Luminaria GPE' | 'Luminaria Wellness';
 
 export interface IDispositivoLorawan {
   _id?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   idModeloDispositivo?: string;
   fechaCreacion?: string; // Dafault: Date.now
   config?: IConfigDispositivoLuminaria;
@@ -102,15 +103,16 @@ export interface IDispositivoLorawan {
 
   //Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   modeloDispositivo?: IModeloDispositivo;
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateDispositivoLorawan
   extends Omit<Partial<IDispositivoLorawan>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateDispositivoLorawan
   extends Omit<Partial<IDispositivoLorawan>, OmitirUpdate> {}

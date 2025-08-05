@@ -13,10 +13,12 @@ export interface IDocumentacion {
   descripcion?: string;
   imagenes?: string[];
   idCliente?: string;
+  idsAncestros?: string[];
   idChofer?: string;
   idActivo?: string;
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   chofer?: IUsuario;
   activo?: IActivo;
 }

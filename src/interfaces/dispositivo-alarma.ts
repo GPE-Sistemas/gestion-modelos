@@ -434,6 +434,7 @@ export interface IDispositivoAlarma {
   idModelo?: string;
   idDomicilio?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   nombre?: string;
   numeroAbonado?: string;
   sim1?: ISim;
@@ -462,6 +463,7 @@ export interface IDispositivoAlarma {
   domicilio?: IUbicacion;
   modelo?: IModeloDispositivo;
   cliente?: ICliente;
+  ancestros?: ICliente[];
   comunicador?: IModeloDispositivo;
   camaras?: ICamara[];
   serviciosContratados?: IServicioContratado[];

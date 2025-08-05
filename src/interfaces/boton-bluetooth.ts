@@ -1,5 +1,5 @@
-import { ICliente } from "./cliente";
-import { IModeloDispositivo } from "./modelo-dispositivo";
+import { ICliente } from './cliente';
+import { IModeloDispositivo } from './modelo-dispositivo';
 
 export interface IBotonBluetooth {
   _id?: string;
@@ -7,20 +7,22 @@ export interface IBotonBluetooth {
 
   fechaCreacion?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   mac?: string;
   serialNumber?: string;
 
   //Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   modeloDispositivo?: IModeloDispositivo;
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateBotonBluetooth
   extends Omit<Partial<IBotonBluetooth>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateBotonBluetooth
   extends Omit<Partial<IBotonBluetooth>, OmitirUpdate> {}

@@ -8,6 +8,7 @@ export type TipoRecordatorio = 'km' | 'fecha';
 export interface IRecordatorio {
   _id?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   idUsuario?: string;
   tipo?: TipoRecordatorio[];
   notificado?: boolean;
@@ -22,6 +23,7 @@ export interface IRecordatorio {
 
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   usuario?: IUsuario;
   activo?: IActivo;
   documentacion?: IDocumentacion;

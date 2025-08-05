@@ -9,6 +9,7 @@ export interface IServicio {
   _id?: string;
   tipo?: TipoServicio;
   idCliente?: string;
+  idsAncestros?: string[];
   idActivo?: string;
   fechaRealizacion?: string;
   fechaCreacion?: string;
@@ -19,6 +20,7 @@ export interface IServicio {
   idProveedor?: string;
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   proveedor?: IProveedor;
   activo?: IActivo;
 }

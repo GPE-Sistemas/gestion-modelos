@@ -12,7 +12,8 @@ export interface IApikey {
   modulos?: Modulo[]; // Flotas - Alarmas - etc
 
   // Populate
-  cliente?: ICliente; // Este sería el creador
+  cliente?: ICliente;
+  ancestros?: ICliente[]; // Este sería el creador
   clientes?: ICliente[]; // Estos son los elegidos para ver
 }
 

@@ -1,23 +1,24 @@
-import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from "../auxiliares";
-import { IActivo, TipoVehiculo } from "./activo";
-import { ICliente } from "./cliente";
-import { IGrupo } from "./grupo";
-import { IRecorrido } from "./recorrido";
-import { ITracker } from "./tracker";
-import { IUsuario } from "./usuario";
+import { ICoordenadaOL, ICoordenadas, IGeoJSONPoint } from '../auxiliares';
+import { IActivo, TipoVehiculo } from './activo';
+import { ICliente } from './cliente';
+import { IGrupo } from './grupo';
+import { IRecorrido } from './recorrido';
+import { ITracker } from './tracker';
+import { IUsuario } from './usuario';
 
-export type TipoTriangulacion = "GNSS" | "Wifi";
+export type TipoTriangulacion = 'GNSS' | 'Wifi';
 export interface IReporte {
   _id?: string;
   //
   idCliente?: string;
+  idsAncestros?: string[];
   idGrupo?: string;
   idTracker?: string;
   idActivo?: string;
   idRecorrido?: string;
   idChofer?: string;
   fechaCreacion?: string;
-  tipo?: "Colectivo" | "Activo" | "Tracker" | "Vehiculo";
+  tipo?: 'Colectivo' | 'Activo' | 'Tracker' | 'Vehiculo';
   geojson?: IGeoJSONPoint;
   fechaDevice?: string;
   tipoTriangulacion?: TipoTriangulacion;
@@ -45,6 +46,7 @@ export interface IReporte {
 
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   grupo?: IGrupo;
   tracker?: ITracker;
   activo?: IActivo;
@@ -55,27 +57,27 @@ export interface IReporte {
 }
 
 type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "tracker"
-  | "activo"
-  | "recorrido"
-  | "grupo"
-  | "chofer"
-  | "ubicacion"
-  | "ubicacionOl";
+  | '_id'
+  | 'cliente'
+  | 'tracker'
+  | 'activo'
+  | 'recorrido'
+  | 'grupo'
+  | 'chofer'
+  | 'ubicacion'
+  | 'ubicacionOl';
 
 export interface ICreateReporte extends Omit<Partial<IReporte>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "tracker"
-  | "activo"
-  | "recorrido"
-  | "grupo"
-  | "chofer"
-  | "ubicacion"
-  | "ubicacionOl";
+  | '_id'
+  | 'cliente'
+  | 'tracker'
+  | 'activo'
+  | 'recorrido'
+  | 'grupo'
+  | 'chofer'
+  | 'ubicacion'
+  | 'ubicacionOl';
 
 export interface IUpdateReporte extends Omit<Partial<IReporte>, OmitirUpdate> {}

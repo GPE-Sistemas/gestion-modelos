@@ -1,5 +1,5 @@
-import { ICliente } from "./cliente";
-import { ICategoriaEvento } from "./categoria-evento";
+import { ICliente } from './cliente';
+import { ICategoriaEvento } from './categoria-evento';
 
 export interface ICodigoDispositivo {
   codigo?: string;
@@ -18,13 +18,13 @@ export interface ICodigoDispositivo {
 }
 
 export type TipoDispositivo =
-  | "Tracker"
-  | "Alarma"
-  | "Comunicador"
-  | "Cámara"
-  | "Luminaria"
-  | "DispositivoLorawan"
-  | "BotonBLE";
+  | 'Tracker'
+  | 'Alarma'
+  | 'Comunicador'
+  | 'Cámara'
+  | 'Luminaria'
+  | 'DispositivoLorawan'
+  | 'BotonBLE';
 
 export interface ICodigosDispositivo {
   _id?: string;
@@ -33,17 +33,19 @@ export interface ICodigosDispositivo {
   tipo?: TipoDispositivo;
   codigos?: ICodigoDispositivo[];
   idCliente?: string;
+  idsAncestros?: string[];
   global?: boolean;
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateCodigosDispositivo
   extends Omit<Partial<ICodigosDispositivo>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateCodigosDispositivo
   extends Omit<Partial<ICodigosDispositivo>, OmitirUpdate> {}

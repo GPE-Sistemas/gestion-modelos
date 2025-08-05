@@ -1,10 +1,11 @@
-import { ICliente } from "./cliente";
-import { IRecordatorio } from "./recordatorio";
-import { IUsuario } from "./usuario";
+import { ICliente } from './cliente';
+import { IRecordatorio } from './recordatorio';
+import { IUsuario } from './usuario';
 
 export interface INotificacion {
   _id?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   idUsuario?: string;
   fechaCreacion?: string;
   fechaLeido?: string;
@@ -15,15 +16,16 @@ export interface INotificacion {
 
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   usuario?: IUsuario;
 }
 
-type OmitirCreate = "_id" | "cliente" | "usuario";
+type OmitirCreate = '_id' | 'cliente' | 'usuario';
 
 export interface ICreateNotificacion
   extends Omit<Partial<INotificacion>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "usuario";
+type OmitirUpdate = '_id' | 'cliente' | 'usuario';
 
 export interface IUpdateNotificacion
   extends Omit<Partial<INotificacion>, OmitirUpdate> {}

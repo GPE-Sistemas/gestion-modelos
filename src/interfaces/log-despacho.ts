@@ -3,6 +3,7 @@ import { ICliente } from './cliente';
 export interface ILogDespacho {
   _id: string;
   idCliente?: string;
+  idsAncestros?: string[];
   fechaCreacion?: string;
   idExternoVehiculo?: string;
   idExternoRecorrido?: string;
@@ -10,6 +11,7 @@ export interface ILogDespacho {
   fecha?: string;
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
 ////// CREATE

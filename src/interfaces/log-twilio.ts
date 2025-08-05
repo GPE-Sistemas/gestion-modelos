@@ -25,6 +25,7 @@ export interface ILogTwilio {
   _id: string;
   fechaCreacion?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   phone?: string;
   sid?: string;
   body?: string;
@@ -36,6 +37,7 @@ export interface ILogTwilio {
   errorMessage?: string;
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
 ////// CREATE

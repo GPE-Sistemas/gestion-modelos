@@ -1,6 +1,6 @@
-import { ICliente } from "./cliente";
+import { ICliente } from './cliente';
 
-export type SonidoEvento = "Silencio" | "Campana" | "Sirena";
+export type SonidoEvento = 'Silencio' | 'Campana' | 'Sirena';
 
 export interface ICategoriaEvento {
   _id?: string;
@@ -13,18 +13,20 @@ export interface ICategoriaEvento {
   noDerivar?: boolean;
   sonido?: SonidoEvento;
   idCliente?: string;
+  idsAncestros?: string[];
   default?: boolean;
   global?: boolean;
   //Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateCategoriaEvento
   extends Omit<Partial<ICategoriaEvento>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateCategoriaEvento
   extends Omit<Partial<ICategoriaEvento>, OmitirUpdate> {}

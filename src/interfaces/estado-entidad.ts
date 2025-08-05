@@ -11,12 +11,14 @@ export interface IEstadoEntidad {
   estado?: estadoCuenta;
   idEntidad?: string; /// POR DISPOSITIVO
   idCliente?: string;
+  idsAncestros?: string[];
   idUsuario?: string;
   nota?: string;
   motivos?: string[];
   vigencia?: string; // Desde cuando se aplica el estado
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   usuario?: IUsuario;
   alarma?: IDispositivoAlarma;
   tracker?: ITracker;

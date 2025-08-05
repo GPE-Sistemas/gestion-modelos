@@ -5,6 +5,7 @@ export interface ILogTrackeo {
   _id?: string;
   //
   idCliente?: string;
+  idsAncestros?: string[];
   idActivo?: string;
   fecha?: string;
   nuevaParada?: boolean;
@@ -17,6 +18,7 @@ export interface ILogTrackeo {
 
   // Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
   activo?: IActivo;
 }
 
