@@ -5,6 +5,7 @@ import { TipoEmergencia } from "./emergencias";
 export interface ICentroDeAtencion {
   _id?: string;
   idCliente?: string;
+  idsAncentros?: string[];
 
   fechaCreacion?: string;
   nombre?: string;
@@ -20,6 +21,7 @@ export interface ICentroDeAtencion {
 
   //Populate
   cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
 type OmitirCreate = "_id";

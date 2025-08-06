@@ -1,5 +1,6 @@
 import { DireccionV2 } from "../auxiliares";
 import { IActivo } from "./activo";
+import { ICentroDeAtencion } from "./centro-de-atencion";
 import { ICliente } from "./cliente";
 import { IDestinatarioAsistencia } from "./destinatario-asistencia";
 import { IEmergencia, IEmergenciaMedica } from "./emergencias";
@@ -13,9 +14,10 @@ export interface IEventoEmergencia {
   idDestinarioAsistencia?: string;
   idEmergencia?: string; // referencia a la emergencia
 
-  idActivo?: string; //referencia al vehículo
-  idChofer?: string; //referencia al
+  idActivo?: string;
+  idChofer?: string;
   idMovilUsuario?: string; //Usuario asignado para el móvil de emergencia médica
+  idCentroDeAtencion?: string;
 
   //Exclusivas de emergencias médicas
   idsMedicos?: string[]; //referencia al medico
@@ -47,6 +49,7 @@ export interface IEventoEmergencia {
   hospital?: IHospital;
   cliente?: ICliente;
   usuarioResponsable?: IUsuario;
+  centroDeAtencion?: ICentroDeAtencion;
 }
 
 export type EstadoEmergenciaMedica =

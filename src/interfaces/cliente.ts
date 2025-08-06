@@ -38,7 +38,6 @@ export interface IConfigCliente {
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   solicitantesEmergencias?: string[];
-  centrosDeAtencion?: ICentroDeAtencion[];
   credencialesAlarmas?: ICredencialesAlarma[];
 }
 

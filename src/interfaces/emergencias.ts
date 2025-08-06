@@ -24,7 +24,6 @@ export interface IEmergencia {
   codigo?: number; // Código único del caso de emergencia médica es incremental
   solicitante?: string; // Nombre del solicitante de la emergencia
   telefono?: string; // Teléfono de contacto del solicitante
-  centroDeAtencion?: ICentroDeAtencion;
   archivosAdjuntos?: IArchivosAdjuntos[];
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
