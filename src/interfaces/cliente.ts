@@ -134,6 +134,7 @@ export interface IModuloHerramientas {
 
 export interface ICliente {
   _id?: string;
+  idsAncestros?: string[];
   idPadre?: string;
   activo?: boolean;
   nombre?: string;
@@ -151,6 +152,7 @@ export interface ICliente {
   };
   // Populate
   padre?: ICliente;
+  ancestros?: ICliente[];
 }
 
 type OmitirCreate = '_id' | 'padre';
