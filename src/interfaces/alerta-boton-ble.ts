@@ -3,6 +3,7 @@ import { ILuminaria } from "./luminaria";
 
 export interface IAlertaBotonBLE {
   _id?: string;
+  idCliente?: string;
   fechaCreacion?: string;
   idDispositivoLorawan?: string;
   idLuminaria?: string;

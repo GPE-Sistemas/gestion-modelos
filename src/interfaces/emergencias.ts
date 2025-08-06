@@ -1,8 +1,8 @@
-import { DireccionV2 } from '../auxiliares';
-import { ICentroDeAtencion } from './centro-de-atencion';
-import { ICliente } from './cliente';
-import { IDestinatarioAsistencia } from './destinatario-asistencia';
-import { IEventoEmergencia } from './evento-emergencia';
+import { DireccionV2 } from "../auxiliares";
+import { ICentroDeAtencion } from "./centro-de-atencion";
+import { ICliente } from "./cliente";
+import { IDestinatarioAsistencia } from "./destinatario-asistencia";
+import { IEventoEmergencia } from "./evento-emergencia";
 
 //EMERGENCIA MÉDICA
 export interface IEmergencia {
@@ -25,7 +25,6 @@ export interface IEmergencia {
   codigo?: number; // Código único del caso de emergencia médica es incremental
   solicitante?: string; // Nombre del solicitante de la emergencia
   telefono?: string; // Teléfono de contacto del solicitante
-  centroDeAtencion?: ICentroDeAtencion;
   archivosAdjuntos?: IArchivosAdjuntos[];
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
@@ -47,13 +46,13 @@ export interface IEmergencia {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export type PrioridadEmergencia =
-  | 'Baja'
-  | 'Media'
-  | 'Alta'
-  | 'Crítica'
-  | 'Óbito'; //Óbito es exclusiva de emergencia médica
+  | "Baja"
+  | "Media"
+  | "Alta"
+  | "Crítica"
+  | "Óbito"; //Óbito es exclusiva de emergencia médica
 
-export type TipoEmergencia = 'Médica' | 'Bombero';
+export type TipoEmergencia = "Médica" | "Bombero";
 
 export interface IArchivosAdjuntos {
   fechaSubida?: string;
@@ -74,12 +73,12 @@ export interface IEmergenciaBomberos {
   //Por ahora no hay propiedades específicas de emergenciaBomberos
 }
 
-type OmitirCreate = '_id';
+type OmitirCreate = "_id";
 
 export interface ICreateEmergencia
   extends Omit<Partial<IEmergencia>, OmitirCreate> {}
 
-type OmitirUpdate = '_id';
+type OmitirUpdate = "_id";
 
 export interface IUpdateEmergencia
   extends Omit<Partial<IEmergencia>, OmitirUpdate> {}

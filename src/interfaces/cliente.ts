@@ -1,4 +1,4 @@
-import { ICentroDeAtencion } from './centro-de-atencion';
+import { ICentroDeAtencion } from "./centro-de-atencion";
 
 export interface IImagenesCliente {
   icono?: string;
@@ -15,7 +15,7 @@ export interface ITemaCliente {
 }
 
 export interface ICredencialesAlarma {
-  tipo?: 'Garnet Titatium';
+  tipo?: "Garnet Titatium";
   usuario?: string;
   password?: string;
 }
@@ -38,13 +38,12 @@ export interface IConfigCliente {
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   solicitantesEmergencias?: string[];
-  centroDeAtencion?: ICentroDeAtencion;
   credencialesAlarmas?: ICredencialesAlarma[];
 }
 
-export type ITipoCliente = 'Mayorista' | 'Minorista' | 'Final';
+export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
 
-export type EstadoCuenta = 'Activo' | 'Suspendido' | 'Moroso';
+export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
 export interface IModulosIntegraciones {
   activo?: boolean;
   moduloBotonDePanico?: IModuloBotonDePanico;
@@ -147,7 +146,7 @@ export interface ICliente {
   habilitado?: boolean;
   apikeyBotonBLE?: string;
   poligono?: {
-    type: 'MultiPolygon';
+    type: "MultiPolygon";
     coordinates: [number, number][][][];
   };
   // Populate
@@ -155,10 +154,10 @@ export interface ICliente {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = '_id' | 'padre';
+type OmitirCreate = "_id" | "padre";
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'nivel' | 'tipoCliente' | 'fechaCreacion' | 'padre';
+type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion" | "padre";
 
 export interface IUpdateCliente extends Omit<Partial<ICliente>, OmitirUpdate> {}
