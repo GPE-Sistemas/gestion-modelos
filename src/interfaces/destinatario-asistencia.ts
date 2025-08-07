@@ -1,5 +1,6 @@
-import { ICliente } from './cliente';
-import { DireccionV2 } from '../auxiliares';
+import { ICliente } from "./cliente";
+import { DireccionV2 } from "../auxiliares";
+import { TipoEmergencia } from "./emergencias";
 
 export interface IInfoAdicional {
   descripcion?: string;
@@ -13,8 +14,9 @@ export interface IDestinatarioAsistencia {
 
   fechaCreacion?: string;
   nombre?: string;
+  tipoEmergencia?: TipoEmergencia;
   apellido?: string;
-  sexo?: 'M' | 'F' | 'X';
+  sexo?: "M" | "F" | "X";
   dni?: string;
   edad?: number;
   obraSocial?: string;
@@ -29,12 +31,12 @@ export interface IDestinatarioAsistencia {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = '_id';
+type OmitirCreate = "_id";
 
 export interface ICreateDestinatarioAsistencia
   extends Omit<Partial<IDestinatarioAsistencia>, OmitirCreate> {}
 
-type OmitirUpdate = '_id';
+type OmitirUpdate = "_id";
 
 export interface IUpdateDestinatarioAsistencia
   extends Omit<Partial<IDestinatarioAsistencia>, OmitirUpdate> {}
