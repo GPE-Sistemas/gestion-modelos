@@ -39,7 +39,7 @@ export interface IEmergencia {
   emergenciaBomberos?: IEmergenciaBomberos;
 
   //Las emergencias importadas sólo sirven para las métricas, no se muestran en el listado
-  importado?: boolean;
+  importada?: boolean;
 
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
