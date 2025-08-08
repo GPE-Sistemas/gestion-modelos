@@ -18,8 +18,8 @@ export interface IEmergencia {
   //Fechas clave de la emergencia
   fechaCreacion?: string;
   fechaPrimeraAsignacion?: string;
-  fechaLlegadaDestino?: string;
   fechaSalidaCentro?: string;
+  fechaLlegadaDestino?: string;
   fechaFinalizacion?: string;
 
   cantidadReasignaciones?: number; //Cuenta la cantidad de reasignaciones que tuvo la emergencia
