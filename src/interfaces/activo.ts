@@ -39,8 +39,6 @@ export interface IVehiculo {
   modelo?: string;
   marca?: string;
   anio?: string;
-  fechaAlta?: string;
-  imagenes?: string[];
   //
   idChofer?: string;
   idRecorrido?: string;
@@ -60,6 +58,9 @@ export interface IActivo {
   idsAncestros?: string[];
   idGrupo?: string;
   idTracker?: string;
+  ///alta de activo
+  fechaAlta?: string;
+  imagenes?: string[];
   /**
    * El id del tracker asignado en la plataforma traccar para obtener el vehiculo rapido con los reportes de traccar
    */
