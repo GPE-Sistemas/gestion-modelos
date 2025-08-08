@@ -17,9 +17,10 @@ export interface IEmergencia {
 
   //Fechas clave de la emergencia
   fechaCreacion?: string;
-  fechaFinalizacion?: string;
   fechaPrimeraAsignacion?: string;
+  fechaSalidaCentro?: string;
   fechaLlegadaDestino?: string;
+  fechaFinalizacion?: string;
 
   cantidadReasignaciones?: number; //Cuenta la cantidad de reasignaciones que tuvo la emergencia
   codigo?: number; // Código único del caso de emergencia médica es incremental
