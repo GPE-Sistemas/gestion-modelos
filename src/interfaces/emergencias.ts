@@ -38,6 +38,9 @@ export interface IEmergencia {
   emergenciaMedica?: IEmergenciaMedica;
   emergenciaBomberos?: IEmergenciaBomberos;
 
+  //Las emergencias importadas sólo sirven para las métricas, no se muestran en el listado
+  importado?: boolean;
+
   //Populate
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
   cliente?: ICliente;
