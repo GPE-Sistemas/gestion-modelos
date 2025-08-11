@@ -49,12 +49,12 @@ export interface ICodigosDispositivo {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = "_id" | "cliente" | "ancestros";
 
 export interface ICreateCodigosDispositivo
   extends Omit<Partial<ICodigosDispositivo>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = "_id" | "cliente" | "ancestros";
 
 export interface IUpdateCodigosDispositivo
   extends Omit<Partial<ICodigosDispositivo>, OmitirUpdate> {}
