@@ -74,7 +74,7 @@ export interface IEmergenciaMedica {
 }
 
 export interface IEmergenciaBomberos {
-  //Por ahora no hay propiedades específicas de emergenciaBomberos
+  irCuartel: boolean; //Cuando se crea una emergencia de bombero, quienes la reciben pueden confirmar su asistencia al cuartel
 }
 
 type OmitirCreate = "_id";
