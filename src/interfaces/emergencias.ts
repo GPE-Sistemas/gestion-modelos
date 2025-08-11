@@ -74,7 +74,7 @@ export interface IEmergenciaMedica {
 }
 
 export interface IEmergenciaBomberos {
-  irCuartel: boolean; //Cuando se crea una emergencia de bombero, quienes la reciben pueden confirmar su asistencia al cuartel
+  irCuartel?: string[]; //Acá irán todos los usuarios que confirman ir al cuartel
 }
 
 type OmitirCreate = "_id";
