@@ -1,16 +1,16 @@
-import { ICliente } from './cliente';
+import { ICliente } from "./cliente";
 
 export type Rol =
-  | 'Administrador'
-  | 'Operador'
-  | 'Conductor'
-  | 'Chofer Colectivo'
-  | 'Consultor'
-  | 'Técnico'
-  | 'Final'
-  | 'Coordinador Emergencias'
-  | 'Registrador Emergencias'
-  | 'Móvil Emergencias';
+  | "Administrador"
+  | "Operador"
+  | "Conductor"
+  | "Chofer Colectivo"
+  | "Consultor"
+  | "Técnico"
+  | "Final"
+  | "Coordinador Emergencias"
+  | "Registrador Emergencias"
+  | "Móvil Emergencias";
 
 export interface IModulos {
   moduloColectivos?: boolean;
@@ -42,6 +42,7 @@ export interface IConfigUsuario {
   cantMapasVehiculos?: number;
   noMostrarGuardarClaveAlarma?: boolean;
   clavesAlarma?: IClaveUsuarioAlarma[];
+  tokenPush?: string; //tokens para las notificaciones push
 }
 
 export interface IClaveUsuarioAlarma {
@@ -79,10 +80,10 @@ export interface IUsuario {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'fechaCreacion';
+type OmitirCreate = "_id" | "cliente" | "fechaCreacion";
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'fechaCreacion';
+type OmitirUpdate = "_id" | "cliente" | "fechaCreacion";
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}
