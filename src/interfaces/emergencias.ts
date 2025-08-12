@@ -74,7 +74,7 @@ export interface IEmergenciaMedica {
 }
 
 export interface IEmergenciaBomberos {
-  //Por ahora no hay propiedades específicas de emergenciaBomberos
+  irCuartel?: string[]; //Acá irán todos los usuarios que confirman ir al cuartel
 }
 
 type OmitirCreate = "_id";
