@@ -42,7 +42,6 @@ export interface IConfigUsuario {
   cantMapasVehiculos?: number;
   noMostrarGuardarClaveAlarma?: boolean;
   clavesAlarma?: IClaveUsuarioAlarma[];
-  tokenPush?: string; //tokens para las notificaciones push
 }
 
 export interface IClaveUsuarioAlarma {
