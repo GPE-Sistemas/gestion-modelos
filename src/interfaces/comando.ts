@@ -21,6 +21,7 @@ export interface IComando {
   payload?: string;
   // Tracker
   idTracker?: string;
+  respuesta?: string;
   // lorawan
   // Downlink
   deveui?: string;
