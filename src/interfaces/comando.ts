@@ -1,26 +1,31 @@
-import { ICliente } from './cliente';
-import { IDispositivoLorawan } from './dispositivo-lorawan';
-import { IUsuario } from './usuario';
+import { ICliente } from "./cliente";
+import { IDispositivoLorawan } from "./dispositivo-lorawan";
+import { ITracker } from "./tracker";
+import { IUsuario } from "./usuario";
 
 export type IEstadoComando =
-  | 'Enviado'
-  | 'Recibido'
-  | 'Ejecutado'
-  | 'No Ejecutado';
+  | "Enviado"
+  | "Recibido"
+  | "Ejecutado"
+  | "En Cola"
+  | "No Ejecutado";
 
 export interface IComando {
   _id?: string;
-  // Downlink
-  deveui?: string;
-  puerto?: number;
-  payload?: string;
-  //
-  nombre?: string; // Ej: Cambio dimerizacion
-  descripcion?: string; /// Cambio dimerizacion 50%
   idCliente?: string;
   idsAncestros?: string[];
   idUsuario?: string;
-  fechaCreacion?: string; // Default: Date.now
+  nombre?: string;
+  descripcion?: string;
+  fechaCreacion?: string;
+  payload?: string;
+  // Tracker
+  idTracker?: string;
+  // lorawan
+  // Downlink
+  deveui?: string;
+  puerto?: number;
+  //
   fechaActualizacion?: string;
   estado?: IEstadoComando; // Default: Enviado
   fallos?: number;
@@ -28,6 +33,7 @@ export interface IComando {
   idChirpstack?: string;
 
   // Virtuals
+  tracker?: ITracker;
   cliente?: ICliente;
   ancestros?: ICliente[];
   usuario?: IUsuario;
@@ -35,18 +41,20 @@ export interface IComando {
 }
 
 type OmitirCreate =
-  | '_id'
-  | 'fechaCreacion'
-  | 'estado'
-  | 'cliente'
-  | 'usuario'
-  | 'dispositivo';
+  | "_id"
+  | "fechaCreacion"
+  | "estado"
+  | "cliente"
+  | "usuario"
+  | "tracker"
+  | "dispositivo";
 export interface ICreateComando extends Omit<Partial<IComando>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | '_id'
-  | 'fechaCreacion'
-  | 'cliente'
-  | 'usuario'
-  | 'dispositivo';
+  | "_id"
+  | "fechaCreacion"
+  | "cliente"
+  | "usuario"
+  | "tracker"
+  | "dispositivo";
 export interface IUpdateComando extends Omit<Partial<IComando>, OmitirUpdate> {}
