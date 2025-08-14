@@ -46,6 +46,7 @@ type OmitirCreate =
   | "fechaCreacion"
   | "estado"
   | "cliente"
+  | "ancestros"
   | "usuario"
   | "tracker"
   | "dispositivo";
@@ -56,6 +57,7 @@ type OmitirUpdate =
   | "fechaCreacion"
   | "cliente"
   | "usuario"
+  | "ancestros"
   | "tracker"
   | "dispositivo";
 export interface IUpdateComando extends Omit<Partial<IComando>, OmitirUpdate> {}
