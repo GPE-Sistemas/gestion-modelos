@@ -44,7 +44,6 @@ export interface IComando {
 type OmitirCreate =
   | "_id"
   | "fechaCreacion"
-  | "estado"
   | "cliente"
   | "ancestros"
   | "usuario"
