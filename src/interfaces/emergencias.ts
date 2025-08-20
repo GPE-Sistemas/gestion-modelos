@@ -12,8 +12,8 @@ export interface IEmergencia {
   idCliente?: string;
   idsAncestros?: string[];
   tipo?: TipoEmergencia;
-  prioridadApertura?: PrioridadEmergencia; //Prioridad de apertura de la emergencia
-  prioridadCierre?: PrioridadEmergencia; //Prioridad asignada por el personal correspondiente
+  prioridadApertura?: PrioridadEmergenciaMedica | PrioridadEmergenciaBombero; //Prioridad de apertura de la emergencia
+  prioridadCierre?: PrioridadEmergenciaMedica | PrioridadEmergenciaBombero; //Prioridad asignada por el personal correspondiente
 
   //Fechas clave de la emergencia
   fechaCreacion?: string;
@@ -49,19 +49,11 @@ export interface IEmergencia {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export type PrioridadEmergencia =
-  //Emergencia bomberos
-  | "Baja"
-  | "Media"
-  | "Alta"
-  | "Crítica"
-  | "Óbito"
+export type PrioridadEmergenciaMedica = "Verde" | "Amarillo" | "Rojo" | "Negro";
 
-  //Emergencia médica
-  | "Verde"
-  | "Amarillo"
-  | "Rojo"
-  | "Negro";
+export type PrioridadEmergenciaBombero =
+  //Emergencia bomberos
+  "Baja" | "Media" | "Alta" | "Crítica" | "Óbito";
 
 export type TipoEmergencia = "Médica" | "Bombero";
 
