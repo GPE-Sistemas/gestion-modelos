@@ -52,8 +52,11 @@ export interface IEmergencia {
 export type PrioridadEmergenciaMedica = "Verde" | "Amarillo" | "Rojo" | "Negro";
 
 export type PrioridadEmergenciaBombero =
-  //Emergencia bomberos
-  "Baja" | "Media" | "Alta" | "Crítica" | "Óbito";
+  | "Baja"
+  | "Media"
+  | "Alta"
+  | "Crítica"
+  | "Óbito";
 
 export type TipoEmergencia = "Médica" | "Bombero";
 
