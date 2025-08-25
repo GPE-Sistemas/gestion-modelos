@@ -1,5 +1,3 @@
-import { ICentroDeAtencion } from "./centro-de-atencion";
-
 export interface IImagenesCliente {
   icono?: string;
   banner?: string;
