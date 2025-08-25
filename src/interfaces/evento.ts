@@ -1,13 +1,13 @@
-import { ICliente } from './cliente';
-import { ITracker } from './tracker';
-import { IDispositivoAlarma } from './dispositivo-alarma';
-import { IReporte } from './reporte';
-import { IActivo } from './activo';
-import { IConfigEventoUsuario } from './config-evento-usuario';
-import { SonidoEvento } from './categoria-evento';
-import { IUsuario } from './usuario';
-import { ILuminaria } from './luminaria';
-import { IBotonBluetooth } from './boton-bluetooth';
+import { ICliente } from "./cliente";
+import { ITracker } from "./tracker";
+import { IDispositivoAlarma } from "./dispositivo-alarma";
+import { IReporte } from "./reporte";
+import { IActivo } from "./activo";
+import { IConfigEventoUsuario } from "./config-evento-usuario";
+import { SonidoEvento } from "./categoria-evento";
+import { IUsuario } from "./usuario";
+import { ILuminaria } from "./luminaria";
+import { IBotonBluetooth } from "./boton-bluetooth";
 
 export interface IContactID {
   numeroCuenta?: string;
@@ -20,21 +20,21 @@ export interface IContactID {
 }
 
 export type estadoEvento =
-  | 'Sin Tratamiento'
-  | 'Pendiente'
-  | 'En Atención'
-  | 'En Espera'
-  | 'Liberada'
-  | 'Finalizada';
+  | "Sin Tratamiento"
+  | "Pendiente"
+  | "En Atención"
+  | "En Espera"
+  | "Liberada"
+  | "Finalizada";
 
 export type tipoEvento =
-  | 'Colectivo'
-  | 'Activo'
-  | 'Tracker'
-  | 'Vehiculo'
-  | 'Alarma'
-  | 'Luminaria'
-  | 'BotonBLE';
+  | "Colectivo"
+  | "Activo"
+  | "Tracker"
+  | "Vehiculo"
+  | "Alarma"
+  | "Luminaria"
+  | "BotonBLE";
 export interface IValoresEvento {
   titulo?: string;
   mensaje?: string;
@@ -46,7 +46,7 @@ export interface IValoresEvento {
   contactId?: IContactID;
   codigoAlarma?: string;
   codigoComunicador?: string;
-  tiposEvento?: ('Armado' | 'Desarmado' | 'Detonación' | 'Test')[]; // Armado, Desarmado, detonacion, etc
+  tiposEvento?: ("Armado" | "Desarmado" | "Detonación" | "Test")[]; // Armado, Desarmado, detonacion, etc
   // Otros campos
   [key: string]: any;
 }
@@ -68,6 +68,7 @@ export interface IEvento {
   prioridad?: number;
   repetido?: number;
   fechaUltimoRepetido?: string;
+  tiempoRespuesta?: number; // Tiempo en segundos desde que se crea el evento hasta que se da un tratamiento
   //
   //ids Asignados
   idTracker?: string;
@@ -97,25 +98,25 @@ export interface IEvento {
 }
 
 type OmitirCreate =
-  | '_id'
-  | 'cliente'
-  | 'tracker'
-  | 'alarma'
-  | 'reporte'
-  | 'activo'
-  | 'botonBluetooth'
-  | 'configEventoUsuario';
+  | "_id"
+  | "cliente"
+  | "tracker"
+  | "alarma"
+  | "reporte"
+  | "activo"
+  | "botonBluetooth"
+  | "configEventoUsuario";
 
 export interface ICreateEvento extends Omit<Partial<IEvento>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | '_id'
-  | 'cliente'
-  | 'tracker'
-  | 'alarma'
-  | 'reporte'
-  | 'activo'
-  | 'botonBluetooth'
-  | 'configEventoUsuario';
+  | "_id"
+  | "cliente"
+  | "tracker"
+  | "alarma"
+  | "reporte"
+  | "activo"
+  | "botonBluetooth"
+  | "configEventoUsuario";
 
 export interface IUpdateEvento extends Omit<Partial<IEvento>, OmitirUpdate> {}
