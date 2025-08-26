@@ -110,6 +110,7 @@ export interface IModuloAdministracion {
   crearUsuarios?: boolean;
   crearServicios?: boolean;
   crearApikeys?: boolean;
+  crearBotonesBLE?: boolean;
   crearDispositivosLorawan?: boolean;
   compartirDispositivosLorawan?: boolean;
 }
