@@ -26,6 +26,7 @@ export interface IModulos {
   moduloEventosTecnicos?: boolean;
   moduloVehiculos?: boolean;
   moduloHerramientas?: boolean;
+  moduloIntegraciones?: boolean;
 }
 
 export interface IDatosPersonales {
