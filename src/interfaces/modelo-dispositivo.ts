@@ -1,6 +1,12 @@
-import { ICliente } from './cliente';
-import { ICodigosDispositivo, TipoDispositivo } from './codigos-dispositivo';
+import { ICliente } from "./cliente";
+import { ICodigosDispositivo, TipoDispositivo } from "./codigos-dispositivo";
 
+export type FormatosMensajeComunicador =
+  | "Garnet-Titanium"
+  | "TECHNO 123"
+  | "Netio"
+  | "Nanocomm ED5200"
+  | "Garnet";
 export interface PotenciasDimerizacionLuminarias {
   dim20?: number;
   dim40?: number;
@@ -20,7 +26,7 @@ export interface IModeloDispositivo {
   tipo?: TipoDispositivo;
   marca?: string;
   modelo?: string;
-  formatoMensaje?: string;
+  formatoMensaje?: FormatosMensajeComunicador;
   idCodigos?: string;
   idCliente?: string;
   idsAncestros?: string[];
@@ -33,12 +39,12 @@ export interface IModeloDispositivo {
   codigos?: ICodigosDispositivo;
 }
 
-type OmitirCreate = '_id' | 'codigos' | 'cliente';
+type OmitirCreate = "_id" | "codigos" | "cliente";
 
 export interface ICreateModeloDispositivo
   extends Omit<Partial<IModeloDispositivo>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'codigos' | 'cliente';
+type OmitirUpdate = "_id" | "codigos" | "cliente";
 
 export interface IUpdateModeloDispositivo
   extends Omit<Partial<IModeloDispositivo>, OmitirUpdate> {}
