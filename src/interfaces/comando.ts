@@ -6,6 +6,7 @@ import { IUsuario } from "./usuario";
 export type IEstadoComando =
   | "Enviado"
   | "Recibido"
+  | "No Recibido"
   | "Ejecutado"
   | "En Cola"
   | "No Ejecutado";
