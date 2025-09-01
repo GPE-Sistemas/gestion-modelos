@@ -1,7 +1,8 @@
-import { IGeoJSONPoint } from '../auxiliares';
-import { ICliente } from './cliente';
-import { IModeloDispositivo } from './modelo-dispositivo';
-import { IModoLuminaria, IReporteDispositivo } from './reporte-dispositivo';
+import { IGeoJSONPoint } from "../auxiliares";
+import { ICliente } from "./cliente";
+import { IComando } from "./comando";
+import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
 
 //Notas: En el caso de estos dispositivos:
 // Potencia de dispositivo GPE = consumo instantáneo (W)
@@ -64,7 +65,7 @@ export interface IDispositivoLuminariaWellness {
   alarma?: string;
 }
 
-export type TipoDispositivoLorawan = 'Luminaria GPE' | 'Luminaria Wellness';
+export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
 
 export interface IDispositivoLorawan {
   _id?: string;
@@ -78,6 +79,7 @@ export interface IDispositivoLorawan {
   frecReporte?: number;
   tipo?: TipoDispositivoLorawan;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
+  ultimoComando?: IComando; //Último downlink enviado a este dispositivo
 
   // Datos para el lora server
   deveui?: string;
@@ -107,12 +109,12 @@ export interface IDispositivoLorawan {
   modeloDispositivo?: IModeloDispositivo;
 }
 
-type OmitirCreate = '_id' | 'cliente';
+type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateDispositivoLorawan
   extends Omit<Partial<IDispositivoLorawan>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente';
+type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateDispositivoLorawan
   extends Omit<Partial<IDispositivoLorawan>, OmitirUpdate> {}
