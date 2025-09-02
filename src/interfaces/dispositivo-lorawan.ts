@@ -122,6 +122,7 @@ export interface IDimmerCalendarioConfig {
 export interface IPuntoDimmer {
   hora: string;
   porcentaje: number;
+  activo: boolean;
 }
 
 type OmitirCreate = "_id" | "cliente";
