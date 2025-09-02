@@ -119,7 +119,7 @@ export interface DimmerCalendarioConfig {
   porcentajeDefecto: number;
 }
 //Información para cada punto del modo calendario
-interface PuntoDimmer {
+export interface PuntoDimmer {
   hora: string;
   porcentaje: number;
   activo: boolean;
