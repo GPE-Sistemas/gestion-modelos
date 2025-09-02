@@ -58,7 +58,7 @@ export interface IDispositivoLuminariaGPE {
   factorPotencia?: number;
 
   //Configuración modo calendario
-  configCalendario?: DimmerCalendarioConfig;
+  configCalendario?: IDimmerCalendarioConfig;
 }
 export interface IDispositivoLuminariaWellness {
   mode?: IModoLuminaria;
@@ -113,13 +113,13 @@ export interface IDispositivoLorawan {
 }
 
 //Información para el modo calendario
-export interface DimmerCalendarioConfig {
+export interface IDimmerCalendarioConfig {
   calendarioHabilitado: boolean;
-  puntos: PuntoDimmer[];
+  puntos: IPuntoDimmer[];
   porcentajeDefecto: number;
 }
 //Información para cada punto del modo calendario
-export interface PuntoDimmer {
+export interface IPuntoDimmer {
   hora: string;
   porcentaje: number;
   activo: boolean;
