@@ -56,6 +56,9 @@ export interface IDispositivoLuminariaGPE {
   energia?: number; //kWh
   energiaTotal?: number; //kWh
   factorPotencia?: number;
+
+  //Configuración modo calendario
+  configCalendario?: IDimmerCalendarioConfig;
 }
 export interface IDispositivoLuminariaWellness {
   mode?: IModoLuminaria;
@@ -107,6 +110,19 @@ export interface IDispositivoLorawan {
   cliente?: ICliente;
   ancestros?: ICliente[];
   modeloDispositivo?: IModeloDispositivo;
+}
+
+//Información para el modo calendario
+export interface IDimmerCalendarioConfig {
+  calendarioHabilitado: boolean;
+  puntos: IPuntoDimmer[];
+  porcentajeDefecto: number;
+}
+//Información para cada punto del modo calendario
+export interface IPuntoDimmer {
+  hora: string;
+  porcentaje: number;
+  activo: boolean;
 }
 
 type OmitirCreate = "_id" | "cliente";
