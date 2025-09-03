@@ -8,10 +8,15 @@ export type FormatosMensajeComunicador =
   | "Nanocomm ED5200"
   | "Garnet";
 export interface PotenciasDimerizacionLuminarias {
+  dim10?: number;
   dim20?: number;
+  dim30?: number;
   dim40?: number;
+  dim50?: number;
   dim60?: number;
+  dim70?: number;
   dim80?: number;
+  dim90?: number;
   dim100?: number;
 }
 export interface IDetallesLuminarias {
