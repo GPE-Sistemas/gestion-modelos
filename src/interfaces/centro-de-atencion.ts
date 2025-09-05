@@ -11,7 +11,6 @@ export interface ICentroDeAtencion {
   fechaCreacion?: string;
   nombre?: string;
   tipoEmergencia?: TipoEmergencia;
-  direccion?: DireccionV2;
   telefono?: string; // Teléfono de contacto
   email?: string; // Email institucional
   activo?: boolean; // Si está operativo
