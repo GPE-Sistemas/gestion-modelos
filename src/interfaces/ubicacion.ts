@@ -5,6 +5,7 @@ export type ICategoriaUbicacion =
   | "Normal"
   | "Terminal"
   | "Domicilio"
+  | "Activos"
   | "Centro de Atención"
   | "Hospital";
 
