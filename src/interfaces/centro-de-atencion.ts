@@ -1,6 +1,7 @@
 import { DireccionV2, ICoordenadas } from "../auxiliares";
 import { ICliente } from "./cliente";
 import { TipoEmergencia } from "./emergencias";
+import { IUbicacion } from "./ubicacion";
 
 export interface ICentroDeAtencion {
   _id?: string;
@@ -10,10 +11,10 @@ export interface ICentroDeAtencion {
   fechaCreacion?: string;
   nombre?: string;
   tipoEmergencia?: TipoEmergencia;
-  direccion?: DireccionV2;
   telefono?: string; // Teléfono de contacto
   email?: string; // Email institucional
   activo?: boolean; // Si está operativo
+  idUbicacion?: string;
   circuloArea?: {
     center?: number[];
     radius?: number;
@@ -22,6 +23,7 @@ export interface ICentroDeAtencion {
   //Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
+  ubicacion?: IUbicacion;
 }
 
 type OmitirCreate = "_id";

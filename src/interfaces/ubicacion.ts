@@ -1,7 +1,13 @@
-import { IGeoJSON } from '../auxiliares';
-import { ICliente } from './cliente';
+import { IGeoJSON } from "../auxiliares";
+import { ICliente } from "./cliente";
 
-export type ICategoriaUbicacion = 'Normal' | 'Terminal' | 'Domicilio';
+export type ICategoriaUbicacion =
+  | "Normal"
+  | "Terminal"
+  | "Domicilio"
+  | "Activos"
+  | "Centro de Atención"
+  | "Hospital";
 
 export interface IUbicacion {
   _id?: string;
@@ -19,10 +25,10 @@ export interface IUbicacion {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = '_id' | 'cliente';
+type OmitirCreate = "_id" | "cliente";
 export interface ICreateUbicacion
   extends Omit<Partial<IUbicacion>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente';
+type OmitirUpdate = "_id" | "cliente";
 export interface IUpdateUbicacion
   extends Omit<Partial<IUbicacion>, OmitirUpdate> {}
