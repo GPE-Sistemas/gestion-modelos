@@ -32,7 +32,7 @@ export interface IConfigCliente {
   moduloEmergencias?: IModuloEmergencias;
   moduloBotonBLE?: IModuloBotonBLE;
   modulosIntegraciones?: IModulosIntegraciones;
-  moduloHerramientas?: IModuloHerramientas;
+  moduloLogs?: IModuloLogs;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   solicitantesEmergencias?: string[];
@@ -127,7 +127,7 @@ export interface IModuloEventosTecnicos {
   activo?: boolean;
 }
 
-export interface IModuloHerramientas {
+export interface IModuloLogs {
   activo?: boolean;
 }
 

@@ -25,7 +25,7 @@ export interface IModulos {
   moduloAdministracion?: boolean;
   moduloEventosTecnicos?: boolean;
   moduloVehiculos?: boolean;
-  moduloHerramientas?: boolean;
+  moduloLogs?: boolean;
   moduloIntegraciones?: boolean;
 }
 
