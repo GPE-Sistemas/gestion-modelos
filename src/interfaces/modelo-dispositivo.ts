@@ -6,7 +6,9 @@ export type FormatosMensajeComunicador =
   | "TECHNO 123"
   | "Netio"
   | "Nanocomm ED5200"
-  | "Garnet";
+  | "Garnet"
+  | "Dahua";
+
 export interface PotenciasDimerizacionLuminarias {
   dim10?: number;
   dim20?: number;
