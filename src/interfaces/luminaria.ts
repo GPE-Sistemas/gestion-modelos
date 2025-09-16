@@ -12,6 +12,7 @@ export interface ILuminaria {
   fechaCreacion?: string; // Default: Date.now
   idCliente?: string;
   idsAncestros?: string[];
+  idUltimoReporte?: string;
   deveui?: string; // Deveui del dispositivo lorawan
   identificacion?: string;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria
@@ -22,12 +23,13 @@ export interface ILuminaria {
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
-  ultimoReporte?: IReporteDispositivo;
+
   // Virtuals
   cliente?: ICliente;
   ancestros?: ICliente[];
   dispositivo?: IDispositivoLorawan;
   modeloDispositivo?: IModeloDispositivo;
+  ultimoReporte?: IReporteDispositivo;
   grupos?: IGrupo[];
 }
 
