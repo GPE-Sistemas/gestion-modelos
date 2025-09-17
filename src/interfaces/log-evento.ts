@@ -11,6 +11,7 @@ export interface ILogEvento {
   puerto?: number;
   battery?: number;
   fCnt?: number;
+  margin?: number;
 
   //Populate
   dispositivoLorawan?: IDispositivoLorawan;
