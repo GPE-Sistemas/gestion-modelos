@@ -20,7 +20,7 @@ export interface ILuminaria {
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idsGrupos?: string[];
   tiempoEncendida?: string; //En horas minutos y segundos
-  resetearEncendidos?: boolean; // Indica si se debe resetear el contador de tiempo encendida en el proximo reporte
+  resetearEncendido?: boolean; // Indica si se debe resetear el contador de tiempo encendida en el proximo reporte
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
