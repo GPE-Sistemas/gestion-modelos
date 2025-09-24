@@ -19,7 +19,7 @@ export interface ILuminaria {
   direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idsGrupos?: string[];
-  tiempoEncendida?: string; //En horas minutos y segundos
+  tiempoEncendida?: number; //En horas
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
