@@ -75,10 +75,11 @@ export interface IDispositivoLorawan {
   idCliente?: string;
   idsAncestros?: string[];
   idModeloDispositivo?: string;
-  fechaCreacion?: string; // Dafault: Date.now
+  fechaCreacion?: string;
   config?: IConfigDispositivoLuminaria;
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteDispositivo;
+  margin?: number; //Es la señal del dispositivo, expresada en dB
   frecReporte?: number;
   tipo?: TipoDispositivoLorawan;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
