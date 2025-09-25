@@ -1,6 +1,13 @@
-import { ICliente } from './cliente';
+import { ICliente } from "./cliente";
 
-export type SonidoEvento = 'Silencio' | 'Campana' | 'Sirena';
+export type SonidoEvento = "Silencio" | "Campana" | "Sirena";
+export type TipoCategoria =
+  | "Activo"
+  | "Vehiculo"
+  | "Alarma"
+  | "Luminaria"
+  | "Sistema"
+  | "Otro";
 
 export interface ICategoriaEvento {
   _id?: string;
@@ -12,6 +19,7 @@ export interface ICategoriaEvento {
   atender?: boolean;
   noDerivar?: boolean;
   sonido?: SonidoEvento;
+  modulo?: TipoCategoria;
   idCliente?: string;
   idsAncestros?: string[];
   default?: boolean;
@@ -21,12 +29,12 @@ export interface ICategoriaEvento {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = '_id' | 'cliente';
+type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateCategoriaEvento
   extends Omit<Partial<ICategoriaEvento>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente';
+type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateCategoriaEvento
   extends Omit<Partial<ICategoriaEvento>, OmitirUpdate> {}
