@@ -131,6 +131,12 @@ export interface IModuloLogs {
   activo?: boolean;
 }
 
+export interface ILayerMapaPersonalizado {
+  nombre?: string;
+  url?: string;
+  icono?: string;
+}
+
 export interface ICliente {
   _id?: string;
   idsAncestros?: string[];
@@ -149,7 +155,7 @@ export interface ICliente {
     type: "MultiPolygon";
     coordinates: [number, number][][][];
   };
-  mapLayers?: string[]; //Capas de mapa personalizadas
+  mapLayers?: ILayerMapaPersonalizado[]; //Capas de mapa personalizadas
   // Populate
   padre?: ICliente;
   ancestros?: ICliente[];
