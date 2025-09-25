@@ -149,6 +149,7 @@ export interface ICliente {
     type: "MultiPolygon";
     coordinates: [number, number][][][];
   };
+  mapLayers?: string[]; //Capas de mapa personalizadas
   // Populate
   padre?: ICliente;
   ancestros?: ICliente[];
