@@ -53,6 +53,8 @@ export interface IReporteDispositivo {
   // Datos especificos de acuerdo al tipo de dispositivo
   valores?: IReporteLuminaria;
   esDeDia?: boolean; // Indica si el reporte es de día o de noche
+  horaAmanecer?: string; // Hora de amanecer del día del reporte
+  horaAtardecer?: string; // Hora de atardecer del día del reporte
   fCnt?: number;
 
   // Virtuals
