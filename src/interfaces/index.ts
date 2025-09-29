@@ -59,5 +59,6 @@ export * from './log-https';
 export * from './boton-bluetooth';
 export * from './centro-de-atencion';
 export * from './sendgrid';
+export * from './password-reset';
 // Chripstack
 export * from './chirpstack';
