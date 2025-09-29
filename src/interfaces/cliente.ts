@@ -33,12 +33,13 @@ export interface IConfigCliente {
   moduloBotonBLE?: IModuloBotonBLE;
   modulosIntegraciones?: IModulosIntegraciones;
   moduloLogs?: IModuloLogs;
+  moduloTwilio?: IModuloTwilio;
+  moduloSendgrid?: IModuloSendgrid;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   solicitantesEmergencias?: string[];
   solicitantePredeterminado?: string;
   credencialesAlarmas?: ICredencialesAlarma[];
-  twilio?: IConfigTwilio;
 }
 
 /// Twilio
@@ -54,8 +55,8 @@ export type TemplatesMail =
   | 'Reset de contraseña'
   | 'Cambio de contraseña';
 
-export interface IConfigTwilio {
-  //Mensajes y llamadas
+export interface IModuloTwilio {
+  activo?: boolean;
   accSid?: string;
   authToken?: string;
   msgServiceSid?: string;
@@ -66,8 +67,10 @@ export interface IConfigTwilio {
   templatesWhatsapp?: {
     [K in TemplatesWhatsapp]?: string;
   };
+}
 
-  //Email
+export interface IModuloSendgrid {
+  activo?: boolean;
   senderEmail?: string;
   senderName?: string;
   senderAddress?: string;
