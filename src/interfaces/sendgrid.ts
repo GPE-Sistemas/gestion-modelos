@@ -1,6 +1,6 @@
 // EMAIL
 
-import { IConfigTwilio } from './cliente';
+import { IModuloSendgrid } from './cliente';
 
 export interface IEmailDataBase {
   sid: string;
@@ -33,6 +33,6 @@ export interface IEmailTwilio {
     | IEmailCambioPassword;
   idCliente?: string;
   usuario?: string;
-  twilio?: IConfigTwilio;
+  twilio?: IModuloSendgrid;
   extra?: Record<string, any>;
 }
