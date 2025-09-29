@@ -13,7 +13,7 @@ export interface ITemaCliente {
 }
 
 export interface ICredencialesAlarma {
-  tipo?: "Garnet Titanium";
+  tipo?: 'Garnet Titanium';
   usuario?: string;
   password?: string;
 }
@@ -38,11 +38,51 @@ export interface IConfigCliente {
   solicitantesEmergencias?: string[];
   solicitantePredeterminado?: string;
   credencialesAlarmas?: ICredencialesAlarma[];
+  twilio?: IConfigTwilio;
 }
 
-export type ITipoCliente = "Mayorista" | "Minorista" | "Final";
+/// Twilio
 
-export type EstadoCuenta = "Activo" | "Suspendido" | "Moroso";
+export type TemplatesWhatsapp =
+  | 'Error de comunicación de alarma'
+  | 'Equipos fuera de línea'
+  | 'Batería baja';
+
+export type TemplatesMail =
+  | TemplatesWhatsapp
+  | 'Nuevo usuario'
+  | 'Reset de contraseña'
+  | 'Cambio de contraseña';
+
+export interface IConfigTwilio {
+  //Mensajes y llamadas
+  accSid?: string;
+  authToken?: string;
+  msgServiceSid?: string;
+  statusCallback?: string;
+  phoneSms?: string;
+  phoneWhatsapp?: string;
+  phoneLlamada?: string;
+  templatesWhatsapp?: {
+    [K in TemplatesWhatsapp]?: string;
+  };
+
+  //Email
+  senderEmail?: string;
+  senderName?: string;
+  senderAddress?: string;
+  senderCity?: string;
+  senderState?: string;
+  senderZip?: number;
+  sendGridApiKey?: string;
+  templatesMail?: {
+    [K in TemplatesMail]?: string;
+  };
+}
+
+export type ITipoCliente = 'Mayorista' | 'Minorista' | 'Final';
+
+export type EstadoCuenta = 'Activo' | 'Suspendido' | 'Moroso';
 export interface IModulosIntegraciones {
   activo?: boolean;
   moduloBotonDePanico?: IModuloBotonDePanico;
@@ -152,7 +192,7 @@ export interface ICliente {
   habilitado?: boolean;
   apikeyBotonBLE?: string;
   poligono?: {
-    type: "MultiPolygon";
+    type: 'MultiPolygon';
     coordinates: [number, number][][][];
   };
   mapLayers?: ILayerMapaPersonalizado[]; //Capas de mapa personalizadas
@@ -161,10 +201,10 @@ export interface ICliente {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "padre";
+type OmitirCreate = '_id' | 'padre';
 
 export interface ICreateCliente extends Omit<Partial<ICliente>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "nivel" | "tipoCliente" | "fechaCreacion" | "padre";
+type OmitirUpdate = '_id' | 'nivel' | 'tipoCliente' | 'fechaCreacion' | 'padre';
 
 export interface IUpdateCliente extends Omit<Partial<ICliente>, OmitirUpdate> {}
