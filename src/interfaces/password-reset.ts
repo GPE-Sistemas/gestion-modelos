@@ -2,6 +2,7 @@ import { IUsuario } from './usuario';
 
 export interface IPasswordReset {
   _id?: string;
+  fechaCreacion?: string;
   idUsuario?: string;
   token?: string;
   vencimiento?: string;
