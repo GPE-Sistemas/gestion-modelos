@@ -17,30 +17,6 @@ export interface IReporteLuminaria {
   // TODO: Definir los tipos de las propiedades cuando sean conocidos
   [key: string]: any;
 }
-export interface IReporteLuminariaGPE {
-  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
-  modo?: IModoLuminaria;
-  estadoRele?: boolean;
-  dimmerHabilitado?: boolean;
-  energiaExterna?: boolean;
-  potencia?: number;
-  voltaje: number;
-  dimmingValue?: number;
-}
-export interface IReporteLuminariaWellness {
-  dimmingValue?: number; // %
-  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
-  voltage?: number; // V
-  current?: number; // A
-  activePower?: number; // kWh - acumulada, se resetea cuando el nodo se reinicia
-  reactivePower?: number; // kWh - acumulada, se resetea cuando el nodo se reinicia
-  activePowerTotal?: number; // kWh - acumulada
-  reactivePowerTotal?: number; // kWh - acumulada
-  temperature?: number; // Grados Celsius
-  lumenes?: number; // Lux
-  modo?: IModoLuminaria;
-  modoForzado?: ModoForzado;
-}
 
 export interface IReporteDispositivo {
   _id?: string;
