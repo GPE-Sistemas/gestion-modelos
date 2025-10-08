@@ -1,6 +1,7 @@
 import { IGeoJSONPoint } from "../auxiliares";
 import { IActivo } from "./activo";
 import { ICliente } from "./cliente";
+import { IDispositivoLorawan } from "./dispositivo-lorawan";
 import { IGrupo } from "./grupo";
 import { ILuminaria } from "./luminaria";
 import { IRecorrido } from "./recorrido";
@@ -103,11 +104,12 @@ export interface IReporteGenerico {
   cliente?: ICliente;
   ancestros?: ICliente[];
   // De ids asignados
-  grupo?: IGrupo[];
+  dispositivoLora?: IDispositivoLorawan;
   tracker?: ITracker;
+  grupos?: IGrupo[];
   activo?: IActivo;
   recorrido?: IRecorrido;
-  chofer?: IUsuario;
+  usuario?: IUsuario;
   luminaria?: ILuminaria;
 }
 
@@ -117,11 +119,13 @@ type Omitir =
   // Virtuals
   | "cliente"
   | "ancestros"
-  | "grupo"
+  // De ids asignados
+  | "dispositivoLora"
   | "tracker"
+  | "grupos"
   | "activo"
   | "recorrido"
-  | "chofer"
+  | "usuario"
   | "luminaria";
 
 export interface ICreateReporteGenerico
