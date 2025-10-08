@@ -28,7 +28,7 @@ export interface IConfigPerfil {
 
   // Tipo y datos
   tipoEntidad?: TipoEntidadConfigPerfil;
-  tipoReporte?: TipoValoresConfigPerfil;
+  tipoConfig?: TipoValoresConfigPerfil;
   valores?: IConfigDispositivoGPEPayload | IDimmerCalendarioConfig;
 
   // Populate
