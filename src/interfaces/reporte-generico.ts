@@ -33,6 +33,11 @@ export interface IReporteLuminariaGPE {
   potencia?: number;
   voltaje?: number;
   dimmingValue?: number;
+  fCnt?: number;
+  //
+  esDeDia?: boolean; // Indica si el reporte es de día o de noche
+  horaAmanecer?: string; // Hora de amanecer del día del reporte
+  horaAtardecer?: string; // Hora de atardecer del día del reporte
 }
 export interface IReporteLuminariaGPEEnergia {
   corriente?: number; // mA
@@ -41,6 +46,11 @@ export interface IReporteLuminariaGPEEnergia {
   energia?: number; // kWh
   energiaTotal?: number; //kWh acumulado
   factorPotencia?: number; //factor de potencia de la luminaria (dividido por 100)
+  fCnt?: number;
+  //
+  esDeDia?: boolean; // Indica si el reporte es de día o de noche
+  horaAmanecer?: string; // Hora de amanecer del día del reporte
+  horaAtardecer?: string; // Hora de atardecer del día del reporte
 }
 export interface IReporteLuminariaWellness {
   dimmingValue?: number; // %
