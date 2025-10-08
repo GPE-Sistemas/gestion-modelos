@@ -22,6 +22,7 @@ export interface IConfigPerfil {
   _id?: string;
   fechaCreacion?: string;
   nombre?: string;
+  global?: boolean; // Si es global, puede ser usado por cualquier cliente.
   // Tenant
   idCliente?: string;
   idsAncestros?: string[];
