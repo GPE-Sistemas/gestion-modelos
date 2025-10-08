@@ -1,11 +1,12 @@
-import { IGeoJSONPoint } from '../auxiliares';
-import { ICliente } from './cliente';
-import { IDispositivoLorawan } from './dispositivo-lorawan';
-import { IGrupo } from './grupo';
-import { IModeloDispositivo } from './modelo-dispositivo';
-import { IReporteDispositivo } from './reporte-dispositivo';
+import { IGeoJSONPoint } from "../auxiliares";
+import { ICliente } from "./cliente";
+import { IDispositivoLorawan } from "./dispositivo-lorawan";
+import { IGrupo } from "./grupo";
+import { IModeloDispositivo } from "./modelo-dispositivo";
+import { IReporteDispositivo } from "./reporte-dispositivo";
+import { IReporteGenerico } from "./reporte-generico";
 
-export type EstadoLuminaria = 'Operativa' | 'Mantenimiento';
+export type EstadoLuminaria = "Operativa" | "Mantenimiento";
 
 export interface ILuminaria {
   _id?: string;
@@ -18,8 +19,11 @@ export interface ILuminaria {
   direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idsGrupos?: string[];
-  tiempoEncendida?: number; //En horas
+  tiempoEncendida?: number; // En horas
   ultimoReporte?: IReporteDispositivo;
+  ultimoReportePeriodico?: IReporteGenerico; // Ultimo reporte periodico recibido
+  ultimoReporteEnergia?: IReporteGenerico; // Ultimo reporte de energia recibido
+  fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
@@ -34,21 +38,21 @@ export interface ILuminaria {
 
 ////// CREATE
 type OmitirCreate =
-  | '_id'
-  | 'fechaCreacion'
-  | 'cliente'
-  | 'dispositivo'
-  | 'modeloDispositivo';
+  | "_id"
+  | "fechaCreacion"
+  | "cliente"
+  | "dispositivo"
+  | "modeloDispositivo";
 export interface ICreateLuminaria
   extends Omit<Partial<ILuminaria>, OmitirCreate> {}
 
 ////// UPDATE
 type OmitirUpdate =
-  | '_id'
-  | 'fechaCreacion'
-  | 'cliente'
-  | 'dispositivo'
-  | 'modeloDispositivo';
+  | "_id"
+  | "fechaCreacion"
+  | "cliente"
+  | "dispositivo"
+  | "modeloDispositivo";
 export interface IUpdateLuminaria
   extends Omit<Partial<ILuminaria>, OmitirUpdate> {}
 
