@@ -34,6 +34,7 @@ export interface IReporteLuminariaGPE {
   voltaje?: number;
   dimmingValue?: number;
   fCnt?: number;
+  alarmas?: string[]; // Lista de alarmas activas en el momento del reporte (puede venir vacia)
   //
   esDeDia?: boolean; // Indica si el reporte es de día o de noche
   horaAmanecer?: string; // Hora de amanecer del día del reporte
