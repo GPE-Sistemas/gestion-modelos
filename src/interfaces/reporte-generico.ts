@@ -90,13 +90,14 @@ export interface IReporteGenerico {
   // Tipo y datos
   tipoEntidad?: TipoEntidadReporte;
   tipoReporte?: TipoValoresReporte;
-  valores?:
+  valores?: { timestamp?: string } & (
     | IReporteLuminariaGPE
     | IReporteLuminariaGPEEnergia
     | IReporteLuminariaWellness
     | IReporteTracker4G
     | IReporteTrackerT1000B
-    | IReporteTrackerQualcomm;
+    | IReporteTrackerQualcomm
+  );
 
   // Populate
   cliente?: ICliente;
