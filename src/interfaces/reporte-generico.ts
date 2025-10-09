@@ -93,8 +93,6 @@ export interface IReporteTrackerQualcomm extends IReporteTracker {
 export interface IReporteGenerico {
   _id?: string;
   fechaCreacion?: string;
-  expiresAt?: string; // Fecha de expiracion del reporte (se usa para el TTL index)
-  timestamp?: string; // Fecha y hora del reporte enviada por el dispositivo (puede no venir en cuyo caso se usa la de creacion)
   // Tenant
   idCliente?: string;
   idsAncestros?: string[];
@@ -104,13 +102,14 @@ export interface IReporteGenerico {
   // Tipo y datos
   tipoEntidad?: TipoEntidadReporte;
   tipoReporte?: TipoValoresReporte;
-  valores?:
+  valores?: { timestamp?: string } & (
     | IReporteLuminariaGPE
     | IReporteLuminariaGPEEnergia
     | IReporteLuminariaWellness
     | IReporteTracker4G
     | IReporteTrackerT1000B
-    | IReporteTrackerQualcomm;
+    | IReporteTrackerQualcomm
+  );
 
   // Populate
   cliente?: ICliente;
