@@ -60,6 +60,7 @@ export * from "./boton-bluetooth";
 export * from "./centro-de-atencion";
 export * from "./sendgrid";
 export * from "./password-reset";
+export * from "./config-perfil";
 // Chripstack
 export * from "./chirpstack";
 export * from "./reporte-generico";
