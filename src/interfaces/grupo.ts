@@ -1,4 +1,5 @@
 import { ICliente } from "./cliente";
+import { IConfigPerfil } from "./config-perfil";
 
 export type CategoriaGrupo =
   | "Línea de colectivo"
@@ -14,9 +15,14 @@ export interface IGrupo {
   nombre?: string;
   color?: string;
   categoria?: CategoriaGrupo;
+  idPerfilDimming?: string; //Valores por defecto para el comando de dimming
+  idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
+
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
+  perfilDimming?: IConfigPerfil;
+  perfilConfig?: IConfigPerfil;
 }
 
 type OmitirCreate = "_id" | "cliente";
