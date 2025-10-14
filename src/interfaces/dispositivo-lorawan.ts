@@ -71,7 +71,7 @@ export interface IDispositivoLuminariaWellness {
 export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
 
 export interface IPaquetesDispositivoLorawan {
-  inicioSesion?: number; //Cuando inició la sesión actual del dispositivo
+  inicioSesion?: Date; //Cuando inició la sesión actual del dispositivo
   fCntInicial?: number; // fCnt inicial (normalmente 0, 1 o 2)
   ultimoFcnt?: number; // Último fCnt recibido
   framesRecibidos?: number; //Cantidad de frames recibidos
