@@ -11,7 +11,8 @@ export type IModoLuminaria =
   | "Fotocélula"
   | "Calendario"
   | "Manual"
-  | "GPS";
+  | "GPS"
+  | "Reloj Astronómico";
 
 export interface IReporteLuminaria {
   // TODO: Definir los tipos de las propiedades cuando sean conocidos

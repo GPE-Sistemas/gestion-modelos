@@ -30,6 +30,12 @@ export interface IConfigDispositivoLuminaria {
   [key: string]: any;
 }
 
+// Union type para config (retrocompatibilidad - ahora se usa MapaConfigDispositivo)
+export type IDispositivoLuminariaConfig =
+  | IDispositivoLuminariaGPE
+  | IDispositivoLuminariaWellness
+  | IDispositivoLuminariaACTIS;
+
 //Si se trata de una luminaria Wellness, esta es la info que se va a cargar en la config del dispositivo
 export interface IDispositivoLuminariaGPE {
   //Datos de configuración (llegan al inicio del firmware o por pedido de downlink)
@@ -68,20 +74,130 @@ export interface IDispositivoLuminariaWellness {
   alarma?: string;
 }
 
-export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
+// ===== ACTIS FING =====
 
-export interface IDispositivoLorawan {
+// Estructura de perfiles de dimerizado para ACTIS FING
+export interface ICambioDimmingACTIS {
+  offsetMinutos?: number; // -720 a 720 desde medianoche
+  nivelDimming?: number; // 0-31
+}
+
+export interface IPerfilDiasSeleccionados {
+  diasSemana?: boolean[]; // [domingo, lunes, ..., sábado]
+  cambios?: ICambioDimmingACTIS[];
+}
+
+export interface IPerfilDiaEspecial {
+  diaDelAnio?: number; // 1-366
+  cambios?: ICambioDimmingACTIS[];
+}
+
+export interface IPerfilesDimmingACTIS {
+  dimDefault?: number; // 0-31
+  perfilesHabilitados?: number; // Byte con flags
+
+  // 2 perfiles "Todos los días"
+  perfilTodosLosDias1?: ICambioDimmingACTIS[];
+  perfilTodosLosDias2?: ICambioDimmingACTIS[];
+
+  // 2 perfiles "Días seleccionados"
+  perfilDiasSemana1?: IPerfilDiasSeleccionados;
+  perfilDiasSemana2?: IPerfilDiasSeleccionados;
+
+  // 4 perfiles "Días especiales"
+  perfilDiaEspecial1?: IPerfilDiaEspecial;
+  perfilDiaEspecial2?: IPerfilDiaEspecial;
+  perfilDiaEspecial3?: IPerfilDiaEspecial;
+  perfilDiaEspecial4?: IPerfilDiaEspecial;
+}
+
+// Configuración para dispositivos ACTIS FING
+export interface IDispositivoLuminariaACTIS {
+  // ===== MODOS DE FUNCIONAMIENTO (Puerto 10) =====
+  modoFotocelula?: {
+    encendidoHabilitado?: boolean; // bit0
+    apagadoHabilitado?: boolean; // bit1
+  };
+  modoRelojAstronomico?: {
+    encendidoHabilitado?: boolean; // bit2
+    apagadoHabilitado?: boolean; // bit3
+  };
+  iniciarEncendida?: boolean; // bit4 - Estado inicial al salir de modo manual
+
+  // ===== COORDENADAS GPS (Puerto 14) =====
+  coordenadas?: {
+    latitud?: number; // float
+    longitud?: number; // float
+  };
+
+  // ===== FOTOCÉLULA (Puerto 13) =====
+  fotocelula?: {
+    umbralSuperior?: number; // 0-255 (corresponde a 0-3.3V)
+    umbralInferior?: number; // 0-255
+  };
+
+  // ===== RELOJ ASTRONÓMICO (Puerto 12) =====
+  relojAstronomico?: {
+    offsetAtardecer?: number; // -128 a 127 minutos
+    offsetAmanecer?: number; // -128 a 127 minutos
+  };
+
+  // ===== ESTADO MANUAL (Puerto 11) =====
+  estadoManual?: {
+    nivelDimming?: number; // 0-31 (31 = 100%)
+    encendido?: boolean;
+    salirPorFotocelula?: boolean;
+    salirPorRelojAstronomico?: boolean;
+  };
+
+  // ===== CONFIGURACIÓN DE REPORTES (Puerto 43) =====
+  configReportes?: {
+    reportarEncendidoApagado?: boolean; // bit0
+    reportarDimerizado?: boolean; // bit1
+    periodoEstado?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 2-4 (minutos)
+    periodoConsumo?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 5-7 (minutos)
+  };
+
+  // ===== PERFILES DE DIMERIZADO (Puertos 20-30) =====
+  perfilesDimming?: IPerfilesDimmingACTIS;
+
+  // ===== VERSIONES FIRMWARE =====
+  versionFirmware?: string; // Puerto 110
+  versionModuloLoRa?: string; // Puerto 111
+}
+
+export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness" | "Luminaria ACTIS FING";
+
+/* ────────────────────────────────────────────────
+ *  MAPA DE TIPO → CONFIG (TYPE-SAFE)
+ * ────────────────────────────────────────────────*/
+
+type MapaConfigDispositivo = {
+  "Luminaria GPE": IDispositivoLuminariaGPE;
+  "Luminaria Wellness": IDispositivoLuminariaWellness;
+  "Luminaria ACTIS FING": IDispositivoLuminariaACTIS;
+};
+
+/* ────────────────────────────────────────────────
+ *  BASE DEL DISPOSITIVO (GENÉRICO)
+ * ────────────────────────────────────────────────*/
+
+export interface IDispositivoLorawanBase<T extends keyof MapaConfigDispositivo> {
   _id?: string;
   idCliente?: string;
   idsAncestros?: string[];
   idModeloDispositivo?: string;
   fechaCreacion?: string;
-  config?: IConfigDispositivoLuminaria;
+
+  // ===== DISCRIMINATED UNION =====
+  tipo?: T;
+  config?: MapaConfigDispositivo[T];
+
+  // Campos comunes
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteDispositivo;
   margin?: number; //Es la señal del dispositivo, expresada en dB
   frecReporte?: number;
-  tipo?: TipoDispositivoLorawan;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
 
@@ -113,6 +229,45 @@ export interface IDispositivoLorawan {
   modeloDispositivo?: IModeloDispositivo;
 }
 
+/* ────────────────────────────────────────────────
+ *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
+ * ────────────────────────────────────────────────*/
+
+export type IDispositivoLorawan =
+  | IDispositivoLorawanBase<"Luminaria GPE">
+  | IDispositivoLorawanBase<"Luminaria Wellness">
+  | IDispositivoLorawanBase<"Luminaria ACTIS FING">;
+
+/* ────────────────────────────────────────────────
+ *  CREATE / UPDATE - UNIONES DISCRIMINADAS
+ * ────────────────────────────────────────────────*/
+
+type OmitirCreate = "_id" | "cliente" | "ancestros" | "modeloDispositivo";
+
+/** Create: no incluimos los virtuales/ids que manejás en el backend.
+ *  Mantiene `tipo` como discriminante para type safety.
+ */
+export type ICreateDispositivoLorawan =
+  | Omit<Partial<IDispositivoLorawanBase<"Luminaria GPE">>, OmitirCreate>
+  | Omit<Partial<IDispositivoLorawanBase<"Luminaria Wellness">>, OmitirCreate>
+  | Omit<Partial<IDispositivoLorawanBase<"Luminaria ACTIS FING">>, OmitirCreate>;
+
+type OmitirUpdate = "_id" | "cliente" | "ancestros" | "modeloDispositivo";
+
+/** Update: permitimos campos parciales pero mantenemos `tipo` para que TS pueda discriminar.
+ *  Cuando actualizás config, TypeScript valida que sea del tipo correcto según `tipo`.
+ */
+export type IUpdateDispositivoLorawan =
+  | ({ tipo: "Luminaria GPE" } & Partial<
+      Omit<IDispositivoLorawanBase<"Luminaria GPE">, OmitirUpdate | "tipo">
+    >)
+  | ({ tipo: "Luminaria Wellness" } & Partial<
+      Omit<IDispositivoLorawanBase<"Luminaria Wellness">, OmitirUpdate | "tipo">
+    >)
+  | ({ tipo: "Luminaria ACTIS FING" } & Partial<
+      Omit<IDispositivoLorawanBase<"Luminaria ACTIS FING">, OmitirUpdate | "tipo">
+    >);
+
 //Información para el modo calendario
 export interface IDimmerCalendarioConfig {
   calendarioHabilitado: boolean;
@@ -125,13 +280,3 @@ export interface IPuntoDimmer {
   porcentaje: number;
   activo: boolean;
 }
-
-type OmitirCreate = "_id" | "cliente";
-
-export interface ICreateDispositivoLorawan
-  extends Omit<Partial<IDispositivoLorawan>, OmitirCreate> {}
-
-type OmitirUpdate = "_id" | "cliente";
-
-export interface IUpdateDispositivoLorawan
-  extends Omit<Partial<IDispositivoLorawan>, OmitirUpdate> {}
