@@ -70,6 +70,13 @@ export interface IDispositivoLuminariaWellness {
 
 export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
 
+export interface IPaquetesDispositivoLorawan {
+  inicioSesion?: number; //Cuando inició la sesión actual del dispositivo
+  fCntInicial?: number; // fCnt inicial (normalmente 0, 1 o 2)
+  ultimoFcnt?: number; // Último fCnt recibido
+  framesRecibidos?: number; //Cantidad de frames recibidos
+  perdidaPaquetes?: number; // Porcentaje de pérdida de paquetes
+}
 export interface IDispositivoLorawan {
   _id?: string;
   idCliente?: string;
@@ -84,6 +91,7 @@ export interface IDispositivoLorawan {
   tipo?: TipoDispositivoLorawan;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
+  paquetes?: IPaquetesDispositivoLorawan; // Información para calcular la pérdida de paquetes del dispositivo
 
   // Datos para el lora server
   deveui?: string;
