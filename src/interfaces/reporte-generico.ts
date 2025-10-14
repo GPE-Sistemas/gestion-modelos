@@ -159,6 +159,7 @@ export type ValoresReporte<T extends keyof MapaValoresReporte> = {
 export interface IReporteBase<T extends keyof MapaValoresReporte> {
   _id?: string;
   fechaCreacion?: string;
+  expireAt?: string;
 
   // Tenant / relaciones
   idCliente?: string;
@@ -249,7 +250,10 @@ export type IUpdateReporteGenerico =
       Omit<IReporteBase<'Luminaria ACTIS FING Energía'>, Omitir | 'tipoReporte'>
     >)
   | ({ tipoReporte: 'Luminaria ACTIS FING Fotocélula' } & Partial<
-      Omit<IReporteBase<'Luminaria ACTIS FING Fotocélula'>, Omitir | 'tipoReporte'>
+      Omit<
+        IReporteBase<'Luminaria ACTIS FING Fotocélula'>,
+        Omitir | 'tipoReporte'
+      >
     >)
   | ({ tipoReporte: 'Tracker 4G' } & Partial<
       Omit<IReporteBase<'Tracker 4G'>, Omitir | 'tipoReporte'>
