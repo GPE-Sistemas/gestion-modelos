@@ -1,5 +1,6 @@
 import { IGeoJSONPoint } from "../auxiliares";
 import { ICliente } from "./cliente";
+import { IConfigPerfil } from "./config-perfil";
 import { IDispositivoLorawan } from "./dispositivo-lorawan";
 import { IGrupo } from "./grupo";
 import { IModeloDispositivo } from "./modelo-dispositivo";
@@ -24,6 +25,8 @@ export interface ILuminaria {
   ultimoReportePeriodico?: IReporteGenerico; // Ultimo reporte periodico recibido
   ultimoReporteEnergia?: IReporteGenerico; // Ultimo reporte de energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
+  idPerfilDimming?: string; //Valores por defecto para el comando de dimming
+  idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
@@ -34,6 +37,8 @@ export interface ILuminaria {
   dispositivo?: IDispositivoLorawan;
   modeloDispositivo?: IModeloDispositivo;
   grupos?: IGrupo[];
+  perfilDimming?: IConfigPerfil;
+  perfilConfig?: IConfigPerfil;
 }
 
 ////// CREATE
