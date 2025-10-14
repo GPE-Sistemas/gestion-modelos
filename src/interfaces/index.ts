@@ -53,7 +53,6 @@ export * from "./personal-salud";
 export * from "./hospitales";
 export * from "./informacion-tecnica";
 export * from "./reporte-consumo-luminaria-gpe";
-export * from "./reporte-luminaria-actis";
 export * from "./alerta-boton-ble";
 export * from "./log-evento";
 export * from "./log-https";

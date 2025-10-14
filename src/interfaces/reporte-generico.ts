@@ -14,6 +14,9 @@ export type TipoValoresReporte =
   | "Luminaria GPE Periódico"
   | "Luminaria GPE Energía"
   | "Luminaria Wellness"
+  | "Luminaria ACTIS FING Estado"
+  | "Luminaria ACTIS FING Energía"
+  | "Luminaria ACTIS FING Fotocélula"
   | "Tracker 4G"
   | "Tracker T1000B"
   | "Tracker Qualcomm";
@@ -67,6 +70,32 @@ export interface IReporteLuminariaWellness {
   modo?: IModoLuminaria;
   modoForzado?: ModoForzado;
 }
+
+// ===== ACTIS FING =====
+// Reporte de estado (Puerto 131: 1 byte - encendido/apagado, motivo, nivel dimming)
+export interface IReporteLuminariaACTISEstado {
+  encendido?: boolean;
+  motivo?: 'Fotocélula' | 'Reloj Astronómico' | 'Manual' | 'Por defecto';
+  nivelDimming?: number; // 0-31
+  fCnt?: number;
+}
+
+// Reporte de energía (Puerto 130: 3 bytes - voltaje delta, corriente, factor de potencia)
+export interface IReporteLuminariaACTISEnergia {
+  voltaje?: number; // Delta desde 230V (-64 a 63)
+  voltajeTotal?: number; // 230 + voltaje
+  corriente?: number; // mA (0-2047)
+  factorPotencia?: number; // 0.37 a 1.0
+  potencia?: number; // W calculada (V * I / 1000)
+  fCnt?: number;
+}
+
+// Reporte de fotocélula (Puerto 120: 1 byte - valor fotocélula)
+export interface IReporteLuminariaACTISFotocelula {
+  valorFotocelula?: number; // 0-255 (corresponde a 0-3.3V)
+  fCnt?: number;
+}
+
 export interface IReporteTracker {
   fechaDevice?: string;
   geojson?: IGeoJSONPoint;
@@ -106,6 +135,9 @@ export interface IReporteGenerico {
     | IReporteLuminariaGPE
     | IReporteLuminariaGPEEnergia
     | IReporteLuminariaWellness
+    | IReporteLuminariaACTISEstado
+    | IReporteLuminariaACTISEnergia
+    | IReporteLuminariaACTISFotocelula
     | IReporteTracker4G
     | IReporteTrackerT1000B
     | IReporteTrackerQualcomm
