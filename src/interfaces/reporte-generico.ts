@@ -132,7 +132,7 @@ export interface IReporteTrackerQualcomm extends IReporteTracker {
  *  MAPA DE TIPOS DE REPORTE → DATOS
  * ────────────────────────────────────────────────*/
 
-type MapaValoresReporte = {
+export type MapaValoresReporte = {
   'Luminaria GPE Periódico': IReporteLuminariaGPE;
   'Luminaria GPE Energía': IReporteLuminariaGPEEnergia;
   'Luminaria Wellness': IReporteLuminariaWellness;
