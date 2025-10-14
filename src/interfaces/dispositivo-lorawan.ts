@@ -25,6 +25,14 @@ export interface IConfigDispositivoGPEPayload {
   frecReporte?: number;
   dataRate?: number;
 }
+
+export interface IPaquetesDispositivoLorawan {
+  inicioSesion?: Date; //Cuando inició la sesión actual del dispositivo
+  fCntInicial?: number; // fCnt inicial (normalmente 0, 1 o 2)
+  ultimoFcnt?: number; // Último fCnt recibido
+  framesRecibidos?: number; //Cantidad de frames recibidos
+  perdidaPaquetes?: number; // Porcentaje de pérdida de paquetes
+}
 export interface IConfigDispositivoLuminaria {
   // TODO: Definir los tipos de las propiedades cuando sean conocidos
   [key: string]: any;
@@ -166,7 +174,10 @@ export interface IDispositivoLuminariaACTIS {
   versionModuloLoRa?: string; // Puerto 111
 }
 
-export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness" | "Luminaria ACTIS FING";
+export type TipoDispositivoLorawan =
+  | "Luminaria GPE"
+  | "Luminaria Wellness"
+  | "Luminaria ACTIS FING";
 
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO → CONFIG (TYPE-SAFE)
@@ -182,7 +193,9 @@ type MapaConfigDispositivo = {
  *  BASE DEL DISPOSITIVO (GENÉRICO)
  * ────────────────────────────────────────────────*/
 
-export interface IDispositivoLorawanBase<T extends keyof MapaConfigDispositivo> {
+export interface IDispositivoLorawanBase<
+  T extends keyof MapaConfigDispositivo
+> {
   _id?: string;
   idCliente?: string;
   idsAncestros?: string[];
@@ -200,6 +213,7 @@ export interface IDispositivoLorawanBase<T extends keyof MapaConfigDispositivo> 
   frecReporte?: number;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
+  paquetes?: IPaquetesDispositivoLorawan; //Información para calcular la pérdida de paquetes
 
   // Datos para el lora server
   deveui?: string;
@@ -250,7 +264,10 @@ type OmitirCreate = "_id" | "cliente" | "ancestros" | "modeloDispositivo";
 export type ICreateDispositivoLorawan =
   | Omit<Partial<IDispositivoLorawanBase<"Luminaria GPE">>, OmitirCreate>
   | Omit<Partial<IDispositivoLorawanBase<"Luminaria Wellness">>, OmitirCreate>
-  | Omit<Partial<IDispositivoLorawanBase<"Luminaria ACTIS FING">>, OmitirCreate>;
+  | Omit<
+      Partial<IDispositivoLorawanBase<"Luminaria ACTIS FING">>,
+      OmitirCreate
+    >;
 
 type OmitirUpdate = "_id" | "cliente" | "ancestros" | "modeloDispositivo";
 
@@ -265,7 +282,10 @@ export type IUpdateDispositivoLorawan =
       Omit<IDispositivoLorawanBase<"Luminaria Wellness">, OmitirUpdate | "tipo">
     >)
   | ({ tipo: "Luminaria ACTIS FING" } & Partial<
-      Omit<IDispositivoLorawanBase<"Luminaria ACTIS FING">, OmitirUpdate | "tipo">
+      Omit<
+        IDispositivoLorawanBase<"Luminaria ACTIS FING">,
+        OmitirUpdate | "tipo"
+      >
     >);
 
 //Información para el modo calendario
