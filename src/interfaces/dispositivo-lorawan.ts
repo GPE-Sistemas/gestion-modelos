@@ -30,6 +30,12 @@ export interface IConfigDispositivoLuminaria {
   [key: string]: any;
 }
 
+// Union type para config con type safety
+export type IDispositivoLuminariaConfig =
+  | IDispositivoLuminariaGPE
+  | IDispositivoLuminariaWellness
+  | IDispositivoLuminariaACTIS;
+
 //Si se trata de una luminaria Wellness, esta es la info que se va a cargar en la config del dispositivo
 export interface IDispositivoLuminariaGPE {
   //Datos de configuración (llegan al inicio del firmware o por pedido de downlink)
@@ -158,24 +164,6 @@ export interface IDispositivoLuminariaACTIS {
   // ===== VERSIONES FIRMWARE =====
   versionFirmware?: string; // Puerto 110
   versionModuloLoRa?: string; // Puerto 111
-
-  // ===== ÚLTIMO ESTADO CONOCIDO =====
-  ultimoReporte?: {
-    // Estado (puerto 131)
-    encendido?: boolean;
-    motivo?: "Fotocélula" | "Reloj Astronómico" | "Manual" | "Por defecto";
-    nivelDimming?: number;
-
-    // Energía (puerto 130)
-    voltaje?: number; // Delta desde 230V
-    voltajeTotal?: number; // 230 + delta
-    corriente?: number; // mA
-    factorPotencia?: number; // 0.37 - 1.0
-    potencia?: number; // W calculada
-
-    // Fotocélula (puerto 120)
-    valorFotocelula?: number; // 0-255
-  };
 }
 
 export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness" | "Luminaria ACTIS FING";
@@ -186,7 +174,7 @@ export interface IDispositivoLorawan {
   idsAncestros?: string[];
   idModeloDispositivo?: string;
   fechaCreacion?: string;
-  config?: IConfigDispositivoLuminaria;
+  config?: IDispositivoLuminariaConfig;
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteDispositivo;
   margin?: number; //Es la señal del dispositivo, expresada en dB
