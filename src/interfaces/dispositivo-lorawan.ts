@@ -68,7 +68,117 @@ export interface IDispositivoLuminariaWellness {
   alarma?: string;
 }
 
-export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness";
+// ===== ACTIS FING =====
+
+// Estructura de perfiles de dimerizado para ACTIS FING
+export interface ICambioDimmingACTIS {
+  offsetMinutos?: number; // -720 a 720 desde medianoche
+  nivelDimming?: number; // 0-31
+}
+
+export interface IPerfilDiasSeleccionados {
+  diasSemana?: boolean[]; // [domingo, lunes, ..., sábado]
+  cambios?: ICambioDimmingACTIS[];
+}
+
+export interface IPerfilDiaEspecial {
+  diaDelAnio?: number; // 1-366
+  cambios?: ICambioDimmingACTIS[];
+}
+
+export interface IPerfilesDimmingACTIS {
+  dimDefault?: number; // 0-31
+  perfilesHabilitados?: number; // Byte con flags
+
+  // 2 perfiles "Todos los días"
+  perfilTodosLosDias1?: ICambioDimmingACTIS[];
+  perfilTodosLosDias2?: ICambioDimmingACTIS[];
+
+  // 2 perfiles "Días seleccionados"
+  perfilDiasSemana1?: IPerfilDiasSeleccionados;
+  perfilDiasSemana2?: IPerfilDiasSeleccionados;
+
+  // 4 perfiles "Días especiales"
+  perfilDiaEspecial1?: IPerfilDiaEspecial;
+  perfilDiaEspecial2?: IPerfilDiaEspecial;
+  perfilDiaEspecial3?: IPerfilDiaEspecial;
+  perfilDiaEspecial4?: IPerfilDiaEspecial;
+}
+
+// Configuración para dispositivos ACTIS FING
+export interface IDispositivoLuminariaACTIS {
+  // ===== MODOS DE FUNCIONAMIENTO (Puerto 10) =====
+  modoFotocelula?: {
+    encendidoHabilitado?: boolean; // bit0
+    apagadoHabilitado?: boolean; // bit1
+  };
+  modoRelojAstronomico?: {
+    encendidoHabilitado?: boolean; // bit2
+    apagadoHabilitado?: boolean; // bit3
+  };
+  iniciarEncendida?: boolean; // bit4 - Estado inicial al salir de modo manual
+
+  // ===== COORDENADAS GPS (Puerto 14) =====
+  coordenadas?: {
+    latitud?: number; // float
+    longitud?: number; // float
+  };
+
+  // ===== FOTOCÉLULA (Puerto 13) =====
+  fotocelula?: {
+    umbralSuperior?: number; // 0-255 (corresponde a 0-3.3V)
+    umbralInferior?: number; // 0-255
+  };
+
+  // ===== RELOJ ASTRONÓMICO (Puerto 12) =====
+  relojAstronomico?: {
+    offsetAtardecer?: number; // -128 a 127 minutos
+    offsetAmanecer?: number; // -128 a 127 minutos
+  };
+
+  // ===== ESTADO MANUAL (Puerto 11) =====
+  estadoManual?: {
+    nivelDimming?: number; // 0-31 (31 = 100%)
+    encendido?: boolean;
+    salirPorFotocelula?: boolean;
+    salirPorRelojAstronomico?: boolean;
+  };
+
+  // ===== CONFIGURACIÓN DE REPORTES (Puerto 43) =====
+  configReportes?: {
+    reportarEncendidoApagado?: boolean; // bit0
+    reportarDimerizado?: boolean; // bit1
+    periodoEstado?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 2-4 (minutos)
+    periodoConsumo?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 5-7 (minutos)
+  };
+
+  // ===== PERFILES DE DIMERIZADO (Puertos 20-30) =====
+  perfilesDimming?: IPerfilesDimmingACTIS;
+
+  // ===== VERSIONES FIRMWARE =====
+  versionFirmware?: string; // Puerto 110
+  versionModuloLoRa?: string; // Puerto 111
+
+  // ===== ÚLTIMO ESTADO CONOCIDO =====
+  ultimoReporte?: {
+    // Estado (puerto 131)
+    encendido?: boolean;
+    motivo?: "Fotocélula" | "Reloj Astronómico" | "Manual" | "Por defecto";
+    nivelDimming?: number;
+
+    // Energía (puerto 130)
+    voltaje?: number; // Delta desde 230V
+    voltajeTotal?: number; // 230 + delta
+    corriente?: number; // mA
+    factorPotencia?: number; // 0.37 - 1.0
+    potencia?: number; // W calculada
+
+    // Fotocélula (puerto 120)
+    valorFotocelula?: number; // 0-255
+  };
+}
+
+export type TipoDispositivoLorawan = "Luminaria GPE" | "Luminaria Wellness" | "Luminaria ACTIS FING";
 
 export interface IDispositivoLorawan {
   _id?: string;
