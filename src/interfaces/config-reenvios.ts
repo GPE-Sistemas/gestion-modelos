@@ -1,13 +1,13 @@
-import { ICliente } from './cliente';
-import { IDispositivoAlarma } from './dispositivo-alarma';
-import { ITracker } from './tracker';
+import { ICliente } from "./cliente";
+import { IDispositivoAlarma } from "./dispositivo-alarma";
+import { ITracker } from "./tracker";
 
-export type MetodoReenvio = 'Básico' | 'Seguridad Evento Externo';
+export type MetodoReenvio = "Básico" | "Seguridad Evento Externo";
 
 export type IAgrupacionReenvio =
-  | 'Todos los trackers del cliente'
-  | 'Todas las alarmas del cliente'
-  | 'Entidad';
+  | "Todos los trackers del cliente"
+  | "Todas las alarmas del cliente"
+  | "Entidad";
 export interface IOpcionesReenvio {
   metodo?: MetodoReenvio;
   host?: string;
@@ -26,6 +26,7 @@ export interface IConfigReenvio {
   idClienteReenvio?: string;
   idEntidadReenvio?: string;
   opcionesReenvio?: IOpcionesReenvio;
+  reenviarHijos?: boolean; /// solo para trackers o alarmas de clientes hijos del cliente reenvio -- tambien se reenvian los propios
 
   // Virtual
   cliente?: ICliente;
@@ -35,10 +36,10 @@ export interface IConfigReenvio {
   tracker?: ITracker;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'dispositivoAlarma' | 'tracker';
+type OmitirCreate = "_id" | "cliente" | "dispositivoAlarma" | "tracker";
 export interface ICreateConfigReenvio
   extends Omit<Partial<IConfigReenvio>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'dispositivoAlarma' | 'tracker';
+type OmitirUpdate = "_id" | "cliente" | "dispositivoAlarma" | "tracker";
 export interface IUpdateConfigReenvio
   extends Omit<Partial<IConfigReenvio>, OmitirUpdate> {}
