@@ -52,6 +52,11 @@ export interface CondicionNotificacion {
     detenido?: {
       'mas de': number;
     };
+    recorridos?: {
+      distancia?: number; // METROS
+      dentro?: boolean;
+      fuera?: boolean;
+    };
   };
 
   luminaria?: {
