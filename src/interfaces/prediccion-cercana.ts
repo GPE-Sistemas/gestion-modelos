@@ -59,10 +59,15 @@ export interface ICercana {
 
 /**
  * Interfaz para la respuesta del endpoint de predicciones cercanas
+ *
+ * Diseñada para totems/pantallas en estaciones de transporte que muestran
+ * información de múltiples líneas/recorridos. Siempre retorna las paradas
+ * cercanas (radio 50m), mostrando solo la parada más cercana por recorrido.
+ * La predicción es opcional y solo está presente cuando hay vehículos disponibles.
  */
 export interface IPrediccionCercana {
   /**
-   * Información de la parada
+   * Información de la parada más cercana del recorrido
    */
   parada: IParada;
   /**
@@ -87,7 +92,9 @@ export interface IPrediccionCercana {
     color?: string;
   };
   /**
-   * Predicción de llegada del próximo vehículo
+   * Predicción de llegada del próximo vehículo (opcional)
+   * Solo presente cuando hay un vehículo disponible en el recorrido.
+   * Si no hay predicción, el totem puede mostrar "No disponible" o similar.
    */
-  prediccion: ICercana;
+  prediccion?: ICercana;
 }
