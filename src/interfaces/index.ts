@@ -61,6 +61,7 @@ export * from "./centro-de-atencion";
 export * from "./sendgrid";
 export * from "./password-reset";
 export * from "./config-perfil";
+export * from "./prediccion-cercana";
 // Chripstack
 export * from "./chirpstack";
 export * from "./reporte-generico";
