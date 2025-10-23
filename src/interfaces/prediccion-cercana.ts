@@ -90,6 +90,27 @@ export interface IPrediccionCercana {
      * Color del recorrido (para UI)
      */
     color?: string;
+    /**
+     * Nombre de la flota/línea (ej: "518")
+     */
+    nombreFlota?: string;
+    /**
+     * Información del grupo/línea al que pertenece el recorrido
+     */
+    grupo?: {
+      /**
+       * ID del grupo
+       */
+      _id?: string;
+      /**
+       * Nombre del grupo/línea
+       */
+      nombre?: string;
+      /**
+       * Color del grupo/línea
+       */
+      color?: string;
+    };
   };
   /**
    * Predicción de llegada del próximo vehículo (opcional)
