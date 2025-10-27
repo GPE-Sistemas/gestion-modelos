@@ -32,3 +32,6 @@ export interface ICreateUbicacion
 type OmitirUpdate = "_id" | "cliente";
 export interface IUpdateUbicacion
   extends Omit<Partial<IUbicacion>, OmitirUpdate> {}
+
+export interface IUbicacionCache
+  extends Omit<IUbicacion, "cliente" | "ancestros"> {}
