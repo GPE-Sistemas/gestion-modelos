@@ -9,6 +9,9 @@ export interface ICodigoDispositivoEntrada {
   categoriaEvento?: ICategoriaEvento;
 }
 
+export interface ICodigoDispositivoEntradaCache
+  extends Omit<ICodigoDispositivoEntrada, "categoriaEvento"> {}
+
 export interface ICodigoDispositivo {
   codigo?: string;
   descripcion?: string;
@@ -24,6 +27,9 @@ export interface ICodigoDispositivo {
   // Populate
   categoriaEvento?: ICategoriaEvento;
 }
+
+export interface ICodigoDispositivoCache
+  extends Omit<ICodigoDispositivo, "categoriaEvento"> {}
 
 export type TipoDispositivo =
   | "Tracker"
@@ -47,6 +53,15 @@ export interface ICodigosDispositivo {
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
+}
+
+export interface ICodigosDispositivoCache
+  extends Omit<
+    ICodigosDispositivo,
+    "cliente" | "ancestros" | "codigos" | "codigosEntrada"
+  > {
+  codigos?: ICodigoDispositivoCache[];
+  codigosEntrada?: ICodigoDispositivoEntradaCache[];
 }
 
 type OmitirCreate = "_id" | "cliente" | "ancestros";

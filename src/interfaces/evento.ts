@@ -120,3 +120,18 @@ type OmitirUpdate =
   | "configEventoUsuario";
 
 export interface IUpdateEvento extends Omit<Partial<IEvento>, OmitirUpdate> {}
+
+export interface IEventoCache
+  extends Omit<
+    IEvento,
+    | "tracker"
+    | "alarma"
+    | "luminaria"
+    | "usuario"
+    | "cliente"
+    | "ancestros"
+    | "reporte"
+    | "activo"
+    | "configEventoUsuario"
+    | "botonBluetooth"
+  > {}

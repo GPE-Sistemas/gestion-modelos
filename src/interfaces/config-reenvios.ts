@@ -43,3 +43,9 @@ export interface ICreateConfigReenvio
 type OmitirUpdate = "_id" | "cliente" | "dispositivoAlarma" | "tracker";
 export interface IUpdateConfigReenvio
   extends Omit<Partial<IConfigReenvio>, OmitirUpdate> {}
+
+export interface IConfigReenvioCache
+  extends Omit<
+    IConfigReenvio,
+    "cliente" | "ancestros" | "clienteReenvio" | "dispositivoAlarma" | "tracker"
+  > {}

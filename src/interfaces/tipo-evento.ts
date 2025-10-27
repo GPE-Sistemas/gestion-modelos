@@ -1,6 +1,6 @@
-import { ICliente } from './cliente';
+import { ICliente } from "./cliente";
 
-export type ICategoriaTipoEvento = 'Alarma' | 'Tracker' | 'Luminaria';
+export type ICategoriaTipoEvento = "Alarma" | "Tracker" | "Luminaria";
 
 export interface ITipoEvento {
   _id?: string;
@@ -16,12 +16,15 @@ export interface ITipoEvento {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = '_id' | 'cliente';
+type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateTipoEvento
   extends Omit<Partial<ITipoEvento>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente';
+type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateTipoEvento
   extends Omit<Partial<ITipoEvento>, OmitirUpdate> {}
+
+export interface ITipoEventoCache
+  extends Omit<ITipoEvento, "cliente" | "ancestros"> {}

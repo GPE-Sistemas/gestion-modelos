@@ -55,3 +55,6 @@ type OmitirUpdate = "_id" | "codigos" | "cliente";
 
 export interface IUpdateModeloDispositivo
   extends Omit<Partial<IModeloDispositivo>, OmitirUpdate> {}
+
+export interface IModeloDispositivoCache
+  extends Omit<IModeloDispositivo, "cliente" | "ancestros" | "codigos"> {}

@@ -1,9 +1,9 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IDispositivoAlarma } from './dispositivo-alarma';
-import { ILuminaria } from './luminaria';
+import { IActivo } from "./activo";
+import { ICliente } from "./cliente";
+import { IDispositivoAlarma } from "./dispositivo-alarma";
+import { ILuminaria } from "./luminaria";
 
-export type TipoNota = 'Contacto' | 'Nota';
+export type TipoNota = "Contacto" | "Nota";
 
 export interface IInformacionNota {
   nota?: string;
@@ -40,10 +40,16 @@ export interface INota {
   luminaria?: ILuminaria;
 }
 
-type OmitirCreate = '_id' | 'cliente';
+type OmitirCreate = "_id" | "cliente";
 
 export interface ICreateNota extends Omit<Partial<INota>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente';
+type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateNota extends Omit<Partial<INota>, OmitirUpdate> {}
+
+export interface INotaCache
+  extends Omit<
+    INota,
+    "cliente" | "ancestros" | "activo" | "alarma" | "luminaria"
+  > {}
