@@ -38,3 +38,6 @@ type OmitirUpdate = "_id" | "cliente";
 
 export interface IUpdateCategoriaEvento
   extends Omit<Partial<ICategoriaEvento>, OmitirUpdate> {}
+
+export interface ICategoriaEventoCache
+  extends Omit<ICategoriaEvento, "cliente" | "ancestros"> {}
