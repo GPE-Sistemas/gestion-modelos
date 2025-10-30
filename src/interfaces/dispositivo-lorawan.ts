@@ -2,7 +2,7 @@ import { IGeoJSONPoint } from "../auxiliares";
 import { ICliente } from "./cliente";
 import { IComando } from "./comando";
 import { IModeloDispositivo } from "./modelo-dispositivo";
-import { IModoLuminaria, IReporteDispositivo } from "./reporte-dispositivo";
+import { IModoLuminaria, IReporteGenerico } from "./reporte-generico";
 
 //Notas: En el caso de estos dispositivos:
 // Potencia de dispositivo GPE = consumo instantáneo (W)
@@ -208,7 +208,7 @@ export interface IDispositivoLorawanBase<
 
   // Campos comunes
   fechaUltimaComunicacion?: string;
-  ultimoReporte?: IReporteDispositivo;
+  ultimoReporte?: IReporteGenerico;
   margin?: number; //Es la señal del dispositivo, expresada en dB
   frecReporte?: number;
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
