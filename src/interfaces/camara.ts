@@ -16,6 +16,12 @@ export interface ICanalesCamara {
   tipoHabilitacion?: TipoHabilitacion;
 }
 
+export interface ICredencialesDahua {
+  acceskeyDahua?: string;
+  secretKeyDahua?: string;
+  productID?: string;
+}
+
 export interface ICamara {
   _id?: string;
   idCliente?: string;
@@ -32,8 +38,7 @@ export interface ICamara {
   usuario?: string;
   password?: string;
   claveDeEncriptacion?: string;
-  acceskeyDahua?: string;
-  secretKeyDahua?: string;
+  credencialesDahua?: ICredencialesDahua;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
