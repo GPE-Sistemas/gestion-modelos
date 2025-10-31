@@ -4,7 +4,7 @@ import { IConfigPerfil } from "./config-perfil";
 import { IDispositivoLorawan } from "./dispositivo-lorawan";
 import { IGrupo } from "./grupo";
 import { IModeloDispositivo } from "./modelo-dispositivo";
-import { IReporteGenerico } from "./reporte-generico";
+import { IReporteBase } from "./reporte-generico";
 
 export type EstadoLuminaria = "Operativa" | "Mantenimiento";
 
@@ -20,8 +20,8 @@ export interface ILuminaria {
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idsGrupos?: string[];
   tiempoEncendida?: number; // En horas
-  ultimoReportePeriodico?: IReporteGenerico; // Ultimo reporte periodico recibido
-  ultimoReporteEnergia?: IReporteGenerico; // Ultimo reporte de energia recibido
+  ultimoReportePeriodico?: IReporteBase<"Luminaria GPE Periódico">; // Ultimo reporte periodico recibido
+  ultimoReporteEnergia?: IReporteBase<"Luminaria GPE Energía">; // Ultimo reporte de energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
   idPerfilDimming?: string; //Valores por defecto para el comando de dimming
   idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
