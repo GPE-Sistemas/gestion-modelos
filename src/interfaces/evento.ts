@@ -1,13 +1,13 @@
 import { ICliente } from "./cliente";
 import { ITracker } from "./tracker";
 import { IDispositivoAlarma } from "./dispositivo-alarma";
-import { IReporte } from "./reporte";
 import { IActivo } from "./activo";
 import { IConfigEventoUsuario } from "./config-evento-usuario";
 import { SonidoEvento } from "./categoria-evento";
 import { IUsuario } from "./usuario";
 import { ILuminaria } from "./luminaria";
 import { IBotonBluetooth } from "./boton-bluetooth";
+import { IReporteGenerico } from "./reporte-generico";
 
 export interface IContactID {
   numeroCuenta?: string;
@@ -91,7 +91,7 @@ export interface IEvento {
   usuario?: IUsuario;
   cliente?: ICliente;
   ancestros?: ICliente[];
-  reporte?: IReporte;
+  reporte?: IReporteGenerico;
   activo?: IActivo;
   configEventoUsuario?: IConfigEventoUsuario;
   botonBluetooth?: IBotonBluetooth;
