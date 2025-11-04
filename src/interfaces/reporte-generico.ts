@@ -6,10 +6,23 @@ import { IDispositivoLorawan } from "./dispositivo-lorawan";
 import { IGrupo } from "./grupo";
 import { ILuminaria } from "./luminaria";
 import { IRecorrido } from "./recorrido";
-import { TipoTriangulacion } from "./reporte";
-import { IModoLuminaria, ModoForzado } from "./reporte-dispositivo";
 import { ITracker } from "./tracker";
 import { IUsuario } from "./usuario";
+
+export type TipoTriangulacion = "GNSS" | "Wifi";
+
+export type ModoForzado =
+  | "No Forzado"
+  | "Forzado Encendido"
+  | "Forzado Apagado";
+
+export type IModoLuminaria =
+  | "Indeterminado"
+  | "Fotocélula"
+  | "Calendario"
+  | "Manual"
+  | "GPS"
+  | "Reloj Astronómico";
 
 /* ────────────────────────────────────────────────
  *  TIPOS BASE
