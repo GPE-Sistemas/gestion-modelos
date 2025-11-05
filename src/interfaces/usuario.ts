@@ -1,18 +1,18 @@
-import { ICliente } from "./cliente";
+import { ICliente } from './cliente';
 
 export type Rol =
-  | "Administrador"
-  | "Operador"
-  | "Conductor"
-  | "Chofer Colectivo"
-  | "Consultor"
-  | "Técnico"
-  | "Final"
-  | "Administrador Emergencias" //Puede crear/editar emergencias, hospitales, choferes, solicitantes, centros de atención, destinatarios asistencia, personal de salud.
+  | 'Administrador'
+  | 'Operador'
+  | 'Conductor'
+  | 'Chofer Colectivo'
+  | 'Consultor'
+  | 'Técnico'
+  | 'Final'
+  | 'Administrador Emergencias' //Puede crear/editar emergencias, hospitales, choferes, solicitantes, centros de atención, destinatarios asistencia, personal de salud.
   // Puede ver todas las solapas del módulo de emergencias.
-  | "Registrador Emergencias" //Puede crear/editar emergencias y solicitantes
+  | 'Registrador Emergencias' //Puede crear/editar emergencias y solicitantes
   //Puede ver todas las solapas del módulo emergencias, menos el dashboard con estadísticas
-  | "Móvil Emergencias"; //Usuario de la aplicación móvil, puede editar los eventos de emergencias (seguimiento)
+  | 'Móvil Emergencias'; //Usuario de la aplicación móvil, puede editar los eventos de emergencias (seguimiento)
 //Puede ver todo lo que está en el módulo de emergencias de la aplicación móvil.
 
 export interface IModulos {
@@ -27,6 +27,7 @@ export interface IModulos {
   moduloVehiculos?: boolean;
   moduloLogs?: boolean;
   moduloIntegraciones?: boolean;
+  moduloSirenas?: boolean;
 }
 
 export interface IDatosPersonales {
@@ -83,10 +84,10 @@ export interface IUsuario {
   ancestros?: ICliente[];
 }
 
-type OmitirCreate = "_id" | "cliente" | "fechaCreacion";
+type OmitirCreate = '_id' | 'cliente' | 'fechaCreacion';
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "fechaCreacion";
+type OmitirUpdate = '_id' | 'cliente' | 'fechaCreacion';
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}
