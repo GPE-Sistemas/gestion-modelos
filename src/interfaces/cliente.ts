@@ -35,6 +35,7 @@ export interface IConfigCliente {
   moduloLogs?: IModuloLogs;
   moduloTwilio?: IModuloTwilio;
   moduloSendgrid?: IModuloSendgrid;
+  moduloSirenas?: IModuloSirenas;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   solicitantesEmergencias?: string[];
@@ -98,6 +99,14 @@ export interface IModuloBotonDePanico {
 
 export interface IModuloBotonBLE {
   activo?: boolean;
+}
+
+export interface IModuloSirenas {
+  activo?: boolean;
+  crearSirenas?: boolean;
+  derivarEventos?: boolean;
+  derivarEventosTecnicos?: boolean;
+  compartirSirenas?: boolean;
 }
 
 export interface IModuloLuminarias {
