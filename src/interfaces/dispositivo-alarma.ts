@@ -402,10 +402,6 @@ export interface IParticionZona {
   tipo?: CodigoTipoSensor;
   modo?: ModoSensor;
 }
-export interface IUsuarioGenericoAlarma {
-  nombre?: string;
-  numeroUsuario?: number;
-}
 export type CodigoTipoSensor =
   | 'PIR'
   | 'DRV'
@@ -453,7 +449,6 @@ export interface IDispositivoAlarma {
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
-  usuarioGenerico?: IUsuarioGenericoAlarma;
   //
   nroDeSistema?: string;
   //
