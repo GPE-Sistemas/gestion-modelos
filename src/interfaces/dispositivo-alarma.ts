@@ -1,12 +1,12 @@
-import { ICamara } from "./camara";
-import { ICliente } from "./cliente";
-import { estadoCuenta } from "./estado-entidad";
-import { IModeloDispositivo } from "./modelo-dispositivo";
-import { IServicioContratado } from "./servicio-contratado";
-import { IUbicacion } from "./ubicacion";
+import { ICamara } from './camara';
+import { ICliente } from './cliente';
+import { estadoCuenta } from './estado-entidad';
+import { IModeloDispositivo } from './modelo-dispositivo';
+import { IServicioContratado } from './servicio-contratado';
+import { IUbicacion } from './ubicacion';
 
 /// Lepra ( interfaces para las respuestas de HSI )
-export type TipoEmergenciaAlarma = "Pánico" | "Médica" | "Incendio";
+export type TipoEmergenciaAlarma = 'Pánico' | 'Médica' | 'Incendio';
 export interface IConfigAlarmaHSI {
   id: string;
   lastEventReport: string;
@@ -402,26 +402,30 @@ export interface IParticionZona {
   tipo?: CodigoTipoSensor;
   modo?: ModoSensor;
 }
+export interface IUsuarioGenericoAlarma {
+  nombre?: string;
+  numeroUsuario?: number;
+}
 export type CodigoTipoSensor =
-  | "PIR"
-  | "DRV"
-  | "MMG"
-  | "BIR"
-  | "PAS"
-  | "PPC"
-  | "TAM"
-  | "OCR"
-  | "HUM"
-  | "PFU"
-  | "ELE"
-  | "BUM"
-  | "CEM"
-  | "VOL"
-  | "DTS"
-  | "SIS"
-  | "AMK";
-export type ModoSensor = "Seguidor" | "Demorado" | "Instantaneo";
-export type Operador = "Personal" | "Claro" | "Movistar" | "Tuenti" | "Otro";
+  | 'PIR'
+  | 'DRV'
+  | 'MMG'
+  | 'BIR'
+  | 'PAS'
+  | 'PPC'
+  | 'TAM'
+  | 'OCR'
+  | 'HUM'
+  | 'PFU'
+  | 'ELE'
+  | 'BUM'
+  | 'CEM'
+  | 'VOL'
+  | 'DTS'
+  | 'SIS'
+  | 'AMK';
+export type ModoSensor = 'Seguidor' | 'Demorado' | 'Instantaneo';
+export type Operador = 'Personal' | 'Claro' | 'Movistar' | 'Tuenti' | 'Otro';
 export interface IDispositivoAlarma {
   _id?: string;
   //
@@ -449,6 +453,7 @@ export interface IDispositivoAlarma {
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
+  usuarioGenerico?: IUsuarioGenericoAlarma;
   //
   nroDeSistema?: string;
   //
@@ -470,25 +475,25 @@ export interface IDispositivoAlarma {
 }
 
 type OmitirCreate =
-  | "_id"
-  | "cliente"
-  | "modelo"
-  | "domicilio"
-  | "comunicador "
-  | "camaras"
-  | "serviciosContratados";
+  | '_id'
+  | 'cliente'
+  | 'modelo'
+  | 'domicilio'
+  | 'comunicador '
+  | 'camaras'
+  | 'serviciosContratados';
 
 export interface ICreateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
 
 type OmitirUpdate =
-  | "_id"
-  | "cliente"
-  | "modelo"
-  | "domicilio"
-  | "comunicador"
-  | "camaras"
-  | "serviciosContratados";
+  | '_id'
+  | 'cliente'
+  | 'modelo'
+  | 'domicilio'
+  | 'comunicador'
+  | 'camaras'
+  | 'serviciosContratados';
 
 export interface IUpdateDispositivoAlarma
   extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}
@@ -496,11 +501,11 @@ export interface IUpdateDispositivoAlarma
 export interface IDispositivoAlarmaCache
   extends Omit<
     IDispositivoAlarma,
-    | "domicilio"
-    | "modelo"
-    | "cliente"
-    | "ancestros"
-    | "comunicador"
-    | "camaras"
-    | "serviciosContratados"
+    | 'domicilio'
+    | 'modelo'
+    | 'cliente'
+    | 'ancestros'
+    | 'comunicador'
+    | 'camaras'
+    | 'serviciosContratados'
   > {}
