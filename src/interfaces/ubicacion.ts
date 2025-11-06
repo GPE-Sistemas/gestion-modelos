@@ -8,7 +8,7 @@ export type ICategoriaUbicacion =
   | 'Activos'
   | 'Centro de Atención'
   | 'Hospital'
-  | 'Vehículos';
+  | 'Vehiculos';
 
 export interface IUbicacion {
   _id?: string;
