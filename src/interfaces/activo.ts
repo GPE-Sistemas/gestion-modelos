@@ -43,7 +43,7 @@ export interface IVehiculo {
   idChofer?: string;
   idRecorrido?: string;
   idsRecorridos?: string[];
-  dentroDelRecorrido?: boolean; // Para seguri el estado de los eventos
+  dentroDelRecorrido?: boolean; // Para seguir el estado de los eventos
   //
   idExterno?: string;
   // Populate

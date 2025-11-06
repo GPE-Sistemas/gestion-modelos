@@ -38,11 +38,13 @@ export interface IFranjaHoraria {
   frecuenciaMinutos?: number;
 }
 
+export type ICategoriaRecorrido = 'Colectivo' | 'Vehiculo';
 export interface IRecorrido {
   _id?: string;
   idCliente?: string;
   idsAncestros?: string[];
   //
+  categoria?: ICategoriaRecorrido;
   idExterno?: string;
   idGrupo?: string;
   nombreFlota?: string;
