@@ -7,6 +7,7 @@ import { IUbicacion } from './ubicacion';
 
 /// Lepra ( interfaces para las respuestas de HSI )
 export type TipoEmergenciaAlarma = 'Pánico' | 'Médica' | 'Incendio';
+export type TiposDeArmado = 'T' | 'D' | 'p1';
 ////
 export interface ISim {
   iccid?: string;
@@ -519,7 +520,7 @@ export interface ArmOptions {
 export interface IArmModeRequest {
   deviceId: string;
   devCode: string;
-  armMode: 'T' | 'D' | 'p1'; // T=Total, D=Disarm, S=Stay
+  armMode: TiposDeArmado;
   areaIds: number[];
   armOptions: ArmOptions;
 }
@@ -564,6 +565,15 @@ export interface AreaInfo {
   accessoryInfos?: AccessoryInfo[];
 }
 
+export interface armModes {
+  areaId: number;
+  mode: TiposDeArmado;
+}
+
 export interface ResponseInformationData {
   areaInfos?: AreaInfo[];
+}
+
+export interface ResponseStateData {
+  armModes?: armModes[];
 }
