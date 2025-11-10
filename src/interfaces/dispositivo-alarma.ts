@@ -552,18 +552,18 @@ export interface dolynkAlarmUser {
   oneClickArming: boolean | null; // modo de armado rápido (o null si no definido)
 }
 
-interface AccessoryInfo {
+export interface AccessoryInfo {
   name?: string;
   id?: string;
   deviceId?: string;
 }
 
-interface AreaInfo {
+export interface AreaInfo {
   enable?: boolean;
   name?: string;
   accessoryInfos?: AccessoryInfo[];
 }
 
-interface ResponseInformationData {
+export interface ResponseInformationData {
   areaInfos?: AreaInfo[];
 }
