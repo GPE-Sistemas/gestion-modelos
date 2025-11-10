@@ -7,6 +7,158 @@ import { IUbicacion } from './ubicacion';
 
 /// Lepra ( interfaces para las respuestas de HSI )
 export type TipoEmergenciaAlarma = 'Pánico' | 'Médica' | 'Incendio';
+////
+export interface ISim {
+  iccid?: string;
+  numero?: string;
+  operador?: Operador;
+  apn?: string;
+  usuario?: string;
+  password?: string;
+}
+
+export interface IUltimaConexion {
+  lastIp?: string;
+  lastPort?: string;
+  sequence: number;
+}
+
+export interface ICamaraAlarma {
+  idCamara?: string;
+  canal?: string;
+  particion?: number;
+  zona?: number;
+}
+
+export interface IModoDesactivado {
+  dispositivoDesactivado?: boolean;
+  permanente?: boolean;
+  desde?: string;
+  hasta?: string;
+  codigos?: string[];
+  alarma?: {
+    particiones?: string[];
+    zonas?: {
+      particion: string;
+      zona: string;
+    }[];
+  };
+}
+
+export interface IParticionZona {
+  nombre?: string;
+  particion?: number;
+  zona?: number;
+  marca?: string;
+  tipo?: CodigoTipoSensor;
+  modo?: ModoSensor;
+}
+export type CodigoTipoSensor =
+  | 'PIR'
+  | 'DRV'
+  | 'MMG'
+  | 'BIR'
+  | 'PAS'
+  | 'PPC'
+  | 'TAM'
+  | 'OCR'
+  | 'HUM'
+  | 'PFU'
+  | 'ELE'
+  | 'BUM'
+  | 'CEM'
+  | 'VOL'
+  | 'DTS'
+  | 'SIS'
+  | 'AMK';
+export type ModoSensor = 'Seguidor' | 'Demorado' | 'Instantaneo';
+export type Operador = 'Personal' | 'Claro' | 'Movistar' | 'Tuenti' | 'Otro';
+export interface IDispositivoAlarma {
+  _id?: string;
+  //
+  fechaCreacion?: string;
+  fechaAlta?: string;
+  fechaUltimaComunicacion?: string;
+  idComunicador?: string;
+  idUnicoComunicador?: string;
+  passwordComunicador?: string;
+  idModelo?: string;
+  idDomicilio?: string;
+  idCliente?: string;
+  idsAncestros?: string[];
+  nombre?: string;
+  numeroAbonado?: string;
+  sim1?: ISim;
+  sim2?: ISim;
+  idsClientesQuePuedenAtender?: string[];
+  idsClientesQuePuedenAtenderEventosTecnicos?: string[];
+  camarasPorZona?: ICamaraAlarma[];
+  idsCamaras?: string[];
+  armado?: boolean;
+  armando?: boolean;
+  imagenes?: string[];
+  ultimaConexion?: IUltimaConexion;
+  modoDesactivado?: IModoDesactivado;
+  infoZonas?: IParticionZona[];
+  //
+  nroDeSistema?: string;
+  //
+  estadoCuenta?: estadoCuenta;
+  frecReporte?: number;
+  idServiciosContratados?: string[];
+  clave?: string;
+  contraClave?: string;
+  tipoComercio?: string;
+  tipoCategoria?: string;
+  // Populate
+  domicilio?: IUbicacion;
+  modelo?: IModeloDispositivo;
+  cliente?: ICliente;
+  ancestros?: ICliente[];
+  comunicador?: IModeloDispositivo;
+  camaras?: ICamara[];
+  serviciosContratados?: IServicioContratado[];
+}
+
+type OmitirCreate =
+  | '_id'
+  | 'cliente'
+  | 'modelo'
+  | 'domicilio'
+  | 'comunicador '
+  | 'camaras'
+  | 'serviciosContratados';
+
+export interface ICreateDispositivoAlarma
+  extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
+
+type OmitirUpdate =
+  | '_id'
+  | 'cliente'
+  | 'modelo'
+  | 'domicilio'
+  | 'comunicador'
+  | 'camaras'
+  | 'serviciosContratados';
+
+export interface IUpdateDispositivoAlarma
+  extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}
+
+export interface IDispositivoAlarmaCache
+  extends Omit<
+    IDispositivoAlarma,
+    | 'domicilio'
+    | 'modelo'
+    | 'cliente'
+    | 'ancestros'
+    | 'comunicador'
+    | 'camaras'
+    | 'serviciosContratados'
+  > {}
+///////
+/////// Cosas de las apis de garnet dahua y eso
+//////
+/////
 export interface IConfigAlarmaHSI {
   id: string;
   lastEventReport: string;
@@ -186,6 +338,7 @@ export interface IConfigAlarmaHSI {
   nombre: string;
   icono: number;
 }
+
 export interface IStatusAlarmaGarnet {
   particion?: number;
   problemas1?: {
@@ -356,156 +509,61 @@ export interface IStatusAlarmaGarnet {
     demoraPart4?: boolean;
   };
 }
-////
-export interface ISim {
-  iccid?: string;
-  numero?: string;
-  operador?: Operador;
-  apn?: string;
-  usuario?: string;
-  password?: string;
+
+export interface ArmOptions {
+  profile: string;
+  triggerId: string;
+  triggerName: string;
 }
 
-export interface IUltimaConexion {
-  lastIp?: string;
-  lastPort?: string;
-  sequence: number;
+export interface IArmModeRequest {
+  deviceId: string;
+  devCode: string;
+  armMode: 'T' | 'D' | 'p1'; // T=Total, D=Disarm, S=Stay
+  areaIds: number[];
+  armOptions: ArmOptions;
 }
 
-export interface ICamaraAlarma {
-  idCamara?: string;
-  canal?: string;
-  particion?: number;
-  zona?: number;
+export interface respuestaDoLynk {
+  code?: string;
+  data?: dolynkAuthRes | dolynkAlarmUser[] | ResponseInformationData;
+  msg?: string;
+  success?: boolean;
 }
 
-export interface IModoDesactivado {
-  dispositivoDesactivado?: boolean;
-  permanente?: boolean;
-  desde?: string;
-  hasta?: string;
-  codigos?: string[];
-  alarma?: {
-    particiones?: string[];
-    zonas?: {
-      particion: string;
-      zona: string;
-    }[];
-  };
+interface dolynkAuthRes {
+  appAccessToken?: string;
 }
 
-export interface IParticionZona {
-  nombre?: string;
-  particion?: number;
-  zona?: number;
-  marca?: string;
-  tipo?: CodigoTipoSensor;
-  modo?: ModoSensor;
-}
-export interface IUsuarioGenericoAlarma {
-  nombre?: string;
-  numeroUsuario?: number;
-}
-export type CodigoTipoSensor =
-  | 'PIR'
-  | 'DRV'
-  | 'MMG'
-  | 'BIR'
-  | 'PAS'
-  | 'PPC'
-  | 'TAM'
-  | 'OCR'
-  | 'HUM'
-  | 'PFU'
-  | 'ELE'
-  | 'BUM'
-  | 'CEM'
-  | 'VOL'
-  | 'DTS'
-  | 'SIS'
-  | 'AMK';
-export type ModoSensor = 'Seguidor' | 'Demorado' | 'Instantaneo';
-export type Operador = 'Personal' | 'Claro' | 'Movistar' | 'Tuenti' | 'Otro';
-export interface IDispositivoAlarma {
-  _id?: string;
-  //
-  fechaCreacion?: string;
-  fechaAlta?: string;
-  fechaUltimaComunicacion?: string;
-  idComunicador?: string;
-  idUnicoComunicador?: string;
-  passwordComunicador?: string;
-  idModelo?: string;
-  idDomicilio?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  nombre?: string;
-  numeroAbonado?: string;
-  sim1?: ISim;
-  sim2?: ISim;
-  idsClientesQuePuedenAtender?: string[];
-  idsClientesQuePuedenAtenderEventosTecnicos?: string[];
-  camarasPorZona?: ICamaraAlarma[];
-  idsCamaras?: string[];
-  armado?: boolean;
-  armando?: boolean;
-  imagenes?: string[];
-  ultimaConexion?: IUltimaConexion;
-  modoDesactivado?: IModoDesactivado;
-  infoZonas?: IParticionZona[];
-  usuarioGenerico?: IUsuarioGenericoAlarma;
-  //
-  nroDeSistema?: string;
-  //
-  estadoCuenta?: estadoCuenta;
-  frecReporte?: number;
-  idServiciosContratados?: string[];
-  clave?: string;
-  contraClave?: string;
-  tipoComercio?: string;
-  tipoCategoria?: string;
-  // Populate
-  domicilio?: IUbicacion;
-  modelo?: IModeloDispositivo;
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  comunicador?: IModeloDispositivo;
-  camaras?: ICamara[];
-  serviciosContratados?: IServicioContratado[];
+export interface dolynkAlarmUser {
+  userId: string; // ejemplo: "42950568110"
+  userType: string; // ejemplo: "Keypad"
+  group: string; // ejemplo: "Admin"
+  name: string; // ejemplo: "admin"
+  userCode: string; // puede estar vacío
+  duressCode: string; // puede estar vacío
+  authorities: string[]; // lista de permisos/autoridades
+  cards: string[]; // UID(s) de tarjetas
+  reserved: boolean;
+  status: string;
+  accessAllowTime: string | null; // fecha/hora en ISO o null si no aplica
+  areaIds: number[]; // ids de áreas permitidas
+  memo: string | null; // nota opcional
+  oneClickArming: boolean | null; // modo de armado rápido (o null si no definido)
 }
 
-type OmitirCreate =
-  | '_id'
-  | 'cliente'
-  | 'modelo'
-  | 'domicilio'
-  | 'comunicador '
-  | 'camaras'
-  | 'serviciosContratados';
+interface AccessoryInfo {
+  name?: string;
+  id?: string;
+  deviceId?: string;
+}
 
-export interface ICreateDispositivoAlarma
-  extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
+interface AreaInfo {
+  enable?: boolean;
+  name?: string;
+  accessoryInfos?: AccessoryInfo[];
+}
 
-type OmitirUpdate =
-  | '_id'
-  | 'cliente'
-  | 'modelo'
-  | 'domicilio'
-  | 'comunicador'
-  | 'camaras'
-  | 'serviciosContratados';
-
-export interface IUpdateDispositivoAlarma
-  extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}
-
-export interface IDispositivoAlarmaCache
-  extends Omit<
-    IDispositivoAlarma,
-    | 'domicilio'
-    | 'modelo'
-    | 'cliente'
-    | 'ancestros'
-    | 'comunicador'
-    | 'camaras'
-    | 'serviciosContratados'
-  > {}
+interface ResponseInformationData {
+  areaInfos?: AreaInfo[];
+}
