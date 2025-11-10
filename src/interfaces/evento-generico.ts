@@ -173,7 +173,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   idCliente?: string;
   idsAncestros?: string[];
 
-  categoria?: Categoria; // Para las vistas de atender
+  filtrador?: Categoria; // Para las vistas de atender
   // Tipo y datos discriminados
   tipoEvento?: T;
   estado?: MapaEventoGenerico[T]['estado'];
@@ -184,7 +184,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   atender?: boolean;
   noDerivar?: boolean;
   posponerHasta?: string;
-  codigoEvento?: string;
+  categoria?: string; // Nombre de la categoria del tipo de evento
   prioridad?: number;
   repetido?: number;
   fechaUltimoRepetido?: string;
@@ -210,20 +210,12 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   botonBluetooth?: IBotonBluetooth;
   configEventoUsuario?: IConfigEventoUsuario;
   reporte?: IReporteGenerico;
-  tecnico?: IUsuario;
-  destinatarioAsistencia?: IDestinatarioAsistencia;
-  emergencia?: IEmergencia;
-  chofer?: IUsuario;
-  centroDeAtencion?: ICentroDeAtencion;
-  movilUsuario?: IUsuario;
-  medicos?: IPersonalSalud[];
-  enfermeros?: IPersonalSalud[];
-  hospital?: IHospital;
-  usuarioResponsable?: IUsuario;
 }
 
 export type DetallesTecnicos = {
   idTecnicoAsignado?: string;
+  // Populate opcional
+  tecnico?: IUsuario;
 };
 
 export type DetallesMedicos = {
@@ -238,6 +230,16 @@ export type DetallesMedicos = {
   idsMedicos?: string[];
   idsEnfermeros?: string[];
   idUsuarioResponsable?: string;
+  // Populate opcional
+  destinatarioAsistencia?: IDestinatarioAsistencia;
+  emergencia?: IEmergencia;
+  chofer?: IUsuario;
+  centroDeAtencion?: ICentroDeAtencion;
+  movilUsuario?: IUsuario;
+  medicos?: IPersonalSalud[];
+  enfermeros?: IPersonalSalud[];
+  hospital?: IHospital;
+  usuarioResponsable?: IUsuario;
 };
 
 /* ────────────────────────────────────────────────
@@ -274,17 +276,7 @@ type OmitirCreate =
   | 'activo'
   | 'botonBluetooth'
   | 'configEventoUsuario'
-  | 'reporte'
-  | 'tecnico'
-  | 'destinatarioAsistencia'
-  | 'emergencia'
-  | 'chofer'
-  | 'centroDeAtencion'
-  | 'movilUsuario'
-  | 'medicos'
-  | 'enfermeros'
-  | 'hospital'
-  | 'usuarioResponsable';
+  | 'reporte';
 
 /** Create: no incluimos los virtuales/ids que se manejan en el backend.
  *  Mantiene `tipoEvento` como discriminante.
@@ -375,14 +367,20 @@ export type IEventoGenericoCache = Omit<
   | 'botonBluetooth'
   | 'configEventoUsuario'
   | 'reporte'
-  | 'tecnico'
-  | 'destinatarioAsistencia'
-  | 'emergencia'
-  | 'chofer'
-  | 'centroDeAtencion'
-  | 'movilUsuario'
-  | 'medicos'
-  | 'enfermeros'
-  | 'hospital'
-  | 'usuarioResponsable'
->;
+> & {
+  // Sobrescribir detallesTecnicos sin populates
+  detallesTecnicos?: Omit<DetallesTecnicos, 'tecnico'>;
+  // Sobrescribir detallesMedicos sin populates
+  detallesMedicos?: Omit<
+    DetallesMedicos,
+    | 'destinatarioAsistencia'
+    | 'emergencia'
+    | 'chofer'
+    | 'centroDeAtencion'
+    | 'movilUsuario'
+    | 'medicos'
+    | 'enfermeros'
+    | 'hospital'
+    | 'usuarioResponsable'
+  >;
+};
