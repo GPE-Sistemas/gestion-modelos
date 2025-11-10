@@ -191,6 +191,8 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   tiempoRespuesta?: number;
 
   idEntidad?: string; // Lo que generó el evento (activo, tracker, alarma, reporte,etc.)
+  idReporte?: string; // En caso de ser un evento generado por un reporte automático
+  idConfigEventoUsuario?: string; // Configuración de usuario aplicada al evento
 
   detallesTecnicos?: DetallesTecnicos;
   detallesMedicos?: DetallesMedicos;
@@ -202,14 +204,16 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   // Populate opcional
   cliente?: ICliente;
   ancestros?: ICliente[];
+  // idEntidad
   tracker?: ITracker;
   alarma?: IDispositivoAlarma;
   luminaria?: ILuminaria;
   usuario?: IUsuario;
   activo?: IActivo;
   botonBluetooth?: IBotonBluetooth;
-  configEventoUsuario?: IConfigEventoUsuario;
+  //
   reporte?: IReporteGenerico;
+  configEventoUsuario?: IConfigEventoUsuario;
 }
 
 export type DetallesTecnicos = {
