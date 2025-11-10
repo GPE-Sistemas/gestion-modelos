@@ -570,10 +570,25 @@ export interface armModes {
   mode: TiposDeArmado;
 }
 
+export interface accessoryInfo {
+  deviceId?: string;
+  id?: string;
+  name?: string;
+  type?: string;
+  model?: string;
+  areaId?: number;
+  bypassMode?: 'Active' | 'DisableTamper' | 'Bypassed';
+  mode?: TiposDeArmado;
+}
+
 export interface ResponseInformationData {
   areaInfos?: AreaInfo[];
 }
 
 export interface ResponseStateData {
   armModes?: armModes[];
+}
+
+export interface ResponseAccessoryInfos {
+  accessoryInfos?: armModes[];
 }
