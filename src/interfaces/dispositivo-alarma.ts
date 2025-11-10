@@ -590,5 +590,5 @@ export interface ResponseStateData {
 }
 
 export interface ResponseAccessoryInfos {
-  accessoryInfos?: armModes[];
+  accessoryInfos?: accessoryInfo[];
 }
