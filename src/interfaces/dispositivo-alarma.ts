@@ -531,7 +531,7 @@ export interface respuestaDoLynk {
   success?: boolean;
 }
 
-interface dolynkAuthRes {
+export interface dolynkAuthRes {
   appAccessToken?: string;
 }
 
