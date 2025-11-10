@@ -44,6 +44,7 @@ export type TipoEventoGenerico =
   | 'Evento Alarma'
   | 'Evento Luminaria'
   | 'Evento BotonBLE'
+  | 'Evento Sirena'
   | 'Evento Técnico Alarma'
   | 'Evento Técnico Tracker'
   | 'Evento Técnico Luminaria'
@@ -91,6 +92,15 @@ export interface IValoresEventoBotonBLE extends IValoresEventoBase {
   geojson?: IGeoJSONPoint;
 }
 
+export interface IValoresEventoSirena extends IValoresEventoBase {
+  idSirena?: string;
+  idConfigVecino?: string;
+  nombreVecino?: string;
+  tipo?: 'Pánico' | 'Manual' | 'Automático'; /// Pánico (APP) - Manual (Botón físico) - Automático (¿Programado o algo así?)
+  geojson?: IGeoJSONPoint;
+  direccion?: string;
+}
+
 // Valores para eventos técnicos
 export interface IValoresEventoTecnico extends IValoresEventoBase {
   categoria?: CategoriaTecnica;
@@ -136,6 +146,10 @@ export type MapaEventoGenerico = {
   };
   'Evento BotonBLE': {
     valores: IValoresEventoBotonBLE;
+    estado: EstadoEvento;
+  };
+  'Evento Sirena': {
+    valores: IValoresEventoSirena;
     estado: EstadoEvento;
   };
   'Evento Técnico Alarma': {
@@ -258,6 +272,7 @@ export type IEventoGenerico =
   | IEventoBaseGenerico<'Evento Alarma'>
   | IEventoBaseGenerico<'Evento Luminaria'>
   | IEventoBaseGenerico<'Evento BotonBLE'>
+  | IEventoBaseGenerico<'Evento Sirena'>
   | IEventoBaseGenerico<'Evento Técnico Alarma'>
   | IEventoBaseGenerico<'Evento Técnico Tracker'>
   | IEventoBaseGenerico<'Evento Técnico Luminaria'>
@@ -293,6 +308,7 @@ export type ICreateEventoGenerico =
   | Omit<IEventoBaseGenerico<'Evento Alarma'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Luminaria'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento BotonBLE'>, OmitirCreate>
+  | Omit<IEventoBaseGenerico<'Evento Sirena'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Alarma'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Tracker'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Luminaria'>, OmitirCreate>
@@ -323,6 +339,9 @@ export type IUpdateEventoGenerico =
     >)
   | ({ tipoEvento: 'Evento BotonBLE' } & Partial<
       Omit<IEventoBaseGenerico<'Evento BotonBLE'>, OmitirCreate | 'tipoEvento'>
+    >)
+  | ({ tipoEvento: 'Evento Sirena' } & Partial<
+      Omit<IEventoBaseGenerico<'Evento Sirena'>, OmitirCreate | 'tipoEvento'>
     >)
   | ({ tipoEvento: 'Evento Técnico Alarma' } & Partial<
       Omit<
