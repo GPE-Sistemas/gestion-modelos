@@ -7,6 +7,16 @@ export interface IGeoCache {
   };
   geohash?: string;
   direccion?: string;
+  direccionV2?: {
+    calle?: string;
+    numero?: string;
+    barrio?: string;
+    ciudad?: string;
+    partido?: string;
+    provincia?: string;
+    pais?: string;
+    codigoPostal?: string;
+  };
   fuente?: string; // Fuente de los datos (ej. Google Maps, OpenStreetMap, etc.)
 }
 
