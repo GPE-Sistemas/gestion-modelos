@@ -7,6 +7,7 @@ export interface IGeoCache {
   };
   geohash?: string;
   direccion?: string;
+  fuente?: string; // Fuente de los datos (ej. Google Maps, OpenStreetMap, etc.)
 }
 
 type OmitirCreate = '_id';
