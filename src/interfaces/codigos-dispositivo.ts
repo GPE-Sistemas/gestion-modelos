@@ -1,5 +1,5 @@
-import { ICliente } from "./cliente";
-import { ICategoriaEvento } from "./categoria-evento";
+import { ICliente } from './cliente';
+import { ICategoriaEvento } from './categoria-evento';
 
 export interface ICodigoDispositivoEntrada {
   codigo?: string;
@@ -10,7 +10,7 @@ export interface ICodigoDispositivoEntrada {
 }
 
 export interface ICodigoDispositivoEntradaCache
-  extends Omit<ICodigoDispositivoEntrada, "categoriaEvento"> {}
+  extends Omit<ICodigoDispositivoEntrada, 'categoriaEvento'> {}
 
 export interface ICodigoDispositivo {
   codigo?: string;
@@ -29,16 +29,17 @@ export interface ICodigoDispositivo {
 }
 
 export interface ICodigoDispositivoCache
-  extends Omit<ICodigoDispositivo, "categoriaEvento"> {}
+  extends Omit<ICodigoDispositivo, 'categoriaEvento'> {}
 
 export type TipoDispositivo =
-  | "Tracker"
-  | "Alarma"
-  | "Comunicador"
-  | "Cámara"
-  | "Luminaria"
-  | "DispositivoLorawan"
-  | "BotonBLE";
+  | 'Tracker'
+  | 'Alarma'
+  | 'Comunicador'
+  | 'Cámara'
+  | 'Luminaria'
+  | 'DispositivoLorawan'
+  | 'BotonBLE'
+  | 'Sirena';
 
 export interface ICodigosDispositivo {
   _id?: string;
@@ -58,18 +59,18 @@ export interface ICodigosDispositivo {
 export interface ICodigosDispositivoCache
   extends Omit<
     ICodigosDispositivo,
-    "cliente" | "ancestros" | "codigos" | "codigosEntrada"
+    'cliente' | 'ancestros' | 'codigos' | 'codigosEntrada'
   > {
   codigos?: ICodigoDispositivoCache[];
   codigosEntrada?: ICodigoDispositivoEntradaCache[];
 }
 
-type OmitirCreate = "_id" | "cliente" | "ancestros";
+type OmitirCreate = '_id' | 'cliente' | 'ancestros';
 
 export interface ICreateCodigosDispositivo
   extends Omit<Partial<ICodigosDispositivo>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente" | "ancestros";
+type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
 
 export interface IUpdateCodigosDispositivo
   extends Omit<Partial<ICodigosDispositivo>, OmitirUpdate> {}
