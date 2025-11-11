@@ -8,3 +8,13 @@ export interface IGeoCache {
   geohash?: string;
   direccion?: string;
 }
+
+type OmitirCreate = '_id';
+
+export interface ICreateGeoCache
+  extends Omit<Partial<IGeoCache>, OmitirCreate> {}
+
+type OmitirUpdate = '_id';
+
+export interface IUpdateGeoCache
+  extends Omit<Partial<IGeoCache>, OmitirUpdate> {}
