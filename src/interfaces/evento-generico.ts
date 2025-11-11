@@ -94,11 +94,13 @@ export interface IValoresEventoBotonBLE extends IValoresEventoBase {
 
 export interface IValoresEventoSirena extends IValoresEventoBase {
   idSirena?: string;
-  idConfigVecino?: string;
+  origen?: 'APP' | 'Botón' | 'Monitoreo'; /// Pánico (APP) - Manual (Botón físico) - Monitoreo (¿Programado o algo así?)
+  efecto?: 'Reflector' | 'Sirena' | 'Pánico'; /// Reflector (Luz) - Sirena (Sonido) - Pánico (Luz y Sonido)
   nombreVecino?: string;
-  tipo?: 'Pánico' | 'Manual' | 'Automático'; /// Pánico (APP) - Manual (Botón físico) - Automático (¿Programado o algo así?)
-  geojson?: IGeoJSONPoint;
-  direccion?: string;
+  idVecino?: string;
+  usuario?: string; // Si viene de monitoreo
+  idUsuario?: string; // Si viene de monitoreo
+  geojson?: IGeoJSONPoint; /// Ubicación del vecino cuando es APP Sirena en lkos otros casos.
 }
 
 // Valores para eventos técnicos
