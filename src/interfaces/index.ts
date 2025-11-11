@@ -60,6 +60,7 @@ export * from './password-reset';
 export * from './config-perfil';
 export * from './prediccion-cercana';
 export * from './sirena';
+export * from './geo-cache';
 // Chripstack
 export * from './chirpstack';
 export * from './reporte-generico';
