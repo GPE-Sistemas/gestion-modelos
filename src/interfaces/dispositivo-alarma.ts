@@ -1,5 +1,6 @@
 import { ICamara } from './camara';
 import { ICliente } from './cliente';
+import { Dia } from './config-evento-usuario';
 import { estadoCuenta } from './estado-entidad';
 import { IModeloDispositivo } from './modelo-dispositivo';
 import { IServicioContratado } from './servicio-contratado';
@@ -54,6 +55,21 @@ export interface IParticionZona {
   tipo?: CodigoTipoSensor;
   modo?: ModoSensor;
 }
+
+export type ITipoControlHorario = 'Apertura' | 'Cierre';
+export interface IControlHorarioDetalles {
+  // abre los lunes a viernes  a las 8:30 con tolerancia de 30 minutos
+  tipo: ITipoControlHorario;
+  dias: Dia[];
+  hora: string;
+  toleranciaAntes: number;
+  toleranciaDespues: number;
+}
+export interface IControlHorario {
+  activo?: boolean;
+  horarios?: IControlHorarioDetalles[];
+}
+
 export type CodigoTipoSensor =
   | 'PIR'
   | 'DRV'
@@ -101,6 +117,7 @@ export interface IDispositivoAlarma {
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
+  controlHorario?: IControlHorario;
   //
   nroDeSistema?: string;
   //
