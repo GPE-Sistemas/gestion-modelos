@@ -4,10 +4,11 @@ import { ICliente } from './cliente';
 import { IProveedor } from './proveedor';
 
 export type TipoServicio = 'Gasto' | 'Mantenimiento';
-
+export type CategoriaServicio = 'Colectivo' | 'Vehiculo';
 export interface IServicio {
   _id?: string;
   tipo?: TipoServicio;
+  categoria?: CategoriaServicio;
   idCliente?: string;
   idsAncestros?: string[];
   idActivo?: string;
