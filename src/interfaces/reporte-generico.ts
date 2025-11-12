@@ -122,6 +122,7 @@ export interface IReporteLuminariaACTISFotocelula {
 export interface IReporteTracker {
   fechaDevice?: string;
   geojson?: IGeoJSONPoint;
+  snappedGeojson?: IGeoJSONPoint;
   direccion?: string;
   velocidad?: number;
   orientacion?: number;
