@@ -54,6 +54,14 @@ export interface IClaveUsuarioAlarma {
   clave?: string;
 }
 
+export interface IVencimientoPermisoUsuario {
+  // Venicimiento de un permiso con sus respectivas opciones
+  fechaVencimiento?: string;
+  eliminarPermiso?: boolean;
+  desactivarUsuario?: boolean;
+  eliminarUsuario?: boolean;
+}
+
 export interface IPermiso {
   idCliente?: string;
   idsAncestros?: string[];
@@ -61,6 +69,7 @@ export interface IPermiso {
   roles?: Rol[];
   modulos?: IModulos;
   activo?: boolean;
+  vencimiento?: IVencimientoPermisoUsuario;
   // Virtual
   cliente?: ICliente;
   ancestros?: ICliente[];
