@@ -1,49 +1,49 @@
 // reporte-generico.ts
-import { IGeoJSONPoint } from "../auxiliares";
-import { IActivo } from "./activo";
-import { ICliente } from "./cliente";
-import { IDispositivoLorawan } from "./dispositivo-lorawan";
-import { IGrupo } from "./grupo";
-import { ILuminaria } from "./luminaria";
-import { IRecorrido } from "./recorrido";
-import { ITracker } from "./tracker";
-import { IUsuario } from "./usuario";
+import { IGeoJSONPoint } from '../auxiliares';
+import { IActivo } from './activo';
+import { ICliente } from './cliente';
+import { IDispositivoLorawan } from './dispositivo-lorawan';
+import { IGrupo } from './grupo';
+import { ILuminaria } from './luminaria';
+import { IRecorrido } from './recorrido';
+import { ITracker } from './tracker';
+import { IUsuario } from './usuario';
 
-export type TipoTriangulacion = "GNSS" | "Wifi";
+export type TipoTriangulacion = 'GNSS' | 'Wifi';
 
 export type ModoForzado =
-  | "No Forzado"
-  | "Forzado Encendido"
-  | "Forzado Apagado";
+  | 'No Forzado'
+  | 'Forzado Encendido'
+  | 'Forzado Apagado';
 
 export type IModoLuminaria =
-  | "Indeterminado"
-  | "Fotocélula"
-  | "Calendario"
-  | "Manual"
-  | "GPS"
-  | "Reloj Astronómico";
+  | 'Indeterminado'
+  | 'Fotocélula'
+  | 'Calendario'
+  | 'Manual'
+  | 'GPS'
+  | 'Reloj Astronómico';
 
 /* ────────────────────────────────────────────────
  *  TIPOS BASE
  * ────────────────────────────────────────────────*/
 
 export type TipoValoresReporte =
-  | "Luminaria GPE Periódico"
-  | "Luminaria GPE Energía"
-  | "Luminaria Wellness"
-  | "Luminaria ACTIS FING Estado"
-  | "Luminaria ACTIS FING Energía"
-  | "Luminaria ACTIS FING Fotocélula"
-  | "Tracker 4G"
-  | "Tracker T1000B"
-  | "Tracker Qualcomm";
+  | 'Luminaria GPE Periódico'
+  | 'Luminaria GPE Energía'
+  | 'Luminaria Wellness'
+  | 'Luminaria ACTIS FING Estado'
+  | 'Luminaria ACTIS FING Energía'
+  | 'Luminaria ACTIS FING Fotocélula'
+  | 'Tracker 4G'
+  | 'Tracker T1000B'
+  | 'Tracker Qualcomm';
 export type TipoEntidadReporte =
-  | "Luminaria"
-  | "Colectivo"
-  | "Activo"
-  | "Tracker"
-  | "Vehiculo";
+  | 'Luminaria'
+  | 'Colectivo'
+  | 'Activo'
+  | 'Tracker'
+  | 'Vehiculo';
 
 /* ────────────────────────────────────────────────
  *  REPORTES POR TIPO
@@ -98,7 +98,7 @@ export interface IReporteLuminariaWellness {
 // Reporte de estado (Puerto 131: 1 byte - encendido/apagado, motivo, nivel dimming)
 export interface IReporteLuminariaACTISEstado {
   encendido?: boolean;
-  motivo?: "Fotocélula" | "Reloj Astronómico" | "Manual" | "Por defecto";
+  motivo?: 'Fotocélula' | 'Reloj Astronómico' | 'Manual' | 'Por defecto';
   nivelDimming?: number; // 0-31
   fCnt?: number;
 }
@@ -122,6 +122,7 @@ export interface IReporteLuminariaACTISFotocelula {
 export interface IReporteTracker {
   fechaDevice?: string;
   geojson?: IGeoJSONPoint;
+  direccion?: string;
   velocidad?: number;
   orientacion?: number;
 }
@@ -147,15 +148,15 @@ export interface IReporteTrackerQualcomm extends IReporteTracker {
  * ────────────────────────────────────────────────*/
 
 export type MapaValoresReporte = {
-  "Luminaria GPE Periódico": IReporteLuminariaGPE;
-  "Luminaria GPE Energía": IReporteLuminariaGPEEnergia;
-  "Luminaria Wellness": IReporteLuminariaWellness;
-  "Luminaria ACTIS FING Estado": IReporteLuminariaACTISEstado;
-  "Luminaria ACTIS FING Energía": IReporteLuminariaACTISEnergia;
-  "Luminaria ACTIS FING Fotocélula": IReporteLuminariaACTISFotocelula;
-  "Tracker 4G": IReporteTracker4G;
-  "Tracker T1000B": IReporteTrackerT1000B;
-  "Tracker Qualcomm": IReporteTrackerQualcomm;
+  'Luminaria GPE Periódico': IReporteLuminariaGPE;
+  'Luminaria GPE Energía': IReporteLuminariaGPEEnergia;
+  'Luminaria Wellness': IReporteLuminariaWellness;
+  'Luminaria ACTIS FING Estado': IReporteLuminariaACTISEstado;
+  'Luminaria ACTIS FING Energía': IReporteLuminariaACTISEnergia;
+  'Luminaria ACTIS FING Fotocélula': IReporteLuminariaACTISFotocelula;
+  'Tracker 4G': IReporteTracker4G;
+  'Tracker T1000B': IReporteTrackerT1000B;
+  'Tracker Qualcomm': IReporteTrackerQualcomm;
 };
 
 /* ────────────────────────────────────────────────
@@ -203,78 +204,78 @@ export interface IReporteBase<T extends keyof MapaValoresReporte> {
  * ────────────────────────────────────────────────*/
 
 export type IReporteGenerico =
-  | IReporteBase<"Luminaria GPE Periódico">
-  | IReporteBase<"Luminaria GPE Energía">
-  | IReporteBase<"Luminaria Wellness">
-  | IReporteBase<"Luminaria ACTIS FING Estado">
-  | IReporteBase<"Luminaria ACTIS FING Energía">
-  | IReporteBase<"Luminaria ACTIS FING Fotocélula">
-  | IReporteBase<"Tracker 4G">
-  | IReporteBase<"Tracker T1000B">
-  | IReporteBase<"Tracker Qualcomm">;
+  | IReporteBase<'Luminaria GPE Periódico'>
+  | IReporteBase<'Luminaria GPE Energía'>
+  | IReporteBase<'Luminaria Wellness'>
+  | IReporteBase<'Luminaria ACTIS FING Estado'>
+  | IReporteBase<'Luminaria ACTIS FING Energía'>
+  | IReporteBase<'Luminaria ACTIS FING Fotocélula'>
+  | IReporteBase<'Tracker 4G'>
+  | IReporteBase<'Tracker T1000B'>
+  | IReporteBase<'Tracker Qualcomm'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE - UNIONES DISCRIMINADAS
  * ────────────────────────────────────────────────*/
 
 type Omitir =
-  | "_id"
-  | "idsAncestros"
-  | "cliente"
-  | "ancestros"
-  | "dispositivoLora"
-  | "tracker"
-  | "grupos"
-  | "activo"
-  | "recorrido"
-  | "usuario"
-  | "luminaria";
+  | '_id'
+  | 'idsAncestros'
+  | 'cliente'
+  | 'ancestros'
+  | 'dispositivoLora'
+  | 'tracker'
+  | 'grupos'
+  | 'activo'
+  | 'recorrido'
+  | 'usuario'
+  | 'luminaria';
 
 /** Create: no incluimos los virtuales/ids que manejás en el backend.
  *  Mantiene `tipoReporte` como discriminante.
  */
 export type ICreateReporteGenerico =
-  | Omit<IReporteBase<"Luminaria GPE Periódico">, Omitir>
-  | Omit<IReporteBase<"Luminaria GPE Energía">, Omitir>
-  | Omit<IReporteBase<"Luminaria Wellness">, Omitir>
-  | Omit<IReporteBase<"Luminaria ACTIS FING Estado">, Omitir>
-  | Omit<IReporteBase<"Luminaria ACTIS FING Energía">, Omitir>
-  | Omit<IReporteBase<"Luminaria ACTIS FING Fotocélula">, Omitir>
-  | Omit<IReporteBase<"Tracker 4G">, Omitir>
-  | Omit<IReporteBase<"Tracker T1000B">, Omitir>
-  | Omit<IReporteBase<"Tracker Qualcomm">, Omitir>;
+  | Omit<IReporteBase<'Luminaria GPE Periódico'>, Omitir>
+  | Omit<IReporteBase<'Luminaria GPE Energía'>, Omitir>
+  | Omit<IReporteBase<'Luminaria Wellness'>, Omitir>
+  | Omit<IReporteBase<'Luminaria ACTIS FING Estado'>, Omitir>
+  | Omit<IReporteBase<'Luminaria ACTIS FING Energía'>, Omitir>
+  | Omit<IReporteBase<'Luminaria ACTIS FING Fotocélula'>, Omitir>
+  | Omit<IReporteBase<'Tracker 4G'>, Omitir>
+  | Omit<IReporteBase<'Tracker T1000B'>, Omitir>
+  | Omit<IReporteBase<'Tracker Qualcomm'>, Omitir>;
 
 /** Update: permitimos campos parciales (opcional) pero mantenemos `tipoReporte` para que TS pueda discriminar.
  *  Ejemplo: cuando actualizás, podés enviar solo `valores` con algunos campos o metadatos.
  */
 export type IUpdateReporteGenerico =
-  | ({ tipoReporte: "Luminaria GPE Periódico" } & Partial<
-      Omit<IReporteBase<"Luminaria GPE Periódico">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Luminaria GPE Periódico' } & Partial<
+      Omit<IReporteBase<'Luminaria GPE Periódico'>, Omitir | 'tipoReporte'>
     >)
-  | ({ tipoReporte: "Luminaria GPE Energía" } & Partial<
-      Omit<IReporteBase<"Luminaria GPE Energía">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Luminaria GPE Energía' } & Partial<
+      Omit<IReporteBase<'Luminaria GPE Energía'>, Omitir | 'tipoReporte'>
     >)
-  | ({ tipoReporte: "Luminaria Wellness" } & Partial<
-      Omit<IReporteBase<"Luminaria Wellness">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Luminaria Wellness' } & Partial<
+      Omit<IReporteBase<'Luminaria Wellness'>, Omitir | 'tipoReporte'>
     >)
-  | ({ tipoReporte: "Luminaria ACTIS FING Estado" } & Partial<
-      Omit<IReporteBase<"Luminaria ACTIS FING Estado">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Luminaria ACTIS FING Estado' } & Partial<
+      Omit<IReporteBase<'Luminaria ACTIS FING Estado'>, Omitir | 'tipoReporte'>
     >)
-  | ({ tipoReporte: "Luminaria ACTIS FING Energía" } & Partial<
-      Omit<IReporteBase<"Luminaria ACTIS FING Energía">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Luminaria ACTIS FING Energía' } & Partial<
+      Omit<IReporteBase<'Luminaria ACTIS FING Energía'>, Omitir | 'tipoReporte'>
     >)
-  | ({ tipoReporte: "Luminaria ACTIS FING Fotocélula" } & Partial<
+  | ({ tipoReporte: 'Luminaria ACTIS FING Fotocélula' } & Partial<
       Omit<
-        IReporteBase<"Luminaria ACTIS FING Fotocélula">,
-        Omitir | "tipoReporte"
+        IReporteBase<'Luminaria ACTIS FING Fotocélula'>,
+        Omitir | 'tipoReporte'
       >
     >)
-  | ({ tipoReporte: "Tracker 4G" } & Partial<
-      Omit<IReporteBase<"Tracker 4G">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Tracker 4G' } & Partial<
+      Omit<IReporteBase<'Tracker 4G'>, Omitir | 'tipoReporte'>
     >)
-  | ({ tipoReporte: "Tracker T1000B" } & Partial<
-      Omit<IReporteBase<"Tracker T1000B">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Tracker T1000B' } & Partial<
+      Omit<IReporteBase<'Tracker T1000B'>, Omitir | 'tipoReporte'>
     >)
-  | ({ tipoReporte: "Tracker Qualcomm" } & Partial<
-      Omit<IReporteBase<"Tracker Qualcomm">, Omitir | "tipoReporte">
+  | ({ tipoReporte: 'Tracker Qualcomm' } & Partial<
+      Omit<IReporteBase<'Tracker Qualcomm'>, Omitir | 'tipoReporte'>
     >);
