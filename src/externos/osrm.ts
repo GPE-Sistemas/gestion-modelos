@@ -94,3 +94,15 @@ export interface Matchings extends Route {
   // confidence: Confidence of the matching. float value between 0 and 1. 1 is very confident that the matching is correct.
   confidence?: number;
 }
+
+export interface INearest {
+  hint: string;
+  distance: number;
+  name: string;
+  location: number[];
+}
+
+export interface INearestResponse {
+  waypoints: INearest[];
+  code: string;
+}
