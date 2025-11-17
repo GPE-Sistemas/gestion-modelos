@@ -1,12 +1,12 @@
-import { IGeoJSONPoint } from "../auxiliares";
-import { ICliente } from "./cliente";
-import { IConfigPerfil } from "./config-perfil";
-import { IDispositivoLorawan } from "./dispositivo-lorawan";
-import { IGrupo } from "./grupo";
-import { IModeloDispositivo } from "./modelo-dispositivo";
-import { IReporteBase } from "./reporte-generico";
+import { IGeoJSONPoint } from '../auxiliares';
+import { ICliente } from './cliente';
+import { IConfigPerfil } from './config-perfil';
+import { IDispositivoLorawan } from './dispositivo-lorawan';
+import { IGrupo } from './grupo';
+import { IModeloDispositivo } from './modelo-dispositivo';
+import { IReporteBase } from './reporte-generico';
 
-export type EstadoLuminaria = "Operativa" | "Mantenimiento";
+export type EstadoLuminaria = 'Operativa' | 'Mantenimiento';
 
 export interface ILuminaria {
   _id?: string;
@@ -20,8 +20,12 @@ export interface ILuminaria {
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idsGrupos?: string[];
   tiempoEncendida?: number; // En horas
-  ultimoReportePeriodico?: IReporteBase<"Luminaria GPE Periódico">; // Ultimo reporte periodico recibido
-  ultimoReporteEnergia?: IReporteBase<"Luminaria GPE Energía">; // Ultimo reporte de energia recibido
+  ultimoReportePeriodico?:
+    | IReporteBase<'Luminaria GPE Periódico'>
+    | IReporteBase<'Luminaria ACTIS FING Estado'>; // Ultimo reporte periodico recibido
+  ultimoReporteEnergia?:
+    | IReporteBase<'Luminaria GPE Energía'>
+    | IReporteBase<'Luminaria ACTIS FING Energía'>; // Ultimo reporte de energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
   idPerfilDimming?: string; //Valores por defecto para el comando de dimming
   idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
@@ -41,21 +45,21 @@ export interface ILuminaria {
 
 ////// CREATE
 type OmitirCreate =
-  | "_id"
-  | "fechaCreacion"
-  | "cliente"
-  | "dispositivo"
-  | "modeloDispositivo";
+  | '_id'
+  | 'fechaCreacion'
+  | 'cliente'
+  | 'dispositivo'
+  | 'modeloDispositivo';
 export interface ICreateLuminaria
   extends Omit<Partial<ILuminaria>, OmitirCreate> {}
 
 ////// UPDATE
 type OmitirUpdate =
-  | "_id"
-  | "fechaCreacion"
-  | "cliente"
-  | "dispositivo"
-  | "modeloDispositivo";
+  | '_id'
+  | 'fechaCreacion'
+  | 'cliente'
+  | 'dispositivo'
+  | 'modeloDispositivo';
 export interface IUpdateLuminaria
   extends Omit<Partial<ILuminaria>, OmitirUpdate> {}
 

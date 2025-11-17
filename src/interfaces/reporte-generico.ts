@@ -20,9 +20,7 @@ export type IModoLuminaria =
   | 'Indeterminado'
   | 'Fotocélula'
   | 'Calendario'
-  | 'Manual'
-  | 'GPS'
-  | 'Reloj Astronómico';
+  | 'Manual';
 
 /* ────────────────────────────────────────────────
  *  TIPOS BASE
@@ -97,26 +95,27 @@ export interface IReporteLuminariaWellness {
 // ===== ACTIS FING =====
 // Reporte de estado (Puerto 131: 1 byte - encendido/apagado, motivo, nivel dimming)
 export interface IReporteLuminariaACTISEstado {
-  encendido?: boolean;
-  motivo?: 'Fotocélula' | 'Reloj Astronómico' | 'Manual' | 'Por defecto';
-  nivelDimming?: number; // 0-31
+  turnOnOffStatus?: boolean;
+  modo?: IModoLuminaria;
+  estadoRele?: boolean;
+  dimmingValue?: number;
   fCnt?: number;
+  esDeDia?: boolean;
+  horaAmanecer?: string;
+  horaAtardecer?: string;
+  tiempoEncendida?: number; // En horas
 }
 
 // Reporte de energía (Puerto 130: 3 bytes - voltaje delta, corriente, factor de potencia)
 export interface IReporteLuminariaACTISEnergia {
-  voltaje?: number; // Delta desde 230V (-64 a 63)
-  voltajeTotal?: number; // 230 + voltaje
-  corriente?: number; // mA (0-2047)
-  factorPotencia?: number; // 0.37 a 1.0
-  potencia?: number; // W calculada (V * I / 1000)
+  corriente?: number;
+  voltaje?: number;
+  potencia?: number;
+  factorPotencia?: number;
   fCnt?: number;
-}
-
-// Reporte de fotocélula (Puerto 120: 1 byte - valor fotocélula)
-export interface IReporteLuminariaACTISFotocelula {
-  valorFotocelula?: number; // 0-255 (corresponde a 0-3.3V)
-  fCnt?: number;
+  esDeDia?: boolean;
+  horaAmanecer?: string;
+  horaAtardecer?: string;
 }
 
 export interface IReporteTracker {
@@ -154,7 +153,6 @@ export type MapaValoresReporte = {
   'Luminaria Wellness': IReporteLuminariaWellness;
   'Luminaria ACTIS FING Estado': IReporteLuminariaACTISEstado;
   'Luminaria ACTIS FING Energía': IReporteLuminariaACTISEnergia;
-  'Luminaria ACTIS FING Fotocélula': IReporteLuminariaACTISFotocelula;
   'Tracker 4G': IReporteTracker4G;
   'Tracker T1000B': IReporteTrackerT1000B;
   'Tracker Qualcomm': IReporteTrackerQualcomm;
@@ -210,7 +208,6 @@ export type IReporteGenerico =
   | IReporteBase<'Luminaria Wellness'>
   | IReporteBase<'Luminaria ACTIS FING Estado'>
   | IReporteBase<'Luminaria ACTIS FING Energía'>
-  | IReporteBase<'Luminaria ACTIS FING Fotocélula'>
   | IReporteBase<'Tracker 4G'>
   | IReporteBase<'Tracker T1000B'>
   | IReporteBase<'Tracker Qualcomm'>;
@@ -241,7 +238,6 @@ export type ICreateReporteGenerico =
   | Omit<IReporteBase<'Luminaria Wellness'>, Omitir>
   | Omit<IReporteBase<'Luminaria ACTIS FING Estado'>, Omitir>
   | Omit<IReporteBase<'Luminaria ACTIS FING Energía'>, Omitir>
-  | Omit<IReporteBase<'Luminaria ACTIS FING Fotocélula'>, Omitir>
   | Omit<IReporteBase<'Tracker 4G'>, Omitir>
   | Omit<IReporteBase<'Tracker T1000B'>, Omitir>
   | Omit<IReporteBase<'Tracker Qualcomm'>, Omitir>;
@@ -264,12 +260,6 @@ export type IUpdateReporteGenerico =
     >)
   | ({ tipoReporte: 'Luminaria ACTIS FING Energía' } & Partial<
       Omit<IReporteBase<'Luminaria ACTIS FING Energía'>, Omitir | 'tipoReporte'>
-    >)
-  | ({ tipoReporte: 'Luminaria ACTIS FING Fotocélula' } & Partial<
-      Omit<
-        IReporteBase<'Luminaria ACTIS FING Fotocélula'>,
-        Omitir | 'tipoReporte'
-      >
     >)
   | ({ tipoReporte: 'Tracker 4G' } & Partial<
       Omit<IReporteBase<'Tracker 4G'>, Omitir | 'tipoReporte'>
