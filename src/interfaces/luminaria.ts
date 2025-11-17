@@ -37,7 +37,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   tiempoEncendida?: number; // En horas
   tipoDispositivo?: T; // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
   ultimoReportePeriodico?: MapaValoresReportePeriodico[T]; // Ultimo reporte periodico recibido
-  ultimoReporteEnergia?: MapaValoresReportePeriodico[T]; // Ultimo reporte energia recibido
+  ultimoReporteEnergia?: MapaValoresReporteEnergia[T]; // Ultimo reporte energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
   idPerfilDimming?: string; // Valores por defecto para el comando de dimming
   idPerfilConfig?: string; // Valores por defecto para el comando de configuracion
