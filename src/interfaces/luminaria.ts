@@ -35,7 +35,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idsGrupos?: string[];
   tiempoEncendida?: number; // En horas
-  tipoDispostiivo?: T; // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
+  tipoDispositivo?: T; // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
   ultimoReportePeriodico?: MapaValoresReportePeriodico[T]; // Ultimo reporte periodico recibido
   ultimoReporteEnergia?: MapaValoresReportePeriodico[T]; // Ultimo reporte energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
@@ -59,21 +59,45 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
 type OmitirCreate =
   | '_id'
   | 'fechaCreacion'
+  | 'idsAncestros'
   | 'cliente'
+  | 'ancestros'
   | 'dispositivo'
-  | 'modeloDispositivo';
-export interface ICreateLuminaria
-  extends Omit<Partial<ILuminaria>, OmitirCreate> {}
+  | 'modeloDispositivo'
+  | 'grupos'
+  | 'perfilDimming'
+  | 'perfilConfig';
+
+export type ICreateLuminaria =
+  | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirCreate>
+  | Omit<ILuminariaGenerica<'Luminaria ACTIS FING'>, OmitirCreate>;
 
 ////// UPDATE
 type OmitirUpdate =
   | '_id'
   | 'fechaCreacion'
+  | 'idsAncestros'
   | 'cliente'
+  | 'ancestros'
   | 'dispositivo'
-  | 'modeloDispositivo';
-export interface IUpdateLuminaria
-  extends Omit<Partial<ILuminaria>, OmitirUpdate> {}
+  | 'modeloDispositivo'
+  | 'grupos'
+  | 'perfilDimming'
+  | 'perfilConfig';
+
+export type IUpdateLuminaria =
+  | ({ tipoDispositivo: 'Luminaria GPE' } & Partial<
+      Omit<
+        ILuminariaGenerica<'Luminaria GPE'>,
+        OmitirUpdate | 'tipoDispositivo'
+      >
+    >)
+  | ({ tipoDispositivo: 'Luminaria ACTIS FING' } & Partial<
+      Omit<
+        ILuminariaGenerica<'Luminaria ACTIS FING'>,
+        OmitirUpdate | 'tipoDispositivo'
+      >
+    >);
 
 /**
  * Representa la ubicación de una luminaria con corte de energía
