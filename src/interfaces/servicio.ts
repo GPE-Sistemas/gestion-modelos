@@ -3,7 +3,7 @@ import { IActivo } from './activo';
 import { ICliente } from './cliente';
 import { IProveedor } from './proveedor';
 
-export type TipoServicio = 'Gasto' | 'Mantenimiento';
+export type TipoServicio = 'Gasto' | 'Mantenimiento' | 'Combustible';
 export type CategoriaServicio = 'Colectivo' | 'Vehiculo';
 export interface IServicio {
   _id?: string;

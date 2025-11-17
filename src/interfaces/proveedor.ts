@@ -1,7 +1,7 @@
 import { ICoordenadas } from '../auxiliares';
 import { ICliente } from './cliente';
 
-export type TipoProveedor = 'Mecanico' | 'Combustible';
+export type TipoProveedor = 'Mecanico' | 'Combustible' | 'Otro';
 export type CategoriaProveedor = 'Colectivo' | 'Vehiculo';
 export interface IProveedor {
   _id?: string;
