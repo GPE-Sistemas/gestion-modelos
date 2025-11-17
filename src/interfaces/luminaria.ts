@@ -86,18 +86,8 @@ type OmitirUpdate =
   | 'perfilConfig';
 
 export type IUpdateLuminaria =
-  | ({ tipoDispositivo: 'Luminaria GPE' } & Partial<
-      Omit<
-        ILuminariaGenerica<'Luminaria GPE'>,
-        OmitirUpdate | 'tipoDispositivo'
-      >
-    >)
-  | ({ tipoDispositivo: 'Luminaria ACTIS FING' } & Partial<
-      Omit<
-        ILuminariaGenerica<'Luminaria ACTIS FING'>,
-        OmitirUpdate | 'tipoDispositivo'
-      >
-    >);
+  | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirUpdate>
+  | Omit<ILuminariaGenerica<'Luminaria ACTIS FING'>, OmitirUpdate>;
 
 /**
  * Representa la ubicación de una luminaria con corte de energía
