@@ -8,7 +8,22 @@ import { IReporteBase } from './reporte-generico';
 
 export type EstadoLuminaria = 'Operativa' | 'Mantenimiento';
 
-export interface ILuminaria {
+export type MapaValoresReportePeriodico = {
+  'Luminaria GPE': IReporteBase<'Luminaria GPE Periódico'>;
+  'Luminaria ACTIS FING': IReporteBase<'Luminaria ACTIS FING Estado'>;
+};
+export type MapaValoresReporteEnergia = {
+  'Luminaria GPE': IReporteBase<'Luminaria GPE Energía'>;
+  'Luminaria ACTIS FING': IReporteBase<'Luminaria ACTIS FING Energía'>;
+};
+
+export type TipoDispositivoLuminaria = keyof MapaValoresReportePeriodico;
+
+export type ILuminaria =
+  | ILuminariaGenerica<'Luminaria GPE'>
+  | ILuminariaGenerica<'Luminaria ACTIS FING'>;
+
+export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   _id?: string;
   fechaCreacion?: string; // Default: Date.now
   idCliente?: string;
@@ -20,15 +35,12 @@ export interface ILuminaria {
   idModeloDispositivo?: string; // ID del modelo de dispositivo
   idsGrupos?: string[];
   tiempoEncendida?: number; // En horas
-  ultimoReportePeriodico?:
-    | IReporteBase<'Luminaria GPE Periódico'>
-    | IReporteBase<'Luminaria ACTIS FING Estado'>; // Ultimo reporte periodico recibido
-  ultimoReporteEnergia?:
-    | IReporteBase<'Luminaria GPE Energía'>
-    | IReporteBase<'Luminaria ACTIS FING Energía'>; // Ultimo reporte de energia recibido
+  tipoDispostiivo?: T; // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
+  ultimoReportePeriodico?: MapaValoresReportePeriodico[T]; // Ultimo reporte periodico recibido
+  ultimoReporteEnergia?: MapaValoresReportePeriodico[T]; // Ultimo reporte energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
-  idPerfilDimming?: string; //Valores por defecto para el comando de dimming
-  idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
+  idPerfilDimming?: string; // Valores por defecto para el comando de dimming
+  idPerfilConfig?: string; // Valores por defecto para el comando de configuracion
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
