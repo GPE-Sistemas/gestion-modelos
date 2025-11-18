@@ -183,7 +183,7 @@ export type TipoDispositivoLorawan =
  *  MAPA DE TIPO → CONFIG (TYPE-SAFE)
  * ────────────────────────────────────────────────*/
 
-type MapaConfigDispositivo = {
+export type MapaConfigDispositivo = {
   'Luminaria GPE': IDispositivoLuminariaGPE;
   'Luminaria Wellness': IDispositivoLuminariaWellness;
   'Luminaria ACTIS FING': IDispositivoLuminariaACTIS;
