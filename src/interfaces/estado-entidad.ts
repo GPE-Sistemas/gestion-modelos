@@ -16,7 +16,7 @@ export interface IEstadoEntidad {
   nota?: string;
   motivos?: string[];
   permanente?: boolean; // Si el estado es permanente, no tiene fecha de fin definida
-  vigenciaDesde?: string; // Desde cuando se aplica el estado
+  vigencia?: string; // Desde cuando se aplica el estado
   vigenciaHasta?: string; // Hasta cuando se aplica el estado
   // Populate
   cliente?: ICliente;
