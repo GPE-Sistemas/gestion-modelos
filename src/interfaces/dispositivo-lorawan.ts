@@ -1,8 +1,8 @@
-import { IGeoJSONPoint } from "../auxiliares";
-import { ICliente } from "./cliente";
-import { IComando } from "./comando";
-import { IModeloDispositivo } from "./modelo-dispositivo";
-import { IModoLuminaria, IReporteGenerico } from "./reporte-generico";
+import { IGeoJSONPoint } from '../auxiliares';
+import { ICliente } from './cliente';
+import { IComando } from './comando';
+import { IModeloDispositivo } from './modelo-dispositivo';
+import { IModoLuminaria, IReporteGenerico } from './reporte-generico';
 
 //Notas: En el caso de estos dispositivos:
 // Potencia de dispositivo GPE = consumo instantáneo (W)
@@ -175,18 +175,18 @@ export interface IDispositivoLuminariaACTIS {
 }
 
 export type TipoDispositivoLorawan =
-  | "Luminaria GPE"
-  | "Luminaria Wellness"
-  | "Luminaria ACTIS FING";
+  | 'Luminaria GPE'
+  | 'Luminaria Wellness'
+  | 'Luminaria ACTIS FING';
 
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO → CONFIG (TYPE-SAFE)
  * ────────────────────────────────────────────────*/
 
 type MapaConfigDispositivo = {
-  "Luminaria GPE": IDispositivoLuminariaGPE;
-  "Luminaria Wellness": IDispositivoLuminariaWellness;
-  "Luminaria ACTIS FING": IDispositivoLuminariaACTIS;
+  'Luminaria GPE': IDispositivoLuminariaGPE;
+  'Luminaria Wellness': IDispositivoLuminariaWellness;
+  'Luminaria ACTIS FING': IDispositivoLuminariaACTIS;
 };
 
 /* ────────────────────────────────────────────────
@@ -194,7 +194,7 @@ type MapaConfigDispositivo = {
  * ────────────────────────────────────────────────*/
 
 export interface IDispositivoLorawanBase<
-  T extends keyof MapaConfigDispositivo
+  T extends keyof MapaConfigDispositivo,
 > {
   _id?: string;
   idCliente?: string;
@@ -248,45 +248,39 @@ export interface IDispositivoLorawanBase<
  * ────────────────────────────────────────────────*/
 
 export type IDispositivoLorawan =
-  | IDispositivoLorawanBase<"Luminaria GPE">
-  | IDispositivoLorawanBase<"Luminaria Wellness">
-  | IDispositivoLorawanBase<"Luminaria ACTIS FING">;
+  | IDispositivoLorawanBase<'Luminaria GPE'>
+  | IDispositivoLorawanBase<'Luminaria Wellness'>
+  | IDispositivoLorawanBase<'Luminaria ACTIS FING'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE - UNIONES DISCRIMINADAS
  * ────────────────────────────────────────────────*/
 
-type OmitirCreate = "_id" | "cliente" | "ancestros" | "modeloDispositivo";
+type OmitirCreate = '_id' | 'cliente' | 'ancestros' | 'modeloDispositivo';
 
 /** Create: no incluimos los virtuales/ids que manejás en el backend.
  *  Mantiene `tipo` como discriminante para type safety.
  */
 export type ICreateDispositivoLorawan =
-  | Omit<Partial<IDispositivoLorawanBase<"Luminaria GPE">>, OmitirCreate>
-  | Omit<Partial<IDispositivoLorawanBase<"Luminaria Wellness">>, OmitirCreate>
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria GPE'>>, OmitirCreate>
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria Wellness'>>, OmitirCreate>
   | Omit<
-      Partial<IDispositivoLorawanBase<"Luminaria ACTIS FING">>,
+      Partial<IDispositivoLorawanBase<'Luminaria ACTIS FING'>>,
       OmitirCreate
     >;
 
-type OmitirUpdate = "_id" | "cliente" | "ancestros" | "modeloDispositivo";
+type OmitirUpdate = '_id' | 'cliente' | 'ancestros' | 'modeloDispositivo';
 
 /** Update: permitimos campos parciales pero mantenemos `tipo` para que TS pueda discriminar.
  *  Cuando actualizás config, TypeScript valida que sea del tipo correcto según `tipo`.
  */
 export type IUpdateDispositivoLorawan =
-  | ({ tipo: "Luminaria GPE" } & Partial<
-      Omit<IDispositivoLorawanBase<"Luminaria GPE">, OmitirUpdate | "tipo">
-    >)
-  | ({ tipo: "Luminaria Wellness" } & Partial<
-      Omit<IDispositivoLorawanBase<"Luminaria Wellness">, OmitirUpdate | "tipo">
-    >)
-  | ({ tipo: "Luminaria ACTIS FING" } & Partial<
-      Omit<
-        IDispositivoLorawanBase<"Luminaria ACTIS FING">,
-        OmitirUpdate | "tipo"
-      >
-    >);
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria GPE'>>, OmitirUpdate>
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria Wellness'>>, OmitirUpdate>
+  | Omit<
+      Partial<IDispositivoLorawanBase<'Luminaria ACTIS FING'>>,
+      OmitirUpdate
+    >;
 
 //Información para el modo calendario
 export interface IDimmerCalendarioConfig {
