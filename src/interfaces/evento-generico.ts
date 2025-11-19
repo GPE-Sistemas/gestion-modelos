@@ -21,6 +21,7 @@ import {
   EstadoEmergenciaMedica,
   EstadoEmergenciaBomberos,
 } from './evento-emergencia';
+import { ISirena } from './sirena';
 
 /* ────────────────────────────────────────────────
  *  ALIAS DE TIPOS EXISTENTES
@@ -227,6 +228,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   usuario?: IUsuario;
   activo?: IActivo;
   botonBluetooth?: IBotonBluetooth;
+  sirena?: ISirena;
   //
   reporte?: IReporteGenerico;
   configEventoUsuario?: IConfigEventoUsuario;
