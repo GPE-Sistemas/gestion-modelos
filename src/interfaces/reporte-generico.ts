@@ -32,7 +32,6 @@ export type TipoValoresReporte =
   | 'Luminaria Wellness'
   | 'Luminaria ACTIS FING Estado'
   | 'Luminaria ACTIS FING Energía'
-  | 'Luminaria ACTIS FING Fotocélula'
   | 'Tracker 4G'
   | 'Tracker T1000B'
   | 'Tracker Qualcomm';
