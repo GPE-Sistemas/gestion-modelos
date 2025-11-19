@@ -162,9 +162,17 @@ export interface IModuloAdministracion {
   crearUsuarios?: boolean;
   crearServicios?: boolean;
   crearApikeys?: boolean;
+
+  //Trackers
+  activoTrackers?: boolean;
+  crearTrackers?: boolean;
+  //Botones BLE
+  activoBotonesBLE?: boolean;
   crearBotonesBLE?: boolean;
+  //Dispositivos Lorawam
+  activoDispositivosLorawan?: boolean;
   crearDispositivosLorawan?: boolean;
-  compartirDispositivosLorawan?: boolean;
+  compartirDispositivosLorawan?: boolean; //Posiblemente esto no se use más
 }
 
 export interface IModuloVehiculos {
