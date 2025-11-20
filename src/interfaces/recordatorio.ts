@@ -4,9 +4,10 @@ import { IDocumentacion } from './documentacion';
 import { IUsuario } from './usuario';
 
 export type TipoRecordatorio = 'km' | 'fecha';
-
+export type CategoriaRecordatorio = 'Colectivo' | 'Vehiculo';
 export interface IRecordatorio {
   _id?: string;
+  categoria?: CategoriaRecordatorio;
   idCliente?: string;
   idsAncestros?: string[];
   idUsuario?: string;
