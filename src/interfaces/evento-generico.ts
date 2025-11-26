@@ -98,6 +98,7 @@ export interface IValoresEventoSirena extends IValoresEventoBase {
   chipId?: string;
   origen?: 'APP' | 'Botón' | 'Monitoreo'; /// Pánico (APP) - Manual (Botón físico) - Monitoreo (¿Programado o algo así?)
   efecto?: 'Reflector' | 'Sirena' | 'Pánico'; /// Reflector (Luz) - Sirena (Sonido) - Pánico (Luz y Sonido)
+  direccion?: string; // Dirección parseada de la sirena
   idVecino?: string;
   nombreVecino?: string;
   telefono?: string; // Solo del vecino
