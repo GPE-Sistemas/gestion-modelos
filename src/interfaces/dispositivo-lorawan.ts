@@ -175,6 +175,8 @@ export interface IDispositivoLuminariaACTIS {
 
   // ===== ALARMAS=====
   alarma?: string;
+  // =====FRECUENCIA DE REPORTES=====
+  frecReporte?: number; //Acá se coloca la frecuencia de reportes periódicos en minutos, si bien también hay frecReporte de energía, esta generalmente no va a ser menor que la de reportes periódicos
 }
 
 export type TipoDispositivoLorawan =
@@ -214,6 +216,7 @@ export interface IDispositivoLorawanBase<
   ultimoReporte?: IReporteGenerico;
   margin?: number; //Es la señal del dispositivo, expresada en dB
   frecReporte?: number;
+  //En Wellness es 15 minutos, en GPE y ACTIS se considera la frecuencia de reporte periódico
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
   paquetes?: IPaquetesDispositivoLorawan; //Información para calcular la pérdida de paquetes
