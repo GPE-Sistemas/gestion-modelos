@@ -176,7 +176,8 @@ export interface IDispositivoLuminariaACTIS {
   // ===== ALARMAS=====
   alarma?: string;
   // =====FRECUENCIA DE REPORTES=====
-  frecReporte?: number; //Acá se coloca la frecuencia de reportes periódicos en minutos, si bien también hay frecReporte de energía, esta generalmente no va a ser menor que la de reportes periódicos
+  frecReportePeriodico?: number;
+  frecReporteEnergia?: number;
 }
 
 export type TipoDispositivoLorawan =
