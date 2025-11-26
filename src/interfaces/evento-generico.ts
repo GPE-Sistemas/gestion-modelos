@@ -95,12 +95,14 @@ export interface IValoresEventoBotonBLE extends IValoresEventoBase {
 
 export interface IValoresEventoSirena extends IValoresEventoBase {
   idSirena?: string;
+  chipId?: string;
   origen?: 'APP' | 'Botón' | 'Monitoreo'; /// Pánico (APP) - Manual (Botón físico) - Monitoreo (¿Programado o algo así?)
   efecto?: 'Reflector' | 'Sirena' | 'Pánico'; /// Reflector (Luz) - Sirena (Sonido) - Pánico (Luz y Sonido)
-  nombreVecino?: string;
   idVecino?: string;
-  usuario?: string; // Si viene de monitoreo
+  nombreVecino?: string;
+  telefono?: string; // Solo del vecino
   idUsuario?: string; // Si viene de monitoreo
+  usuario?: string; // Si viene de monitoreo
   geojson?: IGeoJSONPoint; /// Ubicación del vecino cuando es APP Sirena en lkos otros casos.
 }
 
