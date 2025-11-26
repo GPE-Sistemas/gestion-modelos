@@ -172,6 +172,9 @@ export interface IDispositivoLuminariaACTIS {
   // ===== VERSIONES FIRMWARE =====
   versionFirmware?: string; // Puerto 110
   versionModuloLoRa?: string; // Puerto 111
+
+  // ===== ALARMAS=====
+  alarma?: string;
 }
 
 export type TipoDispositivoLorawan =

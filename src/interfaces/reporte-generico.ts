@@ -115,6 +115,7 @@ export interface IReporteLuminariaACTISEnergia {
   esDeDia?: boolean;
   horaAmanecer?: string;
   horaAtardecer?: string;
+  alarmas?: string[];
 }
 
 export interface IReporteTracker {
