@@ -172,6 +172,12 @@ export interface IDispositivoLuminariaACTIS {
   // ===== VERSIONES FIRMWARE =====
   versionFirmware?: string; // Puerto 110
   versionModuloLoRa?: string; // Puerto 111
+
+  // ===== ALARMAS=====
+  alarma?: string;
+  // =====FRECUENCIA DE REPORTES=====
+  frecReportePeriodico?: number;
+  frecReporteEnergia?: number;
 }
 
 export type TipoDispositivoLorawan =
@@ -211,6 +217,7 @@ export interface IDispositivoLorawanBase<
   ultimoReporte?: IReporteGenerico;
   margin?: number; //Es la señal del dispositivo, expresada en dB
   frecReporte?: number;
+  //En Wellness es 15 minutos, en GPE y ACTIS se considera la frecuencia de reporte periódico
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
   paquetes?: IPaquetesDispositivoLorawan; //Información para calcular la pérdida de paquetes
