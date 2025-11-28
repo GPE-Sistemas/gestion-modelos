@@ -19,6 +19,7 @@ export interface IInformacionContacto {
   palabraSeguridadNormal?: string;
   palabraSeguridadEmergencia?: string;
   numeroUsuarioAlarma?: number;
+  particion: number;
 }
 
 export type IInformacion = IInformacionNota & IInformacionContacto;
