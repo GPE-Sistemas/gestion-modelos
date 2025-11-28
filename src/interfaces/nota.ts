@@ -33,6 +33,7 @@ export interface INota {
   tipo?: TipoNota;
   informacion?: IInformacion;
   orden?: number;
+  particion?: number;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
