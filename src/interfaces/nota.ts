@@ -19,6 +19,7 @@ export interface IInformacionContacto {
   palabraSeguridadNormal?: string;
   palabraSeguridadEmergencia?: string;
   numeroUsuarioAlarma?: number;
+  particion: number;
 }
 
 export type IInformacion = IInformacionNota & IInformacionContacto;
@@ -33,6 +34,7 @@ export interface INota {
   tipo?: TipoNota;
   informacion?: IInformacion;
   orden?: number;
+
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
