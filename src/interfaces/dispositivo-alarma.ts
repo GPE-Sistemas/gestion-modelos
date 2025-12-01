@@ -64,6 +64,7 @@ export interface IControlHorarioDetalles {
   hora: string;
   toleranciaAntes: number;
   toleranciaDespues: number;
+  particion: number;
 }
 export interface IControlHorario {
   activo?: boolean;
