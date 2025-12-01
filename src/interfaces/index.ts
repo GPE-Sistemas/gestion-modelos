@@ -9,6 +9,7 @@ export * from './codigos-dispositivo';
 export * from './comando';
 export * from './config-dispositivo';
 export * from './config-evento-usuario';
+export * from './config-marker';
 export * from './config-reenvios';
 export * from './cronograma';
 export * from './despacho';
