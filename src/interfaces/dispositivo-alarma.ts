@@ -112,7 +112,7 @@ export interface IDispositivoAlarma {
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
-  armado?: boolean;
+  armado?: boolean[];
   armando?: boolean;
   imagenes?: string[];
   ultimaConexion?: IUltimaConexion;
