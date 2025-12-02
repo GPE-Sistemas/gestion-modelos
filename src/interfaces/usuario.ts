@@ -65,15 +65,20 @@ export interface IVencimientoPermisoUsuario {
 export type Nivel = 'Cliente' | 'Grupo' | 'Entidad';
 
 export interface IPermiso {
-  idCliente?: string;
-  idsAncestros?: string[];
-  roles?: Rol[];
   nivel?: Nivel;
+  // Para nivel Cliente
+  idCliente?: string;
+  includeChildren?: boolean;
+  idsAncestros?: string[];
+  // Para nivel Grupo
   idsGrupos?: string;
+  // Para nivel Entidad
   idsEntidades?: string[];
-  modulos?: IModulos;
+  //
   activo?: boolean; // Si el permiso está activo o no
   vencimiento?: IVencimientoPermisoUsuario;
+  modulos?: IModulos;
+  roles?: Rol[];
   // Virtual
   cliente?: ICliente;
   ancestros?: ICliente[];
