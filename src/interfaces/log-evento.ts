@@ -1,6 +1,11 @@
-import { IDispositivoLorawan } from "./dispositivo-lorawan";
+import { RxInfo, TxInfo } from '../auxiliares';
+import { IDispositivoLorawan } from './dispositivo-lorawan';
 
-export type TipoLogEvento = "up" | "status" | "join" | "ack" | "txack" | "down";
+export type TipoLogEvento = 'up' | 'status' | 'join' | 'ack' | 'txack' | 'down';
+export interface IMetadatosUplink {
+  rxInfo?: RxInfo[];
+  txInfo?: TxInfo;
+}
 export interface ILogEvento {
   _id?: string;
   fechaCreacion?: string;
@@ -12,17 +17,18 @@ export interface ILogEvento {
   battery?: number;
   fCnt?: number;
   margin?: number;
+  metadatosUplink?: IMetadatosUplink;
 
   //Populate
   dispositivoLorawan?: IDispositivoLorawan;
 }
 
-type OmitirCreate = "_id" | "fechaCreacion";
+type OmitirCreate = '_id' | 'fechaCreacion';
 
 export interface ICreateLogEvento
   extends Omit<Partial<ILogEvento>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "fechaCreacion" | "cliente";
+type OmitirUpdate = '_id' | 'fechaCreacion' | 'cliente';
 
 export interface IUpdateLogEvento
   extends Omit<Partial<ILogEvento>, OmitirUpdate> {}
