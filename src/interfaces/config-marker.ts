@@ -33,3 +33,15 @@ export interface IConfigMarker {
   cliente?: ICliente;
   ancestros?: ICliente[];
 }
+
+type Omitir =
+  | '_id'
+  | 'idsAncestros'
+  // Virtuals
+  | 'cliente'
+  | 'ancestros';
+
+export interface ICreateConfigMarker
+  extends Omit<Partial<IConfigMarker>, Omitir> {}
+export interface IUpdateConfigMarker
+  extends Omit<Partial<IConfigMarker>, Omitir> {}
