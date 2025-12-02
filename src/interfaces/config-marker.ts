@@ -3,9 +3,16 @@ import { ICliente } from './cliente';
 export interface IConfigMarker {
   _id?: string;
   //
+  fechaCreacion?: string;
+
+  // Define quien puede usar este marker
+  //
+  global?: boolean; // Si es global, puede ser usado por cualquiera
   idCliente?: string;
   idsAncestros?: string[];
-  fechaCreacion?: string;
+  idUsuario?: string; // Si tiene idUsuario, solo lo puede usar ese usuario
+
+  // Sobre que aplica este marker
   //
   scope: 'cliente' | 'grupo' | 'activo';
   idRef: string; // idCliente, idGrupo o idActivo
