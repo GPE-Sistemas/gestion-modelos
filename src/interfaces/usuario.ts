@@ -63,7 +63,7 @@ export interface IVencimientoPermisoUsuario {
 }
 
 export type Nivel = 'Cliente' | 'Grupo' | 'Entidad';
-export type TipoEntidad =
+export type TipoEntidadPermiso =
   | 'Activo'
   | 'Vehículo'
   | 'Colectivo'
@@ -79,7 +79,7 @@ export interface IPermiso {
   // Para nivel Grupo
   idsGrupos?: string;
   // Para nivel Entidad
-  tipoEntidad?: TipoEntidad;
+  tipoEntidad?: TipoEntidadPermiso;
   idsEntidades?: string[];
   //
   activo?: boolean; // Si el permiso está activo o no
