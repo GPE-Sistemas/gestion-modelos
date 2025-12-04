@@ -5,6 +5,7 @@ export type TipoLogEvento = 'up' | 'status' | 'join' | 'ack' | 'txack' | 'down';
 export interface IMetadatosUplink {
   rxInfo?: RxInfo[];
   txInfo?: TxInfo;
+  dr?: number;
 }
 export interface ILogEvento {
   _id?: string;
