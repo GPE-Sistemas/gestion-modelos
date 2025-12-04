@@ -1,4 +1,8 @@
+import { IActivo } from './activo';
 import { ICliente } from './cliente';
+import { IDispositivoAlarma } from './dispositivo-alarma';
+import { IGrupo } from './grupo';
+import { ILuminaria } from './luminaria';
 
 export type Rol =
   | 'Administrador'
@@ -89,6 +93,10 @@ export interface IPermiso {
   // Virtual
   cliente?: ICliente;
   ancestros?: ICliente[];
+  grupos?: IGrupo[];
+  activos?: IActivo[]; // Entidades pobladas según el tipoEntidad
+  luminarias?: ILuminaria[]; // Entidades pobladas según el tipoEntidad
+  alarmas?: IDispositivoAlarma[]; // Entidades pobladas según el tipoEntidad
 }
 
 export interface IUsuario {
