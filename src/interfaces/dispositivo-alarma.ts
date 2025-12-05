@@ -68,6 +68,8 @@ export interface IControlHorarioDetalles {
 }
 export interface IControlHorario {
   activo?: boolean;
+  ignorarArmadosFueraDeHorario?: boolean;
+  ignorarDesarmadosFueraDeHorario?: boolean;
   horarios?: IControlHorarioDetalles[];
 }
 
