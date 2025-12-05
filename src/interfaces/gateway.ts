@@ -9,7 +9,10 @@ export interface IGateway {
   nombre?: string;
   description?: string;
   gatewayEui?: string;
+  statsInterval?: number;
   ubicacion?: IGeoJSONPoint;
+  tags?: Record<string, string>;
+  metadata?: Record<string, string>;
 
   cliente?: ICliente;
   ancestros?: ICliente[];

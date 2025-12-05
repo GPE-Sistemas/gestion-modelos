@@ -4,7 +4,7 @@ export interface ICreateUpdateGatewayChirpstack {
 
 export interface IGatewayInfo {
   description?: string;
-  gatewayId?: string;
+  gatewayId?: string; //Este es el gatewayEui
   location?: ILocationGateway;
   metadata?: Record<string, string>;
   name?: string;
