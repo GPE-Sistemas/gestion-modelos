@@ -12,7 +12,7 @@ export interface IGateway {
   //Propios de Chirpstack
   fechaCreacionChirpstack?: string; //Fecha de creación en Chirpstack
   gatewayEui?: string;
-  nombreChirptack?: string;
+  nombreChirpstack?: string;
   description?: string;
   statsInterval?: number;
   ubicacion?: IGeoJSONPoint; //De Chirpstack vienen en otro formato, pero acá lo guardamos como GeoJSON Point
