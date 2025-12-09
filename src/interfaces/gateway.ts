@@ -1,16 +1,21 @@
 import { ICliente } from './cliente';
 import { IGeoJSONPoint } from '../auxiliares';
 
+//Esta es la interfaz del gateway que se va a guardar en nuestra base de datos. Va a requerir que ya exista creado el gateway en Chirpstack
 export interface IGateway {
+  //Propios de nuestra base de datos
   _id?: string;
   idCliente?: string;
   idsAncestros?: string[];
   fechaCreacion?: string;
   nombre?: string;
-  description?: string;
+  //Propios de Chirpstack
+  fechaCreacionChirpstack?: string; //Fecha de creación en Chirpstack
   gatewayEui?: string;
+  nombreChirptack?: string;
+  description?: string;
   statsInterval?: number;
-  ubicacion?: IGeoJSONPoint;
+  ubicacion?: IGeoJSONPoint; //De Chirpstack vienen en otro formato, pero acá lo guardamos como GeoJSON Point
   tags?: Record<string, string>;
   metadata?: Record<string, string>;
 
