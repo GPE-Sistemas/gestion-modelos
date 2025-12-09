@@ -19,3 +19,5 @@ export interface IMetricaDataset {
   data: number[];
   label: string;
 }
+
+export type aggregationGatewaysMetrics = 'HOUR' | 'DAY' | 'MONTH' | 'MINUTE';
