@@ -23,6 +23,14 @@ export interface IGateway {
 
   cliente?: ICliente;
   ancestros?: ICliente[];
+
+  // Estadísticas calculadas por cron (actualización horaria)
+  /** ToA promedio por canal en ms de la última hora */
+  toaPromedioHora?: number;
+  /** Estado de salud basado en ToA: ok (<5%), warning (5-17%), error (>17%) */
+  estadoSalud?: 'ok' | 'warning' | 'error';
+  /** Fecha de última actualización de estadísticas */
+  estadisticasActualizadas?: string;
 }
 
 type OmitirCreate = '_id';
