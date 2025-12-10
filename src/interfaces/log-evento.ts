@@ -6,6 +6,10 @@ export interface IMetadatosUplink {
   rxInfo?: RxInfo[];
   txInfo?: TxInfo;
   dr?: number;
+  /** Tiempo en aire (Time on Air) en milisegundos */
+  timeOnAir?: number;
+  /** Tamaño del payload en bytes */
+  payloadSize?: number;
 }
 export interface ILogEvento {
   _id?: string;
