@@ -1,3 +1,4 @@
+import { ICliente } from './cliente';
 import { IGateway } from './gateway';
 
 export type PeriodoMetrica = 'hora' | 'dia';
@@ -11,6 +12,8 @@ export interface IMetricasGateway {
   idGateway?: string;
   /** EUI del gateway (para queries directas sin join) */
   gatewayEui: string;
+  /** Cliente dueño del dispositivo que generó el uplink (para filtro cross-tenant) */
+  idClienteDispositivo?: string;
   /** Inicio del periodo de agregación (ISO string) */
   fecha: string;
   /** Granularidad de la agregación */
@@ -23,8 +26,9 @@ export interface IMetricasGateway {
   /** Cantidad de uplinks en el periodo */
   cantidadUplinks: number;
 
-  // Virtual
+  // Virtuals
   gateway?: IGateway;
+  clienteDispositivo?: ICliente;
 }
 
 type OmitirCreate = '_id';
@@ -32,7 +36,7 @@ type OmitirCreate = '_id';
 export interface ICreateMetricasGateway
   extends Omit<Partial<IMetricasGateway>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'gatewayEui' | 'fecha' | 'periodo' | 'canal';
+type OmitirUpdate = '_id' | 'gatewayEui' | 'idClienteDispositivo' | 'fecha' | 'periodo' | 'canal';
 
 export interface IUpdateMetricasGateway
   extends Omit<Partial<IMetricasGateway>, OmitirUpdate> {}
