@@ -9,6 +9,8 @@ export interface IGateway {
   idsAncestros?: string[];
   fechaCreacion?: string;
   nombre?: string;
+  /** true si fue creado automáticamente por el cron de métricas */
+  autoCreado?: boolean;
   //Propios de Chirpstack
   fechaCreacionChirpstack?: string; //Fecha de creación en Chirpstack
   gatewayEui?: string;
