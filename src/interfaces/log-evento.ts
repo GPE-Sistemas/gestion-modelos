@@ -10,8 +10,6 @@ export interface IMetadatosUplink {
   timeOnAir?: number;
   /** Tamaño del payload en bytes */
   payloadSize?: number;
-  /** ID del cliente dueño del dispositivo (para métricas cross-tenant) */
-  idCliente?: string;
 }
 export interface ILogEvento {
   _id?: string;
