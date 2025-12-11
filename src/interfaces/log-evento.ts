@@ -1,7 +1,7 @@
 import { RxInfo, TxInfo } from '../auxiliares';
 import { IDispositivoLorawan } from './dispositivo-lorawan';
 
-export type TipoLogEvento = 'up' | 'status' | 'join' | 'ack' | 'txack' | 'down';
+export type TipoLogEvento = 'up' | 'status' | 'join' | 'ack' | 'txack' | 'down' | 'log';
 export interface IMetadatosUplink {
   rxInfo?: RxInfo[];
   txInfo?: TxInfo;
@@ -23,6 +23,12 @@ export interface ILogEvento {
   fCnt?: number;
   margin?: number;
   metadatosUplink?: IMetadatosUplink;
+
+  // Campos específicos para mensajes de tipo 'log' de ChirpStack
+  level?: string; // "ERROR", "WARNING", "INFO"
+  code?: string; // Código del tipo de log (ej: "DOWNLINK_GATEWAY", "UPLINK_F_CNT_RETRANSMISSION")
+  description?: string; // Descripción del evento
+  context?: Record<string, any>; // Contexto adicional del log
 
   //Populate
   dispositivoLorawan?: IDispositivoLorawan;
