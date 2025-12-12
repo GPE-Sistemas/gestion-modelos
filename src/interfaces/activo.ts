@@ -73,6 +73,7 @@ export interface IActivo {
   categoria?: ICategoriaActivo;
   funcion?: FuncionActivo;
   vehiculo?: IVehiculo;
+  ignicion?: boolean;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   modoDesactivado?: IModoDesactivado;
