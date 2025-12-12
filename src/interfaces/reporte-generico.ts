@@ -126,6 +126,7 @@ export interface IReporteTracker {
   direccion?: string;
   velocidad?: number;
   orientacion?: number;
+  ignicion?: boolean;
 }
 
 export interface IReporteTracker4G extends IReporteTracker {
