@@ -178,6 +178,19 @@ export interface IDispositivoLuminariaACTIS {
   // =====FRECUENCIA DE REPORTES=====
   frecReportePeriodico?: number;
   frecReporteEnergia?: number;
+
+  // ===== CONSUMO ACUMULADO =====
+  // Energía total acumulada calculada por integración temporal (kWh)
+  energiaTotal?: number;
+  // Último reporte de energía para cálculo diferencial
+  ultimoReporteEnergia?: {
+    timestamp?: string;
+    voltaje?: number; // V
+    corriente?: number; // mA
+    potencia?: number; // W
+    factorPotencia?: number;
+    fCnt?: number;
+  };
 }
 
 export type TipoDispositivoLorawan =

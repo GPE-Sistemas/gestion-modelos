@@ -116,6 +116,7 @@ export interface IReporteLuminariaACTISEnergia {
   horaAmanecer?: string;
   horaAtardecer?: string;
   alarmas?: string[];
+  energiaTotal?: number; // kWh acumulado total calculado por integración temporal
 }
 
 export interface IReporteTracker {

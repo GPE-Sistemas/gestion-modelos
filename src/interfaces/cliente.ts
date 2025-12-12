@@ -173,6 +173,10 @@ export interface IModuloAdministracion {
   activoDispositivosLorawan?: boolean;
   crearDispositivosLorawan?: boolean;
   compartirDispositivosLorawan?: boolean; //Posiblemente esto no se use más
+
+  //Gateways
+  activoGateways?: boolean;
+  crearGateways?: boolean;
 }
 
 export interface IModuloVehiculos {
