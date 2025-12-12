@@ -44,6 +44,7 @@ export interface IVehiculo {
   idRecorrido?: string;
   idsRecorridos?: string[];
   dentroDelRecorrido?: boolean; // Para seguir el estado de los eventos
+  ignicion?: boolean;
   //
   idExterno?: string;
   // Populate
@@ -73,7 +74,6 @@ export interface IActivo {
   categoria?: ICategoriaActivo;
   funcion?: FuncionActivo;
   vehiculo?: IVehiculo;
-  ignicion?: boolean;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   modoDesactivado?: IModoDesactivado;
