@@ -49,6 +49,7 @@ export type TipoEventoGenerico =
   | 'Evento Técnico Alarma'
   | 'Evento Técnico Tracker'
   | 'Evento Técnico Luminaria'
+  | 'Evento Técnico Sirena'
   | 'Evento Emergencia Médica'
   | 'Evento Emergencia Bomberos';
 
@@ -167,6 +168,10 @@ export type MapaEventoGenerico = {
     estado: EstadoEventoTecnico;
   };
   'Evento Técnico Luminaria': {
+    valores: IValoresEventoTecnico;
+    estado: EstadoEventoTecnico;
+  };
+  'Evento Técnico Sirena': {
     valores: IValoresEventoTecnico;
     estado: EstadoEventoTecnico;
   };
@@ -319,6 +324,7 @@ export type ICreateEventoGenerico =
   | Omit<IEventoBaseGenerico<'Evento Técnico Alarma'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Tracker'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Luminaria'>, OmitirCreate>
+  | Omit<IEventoBaseGenerico<'Evento Técnico Sirena'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Emergencia Médica'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Emergencia Bomberos'>, OmitirCreate>;
 
@@ -368,6 +374,12 @@ export type IUpdateEventoGenerico =
         OmitirCreate | 'tipoEvento'
       >
     >)
+  | ({ tipoEvento: 'Evento Técnico Sirena' } & Partial<
+      Omit<
+        IEventoBaseGenerico<'Evento Técnico Sirena'>,
+        OmitirCreate | 'tipoEvento'
+      >
+    >)
   | ({ tipoEvento: 'Evento Emergencia Médica' } & Partial<
       Omit<
         IEventoBaseGenerico<'Evento Emergencia Médica'>,
@@ -397,6 +409,7 @@ export type IEventoGenericoCache = Omit<
   | 'botonBluetooth'
   | 'configEventoUsuario'
   | 'reporte'
+  | 'sirena'
 > & {
   // Sobrescribir detallesTecnicos sin populates
   detallesTecnicos?: Omit<DetallesTecnicos, 'tecnico'>;

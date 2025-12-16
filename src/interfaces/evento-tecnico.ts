@@ -4,7 +4,7 @@ import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IActivo } from './activo';
 import { IUsuario } from './usuario';
 
-export type CategoriaTecnica = 'Alarma' | 'Tracker' | 'Luminaria';
+export type CategoriaTecnica = 'Alarma' | 'Tracker' | 'Luminaria' | 'Sirena';
 
 export type estadoEventoTecnico =
   | 'Pendiente'
