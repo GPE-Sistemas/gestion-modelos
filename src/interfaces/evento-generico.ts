@@ -288,6 +288,7 @@ export type IEventoGenerico =
   | IEventoBaseGenerico<'Evento Técnico Alarma'>
   | IEventoBaseGenerico<'Evento Técnico Tracker'>
   | IEventoBaseGenerico<'Evento Técnico Luminaria'>
+  | IEventoBaseGenerico<'Evento Técnico Sirena'>
   | IEventoBaseGenerico<'Evento Emergencia Médica'>
   | IEventoBaseGenerico<'Evento Emergencia Bomberos'>;
 
