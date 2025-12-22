@@ -34,6 +34,7 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
   idsAsignados?: string[];
   periodoInicio?: string;
   periodoFin?: string;
+  cerrado?: boolean; //indica que el resumen ya no se va a actualizar más
 
   //Populate
   cliente?: ICliente;
