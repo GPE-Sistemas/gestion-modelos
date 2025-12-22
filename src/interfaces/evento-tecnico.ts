@@ -3,21 +3,13 @@ import { ITracker } from './tracker';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IActivo } from './activo';
 import { IUsuario } from './usuario';
-
-export type CategoriaTecnica = 'Alarma' | 'Tracker' | 'Luminaria' | 'Sirena';
-
-export type estadoEventoTecnico =
-  | 'Pendiente'
-  | 'Asignado'
-  | 'En Atención'
-  | 'Pendiente de Aprobación'
-  | 'Finalizado';
+import { CategoriaTecnica, EstadoEventoTecnico } from './evento-generico';
 
 export interface IEventoTecnico {
   _id?: string;
   //
   fechaCreacion?: string;
-  estado?: estadoEventoTecnico;
+  estado?: EstadoEventoTecnico;
   titulo?: string;
   descripcion?: string;
   categoria?: CategoriaTecnica;
