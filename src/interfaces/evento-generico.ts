@@ -15,8 +15,6 @@ import { IHospital } from './hospitales';
 import { IPersonalSalud } from './personal-salud';
 import { ICentroDeAtencion } from './centro-de-atencion';
 import { DireccionV2, IGeoJSONPoint } from '../auxiliares';
-import { estadoEvento, IContactID } from './evento';
-import { estadoEventoTecnico, CategoriaTecnica } from './evento-tecnico';
 import {
   EstadoEmergenciaMedica,
   EstadoEmergenciaBomberos,
@@ -61,6 +59,41 @@ export type Categoria =
   | 'Servicio Técnico' // Eventos técnicos (alarma, tracker, luminaria)
   | 'Seguimiento Emergencia'; // Eventos de emergencia (médica, bomberos)
 
+/* ────────────────────────────────────────────────
+ *  Auxiliares
+ * ────────────────────────────────────────────────*/
+export interface RangoHorario {
+  dias?: string[]; // ['Lunes', 'Martes', ...]
+  horarioDesde?: string; // '08:00'
+  horarioHasta?: string; // '18:00'
+}
+
+export type CategoriaTecnica = 'Alarma' | 'Tracker' | 'Luminaria' | 'Sirena';
+
+export type estadoEventoTecnico =
+  | 'Pendiente'
+  | 'Asignado'
+  | 'En Atención'
+  | 'Pendiente de Aprobación'
+  | 'Finalizado';
+
+export type estadoEvento =
+  | 'Sin Tratamiento'
+  | 'Pendiente'
+  | 'En Atención'
+  | 'En Espera'
+  | 'Liberada'
+  | 'Finalizada';
+
+export interface IContactID {
+  numeroCuenta?: string;
+  tipoMensaje?: string;
+  calificadorDeEvento?: string;
+  codigoDeEvento?: string;
+  numeroDeParticion?: string;
+  numeroDeZona?: string;
+  checksum?: string;
+}
 /* ────────────────────────────────────────────────
  *  VALORES ESPECÍFICOS POR TIPO DE EVENTO
  * ────────────────────────────────────────────────*/
@@ -111,6 +144,14 @@ export interface IValoresEventoSirena extends IValoresEventoBase {
 // Valores para eventos técnicos
 export interface IValoresEventoTecnico extends IValoresEventoBase {
   categoria?: CategoriaTecnica;
+  solicitante?: {
+    nombre?: string;
+    telefono?: string;
+    email?: string;
+  };
+  disponibilidad?: RangoHorario[];
+  prioridad?: 'Normal' | 'Alta' | 'Urgente';
+  numeroIncidente?: string; // Random cuando se crea.
 }
 
 // Valores para eventos de emergencia
