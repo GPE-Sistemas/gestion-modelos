@@ -1,11 +1,11 @@
 export interface IMetricasGateways {
-  rxPackets: IMetricaItem;
-  rxPacketsPerDr: IMetricaItem;
-  rxPacketsPerFreq: IMetricaItem;
-  txPackets: IMetricaItem;
-  txPacketsPerDr: IMetricaItem;
-  txPacketsPerFreq: IMetricaItem;
-  txPacketsPerStatus: IMetricaItem;
+  rxPackets: IMetricaItem; //Paquetes recibidos
+  rxPacketsPerDr: IMetricaItem; //Paquetes recibidos por data rate
+  rxPacketsPerFreq: IMetricaItem; //Paquetes recibidos por frecuencia
+  txPackets: IMetricaItem; //Paquetes transmitidos
+  txPacketsPerDr: IMetricaItem; //Paquetes transmitidos por data rate
+  txPacketsPerFreq: IMetricaItem; //Paquetes transmitidos por frecuencia
+  txPacketsPerStatus: IMetricaItem; //Paquetes transmitidos por estado
 }
 
 export interface IMetricaItem {
