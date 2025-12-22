@@ -8,15 +8,7 @@ import { IUsuario } from './usuario';
 import { ILuminaria } from './luminaria';
 import { IBotonBluetooth } from './boton-bluetooth';
 import { IReporteGenerico } from './reporte-generico';
-import { IContactID } from './evento-generico';
-
-export type estadoEvento =
-  | 'Sin Tratamiento'
-  | 'Pendiente'
-  | 'En Atención'
-  | 'En Espera'
-  | 'Liberada'
-  | 'Finalizada';
+import { EstadoEvento, IContactID } from './evento-generico';
 
 export type tipoEvento =
   | 'Colectivo'
@@ -53,7 +45,7 @@ export interface IEvento {
   noDerivar?: boolean;
   fechaCreacion?: string;
   posponerHasta?: string;
-  estado?: estadoEvento;
+  estado?: EstadoEvento;
   valores?: IValoresEvento;
   codigoEvento?: string;
   prioridad?: number;

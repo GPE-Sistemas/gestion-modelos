@@ -1,6 +1,6 @@
-import { IUsuario } from "./usuario";
-import { estadoEvento, IEvento } from "./evento";
-import { estadoEventoTecnico } from "./evento-tecnico";
+import { IEvento } from './evento';
+import { EstadoEvento, EstadoEventoTecnico } from './evento-generico';
+import { IUsuario } from './usuario';
 
 export interface ITratamientoEvento {
   _id?: string;
@@ -8,9 +8,9 @@ export interface ITratamientoEvento {
   nota?: string;
   notaInterna?: string;
   fechaCreacion?: string;
-  estado?: estadoEvento;
+  estado?: EstadoEvento;
   // Separados para no hinche las bolas el overlap.
-  estadoTecnico?: estadoEventoTecnico;
+  estadoTecnico?: EstadoEventoTecnico;
   esperaHasta?: string;
   //
   idsEventos?: string[];
@@ -20,12 +20,12 @@ export interface ITratamientoEvento {
   usuario?: IUsuario;
 }
 
-type OmitirCreate = "_id" | "eventos" | "usuario";
+type OmitirCreate = '_id' | 'eventos' | 'usuario';
 
 export interface ICreateTratamientoEvento
   extends Omit<Partial<ITratamientoEvento>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "eventos" | "usuario";
+type OmitirUpdate = '_id' | 'eventos' | 'usuario';
 
 export interface IUpdateTratamientoEvento
   extends Omit<Partial<ITratamientoEvento>, OmitirUpdate> {}
