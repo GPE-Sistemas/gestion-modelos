@@ -64,7 +64,7 @@ export * from './sirena';
 export * from './geo-cache';
 export * from './gateway';
 export * from './metricas-gateway';
-// Chripstack
+export * from './resumen-datos';
 export * from './chirpstack';
 export * from './reporte-generico';
 export * from './evento-generico';
