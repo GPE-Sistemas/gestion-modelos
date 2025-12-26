@@ -20,6 +20,7 @@ export * from './envio-vehiculo';
 export * from './estado-entidad';
 export * from './evento';
 export * from './evento-tecnico';
+export * from './excepciones';
 export * from './evento-traccar';
 export * from './grupo';
 export * from './log-despacho';
