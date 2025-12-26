@@ -141,7 +141,6 @@ Telemetry reports use discriminated unions by `tipoReporte`:
 
 ### External Services
 
-- **Traccar**: 4G tracker integration (`externos/traccar.ts`)
 - **OSRM**: Route calculation (`externos/osrm.ts`)
 - **ChirpStack**: LoRaWAN network server (`interfaces/chirpstack/`)
 - **Contact ID**: Alarm protocol (`IContactID` in `evento.ts`)
