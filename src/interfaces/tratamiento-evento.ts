@@ -1,6 +1,9 @@
-import { IEvento } from './evento';
-import { EstadoEvento, EstadoEventoTecnico } from './evento-generico';
 import { IUsuario } from './usuario';
+import {
+  EstadoEvento,
+  EstadoEventoTecnico,
+  IEventoGenerico,
+} from './evento-generico';
 
 export interface ITratamientoEvento {
   _id?: string;
@@ -16,7 +19,7 @@ export interface ITratamientoEvento {
   idsEventos?: string[];
   idUsuario?: string;
   // Populate
-  eventos?: IEvento[];
+  eventos?: IEventoGenerico[];
   usuario?: IUsuario;
 }
 

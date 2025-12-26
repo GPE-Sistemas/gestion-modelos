@@ -1,6 +1,6 @@
 import { IActivo } from './activo';
 import { ICliente } from './cliente';
-import { IEvento } from './evento';
+import { IEventoGenerico } from './evento-generico';
 import { IUsuario } from './usuario';
 
 export type EstadoEnvioVehiculo =
@@ -29,7 +29,7 @@ export interface IEnvioVehiculo {
   ancestros?: ICliente[];
   conductor?: IUsuario;
   usuario?: IUsuario;
-  eventos?: IEvento[];
+  eventos?: IEventoGenerico[];
   activo?: IActivo;
 }
 
