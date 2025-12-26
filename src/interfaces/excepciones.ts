@@ -2,6 +2,7 @@ import { ICliente } from './cliente';
 
 export interface IExcepcion {
   _id?: string;
+  fechaCreacion?: string;
   idCliente?: string;
   idsAncestros?: string[];
   tipoEntidad?: 'Cliente' | 'Alarma';
