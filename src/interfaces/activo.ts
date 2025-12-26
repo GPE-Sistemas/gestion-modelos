@@ -67,10 +67,6 @@ export interface IActivo {
   ///alta de activo
   fechaAlta?: string;
   imagenes?: string[];
-  /**
-   * El id del tracker asignado en la plataforma traccar para obtener el vehiculo rapido con los reportes de traccar
-   */
-  idUnicoTraccar?: number;
   identificacion?: string;
   categoria?: ICategoriaActivo;
   funcion?: FuncionActivo;

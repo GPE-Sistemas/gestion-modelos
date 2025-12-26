@@ -130,7 +130,7 @@ export interface IReporteTracker {
 }
 
 export interface IReporteTracker4G extends IReporteTracker {
-  traccarUniqueId?: string;
+  uniqueId?: string;
   odometro?: number;
   triperoState?: 'STOPPED' | 'IDLE' | 'MOVING' | 'UNKNOWN' | 'OFFLINE';
   triperoStateDuration?: number;
