@@ -69,3 +69,4 @@ export * from './resumen-datos';
 export * from './chirpstack';
 export * from './reporte-generico';
 export * from './evento-generico';
+export * from './excepciones';
