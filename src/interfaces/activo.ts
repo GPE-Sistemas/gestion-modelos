@@ -7,22 +7,23 @@ import { ITracker } from './tracker';
 import { IUsuario } from './usuario';
 
 export type TipoVehiculo =
-  | 'Colectivo'
-  | 'Camion'
-  | 'Moto'
   | 'Auto'
+  | 'Camion'
+  | 'Camioneta'
+  | 'Colectivo'
   | 'Grua'
+  | 'Moto'
   | 'Otro';
 
 export type FuncionActivo =
-  | 'Transporte'
+  | 'Ambulancia'
   | 'Bomberos'
   | 'Mantenimiento'
-  | 'Policia'
   | 'Particular'
-  | 'Ambulancia'
+  | 'Policia'
   | 'Seguridad Privada'
   | 'Servicio Técnico'
+  | 'Transporte'
   | 'Otro';
 
 export type EstadoVehiculo =
