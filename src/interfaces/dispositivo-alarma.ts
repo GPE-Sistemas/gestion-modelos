@@ -115,7 +115,7 @@ export interface IDispositivoAlarma {
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
   armado?: boolean[];
-  armando?: boolean;
+  armando?: string;
   imagenes?: string[];
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
