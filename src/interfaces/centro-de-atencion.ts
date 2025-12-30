@@ -1,7 +1,6 @@
-import { DireccionV2, ICoordenadas } from "../auxiliares";
-import { ICliente } from "./cliente";
-import { TipoEmergencia } from "./emergencias";
-import { IUbicacion } from "./ubicacion";
+import { ICliente } from './cliente';
+import { TipoEmergencia } from './emergencias';
+import { IUbicacion } from './ubicacion';
 
 export interface ICentroDeAtencion {
   _id?: string;
@@ -26,12 +25,12 @@ export interface ICentroDeAtencion {
   ubicacion?: IUbicacion;
 }
 
-type OmitirCreate = "_id";
+type OmitirCreate = '_id';
 
 export interface ICreateCentroDeAtencion
   extends Omit<Partial<ICentroDeAtencion>, OmitirCreate> {}
 
-type OmitirUpdate = "_id";
+type OmitirUpdate = '_id';
 
 export interface IUpdateCentroDeAtencion
   extends Omit<Partial<ICentroDeAtencion>, OmitirUpdate> {}

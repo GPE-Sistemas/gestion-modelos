@@ -66,3 +66,4 @@ export * from './chirpstack';
 export * from './reporte-generico';
 export * from './evento-generico';
 export * from './excepcion';
+export * from './certificado-entidad';
