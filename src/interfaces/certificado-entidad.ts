@@ -1,4 +1,5 @@
 import { IActivo } from './activo';
+import { ICodigoDispositivo } from './codigos-dispositivo';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IEventoGenerico } from './evento-generico';
 import { ITracker } from './tracker';
@@ -7,11 +8,12 @@ export interface ICertificadoEntidad {
   _id?: string;
   //
   idCliente?: string;
+  idsAncestros?: string[];
+  //
   idEntidad?: string;
   fechaEmision?: string;
   eventosRegistrados?: IEventoGenerico[];
-  idsAncestros?: string[];
-
+  codigosEsperados?: ICodigoDispositivo[];
   // Populate
   tracker?: ITracker;
   activo?: IActivo;
