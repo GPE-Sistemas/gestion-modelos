@@ -1,4 +1,5 @@
 import { IActivo } from './activo';
+import { ICliente } from './cliente';
 import { ICodigoDispositivo } from './codigos-dispositivo';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IEventoGenerico } from './evento-generico';
@@ -18,6 +19,7 @@ export interface ICertificadoEntidad {
   tracker?: ITracker;
   activo?: IActivo;
   alarma?: IDispositivoAlarma;
+  cliente?: ICliente;
 }
 
 type OmitirCreate = '_id' | 'cliente' | 'tracker' | 'alarma' | 'activo';
