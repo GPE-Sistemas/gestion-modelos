@@ -6,7 +6,7 @@ export interface IExcepcion {
   idCliente?: string;
   idsAncestros?: string[];
   tipoEntidad?: 'Cliente' | 'Alarma';
-  idEntidad: string;
+  idEntidad?: string;
   tipoExcepcion?: 'Control Horario';
   fechaDesde?: string;
   fechaHasta?: string;
