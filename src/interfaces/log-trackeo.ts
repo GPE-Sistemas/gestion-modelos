@@ -3,6 +3,7 @@ import { ICliente } from './cliente';
 
 export interface ILogTrackeo {
   _id?: string;
+  expireAt?: string;
   //
   idCliente?: string;
   idsAncestros?: string[];
