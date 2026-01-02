@@ -12,6 +12,7 @@ export interface ICertificadoEntidad {
   idsAncestros?: string[];
   //
   idEntidad?: string;
+  fechaComienzo?: string;
   fechaEmision?: string;
   eventosRegistrados?: IEventoGenerico[];
   codigosEsperados?: ICodigoDispositivo[];
