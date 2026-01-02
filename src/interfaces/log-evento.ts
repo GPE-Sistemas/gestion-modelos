@@ -1,7 +1,14 @@
 import { RxInfo, TxInfo } from '../auxiliares';
 import { IDispositivoLorawan } from './dispositivo-lorawan';
 
-export type TipoLogEvento = 'up' | 'status' | 'join' | 'ack' | 'txack' | 'down' | 'log';
+export type TipoLogEvento =
+  | 'up'
+  | 'status'
+  | 'join'
+  | 'ack'
+  | 'txack'
+  | 'down'
+  | 'log';
 export interface IMetadatosUplink {
   rxInfo?: RxInfo[];
   txInfo?: TxInfo;
@@ -14,6 +21,7 @@ export interface IMetadatosUplink {
 export interface ILogEvento {
   _id?: string;
   fechaCreacion?: string;
+  expireAt?: string;
   tipo?: TipoLogEvento;
   deveui?: string;
   deviceName?: string;

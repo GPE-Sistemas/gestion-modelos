@@ -4,6 +4,7 @@ import { ITracker } from './tracker';
 
 export interface ILogReenvio {
   _id?: string;
+  expireAt?: string;
   //
   idCliente?: string;
   idsAncestros?: string[];

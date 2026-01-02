@@ -1,6 +1,7 @@
 export interface ILogHttp {
   _id?: string;
   fechaCreacion?: string;
+  expireAt?: string;
   method?: string;
   url?: string;
   path?: string;
@@ -10,10 +11,10 @@ export interface ILogHttp {
   params?: string;
 }
 
-type OmitirCreate = "_id" | "fechaCreacion";
+type OmitirCreate = '_id' | 'fechaCreacion';
 
 export interface ICreateLogHttp extends Omit<Partial<ILogHttp>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "fechaCreacion";
+type OmitirUpdate = '_id' | 'fechaCreacion';
 
 export interface IUpdateLogHttp extends Omit<Partial<ILogHttp>, OmitirUpdate> {}

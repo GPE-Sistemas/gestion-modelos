@@ -5,6 +5,7 @@ export interface ILogDespacho {
   idCliente?: string;
   idsAncestros?: string[];
   fechaCreacion?: string;
+  expireAt?: string;
   idExternoVehiculo?: string;
   idExternoRecorrido?: string;
   idExternoChofer?: string;
