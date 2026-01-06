@@ -34,9 +34,13 @@ export interface ICercana {
      */
     ubicacionActual?: ICoordenadas;
     /**
-     * Identificación del vehículo (patente)
+     * Identificación del vehículo
      */
     identificacion?: string;
+    /**
+     * Dominio del vehículo (patente)
+     */
+    dominio?: string;
   };
   /**
    * Información del último trackeo registrado
