@@ -2,7 +2,7 @@ import { ICliente } from './cliente';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { ITracker } from './tracker';
 
-export type MetodoReenvio = 'Básico' | 'Seguridad Evento Externo';
+export type MetodoReenvio = 'Básico' | 'Seguridad Evento Externo' | 'Soflex';
 
 export type IAgrupacionReenvio =
   | 'Todos los trackers del cliente'
@@ -13,6 +13,13 @@ export interface IOpcionesReenvio {
   host?: string;
   puerto?: number;
   apikey?: string;
+  usuario?: string;
+  contrasena?: string;
+  opcionesSoflex?: ISoflexConfig;
+}
+
+export interface ISoflexConfig {
+  providerid?: string;
 }
 
 export interface IConfigReenvio {

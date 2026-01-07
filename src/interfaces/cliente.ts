@@ -18,6 +18,11 @@ export interface ICredencialesAlarma {
   password?: string;
 }
 
+export interface IIntegracionSoflex {
+  // Hace que se creen los trackers en Soflex (se llaman fleet)
+  activo?: boolean;
+}
+
 export interface IConfigCliente {
   imagenes?: IImagenesCliente;
   tema?: ITemaCliente;
@@ -41,6 +46,7 @@ export interface IConfigCliente {
   solicitantesEmergencias?: string[];
   solicitantePredeterminado?: string;
   credencialesAlarmas?: ICredencialesAlarma[];
+  integracionSoflex?: IIntegracionSoflex;
 }
 
 /// Twilio
