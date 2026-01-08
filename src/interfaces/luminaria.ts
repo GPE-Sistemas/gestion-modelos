@@ -7,6 +7,7 @@ import { IModeloDispositivo } from './modelo-dispositivo';
 import { IReporteBase } from './reporte-generico';
 
 export type EstadoLuminaria = 'Operativa' | 'Mantenimiento';
+export type ITipoEnergizado = 'Continuo' | 'Nocturno'; //Continuo: Siempre reportando, Nocturno: Solo reporta de noche porque a la mañana se apaga porque se le corta la energía
 
 export type MapaValoresReportePeriodico = {
   'Luminaria GPE': IReporteBase<'Luminaria GPE Periódico'>;
@@ -41,6 +42,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
   idPerfilDimming?: string; // Valores por defecto para el comando de dimming
   idPerfilConfig?: string; // Valores por defecto para el comando de configuracion
+  tipoEnergizado?: ITipoEnergizado;
 
   // Estado actual de la luminaria
   estado?: EstadoLuminaria;
