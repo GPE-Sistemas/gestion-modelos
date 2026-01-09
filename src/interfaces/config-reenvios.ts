@@ -20,6 +20,7 @@ export interface IOpcionesReenvio {
 
 export interface ISoflexConfig {
   providerid?: string;
+  version?: string; // v.X.X dice la documentación
 }
 
 export interface IConfigReenvio {
