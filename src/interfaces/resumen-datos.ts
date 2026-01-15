@@ -1,13 +1,22 @@
 import { ICliente } from './cliente';
+export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual';
+export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
+export type TipoResumenDatos = 'Consumo Mensual Luminarias';
+
+/* ────────────────────────────────────────────────
+ *  RESÚMENES
+ * ────────────────────────────────────────────────*/
 
 export interface IConsumoMensualLuminarias {
   consumoTotal: number;
   totalDispositivos: number;
 }
 
-export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual';
-export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
-export type TipoResumenDatos = 'Consumo Mensual Luminarias';
+export interface IEncendidoDiarioLuminarias {
+  tiempoEncendidoTotal: number;
+  totalDispositivos: number;
+  tiempoEncendidoPromedio: number;
+}
 
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO DE RESUMEN
@@ -15,6 +24,7 @@ export type TipoResumenDatos = 'Consumo Mensual Luminarias';
 
 export type MapaResumenDatos = {
   'Consumo Mensual Luminarias': IConsumoMensualLuminarias;
+  'Encendido Diario Luminarias': IEncendidoDiarioLuminarias;
 };
 
 /* ────────────────────────────────────────────────
@@ -45,7 +55,9 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
  *  TIPO DISCRIMINADO
  * ────────────────────────────────────────────────*/
 
-export type IResumenDatos = IResumenDatosBase<'Consumo Mensual Luminarias'>;
+export type IResumenDatos =
+  | IResumenDatosBase<'Consumo Mensual Luminarias'>
+  | IResumenDatosBase<'Encendido Diario Luminarias'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
@@ -53,14 +65,18 @@ export type IResumenDatos = IResumenDatosBase<'Consumo Mensual Luminarias'>;
 
 type OmitirCreate = '_id' | 'cliente' | 'ancestros';
 
-export type ICreateResumenDatos = Omit<
-  Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>,
-  OmitirCreate
->;
+export type ICreateResumenDatos =
+  | Omit<Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>, OmitirCreate>
+  | Omit<
+      Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
+      OmitirCreate
+    >;
 
 type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
 
-export type IUpdateResumenDatos = Omit<
-  Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>,
-  OmitirUpdate
->;
+export type IUpdateResumenDatos =
+  | Omit<Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>, OmitirUpdate>
+  | Omit<
+      Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
+      OmitirUpdate
+    >;
