@@ -136,6 +136,7 @@ export interface IDispositivoLuminariaACTIS {
   coordenadas?: {
     latitud?: number; // float
     longitud?: number; // float
+    timeZone?: number; // UTC offset en horas
   };
 
   // ===== FOTOCÉLULA (Puerto 13) =====
