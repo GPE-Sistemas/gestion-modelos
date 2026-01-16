@@ -44,7 +44,7 @@ type OmitirCreate =
   | 'ActivoAsignado'
   | 'TrackerAsignado';
 
-export interface ICreateApikey
+export interface ICreateAsignacion
   extends Omit<Partial<IAsignacion>, OmitirCreate> {}
 
 type OmitirUpdate =
@@ -58,16 +58,5 @@ type OmitirUpdate =
   | 'ActivoAsignado'
   | 'TrackerAsignado';
 
-export interface IUpdateApikey
+export interface IUpdateAsignacion
   extends Omit<Partial<IAsignacion>, OmitirUpdate> {}
-
-export type Modulo =
-  | '_id'
-  | 'cliente'
-  | 'usuario'
-  | 'ChoferModificado'
-  | 'ActivoModificado'
-  | 'TrackerModificado'
-  | 'ChoferAsignado'
-  | 'ActivoAsignado'
-  | 'TrackerAsignado';
