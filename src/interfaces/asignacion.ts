@@ -8,8 +8,8 @@ export type IEntidades = 'Chofer' | 'Activo' | 'Tracker';
 export interface IAsignacion {
   _id?: string;
   //
-  fechaAsignacion?: Date;
-  fechaDesasignacion?: Date;
+  fechaAsignacion?: string;
+  fechaDesasignacion?: string;
   idCliente?: string;
   idUsuario?: string;
 
