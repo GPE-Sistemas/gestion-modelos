@@ -25,24 +25,24 @@ export interface IAsignacion {
   // Populate
   cliente?: ICliente;
   usuario?: IUsuario;
-  ChoferModificado?: IUsuario;
-  ActivoModificado?: IActivo;
-  TrackerModificado?: ITracker;
-  ChoferAsignado?: IUsuario;
-  ActivoAsignado?: IActivo;
-  TrackerAsignado?: ITracker;
+  choferModificado?: IUsuario;
+  activoModificado?: IActivo;
+  trackerModificado?: ITracker;
+  choferAsignado?: IUsuario;
+  activoAsignado?: IActivo;
+  trackerAsignado?: ITracker;
 }
 
 type OmitirCreate =
   | '_id'
   | 'cliente'
   | 'usuario'
-  | 'ChoferModificado'
-  | 'ActivoModificado'
-  | 'TrackerModificado'
-  | 'ChoferAsignado'
-  | 'ActivoAsignado'
-  | 'TrackerAsignado';
+  | 'choferModificado'
+  | 'activoModificado'
+  | 'trackerModificado'
+  | 'choferAsignado'
+  | 'activoAsignado'
+  | 'trackerAsignado';
 
 export interface ICreateAsignacion
   extends Omit<Partial<IAsignacion>, OmitirCreate> {}
@@ -51,12 +51,12 @@ type OmitirUpdate =
   | '_id'
   | 'cliente'
   | 'usuario'
-  | 'ChoferModificado'
-  | 'ActivoModificado'
-  | 'TrackerModificado'
-  | 'ChoferAsignado'
-  | 'ActivoAsignado'
-  | 'TrackerAsignado';
+  | 'choferModificado'
+  | 'activoModificado'
+  | 'trackerModificado'
+  | 'choferAsignado'
+  | 'activoAsignado'
+  | 'trackerAsignado';
 
 export interface IUpdateAsignacion
   extends Omit<Partial<IAsignacion>, OmitirUpdate> {}
