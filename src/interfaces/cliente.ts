@@ -21,6 +21,8 @@ export interface ICredencialesAlarma {
 export interface IIntegracionSoflex {
   // Hace que se creen los trackers en Soflex (se llaman fleet)
   activo?: boolean;
+  fleetId?: string;
+  parentFleetId?: string;
 }
 
 export interface IConfigCliente {

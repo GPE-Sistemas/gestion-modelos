@@ -1,12 +1,12 @@
-import { ICliente } from "./cliente";
-import { IConfigPerfil } from "./config-perfil";
+import { ICliente } from './cliente';
+import { IConfigPerfil } from './config-perfil';
 
 export type CategoriaGrupo =
-  | "Línea de colectivo"
-  | "Flota"
-  | "Activo"
-  | "Normal"
-  | "Luminaria";
+  | 'Línea de colectivo'
+  | 'Flota'
+  | 'Activo'
+  | 'Normal'
+  | 'Luminaria';
 
 export interface IGrupo {
   _id?: string;
@@ -18,6 +18,10 @@ export interface IGrupo {
   idPerfilDimming?: string; //Valores por defecto para el comando de dimming
   idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
 
+  // Integracion Soflex
+  // fleetId?: string;
+  // parentFleetId?: string;
+
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
@@ -25,10 +29,10 @@ export interface IGrupo {
   perfilConfig?: IConfigPerfil;
 }
 
-type OmitirCreate = "_id" | "cliente";
+type OmitirCreate = '_id' | 'cliente';
 
 export interface ICreateGrupo extends Omit<Partial<IGrupo>, OmitirCreate> {}
 
-type OmitirUpdate = "_id" | "cliente";
+type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateGrupo extends Omit<Partial<IGrupo>, OmitirUpdate> {}
