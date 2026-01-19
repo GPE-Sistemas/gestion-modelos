@@ -11,6 +11,7 @@ export interface IAsignacion {
   fechaAsignacion?: string;
   fechaDesasignacion?: string;
   idCliente?: string;
+  idsAncestros?: string[];
   idUsuario?: string;
 
   // Id de la entidad a la que se le asigna algo
@@ -44,8 +45,10 @@ type OmitirCreate =
   | 'activoAsignado'
   | 'trackerAsignado';
 
-export interface ICreateAsignacion
-  extends Omit<Partial<IAsignacion>, OmitirCreate> {}
+export interface ICreateAsignacion extends Omit<
+  Partial<IAsignacion>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate =
   | '_id'
@@ -58,5 +61,7 @@ type OmitirUpdate =
   | 'activoAsignado'
   | 'trackerAsignado';
 
-export interface IUpdateAsignacion
-  extends Omit<Partial<IAsignacion>, OmitirUpdate> {}
+export interface IUpdateAsignacion extends Omit<
+  Partial<IAsignacion>,
+  OmitirUpdate
+> {}
