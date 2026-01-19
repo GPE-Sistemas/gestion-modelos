@@ -19,8 +19,8 @@ export interface IGrupo {
   idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
 
   // Integracion Soflex
-  // fleetId?: string;
-  // parentFleetId?: string;
+  fleetId?: string;
+  parentFleetId?: string;
 
   // Populate
   cliente?: ICliente;
