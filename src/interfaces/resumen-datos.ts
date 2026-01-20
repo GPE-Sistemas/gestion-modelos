@@ -18,6 +18,13 @@ export interface IEncendidoDiarioLuminarias {
   tiempoEncendidoPromedio: number;
 }
 
+export interface IConsumoCombustibleVehiculos {
+  kmRecorridos: number; //km
+  consumoPromedio: number; //litros cada 100 km
+  consumoHipotetico: number; // litros
+  vehiculosConsiderados: number;
+}
+
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO DE RESUMEN
  * ────────────────────────────────────────────────*/
@@ -25,6 +32,8 @@ export interface IEncendidoDiarioLuminarias {
 export type MapaResumenDatos = {
   'Consumo Mensual Luminarias': IConsumoMensualLuminarias;
   'Encendido Diario Luminarias': IEncendidoDiarioLuminarias;
+  'Consumo Diario Combustible Vehículos': IConsumoCombustibleVehiculos;
+  'Consumo Mensual Combustible Vehículos': IConsumoCombustibleVehiculos;
 };
 
 /* ────────────────────────────────────────────────
@@ -57,7 +66,9 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
 
 export type IResumenDatos =
   | IResumenDatosBase<'Consumo Mensual Luminarias'>
-  | IResumenDatosBase<'Encendido Diario Luminarias'>;
+  | IResumenDatosBase<'Encendido Diario Luminarias'>
+  | IResumenDatosBase<'Consumo Diario Combustible Vehículos'>
+  | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
@@ -70,6 +81,14 @@ export type ICreateResumenDatos =
   | Omit<
       Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
       OmitirCreate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Consumo Diario Combustible Vehículos'>>,
+      OmitirCreate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
+      OmitirCreate
     >;
 
 type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
@@ -78,5 +97,13 @@ export type IUpdateResumenDatos =
   | Omit<Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>, OmitirUpdate>
   | Omit<
       Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Consumo Diario Combustible Vehículos'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
       OmitirUpdate
     >;
