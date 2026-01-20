@@ -8,21 +8,21 @@ export type TipoResumenDatos = 'Consumo Mensual Luminarias';
  * ────────────────────────────────────────────────*/
 
 export interface IConsumoMensualLuminarias {
-  consumoTotal: number;
-  totalDispositivos: number;
+  consumoTotal?: number;
+  totalDispositivos?: number;
 }
 
 export interface IEncendidoDiarioLuminarias {
-  tiempoEncendidoTotal: number;
-  totalDispositivos: number;
-  tiempoEncendidoPromedio: number;
+  tiempoEncendidoTotal?: number;
+  totalDispositivos?: number;
+  tiempoEncendidoPromedio?: number;
 }
 
 export interface IConsumoCombustibleVehiculos {
-  kmRecorridos: number; //km
-  consumoPromedio: number; //litros cada 100 km
-  consumoHipotetico: number; // litros
-  vehiculosConsiderados: number;
+  kmRecorridos?: number; //km
+  consumoPromedio?: number; //litros cada 100 km
+  consumoHipotetico?: number; // litros
+  vehiculosConsiderados?: number;
 }
 
 /* ────────────────────────────────────────────────
