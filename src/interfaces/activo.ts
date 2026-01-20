@@ -31,7 +31,7 @@ export type EstadoVehiculo =
   | 'En mantenimiento'
   | 'Fuera de servicio';
 
-export type ICategoriaActivo = 'Normal' | 'Vehículo';
+export type ICategoriaActivo = 'Normal' | 'Vehículo' | 'Colectivo';
 
 export interface IVehiculo {
   tipo?: TipoVehiculo;
@@ -54,8 +54,10 @@ export interface IVehiculo {
   recorridos?: IRecorrido[];
 }
 
-export interface IVehiculoCache
-  extends Omit<IVehiculo, 'chofer' | 'recorrido' | 'recorridos'> {}
+export interface IVehiculoCache extends Omit<
+  IVehiculo,
+  'chofer' | 'recorrido' | 'recorridos'
+> {}
 
 export interface IActivo {
   _id?: string;
@@ -91,10 +93,9 @@ type OmitirUpdate = '_id' | 'cliente' | 'tracker';
 
 export interface IUpdateActivo extends Omit<Partial<IActivo>, OmitirUpdate> {}
 
-export interface IActivoCache
-  extends Omit<
-    IActivo,
-    'cliente' | 'ancestros' | 'tracker' | 'grupo' | 'vehiculo'
-  > {
+export interface IActivoCache extends Omit<
+  IActivo,
+  'cliente' | 'ancestros' | 'tracker' | 'grupo' | 'vehiculo'
+> {
   vehiculo?: IVehiculoCache;
 }
