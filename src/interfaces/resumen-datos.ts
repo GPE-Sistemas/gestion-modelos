@@ -23,9 +23,9 @@ export interface IConsumoCombustibleVehiculos {
   consumoPromedio?: number; //litros cada 100 km (sólo para vehículo individual)
   consumoEstimado?: number; // litros (según km recorridos y consumo promedio)
   consumoDeclarado?: number; // litros (según lo cargado en los servicios del vehículo)
-  vehiculosConsiderados?: number; // Vehículos que tenían valor de odómetro y conumo promedio
+  vehiculosConsiderados?: number; // Vehículos totales analizados (mínimamente tenían odómetro)
+  vehiculosConConsumo?: number; // Vehículos que tenían consumo promedio y valores de odómetro
 }
-
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO DE RESUMEN
  * ────────────────────────────────────────────────*/
