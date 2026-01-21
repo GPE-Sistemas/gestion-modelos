@@ -18,6 +18,7 @@ export interface IServicio {
   detalles?: string;
   kmDelMantenimiento?: number;
   costo?: number;
+  litrosCargados?: number;
   idProveedor?: string;
   // Populate
   cliente?: ICliente;
@@ -28,10 +29,14 @@ export interface IServicio {
 
 type OmitirCreate = '_id' | 'cliente' | 'activo' | 'proveedor';
 
-export interface ICreateServicio
-  extends Omit<Partial<IServicio>, OmitirCreate> {}
+export interface ICreateServicio extends Omit<
+  Partial<IServicio>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate = '_id' | 'cliente' | 'activo' | 'proveedor';
 
-export interface IUpdateServicio
-  extends Omit<Partial<IServicio>, OmitirUpdate> {}
+export interface IUpdateServicio extends Omit<
+  Partial<IServicio>,
+  OmitirUpdate
+> {}
