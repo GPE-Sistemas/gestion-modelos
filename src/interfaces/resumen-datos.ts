@@ -32,7 +32,6 @@ export interface IConsumoCombustibleVehiculos {
 export type MapaResumenDatos = {
   'Consumo Mensual Luminarias': IConsumoMensualLuminarias;
   'Encendido Diario Luminarias': IEncendidoDiarioLuminarias;
-  'Consumo Diario Combustible Vehículos': IConsumoCombustibleVehiculos;
   'Consumo Mensual Combustible Vehículos': IConsumoCombustibleVehiculos;
 };
 
@@ -67,7 +66,6 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
 export type IResumenDatos =
   | IResumenDatosBase<'Consumo Mensual Luminarias'>
   | IResumenDatosBase<'Encendido Diario Luminarias'>
-  | IResumenDatosBase<'Consumo Diario Combustible Vehículos'>
   | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>;
 
 /* ────────────────────────────────────────────────
@@ -83,10 +81,6 @@ export type ICreateResumenDatos =
       OmitirCreate
     >
   | Omit<
-      Partial<IResumenDatosBase<'Consumo Diario Combustible Vehículos'>>,
-      OmitirCreate
-    >
-  | Omit<
       Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
       OmitirCreate
     >;
@@ -97,10 +91,6 @@ export type IUpdateResumenDatos =
   | Omit<Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>, OmitirUpdate>
   | Omit<
       Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
-      OmitirUpdate
-    >
-  | Omit<
-      Partial<IResumenDatosBase<'Consumo Diario Combustible Vehículos'>>,
       OmitirUpdate
     >
   | Omit<
