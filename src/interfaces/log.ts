@@ -21,10 +21,13 @@ export type MapaValoresLog = {
   'Log Mensaje': ILogMensaje;
 };
 
+export type TipoValoresReporte = 'Log Mensaje';
+
 export interface ILog<T extends keyof MapaValoresLog> {
   _id: string;
   fechaCreacion?: string;
   idCliente?: string;
+  expireAt?: string;
   //
   idsAncestros?: string[];
   tipoEntidad?: TipoEntidadLog;
