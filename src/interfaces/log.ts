@@ -22,7 +22,7 @@ export type MapaValoresLog = {
   'Log Mensaje': ILogMensaje;
 };
 
-export type TipoValoresReporte = 'Log Mensaje';
+export type TipoLogs = 'Log Mensaje';
 
 export interface ILog<T extends keyof MapaValoresLog> {
   _id: string;
