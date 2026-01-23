@@ -9,7 +9,7 @@ export type TipoEntidadLog =
 /* ────────────────────────────────────────────────
  *  REPORTES POR TIPO
  * ────────────────────────────────────────────────*/
-export type ILogBase = ILog<'Log Mensaje'>;
+export type ILog = ILogBase<'Log Mensaje'>;
 
 export interface ILogMensaje {
   mensaje?: string;
@@ -24,7 +24,7 @@ export type MapaValoresLog = {
 
 export type TipoLogs = 'Log Mensaje';
 
-export interface ILog<T extends keyof MapaValoresLog> {
+export interface ILogBase<T extends keyof MapaValoresLog> {
   _id: string;
   fechaCreacion?: string;
   idCliente?: string;
@@ -41,7 +41,7 @@ export interface ILog<T extends keyof MapaValoresLog> {
 
 ////// CREATE
 type Omitir = '_id' | 'idsAncestros' | 'cliente' | 'ancestros';
-export type ICreateLog = Omit<ILog<'Log Mensaje'>, Omitir>;
+export type ICreateLog = Omit<ILogBase<'Log Mensaje'>, Omitir>;
 
 ////// UPDATE
-export type IUpdateLog = Omit<Partial<ILog<'Log Mensaje'>>, Omitir>;
+export type IUpdateLog = Omit<Partial<ILogBase<'Log Mensaje'>>, Omitir>;
