@@ -41,7 +41,7 @@ export interface ILogBase<T extends keyof MapaValoresLog> {
 
 ////// CREATE
 type Omitir = '_id' | 'idsAncestros' | 'cliente' | 'ancestros';
-export type ICreateLog = Omit<ILogBase<'Log Mensaje'>, Omitir>;
+export type ICreateLogGenerico = Omit<ILogBase<'Log Mensaje'>, Omitir>;
 
 ////// UPDATE
-export type IUpdateLog = Omit<Partial<ILogBase<'Log Mensaje'>>, Omitir>;
+export type IUpdateLogGenerico = Omit<Partial<ILogBase<'Log Mensaje'>>, Omitir>;
