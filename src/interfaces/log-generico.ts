@@ -9,7 +9,7 @@ export type TipoEntidadLog =
 /* ────────────────────────────────────────────────
  *  REPORTES POR TIPO
  * ────────────────────────────────────────────────*/
-export type ILog = ILogBase<'Log Mensaje'>;
+export type ILogGenerico = ILogBase<'Log Mensaje'>;
 
 export interface ILogMensaje {
   mensaje?: string;
