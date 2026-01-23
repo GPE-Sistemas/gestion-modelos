@@ -68,4 +68,4 @@ export * from './evento-generico';
 export * from './excepcion';
 export * from './certificado-entidad';
 export * from './asignacion';
-export * from './log';
+export * from './log-generico';
