@@ -1,7 +1,7 @@
 import { IActivo } from './activo';
 import { ICliente } from './cliente';
 import { ISim } from './dispositivo-alarma';
-import { EstadoHabilitacion } from './estado-entidad';
+import { estadoCuenta } from './estado-entidad';
 import { IModeloDispositivo } from './modelo-dispositivo';
 import { IServicioContratado } from './servicio-contratado';
 
@@ -41,7 +41,7 @@ export interface ITracker {
   qualcomm?: IQualcommDevice;
   t1000b?: IT100bDevice;
   telefono?: ITelefono;
-  estadoCuenta?: EstadoHabilitacion;
+  estadoCuenta?: estadoCuenta;
   numeroAbonado?: string;
   sim1?: ISim;
   sim2?: ISim;

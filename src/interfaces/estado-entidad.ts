@@ -3,12 +3,12 @@ import { IDispositivoAlarma } from './dispositivo-alarma';
 import { ITracker } from './tracker';
 import { IUsuario } from './usuario';
 
-export type EstadoHabilitacion = 'Habilitado' | 'Suspendido';
+export type estadoCuenta = 'Habilitado' | 'Suspendido';
 
 export interface IEstadoEntidad {
   _id?: string;
   fechaCreacion?: string;
-  estado?: EstadoHabilitacion;
+  estado?: estadoCuenta;
   idEntidad?: string; /// POR DISPOSITIVO
   idCliente?: string;
   idsAncestros?: string[];

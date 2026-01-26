@@ -1,7 +1,7 @@
 import { ICamara } from './camara';
 import { ICliente } from './cliente';
 import { Dia } from './config-evento-usuario';
-import { EstadoHabilitacion } from './estado-entidad';
+import { estadoCuenta } from './estado-entidad';
 import { IModeloDispositivo } from './modelo-dispositivo';
 import { IServicioContratado } from './servicio-contratado';
 import { IUbicacion } from './ubicacion';
@@ -124,7 +124,7 @@ export interface IDispositivoAlarma {
   //
   nroDeSistema?: string;
   //
-  estadoCuenta?: EstadoHabilitacion;
+  estadoCuenta?: estadoCuenta;
   frecReporte?: number;
   idServiciosContratados?: string[];
   clave?: string;
