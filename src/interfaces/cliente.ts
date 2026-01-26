@@ -13,9 +13,11 @@ export interface ITemaCliente {
 }
 
 export interface ICredencialesAlarma {
-  tipo?: 'Garnet Titanium';
+  tipo?: 'Garnet Titanium' | 'Garnet' | 'Hikvision';
   usuario?: string;
   password?: string;
+  apikey?: string;
+  apisecret?: string;
 }
 
 export interface IIntegracionSoflex {
