@@ -81,7 +81,7 @@ export interface IPermiso {
   includeChildren?: boolean;
   idsAncestros?: string[];
   // Para nivel Grupo
-  idsGrupos?: string[];
+  idsGrupos?: string;
   // Para nivel Entidad
   tipoEntidad?: TipoEntidadPermiso;
   idsEntidades?: string[];
