@@ -1,6 +1,6 @@
 import { ICliente } from './cliente';
 import { IModoDesactivado } from './dispositivo-alarma';
-import { estadoCuenta } from './estado-entidad';
+import { EstadoHabilitacion } from './estado-entidad';
 import { IGrupo } from './grupo';
 import { IRecorrido } from './recorrido';
 import { ITracker } from './tracker';
@@ -79,7 +79,7 @@ export interface IActivo {
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   modoDesactivado?: IModoDesactivado;
 
-  estadoCuenta?: estadoCuenta;
+  estadoCuenta?: EstadoHabilitacion;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
