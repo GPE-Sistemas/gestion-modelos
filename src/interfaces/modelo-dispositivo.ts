@@ -1,13 +1,14 @@
-import { ICliente } from "./cliente";
-import { ICodigosDispositivo, TipoDispositivo } from "./codigos-dispositivo";
+import { ICliente } from './cliente';
+import { ICodigosDispositivo, TipoDispositivo } from './codigos-dispositivo';
 
 export type FormatosMensajeComunicador =
-  | "Garnet-Titanium"
-  | "TECHNO 123"
-  | "Netio"
-  | "Nanocomm ED5200"
-  | "Garnet"
-  | "Dahua";
+  | 'Garnet-Titanium'
+  | 'TECHNO 123'
+  | 'Netio'
+  | 'Nanocomm ED5200'
+  | 'Garnet'
+  | 'Dahua'
+  | 'Hikvision';
 
 export interface PotenciasDimerizacionLuminarias {
   dim10?: number;
@@ -46,15 +47,21 @@ export interface IModeloDispositivo {
   codigos?: ICodigosDispositivo;
 }
 
-type OmitirCreate = "_id" | "codigos" | "cliente";
+type OmitirCreate = '_id' | 'codigos' | 'cliente';
 
-export interface ICreateModeloDispositivo
-  extends Omit<Partial<IModeloDispositivo>, OmitirCreate> {}
+export interface ICreateModeloDispositivo extends Omit<
+  Partial<IModeloDispositivo>,
+  OmitirCreate
+> {}
 
-type OmitirUpdate = "_id" | "codigos" | "cliente";
+type OmitirUpdate = '_id' | 'codigos' | 'cliente';
 
-export interface IUpdateModeloDispositivo
-  extends Omit<Partial<IModeloDispositivo>, OmitirUpdate> {}
+export interface IUpdateModeloDispositivo extends Omit<
+  Partial<IModeloDispositivo>,
+  OmitirUpdate
+> {}
 
-export interface IModeloDispositivoCache
-  extends Omit<IModeloDispositivo, "cliente" | "ancestros" | "codigos"> {}
+export interface IModeloDispositivoCache extends Omit<
+  IModeloDispositivo,
+  'cliente' | 'ancestros' | 'codigos'
+> {}
