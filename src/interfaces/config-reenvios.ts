@@ -3,7 +3,7 @@ import { IDispositivoAlarma } from './dispositivo-alarma';
 import { ITracker } from './tracker';
 
 export type MetodoReenvio = 'Básico' | 'Seguridad Evento Externo' | 'Soflex';
-
+export type Protocolo = 'UDP' | 'TCP';
 export type IAgrupacionReenvio =
   | 'Todos los trackers del cliente'
   | 'Todas las alarmas del cliente'
@@ -15,9 +15,18 @@ export interface IOpcionesReenvio {
   apikey?: string;
   usuario?: string;
   contrasena?: string;
+  usaReglaReenvio?: boolean;
+  reglasReenvio?: IReglaReenvio[]; //Especifica condiciones de cómo reenviar, dependiendo de cómo llegó la data recibida
   opcionesSoflex?: ISoflexConfig;
 }
 
+export interface IReglaReenvio {
+  puertoEntrada?: number; // Puerto por el cual llegó la data recibida. Para Trackers: TRAX (5031), GTO6 (5023), GPS103 (5001)
+  protocoloEntrada?: Protocolo;
+  puertoSalida?: number; // Puerto al cual se reenviará la data (definido por el usuario)
+  protocoloSalida?: Protocolo;
+  hostSalida?: string; // Host al cual se reenviará la data (definido por el usuario)
+}
 export interface ISoflexConfig {
   providerid?: string;
   version?: string; // v.X.X dice la documentación
@@ -45,15 +54,18 @@ export interface IConfigReenvio {
 }
 
 type OmitirCreate = '_id' | 'cliente' | 'dispositivoAlarma' | 'tracker';
-export interface ICreateConfigReenvio
-  extends Omit<Partial<IConfigReenvio>, OmitirCreate> {}
+export interface ICreateConfigReenvio extends Omit<
+  Partial<IConfigReenvio>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate = '_id' | 'cliente' | 'dispositivoAlarma' | 'tracker';
-export interface IUpdateConfigReenvio
-  extends Omit<Partial<IConfigReenvio>, OmitirUpdate> {}
+export interface IUpdateConfigReenvio extends Omit<
+  Partial<IConfigReenvio>,
+  OmitirUpdate
+> {}
 
-export interface IConfigReenvioCache
-  extends Omit<
-    IConfigReenvio,
-    'cliente' | 'ancestros' | 'clienteReenvio' | 'dispositivoAlarma' | 'tracker'
-  > {}
+export interface IConfigReenvioCache extends Omit<
+  IConfigReenvio,
+  'cliente' | 'ancestros' | 'clienteReenvio' | 'dispositivoAlarma' | 'tracker'
+> {}
