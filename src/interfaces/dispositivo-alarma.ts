@@ -682,3 +682,11 @@ export interface IZoneItemHikvision {
 export interface IZoneListHikvision {
   ZoneList?: IZoneItemHikvision[];
 }
+
+export interface IResponseHikvision {
+  statusCode?: number;
+  statusString?: string;
+  subStatusCode?: string;
+  errorCode?: number;
+  errorMsg?: string;
+}
