@@ -622,20 +622,20 @@ export interface ResponseAccessoryInfos {
 export type EstadoArmadoHikvision = 'disarm' | 'arm' | 'stay';
 
 export interface ISubSysHikvision {
-  id: number;
-  arming: EstadoArmadoHikvision;
-  alarm: boolean;
-  enabled: boolean;
-  name: string;
-  delayTime: number;
+  id?: number;
+  arming?: EstadoArmadoHikvision;
+  alarm?: boolean;
+  enabled?: boolean;
+  name?: string;
+  delayTime?: number;
 }
 
 export interface ISubSysItemHikvision {
-  SubSys: ISubSysHikvision;
+  SubSys?: ISubSysHikvision;
 }
 
 export interface IStatusAlarmaHikvision {
-  SubSysList: ISubSysItemHikvision[];
+  SubSysList?: ISubSysItemHikvision[];
 }
 
 export type EstadoZonaHikvision = 'online' | 'offline';
@@ -646,39 +646,39 @@ export type TipoZonaHikvision = 'Instant';
 export type AtributoZonaHikvision = 'wireless';
 
 export interface IZoneHikvision {
-  id: number;
-  name: string;
-  status: EstadoZonaHikvision;
-  sensorStatus: EstadoSensorHikvision;
-  tamperEvident: boolean;
-  shielded: boolean;
-  bypassed: boolean;
-  armed: boolean;
-  isArming: boolean;
-  alarm: boolean;
-  charge: CargaZonaHikvision;
-  chargeValue: number;
-  signal: number;
-  realSignal: number;
-  signalType: string;
-  temperature: number;
-  subSystemNo: number;
-  linkageSubSystem: number[];
-  detectorType: TipoDetectorHikvision;
-  model: string;
-  stayAway: boolean;
-  zoneType: TipoZonaHikvision;
-  isViaRepeater: boolean;
-  zoneAttrib: AtributoZonaHikvision;
-  version: string;
-  deviceNo: number;
-  abnormalOrNot: boolean;
+  id?: number;
+  name?: string;
+  status?: EstadoZonaHikvision;
+  sensorStatus?: EstadoSensorHikvision;
+  tamperEvident?: boolean;
+  shielded?: boolean;
+  bypassed?: boolean;
+  armed?: boolean;
+  isArming?: boolean;
+  alarm?: boolean;
+  charge?: CargaZonaHikvision;
+  chargeValue?: number;
+  signal?: number;
+  realSignal?: number;
+  signalType?: string;
+  temperature?: number;
+  subSystemNo?: number;
+  linkageSubSystem?: number[];
+  detectorType?: TipoDetectorHikvision;
+  model?: string;
+  stayAway?: boolean;
+  zoneType?: TipoZonaHikvision;
+  isViaRepeater?: boolean;
+  zoneAttrib?: AtributoZonaHikvision;
+  version?: string;
+  deviceNo?: number;
+  abnormalOrNot?: boolean;
 }
 
 export interface IZoneItemHikvision {
-  Zone: IZoneHikvision;
+  Zone?: IZoneHikvision;
 }
 
 export interface IZoneListHikvision {
-  ZoneList: IZoneItemHikvision[];
+  ZoneList?: IZoneItemHikvision[];
 }
