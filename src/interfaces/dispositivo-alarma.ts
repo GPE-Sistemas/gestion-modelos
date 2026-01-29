@@ -9,6 +9,7 @@ import { IUbicacion } from './ubicacion';
 /// Lepra ( interfaces para las respuestas de HSI )
 export type TipoEmergenciaAlarma = 'Pánico' | 'Médica' | 'Incendio';
 export type TiposDeArmado = 'T' | 'D' | 'p1';
+/// T es away(ausente ) p1 (stay (casa) D es desarmado
 ////
 export interface ISim {
   iccid?: string;
@@ -150,8 +151,10 @@ type OmitirCreate =
   | 'camaras'
   | 'serviciosContratados';
 
-export interface ICreateDispositivoAlarma
-  extends Omit<Partial<IDispositivoAlarma>, OmitirCreate> {}
+export interface ICreateDispositivoAlarma extends Omit<
+  Partial<IDispositivoAlarma>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate =
   | '_id'
@@ -162,20 +165,21 @@ type OmitirUpdate =
   | 'camaras'
   | 'serviciosContratados';
 
-export interface IUpdateDispositivoAlarma
-  extends Omit<Partial<IDispositivoAlarma>, OmitirUpdate> {}
+export interface IUpdateDispositivoAlarma extends Omit<
+  Partial<IDispositivoAlarma>,
+  OmitirUpdate
+> {}
 
-export interface IDispositivoAlarmaCache
-  extends Omit<
-    IDispositivoAlarma,
-    | 'domicilio'
-    | 'modelo'
-    | 'cliente'
-    | 'ancestros'
-    | 'comunicador'
-    | 'camaras'
-    | 'serviciosContratados'
-  > {}
+export interface IDispositivoAlarmaCache extends Omit<
+  IDispositivoAlarma,
+  | 'domicilio'
+  | 'modelo'
+  | 'cliente'
+  | 'ancestros'
+  | 'comunicador'
+  | 'camaras'
+  | 'serviciosContratados'
+> {}
 ///////
 /////// Cosas de las apis de garnet dahua y eso
 //////
@@ -611,4 +615,70 @@ export interface ResponseStateData {
 
 export interface ResponseAccessoryInfos {
   accessoryInfos?: accessoryInfo[];
+}
+
+/// hikvision ( esta hecho para que coincida con la api de mierda que tienen )
+
+export type EstadoArmadoHikvision = 'disarm' | 'arm' | 'stay';
+
+export interface ISubSysHikvision {
+  id?: number;
+  arming?: EstadoArmadoHikvision;
+  alarm?: boolean;
+  enabled?: boolean;
+  name?: string;
+  delayTime?: number;
+}
+
+export interface ISubSysItemHikvision {
+  SubSys?: ISubSysHikvision;
+}
+
+export interface IStatusAlarmaHikvision {
+  SubSysList?: ISubSysItemHikvision[];
+}
+
+export type EstadoZonaHikvision = 'online' | 'offline';
+export type EstadoSensorHikvision = 'normal';
+export type CargaZonaHikvision = 'normal';
+export type TipoDetectorHikvision = 'passiveInfraredDetector';
+export type TipoZonaHikvision = 'Instant';
+export type AtributoZonaHikvision = 'wireless';
+
+export interface IZoneHikvision {
+  id?: number;
+  name?: string;
+  status?: EstadoZonaHikvision;
+  sensorStatus?: EstadoSensorHikvision;
+  tamperEvident?: boolean;
+  shielded?: boolean;
+  bypassed?: boolean;
+  armed?: boolean;
+  isArming?: boolean;
+  alarm?: boolean;
+  charge?: CargaZonaHikvision;
+  chargeValue?: number;
+  signal?: number;
+  realSignal?: number;
+  signalType?: string;
+  temperature?: number;
+  subSystemNo?: number;
+  linkageSubSystem?: number[];
+  detectorType?: TipoDetectorHikvision;
+  model?: string;
+  stayAway?: boolean;
+  zoneType?: TipoZonaHikvision;
+  isViaRepeater?: boolean;
+  zoneAttrib?: AtributoZonaHikvision;
+  version?: string;
+  deviceNo?: number;
+  abnormalOrNot?: boolean;
+}
+
+export interface IZoneItemHikvision {
+  Zone?: IZoneHikvision;
+}
+
+export interface IZoneListHikvision {
+  ZoneList?: IZoneItemHikvision[];
 }
