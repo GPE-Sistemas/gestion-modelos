@@ -617,7 +617,7 @@ export interface ResponseAccessoryInfos {
   accessoryInfos?: accessoryInfo[];
 }
 
-/// hikvision
+/// hikvision ( esta hecho para que coincida con la api de mierda que tienen )
 
 export type EstadoArmadoHikvision = 'disarm' | 'arm' | 'stay';
 
