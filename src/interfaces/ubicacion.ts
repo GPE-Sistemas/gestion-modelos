@@ -1,5 +1,6 @@
 import { IGeoJSON } from '../auxiliares';
 import { ICliente } from './cliente';
+import { Dia, Frecuencia } from './config-evento-usuario';
 
 export type ICategoriaUbicacion =
   | 'Normal'
@@ -23,6 +24,24 @@ export interface IUbicacion {
   geojson?: IGeoJSON;
   fotos?: string[];
   color?: string;
+  excepcionesEvento?: {
+    genera?: boolean; // Si genera o no evento
+    // Agrupaciones temporales
+    frecuencia?: Frecuencia;
+    // Fechas de vigencia para generar los eventos
+    validaDesde?: string;
+    validaHasta?: string;
+    // Frecuencia de generacion de eventos
+    generarSoloUnaVez?: boolean;
+    // Si pasa el periodo y sigue activa se genera el evento
+    generarSiNoSeCumple?: boolean;
+    // Dentro del cronograma
+    dias?: Dia[];
+    horaInicio?: string;
+    horaFin?: string;
+    // Minutos que se agregan a los periodos de vigencia
+    minutosDeGracia?: number;
+  };
   // Virtuals
   cliente?: ICliente;
   ancestros?: ICliente[];
