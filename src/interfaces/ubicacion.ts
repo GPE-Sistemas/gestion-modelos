@@ -3,6 +3,7 @@ import { ICliente } from './cliente';
 
 export type ICategoriaUbicacion =
   | 'Normal'
+  | 'Zona'
   | 'Terminal'
   | 'Domicilio'
   | 'Activos'
@@ -21,18 +22,25 @@ export interface IUbicacion {
   direccion?: string;
   geojson?: IGeoJSON;
   fotos?: string[];
+  color?: string;
   // Virtuals
   cliente?: ICliente;
   ancestros?: ICliente[];
 }
 
 type OmitirCreate = '_id' | 'cliente';
-export interface ICreateUbicacion
-  extends Omit<Partial<IUbicacion>, OmitirCreate> {}
+export interface ICreateUbicacion extends Omit<
+  Partial<IUbicacion>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate = '_id' | 'cliente';
-export interface IUpdateUbicacion
-  extends Omit<Partial<IUbicacion>, OmitirUpdate> {}
+export interface IUpdateUbicacion extends Omit<
+  Partial<IUbicacion>,
+  OmitirUpdate
+> {}
 
-export interface IUbicacionCache
-  extends Omit<IUbicacion, 'cliente' | 'ancestros'> {}
+export interface IUbicacionCache extends Omit<
+  IUbicacion,
+  'cliente' | 'ancestros'
+> {}
