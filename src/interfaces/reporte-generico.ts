@@ -123,6 +123,7 @@ export interface IReporteTracker {
   fechaDevice?: string;
   geojson?: IGeoJSONPoint;
   snappedGeojson?: IGeoJSONPoint;
+  snapDivergence?: number; // En METROS
   direccion?: string;
   velocidad?: number;
   orientacion?: number;
