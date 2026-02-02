@@ -82,6 +82,13 @@ export interface CondicionNotificacion {
       tiempo: number;
     };
   };
+
+  vehiculo?: {
+    divergenciaGPS?: {
+      'mayor a': number;
+      reportesConsecutivos: number;
+    };
+  };
 }
 
 export interface CondicionNotificacionCache {
@@ -129,6 +136,13 @@ export interface CondicionNotificacionCache {
     llegoEn: {
       idUsuario: string;
       tiempo: number;
+    };
+  };
+
+  vehiculo?: {
+    divergenciaGPS?: {
+      'mayor a': number;
+      reportesConsecutivos: number;
     };
   };
 }
