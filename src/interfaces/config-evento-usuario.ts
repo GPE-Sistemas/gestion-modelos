@@ -57,10 +57,7 @@ export interface CondicionNotificacion {
       dentro?: boolean;
       fuera?: boolean;
     };
-    divergenciaGPS?: {
-      'mayor a': number;
-      reportesConsecutivos: number;
-    };
+    divergenciaGPS?: boolean;
   };
 
   luminaria?: {
@@ -110,10 +107,7 @@ export interface CondicionNotificacionCache {
       dentro?: boolean;
       fuera?: boolean;
     };
-    divergenciaGPS?: {
-      'mayor a': number;
-      reportesConsecutivos: number;
-    };
+    divergenciaGPS?: boolean;
   };
 
   luminaria?: {
@@ -225,8 +219,10 @@ type OmitirCreate =
   | 'categoriaEvento'
   | 'tracker'
   | 'tipoEvento';
-export interface ICreateConfigEventoUsuario
-  extends Omit<Partial<IConfigEventoUsuario>, OmitirCreate> {}
+export interface ICreateConfigEventoUsuario extends Omit<
+  Partial<IConfigEventoUsuario>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate =
   | '_id'
@@ -240,24 +236,25 @@ type OmitirUpdate =
   | 'categoriaEvento'
   | 'tracker'
   | 'tipoEvento';
-export interface IUpdateConfigEventoUsuario
-  extends Omit<Partial<IConfigEventoUsuario>, OmitirUpdate> {}
+export interface IUpdateConfigEventoUsuario extends Omit<
+  Partial<IConfigEventoUsuario>,
+  OmitirUpdate
+> {}
 
-export interface IConfigEventoUsuarioCache
-  extends Omit<
-    IConfigEventoUsuario,
-    | 'usuarios'
-    | 'cliente'
-    | 'ancestros'
-    | 'grupo'
-    | 'activo'
-    | 'luminaria'
-    | 'alarma'
-    | 'clientesQuePuedenAtender'
-    | 'categoriaEvento'
-    | 'tracker'
-    | 'tipoEvento'
-    | 'condicion'
-  > {
+export interface IConfigEventoUsuarioCache extends Omit<
+  IConfigEventoUsuario,
+  | 'usuarios'
+  | 'cliente'
+  | 'ancestros'
+  | 'grupo'
+  | 'activo'
+  | 'luminaria'
+  | 'alarma'
+  | 'clientesQuePuedenAtender'
+  | 'categoriaEvento'
+  | 'tracker'
+  | 'tipoEvento'
+  | 'condicion'
+> {
   condicion?: CondicionNotificacionCache;
 }
