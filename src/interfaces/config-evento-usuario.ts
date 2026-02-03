@@ -57,6 +57,10 @@ export interface CondicionNotificacion {
       dentro?: boolean;
       fuera?: boolean;
     };
+    divergenciaGPS?: {
+      'mayor a': number;
+      reportesConsecutivos: number;
+    };
   };
 
   luminaria?: {
@@ -80,13 +84,6 @@ export interface CondicionNotificacion {
     llegoEn: {
       idUsuario: string;
       tiempo: number;
-    };
-  };
-
-  vehiculo?: {
-    divergenciaGPS?: {
-      'mayor a': number;
-      reportesConsecutivos: number;
     };
   };
 }
@@ -113,6 +110,10 @@ export interface CondicionNotificacionCache {
       dentro?: boolean;
       fuera?: boolean;
     };
+    divergenciaGPS?: {
+      'mayor a': number;
+      reportesConsecutivos: number;
+    };
   };
 
   luminaria?: {
@@ -136,13 +137,6 @@ export interface CondicionNotificacionCache {
     llegoEn: {
       idUsuario: string;
       tiempo: number;
-    };
-  };
-
-  vehiculo?: {
-    divergenciaGPS?: {
-      'mayor a': number;
-      reportesConsecutivos: number;
     };
   };
 }
