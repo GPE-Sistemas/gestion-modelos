@@ -326,6 +326,7 @@ export type DetallesEmergencias = {
   idsMedicos?: string[];
   idsEnfermeros?: string[];
   idUsuarioResponsable?: string;
+  idMovilAsignado?: string;
 
   // Populate opcional
   destinatarioAsistencia?: IDestinatarioAsistencia;
@@ -337,6 +338,7 @@ export type DetallesEmergencias = {
   enfermeros?: IPersonalSalud[];
   hospital?: IHospital;
   usuarioResponsable?: IUsuario;
+  movilAsignado?: IActivo;
 };
 
 /* ────────────────────────────────────────────────
