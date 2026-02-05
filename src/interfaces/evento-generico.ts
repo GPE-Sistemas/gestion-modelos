@@ -180,7 +180,7 @@ export interface IValoresEventoTecnico extends IValoresEventoBase {
 
 // Valores para eventos de emergencia
 export interface IValoresEventoEmergencia extends IValoresEventoBase {
-  ubicacionActual?: IGeoJSONPoint;
+  ubicacionActual?: IGeoJSONPoint; //Es la ubicación donde se generó el evento. Cuando se crea la emergencia, el primer evento no tiene ubicación porque no tiene ninguna ambulancia asignada
   direccionActual?: string;
   motivoCancelacion?: string;
   motivoReasignacion?: string;
