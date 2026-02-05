@@ -14,7 +14,7 @@ import { IEmergencia } from './emergencias';
 import { IHospital } from './hospitales';
 import { IPersonalSalud } from './personal-salud';
 import { ICentroDeAtencion } from './centro-de-atencion';
-import { DireccionV2, IGeoJSONPoint } from '../auxiliares';
+import { IGeoJSONPoint } from '../auxiliares';
 import { ISirena } from './sirena';
 
 /* ────────────────────────────────────────────────
@@ -180,7 +180,8 @@ export interface IValoresEventoTecnico extends IValoresEventoBase {
 
 // Valores para eventos de emergencia
 export interface IValoresEventoEmergencia extends IValoresEventoBase {
-  ubicacionDestino?: DireccionV2;
+  ubicacionActual?: IGeoJSONPoint;
+  direccionActual?: string;
   motivoCancelacion?: string;
   motivoReasignacion?: string;
   observaciones?: string;
