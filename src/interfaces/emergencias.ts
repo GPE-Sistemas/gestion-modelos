@@ -1,7 +1,9 @@
 import { DireccionV2, IGeoJSONPoint } from '../auxiliares';
 import { ICliente } from './cliente';
+import { IConfigEventoUsuario } from './config-evento-usuario';
 import { IDestinatarioAsistencia } from './destinatario-asistencia';
 import { IEventoGenerico } from './evento-generico';
+import { IUbicacion } from './ubicacion';
 
 //EMERGENCIA MÉDICA
 export interface IEmergencia {
@@ -29,11 +31,13 @@ export interface IEmergencia {
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
   direccion?: string; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
-  ubicacion?: IGeoJSONPoint; //Coordenadas [longitud, latitud] del lugar de la emergencia
+  ubicacionDestino?: IGeoJSONPoint; //geojson del lugar de la emergencia
   asignada?: boolean; //Indica si a la emergencia se le asignó alguna clase de personal para el seguimiento (vehículos, médicos, choferes, etc)
   ultimaActualizacion?: string;
   ultimoEventoEmergencia?: IEventoGenerico; //Acá se carga el último evento para hacer el seguimiento del auxilio
   salioDelCentro?: boolean; //En caso de que sea un auxilio, se indica cuando el móvil asignado (ambulancia, camión de bomberos, etc) salió del centro de atención.
+  idUbicacion?: string; //Cuando se crea una emergencia, se genera la entidad IUbicacion para la ubicacion, para luego ejecutar una lógica de negocio junto con la configEventoUsuario.
+  idsConfigsEventosUsuario?: string[]; //Cuando se crea una emergencia, se generan las entidades IConfigEventoUsuario, para luego ejecutar una lógica de negocio.
 
   //2-Datos específicos según el tipo de emergencia
   emergenciaMedica?: IEmergenciaMedica;
@@ -46,6 +50,8 @@ export interface IEmergencia {
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
   cliente?: ICliente;
   ancestros?: ICliente[];
+  ubicacion?: IUbicacion;
+  conifgsEventosUsuario?: IConfigEventoUsuario[];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
