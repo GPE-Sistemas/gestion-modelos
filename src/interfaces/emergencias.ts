@@ -1,4 +1,4 @@
-import { DireccionV2 } from '../auxiliares';
+import { DireccionV2, IGeoJSONPoint } from '../auxiliares';
 import { ICliente } from './cliente';
 import { IDestinatarioAsistencia } from './destinatario-asistencia';
 import { IEventoGenerico } from './evento-generico';
@@ -28,7 +28,8 @@ export interface IEmergencia {
   archivosAdjuntos?: IArchivosAdjuntos[];
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
-  direccion?: DireccionV2; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
+  direccion?: string; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
+  ubicacion?: IGeoJSONPoint; //Coordenadas [longitud, latitud] del lugar de la emergencia
   asignada?: boolean; //Indica si a la emergencia se le asignó alguna clase de personal para el seguimiento (vehículos, médicos, choferes, etc)
   ultimaActualizacion?: string;
   ultimoEventoEmergencia?: IEventoGenerico; //Acá se carga el último evento para hacer el seguimiento del auxilio
