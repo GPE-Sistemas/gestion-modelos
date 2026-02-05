@@ -51,7 +51,7 @@ export interface IEmergencia {
   cliente?: ICliente;
   ancestros?: ICliente[];
   ubicacion?: IUbicacion;
-  conifgsEventosUsuario?: IConfigEventoUsuario[];
+  configsEventosUsuario?: IConfigEventoUsuario[];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
