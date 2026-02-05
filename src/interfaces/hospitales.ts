@@ -22,7 +22,7 @@ export interface IHospital {
   cliente?: ICliente;
   ancestros?: ICliente[];
   ubicacion?: IUbicacion;
-  conifgsEventosUsuario?: IConfigEventoUsuario[];
+  configsEventosUsuario?: IConfigEventoUsuario[];
 }
 
 type OmitirCreate = '_id';
