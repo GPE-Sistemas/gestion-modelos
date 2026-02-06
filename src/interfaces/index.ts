@@ -44,7 +44,6 @@ export * from './ubicacion';
 export * from './usuario';
 export * from './destinatario-asistencia';
 export * from './emergencias';
-export * from './evento-emergencia';
 export * from './personal-salud';
 export * from './hospitales';
 export * from './informacion-tecnica';
