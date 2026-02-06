@@ -14,11 +14,7 @@ import { IEmergencia } from './emergencias';
 import { IHospital } from './hospitales';
 import { IPersonalSalud } from './personal-salud';
 import { ICentroDeAtencion } from './centro-de-atencion';
-import { DireccionV2, IGeoJSONPoint } from '../auxiliares';
-import {
-  EstadoEmergenciaMedica,
-  EstadoEmergenciaBomberos,
-} from './evento-emergencia';
+import { IGeoJSONPoint } from '../auxiliares';
 import { ISirena } from './sirena';
 
 /* ────────────────────────────────────────────────
@@ -84,6 +80,34 @@ export type estadoEvento =
   | 'En Espera'
   | 'Liberada'
   | 'Finalizada';
+
+export type EstadoEmergenciaMedica =
+  //LLAMADAS DE EMERGENCIA
+  | 'Atendida' //La llamada se atendió exitosamente
+
+  //AUXILIOS
+  | 'Pendiente' // Auxilio recién creado
+  | 'Asignada' // Se asignó vehículo/médico/enfermero
+  | 'Reasignada' //Se reasignó vehículo/médico/enfermero
+  | 'En tránsito' // El vehículo salió del centro
+  | 'Llegó a destino' // El vehículo llegó al lugar de la emergencia
+  | 'Rumbo a hospital' // El vehículo sale hacia el hospital
+  | 'Llegada a hospital' //El vehículo Llegó al hospital
+  | 'Finalizada' // La emergencia fue tratada. Ya sea porque se llegó al hospital o no
+  | 'Cancelada'; // La emergencia se canceló
+
+export type EstadoEmergenciaBomberos =
+  //LLAMADAS DE EMERGENCIA
+  | 'Atendida' //La llamada se atendió exitosamente
+
+  //AUXILIOS
+  | 'Pendiente' // Auxilio recién creado
+  | 'Asignada' // Se asignó vehículo
+  | 'Reasignada' //Se reasignó vehículo
+  | 'En tránsito' // El vehículo salió del centro
+  | 'Llegó a destino' // El vehículo llegó al lugar de la emergencia
+  | 'Finalizada' // La emergencia fue tratada
+  | 'Cancelada'; // La emergencia se canceló
 
 export interface IContactID {
   numeroCuenta?: string;
@@ -157,7 +181,8 @@ export interface IValoresEventoTecnico extends IValoresEventoBase {
 
 // Valores para eventos de emergencia
 export interface IValoresEventoEmergencia extends IValoresEventoBase {
-  ubicacionDestino?: DireccionV2;
+  ubicacionActual?: IGeoJSONPoint; //Es la ubicación donde se generó el evento. Cuando se crea la emergencia, el primer evento no tiene ubicación porque no tiene ninguna ambulancia asignada
+  direccionActual?: string;
   motivoCancelacion?: string;
   motivoReasignacion?: string;
   observaciones?: string;
@@ -262,7 +287,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   idConfigEventoUsuario?: string; // Configuración de usuario aplicada al evento
 
   detallesTecnicos?: DetallesTecnicos;
-  detallesMedicos?: DetallesMedicos;
+  detallesEmergencias?: DetallesEmergencias;
   // Permisos y atención
   idsClientesQuePuedenAtender?: string[];
   idsClientesAtendiendo?: string[];
@@ -290,11 +315,12 @@ export type DetallesTecnicos = {
   tecnico?: IUsuario;
 };
 
-export type DetallesMedicos = {
-  // Ubicaciones?
+export type DetallesEmergencias = {
+  // Ubicaciones
   idEmergencia?: string;
   idCentroDeAtencion?: string;
   idHospital?: string;
+
   // Cosas que deberían ser usuarios, pero algunas no lo son.
   idDestinatarioAsistencia?: string;
   idChofer?: string;
@@ -302,6 +328,8 @@ export type DetallesMedicos = {
   idsMedicos?: string[];
   idsEnfermeros?: string[];
   idUsuarioResponsable?: string;
+  idMovilAsignado?: string;
+
   // Populate opcional
   destinatarioAsistencia?: IDestinatarioAsistencia;
   emergencia?: IEmergencia;
@@ -312,6 +340,7 @@ export type DetallesMedicos = {
   enfermeros?: IPersonalSalud[];
   hospital?: IHospital;
   usuarioResponsable?: IUsuario;
+  movilAsignado?: IActivo;
 };
 
 /* ────────────────────────────────────────────────
@@ -457,8 +486,8 @@ export type IEventoGenericoCache = Omit<
   // Sobrescribir detallesTecnicos sin populates
   detallesTecnicos?: Omit<DetallesTecnicos, 'tecnico'>;
   // Sobrescribir detallesMedicos sin populates
-  detallesMedicos?: Omit<
-    DetallesMedicos,
+  detallesEmergencias?: Omit<
+    DetallesEmergencias,
     | 'destinatarioAsistencia'
     | 'emergencia'
     | 'chofer'

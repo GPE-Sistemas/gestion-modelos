@@ -9,6 +9,7 @@ export type ICategoriaUbicacion =
   | 'Activos'
   | 'Centro de Atención'
   | 'Hospital'
+  | 'Destino Emergencia'
   | 'Vehiculos';
 
 export interface IUbicacion {

@@ -1,8 +1,9 @@
-import { DireccionV2 } from "../auxiliares";
-import { ICentroDeAtencion } from "./centro-de-atencion";
-import { ICliente } from "./cliente";
-import { IDestinatarioAsistencia } from "./destinatario-asistencia";
-import { IEventoEmergencia } from "./evento-emergencia";
+import { DireccionV2, IGeoJSONPoint } from '../auxiliares';
+import { ICliente } from './cliente';
+import { IConfigEventoUsuario } from './config-evento-usuario';
+import { IDestinatarioAsistencia } from './destinatario-asistencia';
+import { IEventoGenerico } from './evento-generico';
+import { IUbicacion } from './ubicacion';
 
 //EMERGENCIA MÉDICA
 export interface IEmergencia {
@@ -29,11 +30,14 @@ export interface IEmergencia {
   archivosAdjuntos?: IArchivosAdjuntos[];
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
-  direccion?: DireccionV2; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
+  direccion?: string; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
+  ubicacionDestino?: IGeoJSONPoint; //geojson del lugar de la emergencia
   asignada?: boolean; //Indica si a la emergencia se le asignó alguna clase de personal para el seguimiento (vehículos, médicos, choferes, etc)
   ultimaActualizacion?: string;
-  ultimoEventoEmergencia?: IEventoEmergencia; //Acá se carga el último evento para hacer el seguimiento del auxilio
+  ultimoEventoEmergencia?: IEventoGenerico; //Acá se carga el último evento para hacer el seguimiento del auxilio
   salioDelCentro?: boolean; //En caso de que sea un auxilio, se indica cuando el móvil asignado (ambulancia, camión de bomberos, etc) salió del centro de atención.
+  idUbicacion?: string; //Cuando se crea una emergencia, se genera la entidad IUbicacion para la ubicacion, para luego ejecutar una lógica de negocio junto con la configEventoUsuario.
+  idsConfigsEventosUsuario?: string[]; //Cuando se crea una emergencia, se generan las entidades IConfigEventoUsuario, para luego ejecutar una lógica de negocio.
 
   //2-Datos específicos según el tipo de emergencia
   emergenciaMedica?: IEmergenciaMedica;
@@ -46,19 +50,21 @@ export interface IEmergencia {
   destinatarioAsistencia?: IDestinatarioAsistencia; // Información del paciente
   cliente?: ICliente;
   ancestros?: ICliente[];
+  ubicacion?: IUbicacion;
+  configsEventosUsuario?: IConfigEventoUsuario[];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export type PrioridadEmergenciaMedica = "Verde" | "Amarillo" | "Rojo" | "Negro";
+export type PrioridadEmergenciaMedica = 'Verde' | 'Amarillo' | 'Rojo' | 'Negro';
 
 export type PrioridadEmergenciaBombero =
-  | "Baja"
-  | "Media"
-  | "Alta"
-  | "Crítica"
-  | "Óbito";
+  | 'Baja'
+  | 'Media'
+  | 'Alta'
+  | 'Crítica'
+  | 'Óbito';
 
-export type TipoEmergencia = "Médica" | "Bombero";
+export type TipoEmergencia = 'Médica' | 'Bombero';
 
 export interface IArchivosAdjuntos {
   fechaSubida?: string;
@@ -79,12 +85,16 @@ export interface IEmergenciaBomberos {
   irCuartel?: string[]; //Acá irán todos los usuarios que confirman ir al cuartel
 }
 
-type OmitirCreate = "_id";
+type OmitirCreate = '_id';
 
-export interface ICreateEmergencia
-  extends Omit<Partial<IEmergencia>, OmitirCreate> {}
+export interface ICreateEmergencia extends Omit<
+  Partial<IEmergencia>,
+  OmitirCreate
+> {}
 
-type OmitirUpdate = "_id";
+type OmitirUpdate = '_id';
 
-export interface IUpdateEmergencia
-  extends Omit<Partial<IEmergencia>, OmitirUpdate> {}
+export interface IUpdateEmergencia extends Omit<
+  Partial<IEmergencia>,
+  OmitirUpdate
+> {}
