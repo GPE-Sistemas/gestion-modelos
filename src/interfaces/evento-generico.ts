@@ -110,6 +110,7 @@ export interface IValoresEventoBase {
 export interface IValoresEventoTracker extends IValoresEventoBase {
   geojson?: IGeoJSONPoint;
   codigoTracker?: string;
+  direccion?: string; // Coordenadas traducidas a dirección legible
 }
 
 export interface IValoresEventoAlarma extends IValoresEventoBase {
