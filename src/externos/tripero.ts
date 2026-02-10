@@ -120,4 +120,5 @@ export interface IQueryTripero {
   idVehiculo: string;
   from: string;
   to: string;
+  limit?: number;
 }
