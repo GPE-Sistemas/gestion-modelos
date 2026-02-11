@@ -32,6 +32,7 @@ export interface IConfigCliente {
   tema?: ITemaCliente;
   moduloColectivos?: IModuloColectivos;
   moduloAlarmasDomiciliarias?: IModuloAlarmasDomiciliarias;
+  moduloCamaras?: IModuloCamaras;
   moduloDispositivosLorawan?: IModuloDispositivosLorawan;
   moduloActivos?: IModuloActivos;
   moduloAdministracion?: IModuloAdministracion;
@@ -149,6 +150,12 @@ export interface IModuloAlarmasDomiciliarias {
   derivarEventos?: boolean;
   derivarEventosTecnicos?: boolean;
   compartirAlarmas?: boolean;
+}
+
+export interface IModuloCamaras {
+  activo?: boolean;
+  crear?: boolean;
+  compartir?: boolean;
 }
 
 export interface IModuloDispositivosLorawan {
