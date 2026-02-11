@@ -73,7 +73,8 @@ export type TipoEntidadPermiso =
   | 'Vehículo'
   | 'Colectivo'
   | 'Luminaria'
-  | 'Alarma';
+  | 'Alarma'
+  | 'Cámara';
 
 export interface IPermiso {
   nivel?: Nivel;
