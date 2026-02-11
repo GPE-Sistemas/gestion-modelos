@@ -68,3 +68,4 @@ export * from './excepcion';
 export * from './certificado-entidad';
 export * from './asignacion';
 export * from './log-generico';
+export * from './rol';
