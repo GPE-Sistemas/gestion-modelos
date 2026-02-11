@@ -22,6 +22,7 @@ export type Rol =
 export interface IModulos {
   moduloColectivos?: boolean;
   moduloAlarmasDomiciliarias?: boolean;
+  moduloCamaras?: boolean;
   moduloLuminarias?: boolean;
   moduloEmergenciasMedicas?: boolean;
   moduloEmergenciasBomberos?: boolean;
