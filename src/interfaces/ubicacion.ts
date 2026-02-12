@@ -3,7 +3,6 @@ import { ICliente } from './cliente';
 
 export type ICategoriaUbicacion =
   | 'Normal'
-  | 'Zona'
   | 'Terminal'
   | 'Domicilio'
   | 'Activos'
