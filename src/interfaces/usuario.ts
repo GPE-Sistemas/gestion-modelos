@@ -3,6 +3,7 @@ import { ICliente } from './cliente';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IGrupo } from './grupo';
 import { ILuminaria } from './luminaria';
+import { IRol } from './rol';
 
 export type Rol =
   | 'Administrador'
@@ -91,7 +92,13 @@ export interface IPermiso {
   activo?: boolean; // Si el permiso está activo o no
   vencimiento?: IVencimientoPermisoUsuario;
   modulos?: IModulos;
+
+  /**
+   * @deprecated El campo 'roles' está en desuso. Se eliminará en futuras versiones. Los reemplaza "idsRoles" y el virtual "Rols"
+   */
   roles?: Rol[];
+
+  idsRoles?: string[]; // IDs de los roles asignados al permiso
   // Virtual
   cliente?: ICliente;
   ancestros?: ICliente[];
@@ -99,6 +106,7 @@ export interface IPermiso {
   activos?: IActivo[]; // Entidades pobladas según el tipoEntidad
   luminarias?: ILuminaria[]; // Entidades pobladas según el tipoEntidad
   alarmas?: IDispositivoAlarma[]; // Entidades pobladas según el tipoEntidad
+  rols?: IRol[]; // Roles poblados según idsRoles
 }
 
 export interface IUsuario {
