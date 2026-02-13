@@ -8,6 +8,135 @@ export type AccionesRol =
   | 'Eventos - Atender eventos'
   | 'Eventos - Finalizar eventos'
   // *******************************************
+  // LOGS
+  // *******************************************
+  | 'Logs - Ver logs http'
+  | 'Logs - Ver logs eventos lora'
+  | 'Logs - Ver logs despachos'
+  | 'Logs - Ver logs eventos trackers test'
+  | 'Logs - Ver logs reenvios'
+  // *******************************************
+  // MODULO ADMINISTRACIÓN
+  // *******************************************
+  // Clientes
+  | 'Administración - Ver clientes'
+  | 'Administración - Crear clientes'
+  | 'Administración - Editar clientes'
+  | 'Administración - Eliminar clientes'
+  | 'Administración - Deshabilitar / habilitar clientes'
+  // Usuarios
+  | 'Administración - Ver usuarios'
+  | 'Administración - Crear usuarios'
+  | 'Administración - Editar usuarios'
+  | 'Administración - Eliminar usuarios'
+  // Técnicos
+  | 'Administración - Ver técnicos'
+  | 'Administración - Crear técnicos'
+  | 'Administración - Editar técnicos'
+  | 'Administración - Eliminar técnicos'
+  // Dispositivos Lorawan
+  | 'Administración - Ver dispositivos Lorawan'
+  | 'Administración - Crear dispositivos Lorawan'
+  | 'Administración - Editar dispositivos Lorawan'
+  | 'Administración - Eliminar dispositivos Lorawan'
+  // Gateways
+  | 'Administración - Ver gateways'
+  | 'Administración - Crear gateways'
+  | 'Administración - Editar gateways'
+  | 'Administración - Eliminar gateways'
+  // Botones Ble
+  | 'Administración - Ver botones Ble'
+  | 'Administración - Eliminar botones Ble'
+  // Trackers
+  | 'Administración - Ver trackers'
+  | 'Administración - Crear trackers'
+  | 'Administración - Editar trackers'
+  | 'Administración - Eliminar trackers'
+  // Servicios Ofrecidos
+  | 'Administración - Ver servicios ofrecidos'
+  | 'Administración - Crear servicios ofrecidos'
+  | 'Administración - Editar servicios ofrecidos'
+  | 'Administración - Eliminar servicios ofrecidos'
+  // Apikeys
+  | 'Administración - Ver apikeys'
+  | 'Administración - Crear apikeys'
+  | 'Administración - Editar apikeys'
+  | 'Administración - Eliminar apikeys'
+  // Config. de reenvios
+  | 'Administración - Ver configuraciones de reenvíos'
+  | 'Administración - Crear configuraciones de reenvíos'
+  | 'Administración - Editar configuraciones de reenvíos'
+  | 'Administración - Eliminar configuraciones de reenvíos'
+  // Integraciones
+  | 'Administración - Ver integraciones'
+  | 'Administración - Crear integraciones'
+  // Roles
+  | 'Administración - Ver roles'
+  | 'Administración - Crear roles'
+  | 'Administración - Editar roles'
+  | 'Administración - Eliminar roles'
+  // *******************************************
+  // CONFIGURACIONES
+  // *******************************************
+  | 'Configuraciones - Configurar cliente'
+  | 'Configuraciones - Crear eventos personalizados'
+  | 'Configuraciones - Editar eventos personalizados'
+  | 'Configuraciones - Eliminar eventos personalizados'
+  | 'Configuraciones - Crear categorias eventos'
+  | 'Configuraciones - Editar categorias eventos'
+  | 'Configuraciones - Eliminar categorias eventos'
+  | 'Configuraciones - Crear tipos eventos'
+  | 'Configuraciones - Editar tipos eventos'
+  | 'Configuraciones - Eliminar tipos eventos'
+  | 'Configuraciones - Crear codigos alarmas'
+  | 'Configuraciones - Editar codigos alarmas'
+  | 'Configuraciones - Eliminar codigos alarmas'
+  | 'Configuraciones - Crear modelos alarmas'
+  | 'Configuraciones - Editar modelos alarmas'
+  | 'Configuraciones - Eliminar modelos alarmas'
+  | 'Configuraciones - Crear codigos comunicadores'
+  | 'Configuraciones - Editar codigos comunicadores'
+  | 'Configuraciones - Eliminar codigos comunicadores'
+  | 'Configuraciones - Crear modelos comunicadores'
+  | 'Configuraciones - Editar modelos comunicadores'
+  | 'Configuraciones - Eliminar modelos comunicadores'
+  | 'Configuraciones - Crear modelos cámaras'
+  | 'Configuraciones - Editar modelos cámaras'
+  | 'Configuraciones - Eliminar modelos cámaras'
+  | 'Configuraciones - Crear codigos sirenas'
+  | 'Configuraciones - Editar codigos sirenas'
+  | 'Configuraciones - Eliminar codigos sirenas'
+  | 'Configuraciones - Crear modelos sirenas'
+  | 'Configuraciones - Editar modelos sirenas'
+  | 'Configuraciones - Eliminar modelos sirenas'
+  | 'Configuraciones - Crear modelos luminarias'
+  | 'Configuraciones - Editar modelos luminarias'
+  | 'Configuraciones - Eliminar modelos luminarias'
+  | 'Configuraciones - Crear perfiles luminarias'
+  | 'Configuraciones - Editar perfiles luminarias'
+  | 'Configuraciones - Eliminar perfiles luminarias'
+  | 'Configuraciones - Crear codigos dispositivos lorawan'
+  | 'Configuraciones - Editar codigos dispositivos lorawan'
+  | 'Configuraciones - Eliminar codigos dispositivos lorawan'
+  | 'Configuraciones - Crear modelos dispositivos lorawan'
+  | 'Configuraciones - Editar modelos dispositivos lorawan'
+  | 'Configuraciones - Eliminar modelos dispositivos lorawan'
+  | 'Configuraciones - Crear codigos botones BLE'
+  | 'Configuraciones - Editar codigos botones BLE'
+  | 'Configuraciones - Eliminar codigos botones BLE'
+  | 'Configuraciones - Crear modelos botones BLE'
+  | 'Configuraciones - Editar modelos botones BLE'
+  | 'Configuraciones - Eliminar modelos botones BLE'
+  | 'Configuraciones - Crear codigos trackers'
+  | 'Configuraciones - Editar codigos trackers'
+  | 'Configuraciones - Eliminar codigos trackers'
+  | 'Configuraciones - Crear modelos trackers'
+  | 'Configuraciones - Editar modelos trackers'
+  | 'Configuraciones - Eliminar modelos trackers'
+  | 'Configuraciones - Crear iconos vehículos'
+  | 'Configuraciones - Editar iconos vehículos'
+  | 'Configuraciones - Eliminar iconos vehículos'
+  // *******************************************
   // MODULO SERVICIO TECNICO
   // *******************************************
   | 'Servicio Técnico - Ver solicitudes'
@@ -198,67 +327,7 @@ export type AccionesRol =
   | 'Sirenas Municipales - Editar'
   | 'Sirenas Municipales - Eliminar'
   | 'Sirenas Municipales - Solicitar servicio técnico'
-  | 'Sirenas Municipales - Asignar cámaras'
-  // *******************************************
-  // MODULO ADMINISTRACIÓN
-  // *******************************************
-  // Clientes
-  | 'Administración - Ver clientes'
-  | 'Administración - Crear clientes'
-  | 'Administración - Editar clientes'
-  | 'Administración - Eliminar clientes'
-  | 'Administración - Deshabilitar / habilitar clientes'
-  // Usuarios
-  | 'Administración - Ver usuarios'
-  | 'Administración - Crear usuarios'
-  | 'Administración - Editar usuarios'
-  | 'Administración - Eliminar usuarios'
-  // Técnicos
-  | 'Administración - Ver técnicos'
-  | 'Administración - Crear técnicos'
-  | 'Administración - Editar técnicos'
-  | 'Administración - Eliminar técnicos'
-  // Dispositivos Lorawan
-  | 'Administración - Ver dispositivos Lorawan'
-  | 'Administración - Crear dispositivos Lorawan'
-  | 'Administración - Editar dispositivos Lorawan'
-  | 'Administración - Eliminar dispositivos Lorawan'
-  // Gateways
-  | 'Administración - Ver gateways'
-  | 'Administración - Crear gateways'
-  | 'Administración - Editar gateways'
-  | 'Administración - Eliminar gateways'
-  // Botones Ble
-  | 'Administración - Ver botones Ble'
-  | 'Administración - Eliminar botones Ble'
-  // Trackers
-  | 'Administración - Ver trackers'
-  | 'Administración - Crear trackers'
-  | 'Administración - Editar trackers'
-  | 'Administración - Eliminar trackers'
-  // Servicios Ofrecidos
-  | 'Administración - Ver servicios ofrecidos'
-  | 'Administración - Crear servicios ofrecidos'
-  | 'Administración - Editar servicios ofrecidos'
-  | 'Administración - Eliminar servicios ofrecidos'
-  // Apikeys
-  | 'Administración - Ver apikeys'
-  | 'Administración - Crear apikeys'
-  | 'Administración - Editar apikeys'
-  | 'Administración - Eliminar apikeys'
-  // Config. de reenvios
-  | 'Administración - Ver configuraciones de reenvíos'
-  | 'Administración - Crear configuraciones de reenvíos'
-  | 'Administración - Editar configuraciones de reenvíos'
-  | 'Administración - Eliminar configuraciones de reenvíos'
-  // Integraciones
-  | 'Administración - Ver integraciones'
-  | 'Administración - Crear integraciones'
-  // Roles
-  | 'Administración - Ver roles'
-  | 'Administración - Crear roles'
-  | 'Administración - Editar roles'
-  | 'Administración - Eliminar roles';
+  | 'Sirenas Municipales - Asignar cámaras';
 
 export interface IRol {
   _id?: string;
