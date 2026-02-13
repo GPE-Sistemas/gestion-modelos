@@ -46,6 +46,10 @@ export interface CondicionNotificacion {
       idUbicacion: string;
       dentro?: boolean;
       fuera?: boolean;
+      /**
+       * Comprueba que el activo esté asignado a una emergencia medica para generar el evento
+       */
+      soloEnEmergencias?: boolean;
       // Virtual
       ubicacion?: IUbicacion;
     };

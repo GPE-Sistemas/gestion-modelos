@@ -172,7 +172,7 @@ export type AccionesRol =
   | 'Emergencias Médicas - Editar'
   | 'Emergencias Médicas - Eliminar'
   | 'Emergencias Médicas - Reasignar'
-  | 'Emergencias Médicas - Diagnostico'
+  | 'Emergencias Médicas - Finalizar'
   | 'Emergencias Médicas - Cancelar'
   // Hospitales, centros médicos, personal de salud, solicitantes, pacientes
   | 'Emergencias Médicas - Crear hospitales'
