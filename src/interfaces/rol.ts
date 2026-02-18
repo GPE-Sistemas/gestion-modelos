@@ -237,7 +237,7 @@ export type AccionesRol =
   // | 'Activos - Actualizar imágenes' // No esta implementado pero quizá se implemente en un futuro
   | 'Activos - Cambiar modo desactivado'
   | 'Activos - Cambiar de cliente'
-  | 'Alarmas - Cambiar estado de cuenta'
+  | 'Activos - Cambiar estado de cuenta'
   | 'Activos - Solicitar servicio técnico'
   // | 'Activos - Enviar comandos' // No esta implementado pero quizá se implemente en un futuro
   | 'Activos - Editar contactos '
