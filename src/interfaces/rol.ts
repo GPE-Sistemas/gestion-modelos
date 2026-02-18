@@ -163,6 +163,7 @@ export type AccionesRol =
   | 'Alarmas - Editar contactos '
   | 'Alarmas - Editar notas'
   | 'Alarmas - Asignar cámaras'
+  | 'Alarmas - Enviar comandos'
   // *******************************************
   // MODULO VEHÍCULOS
   // *******************************************
@@ -327,7 +328,17 @@ export type AccionesRol =
   | 'Sirenas Municipales - Editar'
   | 'Sirenas Municipales - Eliminar'
   | 'Sirenas Municipales - Solicitar servicio técnico'
-  | 'Sirenas Municipales - Asignar cámaras';
+  | 'Sirenas Municipales - Asignar cámaras'
+  // *******************************************
+  // MODULO CÁMARAS
+  // *******************************************
+  // Cámaras
+  | 'Cámaras - Crear cámara'
+  | 'Cámaras - Editar cámara'
+  | 'Cámaras - Eliminar cámara'
+  | 'Cámaras - Solicitar servicio técnico'
+  | 'Cámaras - Ver streaming'
+  | 'Cámaras - Descargar grabaciones';
 
 export interface IRol {
   _id?: string;
