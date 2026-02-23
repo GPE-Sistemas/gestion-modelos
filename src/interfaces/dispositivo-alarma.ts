@@ -51,13 +51,13 @@ export interface IModoDesactivado {
 export interface ISensorPorZona {
   marca?: string;
   tipo?: CodigoTipoSensor;
-  modo?: ModoSensor;
 }
 export interface IParticionZona {
   nombre?: string;
   particion?: number;
   zona?: number;
   sensores?: ISensorPorZona[];
+  modo?: ModoSensor;
 }
 
 export type ITipoControlHorario = 'Apertura' | 'Cierre';
