@@ -48,12 +48,15 @@ export interface IModoDesactivado {
   };
 }
 
+export interface ISensorPorZona {
+  marca?: string;
+  tipo?: CodigoTipoSensor;
+}
 export interface IParticionZona {
   nombre?: string;
   particion?: number;
   zona?: number;
-  marca?: string;
-  tipo?: CodigoTipoSensor;
+  sensores?: ISensorPorZona[];
   modo?: ModoSensor;
 }
 
