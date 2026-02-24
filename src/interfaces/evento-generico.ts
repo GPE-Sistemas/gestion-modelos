@@ -11,11 +11,10 @@ import { IBotonBluetooth } from './boton-bluetooth';
 import { IReporteGenerico } from './reporte-generico';
 import { IDestinatarioAsistencia } from './destinatario-asistencia';
 import { IEmergencia } from './emergencias';
-import { IHospital } from './hospitales';
 import { IPersonalSalud } from './personal-salud';
-import { ICentroDeAtencion } from './centro-de-atencion';
 import { IGeoJSONPoint } from '../auxiliares';
 import { ISirena } from './sirena';
+import { IUbicacion } from './ubicacion';
 
 /* ────────────────────────────────────────────────
  *  ALIAS DE TIPOS EXISTENTES
@@ -334,11 +333,11 @@ export type DetallesEmergencias = {
   destinatarioAsistencia?: IDestinatarioAsistencia;
   emergencia?: IEmergencia;
   chofer?: IUsuario;
-  centroDeAtencion?: ICentroDeAtencion;
+  centroDeAtencion?: IUbicacion;
   movilUsuario?: IUsuario;
   medicos?: IPersonalSalud[];
   enfermeros?: IPersonalSalud[];
-  hospital?: IHospital;
+  hospital?: IUbicacion;
   usuarioResponsable?: IUsuario;
   movilAsignado?: IActivo;
 };
