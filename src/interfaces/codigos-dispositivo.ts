@@ -9,8 +9,12 @@ export interface ICodigoDispositivoEntrada {
   categoriaEvento?: ICategoriaEvento;
 }
 
-export interface ICodigoDispositivoEntradaCache
-  extends Omit<ICodigoDispositivoEntrada, 'categoriaEvento'> {}
+export type FlagsTrackers = 'Posicion' | 'Ignición' | 'Emergencia' | 'Batería';
+
+export interface ICodigoDispositivoEntradaCache extends Omit<
+  ICodigoDispositivoEntrada,
+  'categoriaEvento'
+> {}
 
 export interface ICodigoDispositivo {
   codigo?: string;
@@ -25,12 +29,16 @@ export interface ICodigoDispositivo {
   notificar?: boolean;
   minutosEsperaAutomatica?: number; // Los eventos generados se ponen en espera automaticamente por este tiempo
   cierraCodigosEventos?: string[]; // Si se genera un evento con este codigo, se cierran los eventos con estos codigos del array
+
+  flagsTrackers?: FlagsTrackers[];
   // Populate
   categoriaEvento?: ICategoriaEvento;
 }
 
-export interface ICodigoDispositivoCache
-  extends Omit<ICodigoDispositivo, 'categoriaEvento'> {}
+export interface ICodigoDispositivoCache extends Omit<
+  ICodigoDispositivo,
+  'categoriaEvento'
+> {}
 
 export type TipoDispositivo =
   | 'Tracker'
@@ -57,21 +65,24 @@ export interface ICodigosDispositivo {
   ancestros?: ICliente[];
 }
 
-export interface ICodigosDispositivoCache
-  extends Omit<
-    ICodigosDispositivo,
-    'cliente' | 'ancestros' | 'codigos' | 'codigosEntrada'
-  > {
+export interface ICodigosDispositivoCache extends Omit<
+  ICodigosDispositivo,
+  'cliente' | 'ancestros' | 'codigos' | 'codigosEntrada'
+> {
   codigos?: ICodigoDispositivoCache[];
   codigosEntrada?: ICodigoDispositivoEntradaCache[];
 }
 
 type OmitirCreate = '_id' | 'cliente' | 'ancestros';
 
-export interface ICreateCodigosDispositivo
-  extends Omit<Partial<ICodigosDispositivo>, OmitirCreate> {}
+export interface ICreateCodigosDispositivo extends Omit<
+  Partial<ICodigosDispositivo>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
 
-export interface IUpdateCodigosDispositivo
-  extends Omit<Partial<ICodigosDispositivo>, OmitirUpdate> {}
+export interface IUpdateCodigosDispositivo extends Omit<
+  Partial<ICodigosDispositivo>,
+  OmitirUpdate
+> {}
