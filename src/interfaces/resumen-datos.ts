@@ -1,7 +1,9 @@
 import { ICliente } from './cliente';
 export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual';
 export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
-export type TipoResumenDatos = 'Consumo Mensual Luminarias';
+export type TipoResumenDatos =
+  | 'Consumo Mensual Luminarias'
+  | 'Informe Diario Luminarias';
 
 /* ────────────────────────────────────────────────
  *  RESÚMENES
@@ -16,6 +18,34 @@ export interface IEncendidoDiarioLuminarias {
   tiempoEncendidoTotal?: number;
   totalDispositivos?: number;
   tiempoEncendidoPromedio?: number;
+}
+
+export interface IInformeDiarioLuminarias {
+  // Generales
+  totalLuminarias?: number;
+
+  // Encendido / Apagado (de ultimoReportePeriodico.valores.turnOnOffStatus)
+  luminariasEncendidas?: number;
+  luminariasApagadas?: number;
+  sinDatoEncendido?: number; // Sin reporte periódico reciente
+
+  // Conectividad (fechaUltimaComunicacion dentro de las últimas 24h)
+  luminariasConectadas?: number;
+  luminariasDesconectadas?: number;
+
+  // Estado operativo (campo `estado` de la luminaria)
+  luminariasOperativas?: number;
+  luminariasEnMantenimiento?: number;
+
+  // Consumo energético del día en kWh (reservado para implementación futura)
+  consumoTotal?: number;
+
+  // Alertas (de ultimoReportePeriodico.valores.alarmas)
+  luminariasConAlarmas?: number;
+  tiposAlarmas?: Record<string, number>; // { 'Sobre voltaje': 2, 'Fallo LED': 1 }
+
+  // Cortes de energía (luminarias GPE con energiaExterna === false en último reporte)
+  luminariasConCortesEnergia?: number;
 }
 
 export interface IConsumoCombustibleVehiculos {
@@ -33,6 +63,7 @@ export interface IConsumoCombustibleVehiculos {
 export type MapaResumenDatos = {
   'Consumo Mensual Luminarias': IConsumoMensualLuminarias;
   'Encendido Diario Luminarias': IEncendidoDiarioLuminarias;
+  'Informe Diario Luminarias': IInformeDiarioLuminarias;
   'Consumo Mensual Combustible Vehículos': IConsumoCombustibleVehiculos;
 };
 
@@ -67,6 +98,7 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
 export type IResumenDatos =
   | IResumenDatosBase<'Consumo Mensual Luminarias'>
   | IResumenDatosBase<'Encendido Diario Luminarias'>
+  | IResumenDatosBase<'Informe Diario Luminarias'>
   | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>;
 
 /* ────────────────────────────────────────────────
@@ -82,6 +114,10 @@ export type ICreateResumenDatos =
       OmitirCreate
     >
   | Omit<
+      Partial<IResumenDatosBase<'Informe Diario Luminarias'>>,
+      OmitirCreate
+    >
+  | Omit<
       Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
       OmitirCreate
     >;
@@ -92,6 +128,10 @@ export type IUpdateResumenDatos =
   | Omit<Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>, OmitirUpdate>
   | Omit<
       Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Informe Diario Luminarias'>>,
       OmitirUpdate
     >
   | Omit<
