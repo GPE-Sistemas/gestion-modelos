@@ -5,7 +5,7 @@ export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
 export type TipoResumenDatos =
   | 'Consumo Mensual Luminarias'
   | 'Informe Diario Luminarias';
-export type TipoEntidadResumen = 'Luminarias' | 'Vehículos' | 'Alarma';
+export type TipoEntidadResumen = 'Luminaria' | 'Vehículo' | 'Alarma';
 /* ────────────────────────────────────────────────
  *  RESÚMENES
  * ────────────────────────────────────────────────*/
