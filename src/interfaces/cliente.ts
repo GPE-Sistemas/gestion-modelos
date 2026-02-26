@@ -54,6 +54,19 @@ export interface IConfigCliente {
   integracionSoflex?: IIntegracionSoflex;
 }
 
+// Informes
+// Configuración para envío de informes por mail
+export interface IConfigInformes {
+  // Lo podemos poner en cualqjhier módulo
+  activo?: boolean;
+  frecuencia?: 'Diaria' | 'Semanal' | 'Mensual'; // Para el cron/worker
+  smtpHost?: string;
+  smtpPort?: number;
+  smtpUser?: string;
+  smtpPass?: string;
+  destinatariosInformes?: string[]; /// Mails
+}
+
 /// Twilio
 
 export type TemplatesWhatsapp =
@@ -118,6 +131,7 @@ export interface IModuloSirenas {
   derivarEventos?: boolean;
   derivarEventosTecnicos?: boolean;
   compartirSirenas?: boolean;
+  informe?: IConfigInformes;
 }
 
 export interface IModuloLuminarias {
