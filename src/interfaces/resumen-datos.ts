@@ -1,10 +1,11 @@
 import { ICliente } from './cliente';
+
 export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual';
 export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
 export type TipoResumenDatos =
   | 'Consumo Mensual Luminarias'
   | 'Informe Diario Luminarias';
-
+export type TipoEntidadResumen = 'Luminarias' | 'Vehículos' | 'Alarma';
 /* ────────────────────────────────────────────────
  *  RESÚMENES
  * ────────────────────────────────────────────────*/
@@ -78,6 +79,7 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
   fechaCreacion?: string;
 
   tipo?: T;
+  tipoEntidad?: TipoEntidadResumen;
   resumen?: MapaResumenDatos[T];
   agrupacion?: AgrupacionResumen;
   agrupacionTiempo?: AgrupacionTiempo;
@@ -113,10 +115,7 @@ export type ICreateResumenDatos =
       Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
       OmitirCreate
     >
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Diario Luminarias'>>,
-      OmitirCreate
-    >
+  | Omit<Partial<IResumenDatosBase<'Informe Diario Luminarias'>>, OmitirCreate>
   | Omit<
       Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
       OmitirCreate
@@ -130,10 +129,7 @@ export type IUpdateResumenDatos =
       Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
       OmitirUpdate
     >
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Diario Luminarias'>>,
-      OmitirUpdate
-    >
+  | Omit<Partial<IResumenDatosBase<'Informe Diario Luminarias'>>, OmitirUpdate>
   | Omit<
       Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
       OmitirUpdate
