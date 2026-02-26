@@ -140,6 +140,7 @@ export interface IModuloLuminarias {
   derivarEventos?: boolean;
   derivarEventosTecnicos?: boolean;
   compartirLuminarias?: boolean;
+  informe?: IConfigInformes;
 }
 
 export interface IModuloEmergencias {
