@@ -3,7 +3,15 @@ import { IActivo } from './activo';
 import { ITracker } from './tracker';
 import { IUsuario } from './usuario';
 
-export type IEntidades = 'Chofer' | 'Activo' | 'Tracker';
+export type IEntidades =
+  | 'Chofer'
+  | 'Activo'
+  | 'Tracker'
+  | 'Luminaria'
+  | 'Cliente'
+  | 'Alarma'
+  | 'Vehículo'
+  | 'Colectivo';
 
 export interface IAsignacion {
   _id?: string;
