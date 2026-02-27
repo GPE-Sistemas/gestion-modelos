@@ -36,6 +36,7 @@ export interface IInformeDiarioLuminarias {
   // Estado operativo (campo `estado` de la luminaria)
   luminariasOperativas?: number;
   luminariasEnMantenimiento?: number;
+  sinEstado?: number; // Sin campo `estado` asignado
 
   // Consumo energético del día en kWh (reservado para implementación futura)
   consumoTotal?: number;
