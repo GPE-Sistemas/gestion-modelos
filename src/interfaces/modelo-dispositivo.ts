@@ -30,6 +30,7 @@ export interface IDetallesLuminarias {
 
 export interface IModeloDispositivo {
   _id?: string;
+
   //
   tipo?: TipoDispositivo;
   marca?: string;
@@ -38,6 +39,7 @@ export interface IModeloDispositivo {
   idCodigos?: string;
   idCliente?: string;
   idsAncestros?: string[];
+
   //Datos técnicos para luminarias
   luminarias?: IDetallesLuminarias;
   global?: boolean;
