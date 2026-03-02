@@ -340,6 +340,12 @@ export type AccionesRol =
   | 'Cámaras - Ver streaming'
   | 'Cámaras - Descargar grabaciones';
 
+export type FuncionesRol =
+  | 'Técnico' // Para elegir técnicos en solicitudes de servicio técnico y para vista especial en la app mobile
+  | 'Conductor' // Asignable a vehiculos (no colectivos)
+  | 'Chofer' // Asignable a colectivos
+  | 'Móvil Emergencias Médicas'; // Funciones especiales para emergencias medicas
+
 export interface IRol {
   _id?: string;
   //
@@ -350,6 +356,7 @@ export interface IRol {
 
   nombre?: string;
   acciones?: AccionesRol[];
+  funciones?: FuncionesRol[];
 
   //Populate
   cliente?: ICliente;
