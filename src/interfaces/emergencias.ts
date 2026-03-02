@@ -19,6 +19,7 @@ export interface IEmergencia {
   //Fechas clave de la emergencia
   fechaCreacion?: string;
   fechaPrimeraAsignacion?: string;
+  fechaSalida?: string; //La ambulancia puede salir del centro o salir desde otro lugar (este dato debe analizarse junto con el campo salioDelCentro)
   fechaLlegadaDestino?: string;
   fechaFinalizacion?: string;
 
@@ -34,6 +35,7 @@ export interface IEmergencia {
   asignada?: boolean; //Indica si a la emergencia se le asignó alguna clase de personal para el seguimiento (vehículos, médicos, choferes, etc)
   ultimaActualizacion?: string;
   ultimoEventoEmergencia?: IEventoGenerico; //Acá se carga el último evento para hacer el seguimiento del auxilio
+  salioDelCentro?: boolean; //En caso de que sea un auxilio, se indica si el móvil asignado salió del centro o no para ir al destino.
   idUbicacion?: string; //Cuando se crea una emergencia, se genera la entidad IUbicacion para la ubicacion, para luego ejecutar una lógica de negocio junto con la configEventoUsuario.
   idsConfigsEventosUsuario?: string[]; //Cuando se crea una emergencia, se generan las entidades IConfigEventoUsuario, para luego ejecutar una lógica de negocio.
 
