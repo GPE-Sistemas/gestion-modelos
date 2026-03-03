@@ -36,6 +36,7 @@ export interface IEmergencia {
   ultimaActualizacion?: string;
   ultimoEventoEmergencia?: IEventoGenerico; //Acá se carga el último evento para hacer el seguimiento del auxilio
   salioDelCentro?: boolean; //En caso de que sea un auxilio, se indica si el móvil asignado salió del centro o no para ir al destino.
+  centroEnTransito?: boolean; //Indica si la ambulancia pasó por un centro en el camino (sirve para diferenciar el caso en el que la ambulancia sale de un centro o pasa por uno. Esto sirve para determinar el campo salioDelCentro)
   idUbicacion?: string; //Cuando se crea una emergencia, se genera la entidad IUbicacion para la ubicacion, para luego ejecutar una lógica de negocio junto con la configEventoUsuario.
   idsConfigsEventosUsuario?: string[]; //Cuando se crea una emergencia, se generan las entidades IConfigEventoUsuario, para luego ejecutar una lógica de negocio.
 
