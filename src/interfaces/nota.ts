@@ -34,11 +34,9 @@ export interface INota {
   tipo?: TipoNota;
   informacion?: IInformacion;
   orden?: number;
-  periodoInhabilitado?: {
-    fechaDesde: Date;
-    fechaHasta: Date;
-  };
-
+  //Para contactos
+  inhabilitadoDesde?: string; //Durante el período inhabilitado, no se mostrará el conatcto en el tratamiento de los eventos
+  inhabilitadoHasta?: string;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
