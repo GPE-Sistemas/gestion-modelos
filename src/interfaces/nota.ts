@@ -34,6 +34,10 @@ export interface INota {
   tipo?: TipoNota;
   informacion?: IInformacion;
   orden?: number;
+  periodoInhabilitado?: {
+    fechaDesde: Date;
+    fechaHasta: Date;
+  };
 
   // Populate
   cliente?: ICliente;
@@ -51,8 +55,7 @@ type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateNota extends Omit<Partial<INota>, OmitirUpdate> {}
 
-export interface INotaCache
-  extends Omit<
-    INota,
-    'cliente' | 'ancestros' | 'activo' | 'alarma' | 'luminaria'
-  > {}
+export interface INotaCache extends Omit<
+  INota,
+  'cliente' | 'ancestros' | 'activo' | 'alarma' | 'luminaria'
+> {}
