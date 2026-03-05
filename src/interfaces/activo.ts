@@ -40,7 +40,11 @@ export interface IVehiculo {
   modelo?: string;
   marca?: string;
   anio?: string;
-  consumoPromedio?: number; // litros cada 100 km
+
+  consumoRuta?: number; // litros cada 100 km
+  consumoCiudad?: number; // litros cada 100 km
+
+  consumoPromedio?: number; // calculado a partir de los consumos registrados en los eventos de combustible
 
   //
   idChofer?: string;
