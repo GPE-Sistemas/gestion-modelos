@@ -51,6 +51,7 @@ export interface IModoDesactivado {
 export interface ISensorPorZona {
   marca?: string;
   tipo?: CodigoTipoSensor;
+  modelo?: string;
 }
 export interface IParticionZona {
   nombre?: string;
