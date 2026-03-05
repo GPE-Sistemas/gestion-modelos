@@ -52,8 +52,9 @@ export interface IInformeDiarioLuminarias {
 
 export interface IConsumoCombustibleVehiculos {
   kmRecorridos?: number; //km (obtenidos del odómetro de los reportes)
-  consumoPromedio?: number; //litros cada 100 km (sólo para vehículo individual)
-  consumoEstimado?: number; // litros (según km recorridos y consumo promedio)
+  consumoRuta?: number; // litros cada 100 km (ruta) — snapshot del vehículo individual
+  consumoCiudad?: number; // litros cada 100 km (ciudad) — snapshot del vehículo individual
+  consumoEstimado?: number; // litros (según km y promedio de consumoRuta/consumoCiudad)
   consumoDeclarado?: number; // litros (según lo cargado en los servicios del vehículo)
   vehiculosConsiderados?: number; // Vehículos totales analizados (mínimamente tenían odómetro)
   vehiculosConConsumo?: number; // Vehículos que tenían consumo promedio y valores de odómetro
