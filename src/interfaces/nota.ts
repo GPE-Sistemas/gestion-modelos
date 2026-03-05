@@ -34,7 +34,9 @@ export interface INota {
   tipo?: TipoNota;
   informacion?: IInformacion;
   orden?: number;
-
+  //Para contactos
+  inhabilitadoDesde?: string; //Durante el período inhabilitado, no se mostrará el conatcto en el tratamiento de los eventos
+  inhabilitadoHasta?: string;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
@@ -51,8 +53,7 @@ type OmitirUpdate = '_id' | 'cliente';
 
 export interface IUpdateNota extends Omit<Partial<INota>, OmitirUpdate> {}
 
-export interface INotaCache
-  extends Omit<
-    INota,
-    'cliente' | 'ancestros' | 'activo' | 'alarma' | 'luminaria'
-  > {}
+export interface INotaCache extends Omit<
+  INota,
+  'cliente' | 'ancestros' | 'activo' | 'alarma' | 'luminaria'
+> {}
