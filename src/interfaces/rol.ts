@@ -338,7 +338,11 @@ export type AccionesRol =
   | 'Cámaras - Eliminar cámara'
   | 'Cámaras - Solicitar servicio técnico'
   | 'Cámaras - Ver streaming'
-  | 'Cámaras - Descargar grabaciones';
+  | 'Cámaras - Descargar grabaciones'
+  // *******************************************
+  // MÓDULO AUDITORÍAS
+  // *******************************************
+  | 'Auditorías - Ver auditorías';
 
 export type FuncionesRol =
   | 'Técnico' // Para elegir técnicos en solicitudes de servicio técnico y para vista especial en la app mobile
