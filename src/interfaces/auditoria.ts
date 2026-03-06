@@ -1,3 +1,6 @@
+import { ICliente } from './cliente';
+import { IUsuario } from './usuario';
+
 export type AccionAuditoria = 'Crear' | 'Editar' | 'Eliminar';
 
 export interface IAuditoria {
@@ -12,6 +15,11 @@ export interface IAuditoria {
   accion?: AccionAuditoria;
   cambios?: Record<string, unknown>; // { campo: valorNuevo }
   camposModificados?: string[]; // ['nombre', 'descripcion'] — indexable
+
+  // Populate
+  usuario?: IUsuario;
+  cliente?: ICliente;
+  ancestros?: ICliente[];
 }
 
 type OmitirCreate = '_id' | 'fechaCreacion';
