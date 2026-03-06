@@ -11,9 +11,13 @@ export interface ICanalesCamara {
     width: number;
     height: number;
   }[];
+  idModeloDispositivo?: string;
   nombre?: string;
   descripcion?: string;
   tipoHabilitacion?: TipoHabilitacion;
+
+  // populate
+  modeloDispositivo?: IModeloDispositivo;
 }
 
 export interface ICredencialesDahua {
