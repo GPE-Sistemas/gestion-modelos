@@ -44,6 +44,7 @@ export type TipoDispositivo =
   | 'Tracker'
   | 'Alarma'
   | 'Comunicador'
+  | 'NVR'
   | 'Cámara'
   | 'Luminaria'
   | 'DispositivoLorawan'
