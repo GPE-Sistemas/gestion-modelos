@@ -3,7 +3,6 @@ import { IModeloDispositivo } from './modelo-dispositivo';
 
 export type TipoHabilitacion = 'Siempre' | 'Con Evento';
 export type TipoCamara = 'Hikvision' | 'Dahua' | 'Hikvision P2P' | 'Dahua P2P';
-// export type ClaseDispositivo = 'Cámara' | 'NVR';
 
 export interface ICanalesCamara {
   numero: string; // 1
@@ -36,7 +35,6 @@ export interface ICamara {
   canales?: ICanalesCamara[];
   idModeloDispositivo?: string;
   tipo?: TipoCamara;
-  // claseDispositivo?: ClaseDispositivo;
   numeroSerie?: string;
   host?: string;
   puertoRTSP?: number;
