@@ -14,6 +14,7 @@ export interface IAuditoria {
   idEntidad?: string; // ID del documento afectado
   accion?: AccionAuditoria;
   cambios?: Record<string, unknown>; // { campo: valorNuevo }
+  valoresAnteriores?: Record<string, unknown>; // { campo: valorAntes } — solo para Editar
   camposModificados?: string[]; // ['nombre', 'descripcion'] — indexable
 
   // Populate
