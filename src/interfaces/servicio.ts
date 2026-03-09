@@ -5,10 +5,25 @@ import { IProveedor } from './proveedor';
 
 export type TipoServicio = 'Gasto' | 'Mantenimiento' | 'Combustible';
 export type CategoriaServicio = 'Colectivo' | 'Vehiculo';
+export type ISubcategoriaRecordatorio =
+  | 'Cambio de aceite y filtro'
+  | 'Cambio de aceite de caja'
+  | 'Cambio de líquido refrigerante'
+  | 'Cambio de filtro de combustible'
+  | 'Cambio de filtro de aire'
+  | 'Cambio de filtro de habitáculo'
+  | 'Cambio de batería'
+  | 'Cambio de cubiertas'
+  | 'Cambio de luces'
+  | 'Cambio de líquido de frenos'
+  | 'Cambio de pastillas de freno'
+  | 'Cambio de bujías'
+  | 'Otro';
 export interface IServicio {
   _id?: string;
   tipo?: TipoServicio;
   categoria?: CategoriaServicio;
+  subcategoria?: ISubcategoriaRecordatorio;
   idCliente?: string;
   idsAncestros?: string[];
   idActivo?: string;
