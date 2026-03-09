@@ -35,7 +35,8 @@ export interface IRecordatorio {
   idDocumentacion?: string;
   detallesDelMantenimiento?: string;
   repetible?: boolean;
-  frecuencia?: number;
+  frecuenciaKm?: number;
+  frecuenciaDia?: number;
 
   // Populate
   cliente?: ICliente;
