@@ -22,6 +22,7 @@ export interface ISirena {
   direccion?: string;
   activa?: boolean;
   estado?: EstadoSirena;
+  tipo?: string;
   onlineDesde?: string;
   offlineDesde?: string;
   iccidSim?: string;
