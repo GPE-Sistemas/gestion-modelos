@@ -11,6 +11,7 @@ export interface IAuditoria {
   idUsuario?: string;
   nombreUsuario?: string; // se persiste por si se borra el usuario
   entidad?: string; // 'activos', 'usuarios', 'clientes', etc.
+  subPath?: string; // Lo que sigue en la ruta despues de la entidad
   idEntidad?: string; // ID del documento afectado
   accion?: AccionAuditoria;
   cambios?: Record<string, unknown>; // { campo: valorNuevo }
