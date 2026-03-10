@@ -5,7 +5,7 @@ import { IProveedor } from './proveedor';
 
 export type TipoServicio = 'Gasto' | 'Mantenimiento' | 'Combustible';
 export type CategoriaServicio = 'Colectivo' | 'Vehiculo';
-export type ISubcategoriaServicio =
+export type SubcategoriaServicio =
   | 'Cambio de aceite y filtro'
   | 'Cambio de aceite de caja'
   | 'Cambio de líquido refrigerante'
@@ -23,7 +23,7 @@ export interface IServicio {
   _id?: string;
   tipo?: TipoServicio;
   categoria?: CategoriaServicio;
-  subcategoria?: ISubcategoriaServicio;
+  subcategoria?: SubcategoriaServicio;
   idCliente?: string;
   idsAncestros?: string[];
   idActivo?: string;

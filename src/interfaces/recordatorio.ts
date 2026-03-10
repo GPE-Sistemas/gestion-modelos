@@ -5,7 +5,7 @@ import { IUsuario } from './usuario';
 
 export type TipoRecordatorio = 'km' | 'fecha';
 export type CategoriaRecordatorio = 'Colectivo' | 'Vehiculo';
-export type ISubcategoriaRecordatorio =
+export type SubcategoriaRecordatorio =
   | 'Cambio de aceite y filtro'
   | 'Cambio de aceite de caja'
   | 'Cambio de líquido refrigerante'
@@ -22,7 +22,7 @@ export type ISubcategoriaRecordatorio =
 export interface IRecordatorio {
   _id?: string;
   categoria?: CategoriaRecordatorio;
-  subcategoria?: ISubcategoriaRecordatorio;
+  subcategoria?: SubcategoriaRecordatorio;
   idCliente?: string;
   idsAncestros?: string[];
   idUsuario?: string;
