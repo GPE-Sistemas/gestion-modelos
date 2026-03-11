@@ -30,6 +30,7 @@ export interface IEmergencia {
   archivosAdjuntos?: IArchivosAdjuntos[];
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
+  enSeguimiento?: boolean; //Una emergencia en seguimiento es aquella que no es una llamada (no es auxilio) y requiere seguimiento. Si está en seguimiento, no se le pueden asignar/reasignar nada. Pueden pasarse en un futuro a auxilio.
   direccion?: string; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
   ubicacionDestino?: IGeoJSONPoint; //geojson del lugar de la emergencia
   asignada?: boolean; //Indica si a la emergencia se le asignó alguna clase de personal para el seguimiento (vehículos, médicos, choferes, etc)
@@ -38,7 +39,6 @@ export interface IEmergencia {
   salioDelCentro?: boolean; //En caso de que sea un auxilio, se indica si el móvil asignado salió del centro o no para ir al destino.
   centroEnTransito?: boolean; //Indica si la ambulancia pasó por un centro en el camino (sirve para diferenciar el caso en el que la ambulancia sale de un centro o pasa por uno. Esto sirve para determinar el campo salioDelCentro)
   idUbicacion?: string; //Cuando se crea una emergencia, se genera la entidad IUbicacion para la ubicacion, para luego ejecutar una lógica de negocio junto con la configEventoUsuario.
-  idsConfigsEventosUsuario?: string[]; //Cuando se crea una emergencia, se generan las entidades IConfigEventoUsuario, para luego ejecutar una lógica de negocio.
 
   //2-Datos específicos según el tipo de emergencia
   emergenciaMedica?: IEmergenciaMedica;
@@ -52,7 +52,6 @@ export interface IEmergencia {
   cliente?: ICliente;
   ancestros?: ICliente[];
   ubicacion?: IUbicacion;
-  configsEventosUsuario?: IConfigEventoUsuario[];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
