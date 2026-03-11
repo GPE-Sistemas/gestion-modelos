@@ -86,7 +86,6 @@ export type EstadoEmergenciaMedica =
 
   //LLAMADAS DE EMERGENCIA
   | 'Atendida' //La llamada se atendió exitosamente
-  | 'Derivada' //La llamada se derivó a otro centro o servicio
 
   //AUXILIOS
   | 'Asignada' // Se asignó vehículo/médico/enfermero
