@@ -81,11 +81,14 @@ export type estadoEvento =
   | 'Finalizada';
 
 export type EstadoEmergenciaMedica =
+  //GENERALES
+  | 'Pendiente' // Auxilio recién creado
+
   //LLAMADAS DE EMERGENCIA
   | 'Atendida' //La llamada se atendió exitosamente
+  | 'Derivada' //La llamada se derivó a otro centro o servicio
 
   //AUXILIOS
-  | 'Pendiente' // Auxilio recién creado
   | 'Asignada' // Se asignó vehículo/médico/enfermero
   | 'Reasignada' //Se reasignó vehículo/médico/enfermero
   | 'En tránsito' // El vehículo salió del centro

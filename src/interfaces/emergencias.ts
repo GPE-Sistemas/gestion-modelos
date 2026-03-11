@@ -30,6 +30,7 @@ export interface IEmergencia {
   archivosAdjuntos?: IArchivosAdjuntos[];
   observaciones?: string; // Notas adicionales sobre el auxilio/llamada
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
+  enSeguimiento?: boolean; //Una emergencia en seguimiento es aquella que no es una llamada (no es auxilio) y requiere seguimiento. Si está en seguimiento, no se le pueden asignar/reasignar nada. Pueden pasarse en un futuro a auxilio.
   direccion?: string; //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
   ubicacionDestino?: IGeoJSONPoint; //geojson del lugar de la emergencia
   asignada?: boolean; //Indica si a la emergencia se le asignó alguna clase de personal para el seguimiento (vehículos, médicos, choferes, etc)
