@@ -77,6 +77,7 @@ export interface IActivo {
   vehiculo?: IVehiculo;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
+  puedeSolicitarServicioTecnico?: boolean;
   modoDesactivado?: IModoDesactivado;
 
   estadoCuenta?: estadoCuenta;

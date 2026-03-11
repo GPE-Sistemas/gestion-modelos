@@ -117,6 +117,7 @@ export interface IDispositivoAlarma {
   sim2?: ISim;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
+  puedeSolicitarServicioTecnico?: boolean;
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
   armado?: boolean[];

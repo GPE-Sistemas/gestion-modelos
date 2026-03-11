@@ -29,6 +29,7 @@ export interface ITracker {
   idsAncestros?: string[];
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
+  puedeSolicitarServicioTecnico?: boolean;
   idModelo?: string;
   nombre?: string;
   identificacion?: string;
@@ -74,8 +75,7 @@ type OmitirUpdate =
 
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}
 
-export interface ITrackerCache
-  extends Omit<
-    ITracker,
-    'cliente' | 'ancestros' | 'activo' | 'modelo' | 'serviciosContratados'
-  > {}
+export interface ITrackerCache extends Omit<
+  ITracker,
+  'cliente' | 'ancestros' | 'activo' | 'modelo' | 'serviciosContratados'
+> {}
