@@ -45,6 +45,7 @@ export type TipoEventoGenerico =
   | 'Evento Técnico Tracker'
   | 'Evento Técnico Luminaria'
   | 'Evento Técnico Sirena'
+  | 'Evento Técnico Gateway'
   | 'Evento Emergencia Médica'
   | 'Evento Emergencia Bomberos';
 
