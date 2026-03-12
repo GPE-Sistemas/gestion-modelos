@@ -21,8 +21,10 @@ export interface ILocationGateway {
   source?: string;
 }
 
-export interface IGatewayChirpstack
-  extends Omit<IGatewayInfo, 'metadata' | 'tags' | 'statsInterval'> {
+export interface IGatewayChirpstack extends Omit<
+  IGatewayInfo,
+  'metadata' | 'tags' | 'statsInterval'
+> {
   createdAt?: string;
   lastSeenAt?: string;
   updatedAt?: string;
