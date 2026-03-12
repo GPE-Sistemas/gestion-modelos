@@ -401,6 +401,7 @@ type OmitirCreate =
   | 'luminaria'
   | 'usuario'
   | 'activo'
+  | 'gateway'
   | 'botonBluetooth'
   | 'configEventoUsuario'
   | 'reporte';
