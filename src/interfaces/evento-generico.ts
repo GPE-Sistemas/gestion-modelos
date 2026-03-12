@@ -15,6 +15,7 @@ import { IPersonalSalud } from './personal-salud';
 import { IGeoJSONPoint } from '../auxiliares';
 import { ISirena } from './sirena';
 import { IUbicacion } from './ubicacion';
+import { IGateway } from './gateway';
 
 /* ────────────────────────────────────────────────
  *  ALIAS DE TIPOS EXISTENTES
@@ -37,12 +38,14 @@ export type TipoEventoGenerico =
   | 'Evento Vehiculo'
   | 'Evento Alarma'
   | 'Evento Luminaria'
+  | 'Evento Gateway'
   | 'Evento BotonBLE'
   | 'Evento Sirena'
   | 'Evento Técnico Alarma'
   | 'Evento Técnico Tracker'
   | 'Evento Técnico Luminaria'
   | 'Evento Técnico Sirena'
+  | 'Evento Técnico Gateway'
   | 'Evento Emergencia Médica'
   | 'Evento Emergencia Bomberos';
 
@@ -50,7 +53,7 @@ export type TipoEventoGenerico =
  *  CATEGORIAS
  * ────────────────────────────────────────────────*/
 export type Categoria =
-  | 'Evento' // Eventos operacionales que pueden ser atendidos. (colectivos, activos, trackers, vehículos, alarmas, luminarias, botón BLE)
+  | 'Evento' // Eventos operacionales que pueden ser atendidos. (colectivos, activos, trackers, vehículos, alarmas, luminarias, botón BLE, gateways)
   | 'Servicio Técnico' // Eventos técnicos (alarma, tracker, luminaria)
   | 'Seguimiento Emergencia'; // Eventos de emergencia (médica, bomberos)
 
@@ -63,7 +66,12 @@ export interface RangoHorario {
   horarioHasta?: string; // '18:00'
 }
 
-export type CategoriaTecnica = 'Alarma' | 'Tracker' | 'Luminaria' | 'Sirena';
+export type CategoriaTecnica =
+  | 'Alarma'
+  | 'Tracker'
+  | 'Luminaria'
+  | 'Sirena'
+  | 'Gateway';
 
 export type estadoEventoTecnico =
   | 'Pendiente'
@@ -153,6 +161,10 @@ export interface IValoresEventoBotonBLE extends IValoresEventoBase {
   geojson?: IGeoJSONPoint;
 }
 
+export interface IValoresEventoGateway extends IValoresEventoBase {
+  geojson?: IGeoJSONPoint;
+}
+
 export interface IValoresEventoSirena extends IValoresEventoBase {
   idSirena?: string;
   chipId?: string;
@@ -219,6 +231,10 @@ export type MapaEventoGenerico = {
     valores: IValoresEventoLuminaria;
     estado: EstadoEvento;
   };
+  'Evento Gateway': {
+    valores: IValoresEventoGateway;
+    estado: EstadoEvento;
+  };
   'Evento BotonBLE': {
     valores: IValoresEventoBotonBLE;
     estado: EstadoEvento;
@@ -240,6 +256,10 @@ export type MapaEventoGenerico = {
     estado: EstadoEventoTecnico;
   };
   'Evento Técnico Sirena': {
+    valores: IValoresEventoTecnico;
+    estado: EstadoEventoTecnico;
+  };
+  'Evento Técnico Gateway': {
     valores: IValoresEventoTecnico;
     estado: EstadoEventoTecnico;
   };
@@ -305,6 +325,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   activo?: IActivo;
   botonBluetooth?: IBotonBluetooth;
   sirena?: ISirena;
+  gateway?: IGateway;
   //
   reporte?: IReporteGenerico;
   configEventoUsuario?: IConfigEventoUsuario;
@@ -355,11 +376,13 @@ export type IEventoGenerico =
   | IEventoBaseGenerico<'Evento Vehiculo'>
   | IEventoBaseGenerico<'Evento Alarma'>
   | IEventoBaseGenerico<'Evento Luminaria'>
+  | IEventoBaseGenerico<'Evento Gateway'>
   | IEventoBaseGenerico<'Evento BotonBLE'>
   | IEventoBaseGenerico<'Evento Sirena'>
   | IEventoBaseGenerico<'Evento Técnico Alarma'>
   | IEventoBaseGenerico<'Evento Técnico Tracker'>
   | IEventoBaseGenerico<'Evento Técnico Luminaria'>
+  | IEventoBaseGenerico<'Evento Técnico Gateway'>
   | IEventoBaseGenerico<'Evento Técnico Sirena'>
   | IEventoBaseGenerico<'Evento Emergencia Médica'>
   | IEventoBaseGenerico<'Evento Emergencia Bomberos'>;
@@ -378,6 +401,7 @@ type OmitirCreate =
   | 'luminaria'
   | 'usuario'
   | 'activo'
+  | 'gateway'
   | 'botonBluetooth'
   | 'configEventoUsuario'
   | 'reporte';
@@ -392,11 +416,13 @@ export type ICreateEventoGenerico =
   | Omit<IEventoBaseGenerico<'Evento Vehiculo'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Alarma'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Luminaria'>, OmitirCreate>
+  | Omit<IEventoBaseGenerico<'Evento Gateway'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento BotonBLE'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Sirena'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Alarma'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Tracker'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Luminaria'>, OmitirCreate>
+  | Omit<IEventoBaseGenerico<'Evento Técnico Gateway'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Sirena'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Emergencia Médica'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Emergencia Bomberos'>, OmitirCreate>;
@@ -423,6 +449,9 @@ export type IUpdateEventoGenerico =
   | ({ tipoEvento: 'Evento Luminaria' } & Partial<
       Omit<IEventoBaseGenerico<'Evento Luminaria'>, OmitirCreate | 'tipoEvento'>
     >)
+  | ({ tipoEvento: 'Evento Gateway' } & Partial<
+      Omit<IEventoBaseGenerico<'Evento Gateway'>, OmitirCreate | 'tipoEvento'>
+    >)
   | ({ tipoEvento: 'Evento BotonBLE' } & Partial<
       Omit<IEventoBaseGenerico<'Evento BotonBLE'>, OmitirCreate | 'tipoEvento'>
     >)
@@ -444,6 +473,12 @@ export type IUpdateEventoGenerico =
   | ({ tipoEvento: 'Evento Técnico Luminaria' } & Partial<
       Omit<
         IEventoBaseGenerico<'Evento Técnico Luminaria'>,
+        OmitirCreate | 'tipoEvento'
+      >
+    >)
+  | ({ tipoEvento: 'Evento Técnico Gateway' } & Partial<
+      Omit<
+        IEventoBaseGenerico<'Evento Técnico Gateway'>,
         OmitirCreate | 'tipoEvento'
       >
     >)
@@ -483,6 +518,7 @@ export type IEventoGenericoCache = Omit<
   | 'configEventoUsuario'
   | 'reporte'
   | 'sirena'
+  | 'gateway'
 > & {
   // Sobrescribir detallesTecnicos sin populates
   detallesTecnicos?: Omit<DetallesTecnicos, 'tecnico'>;
