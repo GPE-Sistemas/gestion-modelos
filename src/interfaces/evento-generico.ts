@@ -333,6 +333,8 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
 
 export type DetallesTecnicos = {
   idTecnicoAsignado?: string;
+  fechaDisponibleParaTratar?: string;
+
   // Populate opcional
   tecnico?: IUsuario;
 };
