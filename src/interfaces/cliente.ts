@@ -52,6 +52,7 @@ export interface IConfigCliente {
   solicitantePredeterminado?: string;
   credencialesAlarmas?: ICredencialesAlarma[];
   integracionSoflex?: IIntegracionSoflex;
+  verTrafico?: boolean;
 }
 
 // Informes
