@@ -1,6 +1,5 @@
 import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IConfigHorario } from './config-horario';
+import { ICliente, IConfigHorario } from './cliente';
 import { ICategoriaEvento } from './categoria-evento';
 import { IGrupo } from './grupo';
 import { IUbicacion } from './ubicacion';
