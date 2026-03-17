@@ -1,3 +1,10 @@
+export interface IConfigHorario {
+  idCliente?: string; // undefined = default del cliente
+  dias?: number[]; // 0-6 (Dom-Sáb), undefined = todos los días
+  horaInicio?: string; // "HH:mm"
+  horaFin?: string; // "HH:mm"
+}
+
 export interface IImagenesCliente {
   icono?: string;
   banner?: string;
@@ -48,6 +55,7 @@ export interface IConfigCliente {
   moduloSirenas?: IModuloSirenas;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
+  configHorarioAtencion?: IConfigHorario;
   solicitantesEmergencias?: string[];
   solicitantePredeterminado?: string;
   credencialesAlarmas?: ICredencialesAlarma[];

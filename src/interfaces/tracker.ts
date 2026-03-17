@@ -1,5 +1,5 @@
 import { IActivo } from './activo';
-import { ICliente } from './cliente';
+import { ICliente, IConfigHorario } from './cliente';
 import { ISim } from './dispositivo-alarma';
 import { estadoCuenta } from './estado-entidad';
 import { IModeloDispositivo } from './modelo-dispositivo';
@@ -30,6 +30,8 @@ export interface ITracker {
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   puedeSolicitarServicioTecnico?: boolean;
+  configHorariosAtencion?: IConfigHorario[];
+  configHorariosAtencionTecnica?: IConfigHorario[];
   idModelo?: string;
   nombre?: string;
   identificacion?: string;

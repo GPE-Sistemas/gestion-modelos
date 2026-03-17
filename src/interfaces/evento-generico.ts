@@ -1,5 +1,5 @@
 // evento-generico.ts
-import { ICliente } from './cliente';
+import { ICliente, IConfigHorario } from './cliente';
 import { ITracker } from './tracker';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { IActivo } from './activo';
@@ -311,6 +311,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   detallesEmergencias?: DetallesEmergencias;
   // Permisos y atención
   idsClientesQuePuedenAtender?: string[];
+  configHorariosAtencion?: IConfigHorario[];
   idsClientesAtendiendo?: string[];
   idsUsuariosAtendiendo?: string[];
 

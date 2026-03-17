@@ -1,4 +1,4 @@
-import { ICliente } from './cliente';
+import { ICliente, IConfigHorario } from './cliente';
 import { IModoDesactivado } from './dispositivo-alarma';
 import { estadoCuenta } from './estado-entidad';
 import { IGrupo } from './grupo';
@@ -78,6 +78,8 @@ export interface IActivo {
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   puedeSolicitarServicioTecnico?: boolean;
+  configHorariosAtencion?: IConfigHorario[];
+  configHorariosAtencionTecnica?: IConfigHorario[];
   modoDesactivado?: IModoDesactivado;
 
   estadoCuenta?: estadoCuenta;

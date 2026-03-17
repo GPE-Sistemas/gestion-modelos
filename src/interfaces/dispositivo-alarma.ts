@@ -1,5 +1,5 @@
 import { ICamara } from './camara';
-import { ICliente } from './cliente';
+import { ICliente, IConfigHorario } from './cliente';
 import { Dia } from './config-evento-usuario';
 import { estadoCuenta } from './estado-entidad';
 import { IModeloDispositivo } from './modelo-dispositivo';
@@ -118,6 +118,8 @@ export interface IDispositivoAlarma {
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   puedeSolicitarServicioTecnico?: boolean;
+  configHorariosAtencion?: IConfigHorario[];
+  configHorariosAtencionTecnica?: IConfigHorario[];
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
   armado?: boolean[];

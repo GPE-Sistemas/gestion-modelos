@@ -1,5 +1,6 @@
 import { IActivo } from './activo';
 import { ICliente } from './cliente';
+import { IConfigHorario } from './config-horario';
 import { ICategoriaEvento } from './categoria-evento';
 import { IGrupo } from './grupo';
 import { IUbicacion } from './ubicacion';
@@ -192,6 +193,7 @@ export interface IConfigEventoUsuario {
   idsUsuarios?: string[];
   // Los clientes que pueden atender el evento
   idsClientesQuePuedenAtender?: string[];
+  configHorariosAtencion?: IConfigHorario[];
   idCategoriaEvento?: string;
   codigoReportado?: string;
   idTipoEvento?: string;
