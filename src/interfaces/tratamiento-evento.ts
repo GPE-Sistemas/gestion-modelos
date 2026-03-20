@@ -10,6 +10,7 @@ export interface ITratamientoEvento {
   //
   nota?: string;
   notaInterna?: string;
+  imagenes?: string[];
   fechaCreacion?: string;
   estado?: EstadoEvento;
   // Separados para no hinche las bolas el overlap.
@@ -25,10 +26,14 @@ export interface ITratamientoEvento {
 
 type OmitirCreate = '_id' | 'eventos' | 'usuario';
 
-export interface ICreateTratamientoEvento
-  extends Omit<Partial<ITratamientoEvento>, OmitirCreate> {}
+export interface ICreateTratamientoEvento extends Omit<
+  Partial<ITratamientoEvento>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate = '_id' | 'eventos' | 'usuario';
 
-export interface IUpdateTratamientoEvento
-  extends Omit<Partial<ITratamientoEvento>, OmitirUpdate> {}
+export interface IUpdateTratamientoEvento extends Omit<
+  Partial<ITratamientoEvento>,
+  OmitirUpdate
+> {}
