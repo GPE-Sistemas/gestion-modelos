@@ -2,7 +2,12 @@ import { ICliente } from './cliente';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { ITracker } from './tracker';
 
-export type MetodoReenvio = 'Básico' | 'Seguridad Evento Externo' | 'Soflex';
+export type MetodoReenvio =
+  | 'Básico'
+  | 'Seguridad Evento Externo'
+  | 'Soflex'
+  | 'Caessat'
+  | 'Cersat';
 export type Protocolo = 'UDP' | 'TCP';
 export type IAgrupacionReenvio =
   | 'Todos los trackers del cliente'
@@ -14,6 +19,7 @@ export interface IOpcionesReenvio {
   puerto?: number;
   apikey?: string;
   usuario?: string;
+  protocolo?: Protocolo;
   contrasena?: string;
   usaReglaReenvio?: boolean;
   reglasReenvio?: IReglaReenvio[]; //Especifica condiciones de cómo reenviar, dependiendo de cómo llegó la data recibida
