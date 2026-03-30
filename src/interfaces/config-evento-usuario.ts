@@ -6,7 +6,7 @@ import { IUbicacion } from './ubicacion';
 import { IUsuario } from './usuario';
 import { IDispositivoAlarma } from './dispositivo-alarma';
 import { ITracker } from './tracker';
-import { ITipoEvento } from './tipo-evento';
+import { IListadoCategoria } from './listado-categoria';
 import { IGeoJSONPoint } from '../auxiliares';
 import { ILuminaria } from './luminaria';
 
@@ -209,7 +209,7 @@ export interface IConfigEventoUsuario {
   clientesQuePuedenAtender?: ICliente[];
   categoriaEvento?: ICategoriaEvento;
   tracker?: ITracker;
-  tipoEvento?: ITipoEvento;
+  listadoCategoria?: IListadoCategoria;
 }
 
 type OmitirCreate =
@@ -223,7 +223,7 @@ type OmitirCreate =
   | 'clientesQuePuedenAtender'
   | 'categoriaEvento'
   | 'tracker'
-  | 'tipoEvento';
+  | 'listadoCategoria';
 export interface ICreateConfigEventoUsuario extends Omit<
   Partial<IConfigEventoUsuario>,
   OmitirCreate
@@ -240,7 +240,7 @@ type OmitirUpdate =
   | 'clientesQuePuedenAtender'
   | 'categoriaEvento'
   | 'tracker'
-  | 'tipoEvento';
+  | 'listadoCategoria';
 export interface IUpdateConfigEventoUsuario extends Omit<
   Partial<IConfigEventoUsuario>,
   OmitirUpdate
@@ -258,7 +258,7 @@ export interface IConfigEventoUsuarioCache extends Omit<
   | 'clientesQuePuedenAtender'
   | 'categoriaEvento'
   | 'tracker'
-  | 'tipoEvento'
+  | 'listadoCategoria'
   | 'condicion'
 > {
   condicion?: CondicionNotificacionCache;
