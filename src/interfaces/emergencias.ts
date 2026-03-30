@@ -82,6 +82,7 @@ export interface IArchivosAdjuntos {
 export interface IEmergenciaMedica {
   sintomasApertura?: string[]; // Lista de síntomas reportados al inicio
   sintomasCierre?: string[]; // Lista de síntomas reportados al finalizar una emergencia con un diagnóstico
+  tratamiento?: string; //Tratamiento realizado
   diagnostico?: string; // Diagnóstico hecho
   irAHospital?: boolean; //Esto se marca una vez que la ambulancia haya llegado a la dirección de auxilio y se dé el ok para ir al hospital (se indica manualmente)
   fechaLlegadaHospital?: string;
