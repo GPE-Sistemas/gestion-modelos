@@ -195,7 +195,7 @@ export interface IConfigEventoUsuario {
   configHorariosAtencion?: IConfigHorario[];
   idCategoriaEvento?: string;
   codigoReportado?: string;
-  idTipoEvento?: string;
+  idListadoCategoria?: string;
   configZona?: IConfigZona;
 
   // Virtual
