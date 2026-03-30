@@ -79,13 +79,28 @@ export interface IArchivosAdjuntos {
   nombreOriginal?: string; //El nombre del archivo que se subió
 }
 
+export interface SignosVitales {
+  tensionArterial?: number; //miligramos de mercurio (mmHg)
+  frecuenciaRespiratoria?: number; //impulsos respiratorios por minuto (irpm)
+  frecuenciaCardiaca?: number; //latidos por minuto (lpm)
+  saturacionOxigeno?: number; // %
+  temperatura?: number; //grados
+}
+export interface InfoTraslado {
+  traslado?: boolean;
+  direccion?: string;
+  aceptaTraslado?: boolean; //indica si el paciente acepta ser trasladado o se niega
+}
 export interface IEmergenciaMedica {
   sintomasApertura?: string[]; // Lista de síntomas reportados al inicio
   sintomasCierre?: string[]; // Lista de síntomas reportados al finalizar una emergencia con un diagnóstico
   tratamiento?: string; //Tratamiento realizado
   diagnostico?: string; // Diagnóstico hecho
+  medicacion?: string; // Medicación administrada
   irAHospital?: boolean; //Esto se marca una vez que la ambulancia haya llegado a la dirección de auxilio y se dé el ok para ir al hospital (se indica manualmente)
   fechaLlegadaHospital?: string;
+  signosVitales?: SignosVitales;
+  traslado?: InfoTraslado;
 }
 
 export interface IEmergenciaBomberos {
