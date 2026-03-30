@@ -100,10 +100,6 @@ export type EstadoEmergenciaMedica =
   | 'Cancelada'; // La emergencia se canceló
 
 export type EstadoEmergenciaBomberos =
-  //LLAMADAS DE EMERGENCIA
-  | 'Atendida' //La llamada se atendió exitosamente
-
-  //AUXILIOS
   | 'Pendiente' // Auxilio recién creado
   | 'Asignada' // Se asignó vehículo
   | 'Reasignada' //Se reasignó vehículo
