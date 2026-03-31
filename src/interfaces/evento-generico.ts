@@ -55,7 +55,8 @@ export type TipoEventoGenerico =
 export type Categoria =
   | 'Evento' // Eventos operacionales que pueden ser atendidos. (colectivos, activos, trackers, vehículos, alarmas, luminarias, botón BLE, gateways)
   | 'Servicio Técnico' // Eventos técnicos (alarma, tracker, luminaria)
-  | 'Seguimiento Emergencia'; // Eventos de emergencia (médica, bomberos)
+  | 'Seguimiento Emergencia' // Eventos de emergencia (médica, bomberos)
+  | 'Verificación'; // Eventos de verificación (subir fotos y notas de entidades particulares)
 
 /* ────────────────────────────────────────────────
  *  Auxiliares
