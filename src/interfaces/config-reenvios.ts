@@ -7,7 +7,8 @@ export type MetodoReenvio =
   | 'Seguridad Evento Externo'
   | 'Soflex'
   | 'Caessat'
-  | 'Cersat';
+  | 'Cersat'
+  | 'Iron Tracking';
 export type Protocolo = 'UDP' | 'TCP';
 export type IAgrupacionReenvio =
   | 'Todos los trackers del cliente'
