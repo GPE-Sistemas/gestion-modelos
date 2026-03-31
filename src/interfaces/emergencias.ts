@@ -30,6 +30,7 @@ export interface IEmergencia {
   fechaFinalizacion?: string;
 
   //SITUACIÓN DE LA EMERGENCIA
+  //Si no es ninguna de estas, es una llamada común que no requiere seguimiento ni auxilio, ni tampoco es una emergencia ya atendida en el hospital.
   esAuxilio?: boolean; //Esto es para indicar si la emergencia requiere un seguimiento extra, es decir, se hace algo más que sólo registrarla
   enSeguimiento?: boolean; //Una emergencia en seguimiento es aquella que no es auxilio y requiere seguimiento. Si está en seguimiento, no se le pueden asignar/reasignar nada. Pueden pasarse en un futuro a auxilio.
   iniciaFinalizada?: boolean; //Indica que la emergencia que se está cargando ya está finalizada (simplemente sirve como registro), si está esta opción, se pueden cargar detalles de la atención recibida.
