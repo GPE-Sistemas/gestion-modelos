@@ -33,6 +33,7 @@ export * from './recorrido';
 export * from './servicio';
 export * from './servicio-contratado';
 export * from './soap';
+export * from './tipo-evento';
 export * from './token';
 export * from './token-push';
 export * from './trackeo';
