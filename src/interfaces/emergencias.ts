@@ -61,7 +61,12 @@ export interface IEmergencia {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export type PrioridadEmergenciaMedica = 'Verde' | 'Amarillo' | 'Rojo' | 'Negro';
+export type PrioridadEmergenciaMedica =
+  | 'Verde'
+  | 'Amarillo'
+  | 'Rojo'
+  | 'Negro'
+  | 'Celeste';
 
 export type PrioridadEmergenciaBombero =
   | 'Baja'
