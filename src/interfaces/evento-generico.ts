@@ -43,6 +43,7 @@ export type TipoEventoGenerico =
   | 'Evento Sirena'
   | 'Evento Técnico Alarma'
   | 'Evento Técnico Tracker'
+  | 'Evento Técnico Vehículo'
   | 'Evento Técnico Luminaria'
   | 'Evento Técnico Sirena'
   | 'Evento Técnico Gateway'
@@ -70,6 +71,7 @@ export interface RangoHorario {
 export type CategoriaTecnica =
   | 'Alarma'
   | 'Tracker'
+  | 'Vehículo'
   | 'Luminaria'
   | 'Sirena'
   | 'Gateway';
@@ -242,6 +244,11 @@ export type MapaEventoGenerico = {
     valores: IValoresEventoTecnico;
     estado: EstadoEventoTecnico;
   };
+
+  'Evento Técnico Vehículo': {
+    valores: IValoresEventoTecnico;
+    estado: EstadoEventoTecnico;
+  };
   'Evento Técnico Luminaria': {
     valores: IValoresEventoTecnico;
     estado: EstadoEventoTecnico;
@@ -375,6 +382,7 @@ export type IEventoGenerico =
   | IEventoBaseGenerico<'Evento Sirena'>
   | IEventoBaseGenerico<'Evento Técnico Alarma'>
   | IEventoBaseGenerico<'Evento Técnico Tracker'>
+  | IEventoBaseGenerico<'Evento Técnico Vehículo'>
   | IEventoBaseGenerico<'Evento Técnico Luminaria'>
   | IEventoBaseGenerico<'Evento Técnico Gateway'>
   | IEventoBaseGenerico<'Evento Técnico Sirena'>
@@ -415,6 +423,7 @@ export type ICreateEventoGenerico =
   | Omit<IEventoBaseGenerico<'Evento Sirena'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Alarma'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Tracker'>, OmitirCreate>
+  | Omit<IEventoBaseGenerico<'Evento Técnico Vehículo'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Luminaria'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Gateway'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Sirena'>, OmitirCreate>
@@ -464,6 +473,12 @@ export type IUpdateEventoGenerico =
         OmitirCreate | 'tipoEvento'
       >
     >)
+  | ({ tipoEvento: 'Evento Técnico Vehículo' } & Partial<
+      Omit<
+        IEventoBaseGenerico<'Evento Técnico Vehículo'>,
+        OmitirCreate | 'tipoEvento'
+      >
+    >)
   | ({ tipoEvento: 'Evento Técnico Luminaria' } & Partial<
       Omit<
         IEventoBaseGenerico<'Evento Técnico Luminaria'>,
@@ -504,6 +519,7 @@ export type IEventoGenericoCache = Omit<
   | 'cliente'
   | 'ancestros'
   | 'tracker'
+  | 'vehiculo'
   | 'alarma'
   | 'luminaria'
   | 'usuario'
