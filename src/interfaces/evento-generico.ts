@@ -285,6 +285,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   idsAncestros?: string[];
 
   filtrador?: Categoria; // Para las vistas de atender
+
   // Tipo y datos discriminados
   tipoEvento?: T;
   estado?: MapaEventoGenerico[T]['estado'];
