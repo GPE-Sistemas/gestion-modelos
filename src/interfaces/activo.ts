@@ -42,6 +42,7 @@ export interface IVehiculo {
   anio?: string;
   consumoRuta?: number; // litros cada 100 km
   consumoCiudad?: number; // litros cada 100 km
+  capacidadCombustible?: number; // litros
   //
   idChofer?: string;
   idRecorrido?: string;
