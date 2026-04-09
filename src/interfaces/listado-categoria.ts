@@ -5,7 +5,13 @@ export type ITipoListadoCategoria =
   | 'Evento-Tracker'
   | 'Evento-Luminaria'
   | 'Sintomas'
-  | 'Diagnosticos';
+  | 'Diagnosticos'
+  | 'Evento-Tecnico-Tracker'
+  | 'Evento-Tecnico-Alarma'
+  | 'Evento-Tecnico-Vehiculo'
+  | 'Evento-Tecnico-Luminaria'
+  | 'Evento-Tecnico-Sirena'
+  | 'Evento-Tecnico-Gateway';
 
 export interface IListadoCategoria {
   _id?: string;
