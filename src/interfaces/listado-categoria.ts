@@ -1,17 +1,17 @@
 import { ICliente } from './cliente';
 
 export type ITipoListadoCategoria =
-  | 'Evento Alarma'
-  | 'Evento Tracker'
-  | 'Evento Luminaria'
-  | 'Síntomas'
-  | 'Diagnósticos'
-  | 'Evento Técnico Tracker'
-  | 'Evento Técnico Alarma'
-  | 'Evento Técnico Vehículo'
-  | 'Evento Técnico Luminaria'
-  | 'Evento Técnico Sirena'
-  | 'Evento Técnico Gateway';
+  | 'Evento-Alarma'
+  | 'Evento-Tracker'
+  | 'Evento-Luminaria'
+  | 'Sintomas'
+  | 'Diagnosticos'
+  | 'Evento-Tecnico-Tracker'
+  | 'Evento-Tecnico-Alarma'
+  | 'Evento-Tecnico-Vehiculo'
+  | 'Evento-Tecnico-Luminaria'
+  | 'Evento-Tecnico-Sirena'
+  | 'Evento-Tecnico-Gateway';
 
 export interface IListadoCategoria {
   _id?: string;
