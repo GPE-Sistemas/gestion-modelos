@@ -1,15 +1,17 @@
 import { ICliente } from './cliente';
 
 export type ITipoListadoCategoria =
+  //PARA TIPOS DE EVENTOS
   | 'Evento-Alarma'
   | 'Evento-Tracker'
   | 'Evento-Luminaria'
-  | 'Evento-Vehiculo'
   | 'Evento-Sirena'
   | 'Evento-Gateway'
   | 'Evento-Activo'
+  //PARA EMERGENCIAS MÉDICAS
   | 'Sintomas'
   | 'Diagnosticos'
+  //PARA SERVICIOS TÉCNICOS
   | 'Evento-Tecnico-Tracker'
   | 'Evento-Tecnico-Alarma'
   | 'Evento-Tecnico-Vehiculo'
