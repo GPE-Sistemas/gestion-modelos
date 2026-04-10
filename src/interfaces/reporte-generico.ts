@@ -34,6 +34,7 @@ export type TipoValoresReporte =
   | 'Luminaria ACTIS FING Energía'
   | 'Tracker 4G'
   | 'Tracker 4G Combustible'
+  | 'Tracker 4G Temperatura'
   | 'Tracker T1000B'
   | 'Tracker Qualcomm';
 export type TipoEntidadReporte =
@@ -151,6 +152,12 @@ export interface IReporteTrackerQualcomm extends IReporteTracker {
   tipoTriangulacion?: TipoTriangulacion;
 }
 
+export interface IReporteTrackerTemperatura {
+  uniqueId?: string;
+  temperatura?: number; // °C con signo (ej: +20.5, -5.2)
+  tramaRaw?: string; // Trama completa para diagnóstico
+}
+
 export interface IReporteTrackerCombustible {
   uniqueId?: string;
   // Nivel por tanque (litros)
@@ -184,6 +191,7 @@ export type MapaValoresReporte = {
   'Tracker T1000B': IReporteTrackerT1000B;
   'Tracker Qualcomm': IReporteTrackerQualcomm;
   'Tracker 4G Combustible': IReporteTrackerCombustible;
+  'Tracker 4G Temperatura': IReporteTrackerTemperatura;
 };
 
 /* ────────────────────────────────────────────────
@@ -239,7 +247,8 @@ export type IReporteGenerico =
   | IReporteBase<'Tracker 4G'>
   | IReporteBase<'Tracker T1000B'>
   | IReporteBase<'Tracker Qualcomm'>
-  | IReporteBase<'Tracker 4G Combustible'>;
+  | IReporteBase<'Tracker 4G Combustible'>
+  | IReporteBase<'Tracker 4G Temperatura'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE - UNIONES DISCRIMINADAS
@@ -270,7 +279,8 @@ export type ICreateReporteGenerico =
   | Omit<IReporteBase<'Tracker 4G'>, Omitir>
   | Omit<IReporteBase<'Tracker T1000B'>, Omitir>
   | Omit<IReporteBase<'Tracker Qualcomm'>, Omitir>
-  | Omit<IReporteBase<'Tracker 4G Combustible'>, Omitir>;
+  | Omit<IReporteBase<'Tracker 4G Combustible'>, Omitir>
+  | Omit<IReporteBase<'Tracker 4G Temperatura'>, Omitir>;
 
 /** Update: permitimos campos parciales (opcional) pero mantenemos `tipoReporte` para que TS pueda discriminar.
  *  Ejemplo: cuando actualizás, podés enviar solo `valores` con algunos campos o metadatos.
@@ -302,4 +312,7 @@ export type IUpdateReporteGenerico =
     >)
   | ({ tipoReporte: 'Tracker 4G Combustible' } & Partial<
       Omit<IReporteBase<'Tracker 4G Combustible'>, Omitir | 'tipoReporte'>
+    >)
+  | ({ tipoReporte: 'Tracker 4G Temperatura' } & Partial<
+      Omit<IReporteBase<'Tracker 4G Temperatura'>, Omitir | 'tipoReporte'>
     >);
