@@ -1,6 +1,6 @@
 import { ICliente } from './cliente';
 
-export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual';
+export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual' | 'Horario';
 export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
 export type TipoResumenDatos =
   | 'Consumo Mensual Luminarias'
@@ -50,6 +50,13 @@ export interface IInformeDiarioLuminarias {
   luminariasConCortesEnergia?: number;
 }
 
+export interface ITemperaturaHorariaVehiculo {
+  temperaturaPromedio?: number; // °C promedio de la hora
+  temperaturaMin?: number; // °C mínima de la hora
+  temperaturaMax?: number; // °C máxima de la hora
+  cantidadReportes?: number; // cantidad de reportes procesados
+}
+
 export interface IConsumoCombustibleVehiculos {
   kmRecorridos?: number; //km (obtenidos del odómetro de los reportes)
   consumoRuta?: number; // litros cada 100 km (ruta) — snapshot del vehículo individual
@@ -68,6 +75,7 @@ export type MapaResumenDatos = {
   'Encendido Diario Luminarias': IEncendidoDiarioLuminarias;
   'Informe Diario Luminarias': IInformeDiarioLuminarias;
   'Consumo Mensual Combustible Vehículos': IConsumoCombustibleVehiculos;
+  'Temperatura Horaria Vehículos': ITemperaturaHorariaVehiculo;
 };
 
 /* ────────────────────────────────────────────────
@@ -103,7 +111,8 @@ export type IResumenDatos =
   | IResumenDatosBase<'Consumo Mensual Luminarias'>
   | IResumenDatosBase<'Encendido Diario Luminarias'>
   | IResumenDatosBase<'Informe Diario Luminarias'>
-  | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>;
+  | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>
+  | IResumenDatosBase<'Temperatura Horaria Vehículos'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
@@ -121,6 +130,10 @@ export type ICreateResumenDatos =
   | Omit<
       Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
       OmitirCreate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
+      OmitirCreate
     >;
 
 type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
@@ -134,5 +147,9 @@ export type IUpdateResumenDatos =
   | Omit<Partial<IResumenDatosBase<'Informe Diario Luminarias'>>, OmitirUpdate>
   | Omit<
       Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
       OmitirUpdate
     >;
