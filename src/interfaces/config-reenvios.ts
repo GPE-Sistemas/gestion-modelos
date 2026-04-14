@@ -8,7 +8,8 @@ export type MetodoReenvio =
   | 'Soflex'
   | 'Caessat'
   | 'Cersat'
-  | 'Iron Tracking';
+  | 'Iron Tracking'
+  | 'Logictracker';
 export type Protocolo = 'UDP' | 'TCP';
 export type IAgrupacionReenvio =
   | 'Todos los trackers del cliente'
