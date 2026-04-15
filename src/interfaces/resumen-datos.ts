@@ -4,7 +4,10 @@ export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual' | 'Hor
 export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
 export type TipoResumenDatos =
   | 'Consumo Mensual Luminarias'
-  | 'Informe Diario Luminarias';
+  | 'Informe Diario Luminarias'
+  | 'Informe Cargas Combustible'
+  | 'Informe Eventos Sospechosos Combustible'
+  | 'Informe Mensual Flota Combustible';
 export type TipoEntidadResumen = 'Luminaria' | 'Vehículo' | 'Alarma';
 /* ────────────────────────────────────────────────
  *  RESÚMENES
@@ -57,6 +60,77 @@ export interface ITemperaturaHorariaVehiculo {
   cantidadReportes?: number; // cantidad de reportes procesados
 }
 
+/* ────────────────────────────────────────────────
+ *  COMBUSTIBLE — CARGAS
+ * ────────────────────────────────────────────────*/
+
+export interface IEventoCargaCombustible {
+  idActivo?: string;
+  nombreActivo?: string;
+  fecha?: string;            // ISO timestamp del evento
+  litrosCargados?: number;   // variacionCombustible (positivo)
+  nivelPostCarga?: number;   // nivelPostVariacion
+  odometro?: number;
+  geojson?: { type: 'Point'; coordinates: [number, number] };
+  direccion?: string;
+  idSensor?: number;
+}
+
+export interface IInformeCargasCombustible {
+  totalCargas?: number;
+  totalLitrosCargados?: number;
+  vehiculosConCarga?: number;
+  cargas?: IEventoCargaCombustible[];
+}
+
+/* ────────────────────────────────────────────────
+ *  COMBUSTIBLE — EVENTOS SOSPECHOSOS (DESCARGAS)
+ * ────────────────────────────────────────────────*/
+
+export interface IEventoDescargaCombustible {
+  idActivo?: string;
+  nombreActivo?: string;
+  fecha?: string;
+  litrosDescargados?: number;   // |variacionCombustible|
+  nivelAntes?: number;
+  nivelDespues?: number;        // nivelPostVariacion
+  odometro?: number;
+  geojson?: { type: 'Point'; coordinates: [number, number] };
+  direccion?: string;
+  idSensor?: number;
+}
+
+export interface IInformeEventosSospechosos {
+  totalEventos?: number;
+  totalLitrosDescargados?: number;
+  vehiculosAfectados?: number;
+  eventos?: IEventoDescargaCombustible[];
+}
+
+/* ────────────────────────────────────────────────
+ *  COMBUSTIBLE — MENSUAL DE FLOTA
+ * ────────────────────────────────────────────────*/
+
+export interface IEstadisticaVehiculoCombustible {
+  idActivo?: string;
+  nombreActivo?: string;
+  kmRecorridos?: number;
+  litrosCargados?: number;
+  rendimientoL100km?: number;   // L/100km (null si sin datos de odómetro)
+  cantidadCargas?: number;
+  cantidadEventosSospechosos?: number;
+}
+
+export interface IInformeMensualFlotaCombustible {
+  totalVehiculos?: number;
+  kmTotales?: number;
+  litrosTotales?: number;
+  rendimientoPromedio?: number;
+  cantidadCargas?: number;
+  cantidadEventosSospechosos?: number;
+  vehiculos?: IEstadisticaVehiculoCombustible[];
+}
+
 export interface IConsumoCombustibleVehiculos {
   kmRecorridos?: number; //km (obtenidos del odómetro de los reportes)
   consumoRuta?: number; // litros cada 100 km (ruta) — snapshot del vehículo individual
@@ -76,6 +150,9 @@ export type MapaResumenDatos = {
   'Informe Diario Luminarias': IInformeDiarioLuminarias;
   'Consumo Mensual Combustible Vehículos': IConsumoCombustibleVehiculos;
   'Temperatura Horaria Vehículos': ITemperaturaHorariaVehiculo;
+  'Informe Cargas Combustible': IInformeCargasCombustible;
+  'Informe Eventos Sospechosos Combustible': IInformeEventosSospechosos;
+  'Informe Mensual Flota Combustible': IInformeMensualFlotaCombustible;
 };
 
 /* ────────────────────────────────────────────────
@@ -112,7 +189,10 @@ export type IResumenDatos =
   | IResumenDatosBase<'Encendido Diario Luminarias'>
   | IResumenDatosBase<'Informe Diario Luminarias'>
   | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>
-  | IResumenDatosBase<'Temperatura Horaria Vehículos'>;
+  | IResumenDatosBase<'Temperatura Horaria Vehículos'>
+  | IResumenDatosBase<'Informe Cargas Combustible'>
+  | IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>
+  | IResumenDatosBase<'Informe Mensual Flota Combustible'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
@@ -134,6 +214,18 @@ export type ICreateResumenDatos =
   | Omit<
       Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
       OmitirCreate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Informe Cargas Combustible'>>,
+      OmitirCreate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>>,
+      OmitirCreate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Informe Mensual Flota Combustible'>>,
+      OmitirCreate
     >;
 
 type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
@@ -151,5 +243,17 @@ export type IUpdateResumenDatos =
     >
   | Omit<
       Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Informe Cargas Combustible'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Informe Mensual Flota Combustible'>>,
       OmitirUpdate
     >;
