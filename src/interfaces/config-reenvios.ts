@@ -52,6 +52,8 @@ export interface IConfigReenvio {
   idEntidadReenvio?: string;
   opcionesReenvio?: IOpcionesReenvio;
   reenviarHijos?: boolean; /// solo para trackers o alarmas de clientes hijos del cliente reenvio -- tambien se reenvian los propios
+  periodoInicio?: string; // Fecha desde la cual se comenzará a reenviar la data (si no se especifica, se asume que es desde la fecha de creación del reenvío)
+  periodoFin?: string; // Fecha hasta la cual se reenviará la data (si no se especifica, se asume que es indefinido)
 
   // Virtual
   cliente?: ICliente;
