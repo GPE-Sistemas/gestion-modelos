@@ -156,6 +156,7 @@ export interface IReporteTrackerTemperatura {
   uniqueId?: string;
   temperatura?: number; // °C con signo (ej: +20.5, -5.2)
   tramaRaw?: string; // Trama completa para diagnóstico
+  geojson?: IGeoJSONPoint; // Última posición conocida (≤5 min)
 }
 
 export interface IReporteTrackerCombustible {
@@ -175,6 +176,7 @@ export interface IReporteTrackerCombustible {
   // Debug / diagnóstico
   debugValue?: string; // Valor lógico crudo del sensor
   tramaRaw?: string; // Trama completa para diagnóstico
+  geojson?: IGeoJSONPoint; // Última posición conocida (≤5 min)
 }
 
 /* ────────────────────────────────────────────────
