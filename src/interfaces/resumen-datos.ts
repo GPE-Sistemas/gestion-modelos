@@ -4,7 +4,10 @@ export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual' | 'Hor
 export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
 export type TipoResumenDatos =
   | 'Consumo Mensual Luminarias'
+  | 'Encendido Diario Luminarias'
   | 'Informe Diario Luminarias'
+  | 'Consumo Mensual Combustible Vehículos'
+  | 'Temperatura Horaria Vehículos'
   | 'Informe Cargas Combustible'
   | 'Informe Eventos Sospechosos Combustible'
   | 'Informe Mensual Flota Combustible';
