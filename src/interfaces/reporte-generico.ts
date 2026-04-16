@@ -130,6 +130,7 @@ export interface IReporteTracker {
   velocidad?: number;
   orientacion?: number;
   ignicion?: boolean;
+  raw?: string; // Crudo para diagnóstico o datos adicionales no estructurados
 }
 
 export interface IReporteTracker4G extends IReporteTracker {
