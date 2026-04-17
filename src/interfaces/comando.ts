@@ -9,7 +9,8 @@ export type IEstadoComando =
   | "No Recibido"
   | "Ejecutado"
   | "En Cola"
-  | "No Ejecutado";
+  | "No Ejecutado"
+  | "Descartado";
 
 export interface IComando {
   _id?: string;
