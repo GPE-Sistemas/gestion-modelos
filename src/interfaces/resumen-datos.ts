@@ -8,6 +8,7 @@ export type TipoResumenDatos =
   | 'Informe Diario Luminarias'
   | 'Consumo Mensual Combustible Vehículos'
   | 'Temperatura Horaria Vehículos'
+  | 'Combustible Horario Vehículos'
   | 'Informe Cargas Combustible'
   | 'Informe Eventos Sospechosos Combustible'
   | 'Informe Mensual Flota Combustible';
@@ -60,6 +61,13 @@ export interface ITemperaturaHorariaVehiculo {
   temperaturaPromedio?: number; // °C promedio de la hora
   temperaturaMin?: number; // °C mínima de la hora
   temperaturaMax?: number; // °C máxima de la hora
+  cantidadReportes?: number; // cantidad de reportes procesados
+}
+
+export interface ICombustibleHorarioVehiculo {
+  nivelPromedio?: number; // nivel promedio de la hora (unidad del sensor)
+  nivelMin?: number; // nivel mínimo de la hora
+  nivelMax?: number; // nivel máximo de la hora
   cantidadReportes?: number; // cantidad de reportes procesados
 }
 
@@ -153,6 +161,7 @@ export type MapaResumenDatos = {
   'Informe Diario Luminarias': IInformeDiarioLuminarias;
   'Consumo Mensual Combustible Vehículos': IConsumoCombustibleVehiculos;
   'Temperatura Horaria Vehículos': ITemperaturaHorariaVehiculo;
+  'Combustible Horario Vehículos': ICombustibleHorarioVehiculo;
   'Informe Cargas Combustible': IInformeCargasCombustible;
   'Informe Eventos Sospechosos Combustible': IInformeEventosSospechosos;
   'Informe Mensual Flota Combustible': IInformeMensualFlotaCombustible;
@@ -193,6 +202,7 @@ export type IResumenDatos =
   | IResumenDatosBase<'Informe Diario Luminarias'>
   | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>
   | IResumenDatosBase<'Temperatura Horaria Vehículos'>
+  | IResumenDatosBase<'Combustible Horario Vehículos'>
   | IResumenDatosBase<'Informe Cargas Combustible'>
   | IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>
   | IResumenDatosBase<'Informe Mensual Flota Combustible'>;
@@ -216,6 +226,10 @@ export type ICreateResumenDatos =
     >
   | Omit<
       Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
+      OmitirCreate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Combustible Horario Vehículos'>>,
       OmitirCreate
     >
   | Omit<
@@ -246,6 +260,10 @@ export type IUpdateResumenDatos =
     >
   | Omit<
       Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
+      OmitirUpdate
+    >
+  | Omit<
+      Partial<IResumenDatosBase<'Combustible Horario Vehículos'>>,
       OmitirUpdate
     >
   | Omit<
