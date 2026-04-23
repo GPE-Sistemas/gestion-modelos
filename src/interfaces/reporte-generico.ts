@@ -162,11 +162,12 @@ export interface IReporteTrackerTemperatura {
 
 export interface IReporteTrackerCombustible {
   uniqueId?: string;
-  // Nivel por tanque (litros)
-  nivelCombustible?: number; // Sensor 0 (maestro)
-  nivelCombustible1?: number; // Sensor 1 (esclavo)
+  // Nivel por tanque (litros). Solo se incluyen los sensores conectados.
+  nivelCombustible1?: number; // Sensor 1
   nivelCombustible2?: number; // Sensor 2
   nivelCombustible3?: number; // Sensor 3
+  nivelCombustible4?: number; // Sensor 4
+  nivelCombustibleTotal?: number; // Suma de sensores conectados (litros)
   temperaturaCombustible?: number; // °C
   alarmaAgua?: boolean; // Agua o cortocircuito en varillas
   ignicionVirtualSensor?: boolean; // Estado motor reportado por el sensor
