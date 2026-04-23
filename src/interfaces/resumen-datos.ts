@@ -65,10 +65,24 @@ export interface ITemperaturaHorariaVehiculo {
 }
 
 export interface ICombustibleHorarioVehiculo {
-  nivelPromedio?: number; // nivel promedio de la hora (unidad del sensor)
+  // Total (suma de sensores conectados)
+  nivelPromedio?: number; // nivel promedio de la hora
   nivelMin?: number; // nivel mínimo de la hora
   nivelMax?: number; // nivel máximo de la hora
-  cantidadReportes?: number; // cantidad de reportes procesados
+  // Por sensor (1-4). Se omiten si el sensor no reportó en la hora.
+  nivelPromedio1?: number;
+  nivelMin1?: number;
+  nivelMax1?: number;
+  nivelPromedio2?: number;
+  nivelMin2?: number;
+  nivelMax2?: number;
+  nivelPromedio3?: number;
+  nivelMin3?: number;
+  nivelMax3?: number;
+  nivelPromedio4?: number;
+  nivelMin4?: number;
+  nivelMax4?: number;
+  cantidadReportes?: number; // cantidad de reportes procesados (del Total)
 }
 
 /* ────────────────────────────────────────────────
