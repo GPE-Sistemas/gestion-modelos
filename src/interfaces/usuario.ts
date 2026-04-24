@@ -73,6 +73,14 @@ export interface ICredencialesSeguridad {
   claveEncriptada?: string;
 }
 
+//Par actualizar credenciales de seguridad vía PUT /:id/credencialesSeguridad, se recibe este DTO con los datos en texto plano
+// (la gestion-api-gestion se encarga de cifrar la clave antes de persistir)
+export interface IUpdateCredencialesSeguridad {
+  idCliente: string;
+  usuario: string;
+  clave: string;
+}
+
 export type Nivel = 'Cliente' | 'Grupo' | 'Entidad';
 export type TipoEntidadPermiso =
   | 'Activo'
