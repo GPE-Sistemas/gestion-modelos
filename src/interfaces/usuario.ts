@@ -68,6 +68,11 @@ export interface IVencimientoPermisoUsuario {
   eliminarUsuario?: boolean;
 }
 
+export interface ICredencialesSeguridad {
+  usuario?: string;
+  claveEncriptada?: string;
+}
+
 export type Nivel = 'Cliente' | 'Grupo' | 'Entidad';
 export type TipoEntidadPermiso =
   | 'Activo'
@@ -99,6 +104,10 @@ export interface IPermiso {
   roles?: Rol[];
 
   idsRoles?: string[]; // IDs de los roles asignados al permiso
+
+  credencialesSeguridad?: ICredencialesSeguridad; // Credenciales del sistema de seguridad (AES encriptadas)
+  tieneCredencialesSeguridad?: boolean; // Virtual: true si el permiso tiene credenciales configuradas
+
   // Virtual
   cliente?: ICliente;
   ancestros?: ICliente[];
