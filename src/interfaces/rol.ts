@@ -342,7 +342,14 @@ export type AccionesRol =
   // *******************************************
   // MÓDULO AUDITORÍAS
   // *******************************************
-  | 'Auditorías - Ver auditorías';
+  | 'Auditorías - Ver auditorías'
+  // *******************************************
+  // MODULO ALERTAS SEGURIDAD
+  // *******************************************
+  | 'Alertas Seguridad - Crear'
+  | 'Alertas Seguridad - Atender'
+  | 'Alertas Seguridad - Derivar'
+  | 'Alertas Seguridad - Exportar';
 
 export type FuncionesRol =
   | 'Técnico' // Para elegir técnicos en solicitudes de servicio técnico y para vista especial en la app mobile

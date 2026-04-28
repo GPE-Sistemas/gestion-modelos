@@ -34,6 +34,7 @@ export interface IModulos {
   moduloLogs?: boolean;
   moduloIntegraciones?: boolean;
   moduloSirenas?: boolean;
+  moduloAlertasSeguridad?: boolean;
 }
 
 export interface IDatosPersonales {
