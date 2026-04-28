@@ -20,6 +20,7 @@ export type IModoLuminaria =
   | 'Indeterminado'
   | 'Fotocélula'
   | 'Calendario'
+  | 'Por Defecto'
   | 'Manual';
 
 /* ────────────────────────────────────────────────
