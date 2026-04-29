@@ -143,6 +143,9 @@ export interface IDispositivoLuminariaACTIS {
   fotocelula?: {
     umbralSuperior?: number; // 0-255 (corresponde a 0-3.3V)
     umbralInferior?: number; // 0-255
+
+    // ===== (Puerto 120) =====
+    promedio?: number; // Valor de luz ambiente (0-255) calculado por el promedio de lecturas realizadas el último minuto
   };
 
   // ===== RELOJ ASTRONÓMICO (Puerto 12) =====
