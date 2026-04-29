@@ -53,6 +53,7 @@ export interface IConfigCliente {
   moduloTwilio?: IModuloTwilio;
   moduloSendgrid?: IModuloSendgrid;
   moduloSirenas?: IModuloSirenas;
+  moduloAlertasSeguridad?: IModuloAlertasSeguridad;
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   configHorarioAtencion?: IConfigHorario;
@@ -158,6 +159,11 @@ export interface IModuloEmergencias {
   activoEmergenciasBomberos?: boolean;
   crearEmergenciasBomberos?: boolean;
   //Acá pueden ir otros tipos de emergencias...
+}
+
+export interface IModuloAlertasSeguridad {
+  activo?: boolean;
+  crearAlertas?: boolean;
 }
 
 export interface IModuloColectivos {
