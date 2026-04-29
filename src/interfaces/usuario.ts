@@ -80,6 +80,8 @@ export interface IUpdateCredencialesSeguridad {
   idCliente: string;
   usuario: string;
   clave: string;
+  // Índice del permiso en el array, para distinguir múltiples permisos con el mismo idCliente
+  permisoIndex?: number;
 }
 
 export type Nivel = 'Cliente' | 'Grupo' | 'Entidad';
