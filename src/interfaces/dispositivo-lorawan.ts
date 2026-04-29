@@ -183,8 +183,9 @@ export interface IDispositivoLuminariaACTIS {
   frecReportePeriodico?: number;
   frecReporteEnergia?: number;
 
+  // ===== FECHA/HORA LUMINARIA (Puerto 121) =====
   reporteFechaHora?: {
-    reportada?: string; // cuando el dispositivo/evento dice que ocurrió
+    reportada?: string; // cuando el dispositivo dice que ocurrió
     receivedAt?: string; // cuando la api lo recibió
   };
 
