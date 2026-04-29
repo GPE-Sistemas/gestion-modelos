@@ -183,6 +183,11 @@ export interface IDispositivoLuminariaACTIS {
   frecReportePeriodico?: number;
   frecReporteEnergia?: number;
 
+  reporteFechaHora?: {
+    reportada?: string; // cuando el dispositivo/evento dice que ocurrió
+    receivedAt?: string; // cuando la api lo recibió
+  };
+
   // ===== CONSUMO ACUMULADO =====
   // Energía total acumulada calculada por integración temporal (kWh)
   energiaTotal?: number;
