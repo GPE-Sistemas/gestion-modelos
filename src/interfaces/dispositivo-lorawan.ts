@@ -4,6 +4,13 @@ import { IComando } from './comando';
 import { IModeloDispositivo } from './modelo-dispositivo';
 import { IModoLuminaria, IReporteGenerico } from './reporte-generico';
 
+//Las luminarias ACTIS pueden tener más de un modo de funcionamiento en simultáneo (ej: astronómico + fotocélula para el encendido).
+export interface IModosACTIS {
+  fotocelula?: boolean;
+  astronomico?: boolean;
+  manual?: boolean;
+  rele?: boolean;
+}
 //Notas: En el caso de estos dispositivos:
 // Potencia de dispositivo GPE = consumo instantáneo (W)
 // Energía de dispositivo GPE = Reactive Power de dispositivo Wellness = Consumo acumulado (kWh)
@@ -131,6 +138,9 @@ export interface IDispositivoLuminariaACTIS {
     apagadoHabilitado?: boolean; // bit3
   };
   iniciarEncendida?: boolean; // bit4 - Estado inicial al salir de modo manual
+
+  modoEncendido?: IModosACTIS;
+  modoApagado?: IModosACTIS;
 
   // ===== COORDENADAS GPS (Puerto 14) =====
   coordenadas?: {
