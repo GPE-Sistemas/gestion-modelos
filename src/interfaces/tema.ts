@@ -19,7 +19,7 @@ export interface IRangoRecurrenteAnual {
 
 export interface IDecal {
   urlAsset: string;
-  tamañoPct?: number; // 0-100
+  tamanoPct?: number; // 0-100
 }
 
 export interface IEfectoFullscreen {
