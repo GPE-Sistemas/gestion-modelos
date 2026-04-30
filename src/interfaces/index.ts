@@ -69,3 +69,4 @@ export * from './log-generico';
 export * from './rol';
 export * from './auditoria';
 export * from './listado-categoria';
+export * from './tema';
