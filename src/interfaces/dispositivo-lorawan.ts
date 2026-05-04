@@ -138,6 +138,7 @@ export interface IDispositivoLuminariaACTIS {
     apagadoHabilitado?: boolean; // bit3
   };
   iniciarEncendida?: boolean; // bit4 - Estado inicial al salir de modo manual
+  modoRele?: boolean; //No tiene puerto, es una configuración aparte
 
   modoEncendido?: IModosACTIS;
   modoApagado?: IModosACTIS;
