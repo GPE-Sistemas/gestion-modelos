@@ -170,6 +170,14 @@ export interface IDispositivoLuminariaACTIS {
     periodoConsumo?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 5-7 (minutos)
   };
 
+  // ===== CONFIGURACIÓN DE ACK (Puerto 44) =====
+  configACK?: {
+    periodoHoras?: number; // bit 0-4 (0-31 horas)
+    forzado?: boolean; // bit5 En caso de estar habilitado, al expirar el timer se envía un mensaje vacío solicitando confirmación, en caso contrario se espera al próximo mensaje a enviar para solicitar confirmación
+    ackEstado?: boolean; // bit6 ACK activado en todos los reportes de estado
+    ackConsumo?: boolean; // bit7 ACK activado en todos los reportes de consumo
+  };
+
   // ===== PERFILES DE DIMERIZADO (Puertos 20-30) =====
   perfilesDimming?: IPerfilesDimmingACTIS;
 
