@@ -15,6 +15,7 @@ export interface IModosACTIS {
 // Potencia de dispositivo GPE = consumo instantáneo (W)
 // Energía de dispositivo GPE = Reactive Power de dispositivo Wellness = Consumo acumulado (kWh)
 //Esta es la estructura de la config de un dispositivoGPE. A partir de sus valores se va a generar un payload para cambiar la configuración del dispositivo
+
 export interface IConfigDispositivoGPEPayload {
   //Config byte
   mode?: IModoLuminaria;
@@ -31,6 +32,54 @@ export interface IConfigDispositivoGPEPayload {
   timeZone?: number;
   frecReporte?: number;
   dataRate?: number;
+}
+// ===== MODO ACTIS (Puerto 10) =====
+//Uplinks asociados:
+// puerto 10 (si se consulta con downlink al puerto 15, devuelve el modo actual configurado)
+// puerto 131 (llega de manera periódica o se puede consultar por puerto 42, indica con qué modo se apagó/encendió una luminaria)
+//Downlinks asociados:
+//puerto 11 (encendido manual, con opción de salir por fotocélula o reloj astronómico)
+//puerto 15 (se puede consultar la configuración de modo)
+//puerto 42 (consulta el estado de la luminaria)
+export interface PayloadSetModeActis {
+  modoFotocelula?: {
+    encendidoHabilitado?: boolean; // bit0
+    apagadoHabilitado?: boolean; // bit1
+  };
+  modoRelojAstronomico?: {
+    encendidoHabilitado?: boolean; // bit2
+    apagadoHabilitado?: boolean; // bit3
+  };
+  iniciarEncendida?: boolean; // bit4 - Estado inicial al salir de modo manual
+  modoRele?: boolean; //Es un flag que se incluye para generar el comando que se enviará a Chirpstack
+}
+
+// ===== PAYLOAD MODO MANUAL ACTIS (Puerto 11) =====
+//Uplinks asociados:
+// puerto 10 (si se consulta con downlink al puerto 15, devuelve el modo de la luminaria)
+//puerto 131 (llega de manera periódica o se puede consultar por puerto 42, indica si la luminaria está encendida o apagada y en qué modo se apagó/encendió una luminaria)
+// Downlinks asociados:
+//puerto 10 (cambia el modo de la luminaria)
+export interface PayloadSetManualActis {
+  estadoManual?: {
+    nivelDimming?: number; // 0-31 (31 = 100%)
+    encendido?: boolean;
+    salirPorFotocelula?: boolean;
+    salirPorRelojAstronomico?: boolean;
+  };
+}
+
+// ===== PAYLOAD GET STATE ACTIS (Puerto 42) =====
+//Uplinks asociados:
+// puerto 131 (info de estado)
+//puerto 130 (reporte energía)
+//puerto 120 (sensado de la fotocélula)
+//puerto 121 (reporte fecha/hora)
+export interface PayloadGetStateActis {
+  reporteEnergia: boolean;
+  reporteEstado?: boolean;
+  fotocelula?: boolean;
+  fecha?: string;
 }
 
 export interface IPaquetesDispositivoLorawan {
@@ -128,97 +177,60 @@ export interface IPerfilesDimmingACTIS {
 
 // Configuración para dispositivos ACTIS FING
 export interface IDispositivoLuminariaACTIS {
-  // ===== MODOS DE FUNCIONAMIENTO (Puerto 10) =====
-  modoFotocelula?: {
-    encendidoHabilitado?: boolean; // bit0
-    apagadoHabilitado?: boolean; // bit1
-  };
-  modoRelojAstronomico?: {
-    encendidoHabilitado?: boolean; // bit2
-    apagadoHabilitado?: boolean; // bit3
-  };
-  iniciarEncendida?: boolean; // bit4 - Estado inicial al salir de modo manual
-  modoRele?: boolean; //No tiene puerto, es una configuración aparte
-
+  // ===== MODOS (Puerto 10 consultado por 15 / modo manual por 11 / reporte por 131) =====
   modoEncendido?: IModosACTIS;
   modoApagado?: IModosACTIS;
+  iniciarEncendida?: boolean;
 
-  // ===== COORDENADAS GPS (Puerto 14) =====
+  // ===== COORDENADAS GPS (Puerto 14 consultado por 15) =====
   coordenadas?: {
-    latitud?: number; // float
-    longitud?: number; // float
+    geojson?: IGeoJSONPoint;
     timeZone?: number; // UTC offset en horas
   };
 
-  // ===== FOTOCÉLULA (Puerto 13) =====
+  // ===== FOTOCÉLULA (Puerto 13 consultado por 15) =====
   fotocelula?: {
-    umbralSuperior?: number; // 0-255 (corresponde a 0-3.3V)
+    umbralSuperior?: number; // 0-255 (0-3.3V)
     umbralInferior?: number; // 0-255
-
-    // ===== (Puerto 120) =====
-    promedio?: number; // Valor de luz ambiente (0-255) calculado por el promedio de lecturas realizadas el último minuto
+    promedio?: number; // Puerto 120: promedio último minuto (0-255)
   };
 
-  // ===== RELOJ ASTRONÓMICO (Puerto 12) =====
+  // ===== RELOJ ASTRONÓMICO (Puerto 12 consultado por 15) =====
   relojAstronomico?: {
     offsetAtardecer?: number; // -128 a 127 minutos
     offsetAmanecer?: number; // -128 a 127 minutos
   };
 
-  // ===== ESTADO MANUAL (Puerto 11) =====
-  estadoManual?: {
-    nivelDimming?: number; // 0-31 (31 = 100%)
-    encendido?: boolean;
-    salirPorFotocelula?: boolean;
-    salirPorRelojAstronomico?: boolean;
-  };
-
-  // ===== CONFIGURACIÓN DE REPORTES (Puerto 43) =====
+  // ===== CONFIG REPORTES (Puerto 43 consultado por 45, reportes 130/131) =====
   configReportes?: {
     reportarEncendidoApagado?: boolean; // bit0
     reportarDimerizado?: boolean; // bit1
-    periodoEstado?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 2-4 (minutos)
-    periodoConsumo?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 5-7 (minutos)
+    periodoEstado?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 2-4 (min)
+    periodoEnergia?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 5-7 (min)
   };
 
-  // ===== CONFIGURACIÓN DE ACK (Puerto 44) =====
+  // ===== CONFIG ACK (Puerto 44 consultado por 45) =====
   configACK?: {
-    periodoHoras?: number; // bit 0-4 (0-31 horas)
-    forzado?: boolean; // bit5 En caso de estar habilitado, al expirar el timer se envía un mensaje vacío solicitando confirmación, en caso contrario se espera al próximo mensaje a enviar para solicitar confirmación
-    ackEstado?: boolean; // bit6 ACK activado en todos los reportes de estado
-    ackConsumo?: boolean; // bit7 ACK activado en todos los reportes de consumo
+    periodoHoras?: number; // bits 0-4 (0-31 horas)
+    forzado?: boolean; // bit5: envía mensaje vacío al expirar timer
+    ackEstado?: boolean; // bit6
+    ackEnergia?: boolean; // bit7
   };
 
-  // ===== PERFILES DE DIMERIZADO (Puertos 20-30) =====
+  // ===== PERFILES DIMERIZADO (Puertos 20-30) =====
   perfilesDimming?: IPerfilesDimmingACTIS;
 
-  // ===== VERSIONES FIRMWARE =====
+  // ===== FIRMWARE =====
   versionFirmware?: string; // Puerto 110
   versionModuloLoRa?: string; // Puerto 111
 
-  // ===== ALARMAS=====
+  // ===== ALARMAS =====
   alarma?: string;
-  // =====FRECUENCIA DE REPORTES=====
-  frecReportePeriodico?: number;
-  frecReporteEnergia?: number;
 
-  // ===== FECHA/HORA LUMINARIA (Puerto 121) =====
+  // ===== FECHA/HORA (Puerto 121) =====
   reporteFechaHora?: {
-    reportada?: string; // cuando el dispositivo dice que ocurrió
-    receivedAt?: string; // cuando la api lo recibió
-  };
-
-  // ===== CONSUMO ACUMULADO =====
-  // Energía total acumulada calculada por integración temporal (kWh)
-  energiaTotal?: number;
-  // Último reporte de energía para cálculo diferencial
-  ultimoReporteEnergia?: {
-    timestamp?: string;
-    voltaje?: number; // V
-    corriente?: number; // mA
-    potencia?: number; // W
-    factorPotencia?: number;
-    fCnt?: number;
+    reportada?: string; // timestamp del dispositivo
+    receivedAt?: string; // timestamp de recepción API
   };
 }
 
