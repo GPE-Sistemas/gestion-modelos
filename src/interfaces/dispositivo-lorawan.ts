@@ -177,83 +177,60 @@ export interface IPerfilesDimmingACTIS {
 
 // Configuración para dispositivos ACTIS FING
 export interface IDispositivoLuminariaACTIS {
-  // ===== MODOS (Puerto 10) ====
-  //Datos de modo (se completan en base a lo que viene del puerto 10 consultado por puerto 15; puerto 131 obtenido periódicamente o consultado por puerto 42; o puerto 11)
+  // ===== MODOS (Puerto 10 consultado por 15 / modo manual por 11 / reporte por 131) =====
   modoEncendido?: IModosACTIS;
   modoApagado?: IModosACTIS;
   iniciarEncendida?: boolean;
 
-  // ===== COORDENADAS GPS (Puerto 14) =====
-  //Uplinks asociados:
-  // puerto 14 (si se consulta con downlink al puerto 15, devuelve config coordenadas)
-  //Donwlinks asociados:
-  //puerto 15 (se puede consultar la configuración de coordenadas)
+  // ===== COORDENADAS GPS (Puerto 14 consultado por 15) =====
   coordenadas?: {
-    geojson?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
-    timeZone?: number; // UTC offset en horas}
+    geojson?: IGeoJSONPoint;
+    timeZone?: number; // UTC offset en horas
   };
 
-  // ===== FOTOCÉLULA (Puerto 13) =====
-  //Uplinks asociados:
-  // puerto 13 (si se consulta con downlink al puerto 15, devuelve config fotocélula)
-  //Donwlinks asociados:
-  //puerto 15 (se puede consultar la configuración de fotocélula)
+  // ===== FOTOCÉLULA (Puerto 13 consultado por 15) =====
   fotocelula?: {
-    umbralSuperior?: number; // 0-255 (corresponde a 0-3.3V)
+    umbralSuperior?: number; // 0-255 (0-3.3V)
     umbralInferior?: number; // 0-255
-    // ===== (Puerto 120) =====
-    promedio?: number; // Valor de luz ambiente (0-255) calculado por el promedio de lecturas realizadas el último minuto
+    promedio?: number; // Puerto 120: promedio último minuto (0-255)
   };
 
-  // ===== RELOJ ASTRONÓMICO (Puerto 12) =====
-  //Uplinks asociados:
-  // puerto 13 (si se consulta con downlink al puerto 15, devuelve el offset del reloj astronómico)
-  //Donwlinks asociados:
-  //puerto 15 (se puede consultar la configuración de offset del reloj astronómico)
+  // ===== RELOJ ASTRONÓMICO (Puerto 12 consultado por 15) =====
   relojAstronomico?: {
     offsetAtardecer?: number; // -128 a 127 minutos
     offsetAmanecer?: number; // -128 a 127 minutos
   };
 
-  // ===== CONFIGURACIÓN DE REPORTES (Puerto 43) =====
-  //Uplinks asociados:
-  //puerto 131 (envía los reportes de estado)
-  //puerto 130 (envía los reportes de energia)
-  //puerto 43 (si se consulta con downlink al puerto 45, devuelve config de reportes)
-  //downlinks asociados:
-  //puerto 45 (se puede consultar la configuración de reportes)
+  // ===== CONFIG REPORTES (Puerto 43 consultado por 45, reportes 130/131) =====
   configReportes?: {
-    reportarEncendidoApagado?: boolean; // bit0 envía reportes de estado con cada encendido
-    reportarDimerizado?: boolean; // bit1 envía reportes de estado con cada cambio de nivel de dimerizado
-    periodoEstado?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 2-4 (minutos) cada cuánto se envía el reporte de estado
-    periodoEnergia?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 5-7 (minutos) cada cuánto se envía el reporte de energía/consumo
+    reportarEncendidoApagado?: boolean; // bit0
+    reportarDimerizado?: boolean; // bit1
+    periodoEstado?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 2-4 (min)
+    periodoEnergia?: 0 | 5 | 15 | 30 | 60 | 90 | 120 | 180; // bits 5-7 (min)
   };
 
-  // ===== CONFIGURACIÓN DE ACK (Puerto 44) =====
-  //Uplinks asociados:
-  //puerto 131 (envía los reportes de estado)
-  //puerto 130 (envía los reportes de energia)
-  //puerto 44 (si se consulta con downlink al puerto 45, devuelve config de reportes)
-  //downlinks asociados:
-  //puerto 45 (se puede consultar la configuración de reportes)
+  // ===== CONFIG ACK (Puerto 44 consultado por 45) =====
   configACK?: {
-    periodoHoras?: number; // bit 0-4 (0-31 horas)
-    forzado?: boolean; // bit5 En caso de estar habilitado, al expirar el timer se envía un mensaje vacío solicitando confirmación, en caso contrario se espera al próximo mensaje a enviar para solicitar confirmación
-    ackEstado?: boolean; // bit6 ACK activado en todos los reportes de estado
-    ackEnergia?: boolean; // bit7 ACK activado en todos los reportes de energía
+    periodoHoras?: number; // bits 0-4 (0-31 horas)
+    forzado?: boolean; // bit5: envía mensaje vacío al expirar timer
+    ackEstado?: boolean; // bit6
+    ackEnergia?: boolean; // bit7
   };
 
-  // ===== PERFILES DE DIMERIZADO (Puertos 20-30) =====
+  // ===== PERFILES DIMERIZADO (Puertos 20-30) =====
   perfilesDimming?: IPerfilesDimmingACTIS;
-  // ===== VERSIONES FIRMWARE =====
+
+  // ===== FIRMWARE =====
   versionFirmware?: string; // Puerto 110
   versionModuloLoRa?: string; // Puerto 111
-  // ===== ALARMAS=====
+
+  // ===== ALARMAS =====
   alarma?: string;
-  // ===== FECHA/HORA LUMINARIA (Puerto 121) =====
+
+  // ===== FECHA/HORA (Puerto 121) =====
   reporteFechaHora?: {
-    reportada?: string; // cuando el dispositivo dice que ocurrió
-    receivedAt?: string; // cuando la api lo recibió
+    reportada?: string; // timestamp del dispositivo
+    receivedAt?: string; // timestamp de recepción API
   };
 }
 
