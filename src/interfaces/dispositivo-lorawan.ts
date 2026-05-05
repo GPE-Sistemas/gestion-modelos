@@ -41,7 +41,7 @@ export interface IConfigDispositivoGPEPayload {
 //puerto 11 (encendido manual, con opción de salir por fotocélula o reloj astronómico)
 //puerto 15 (se puede consultar la configuración de modo)
 //puerto 42 (consulta el estado de la luminaria)
-export interface payloadSetModeActis {
+export interface PayloadSetModeActis {
   modoFotocelula?: {
     encendidoHabilitado?: boolean; // bit0
     apagadoHabilitado?: boolean; // bit1
@@ -60,7 +60,7 @@ export interface payloadSetModeActis {
 //puerto 131 (llega de manera periódica o se puede consultar por puerto 42, indica si la luminaria está encendida o apagada y en qué modo se apagó/encendió una luminaria)
 // Downlinks asociados:
 //puerto 10 (cambia el modo de la luminaria)
-export interface payloadSetManualActis {
+export interface PayloadSetManualActis {
   estadoManual?: {
     nivelDimming?: number; // 0-31 (31 = 100%)
     encendido?: boolean;
@@ -75,7 +75,7 @@ export interface payloadSetManualActis {
 //puerto 130 (reporte energía)
 //puerto 120 (sensado de la fotocélula)
 //puerto 121 (reporte fecha/hora)
-export interface payloadGetStateActis {
+export interface PayloadGetStateActis {
   reporteEnergia: boolean;
   reporteEstado?: boolean;
   fotocelula?: boolean;
