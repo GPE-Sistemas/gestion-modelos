@@ -40,8 +40,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   ultimoReportePeriodico?: MapaValoresReportePeriodico[T]; // Ultimo reporte periodico recibido
   ultimoReporteEnergia?: MapaValoresReporteEnergia[T]; // Ultimo reporte energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
-  idPerfilDimming?: string; // Valores por defecto para el comando de dimming
-  idPerfilConfig?: string; // Valores por defecto para el comando de configuracion
+  idPerfilConfig?: string;
   tipoEnergizado?: ITipoEnergizado;
 
   // Estado actual de la luminaria
@@ -53,7 +52,6 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   dispositivo?: IDispositivoLorawan;
   modeloDispositivo?: IModeloDispositivo;
   grupos?: IGrupo[];
-  perfilDimming?: IConfigPerfil;
   perfilConfig?: IConfigPerfil;
 }
 
@@ -67,7 +65,6 @@ type OmitirCreate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilDimming'
   | 'perfilConfig';
 
 export type ICreateLuminaria =
@@ -84,7 +81,6 @@ type OmitirUpdate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilDimming'
   | 'perfilConfig';
 
 export type IUpdateLuminaria =

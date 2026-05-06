@@ -15,8 +15,7 @@ export interface IGrupo {
   nombre?: string;
   color?: string;
   categoria?: CategoriaGrupo;
-  idPerfilDimming?: string; //Valores por defecto para el comando de dimming
-  idPerfilConfig?: string; //Valores por defecto para el comando de configuracion
+  idPerfilConfig?: string;
 
   // Integracion Soflex
   fleetId?: string;
@@ -25,7 +24,6 @@ export interface IGrupo {
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
-  perfilDimming?: IConfigPerfil;
   perfilConfig?: IConfigPerfil;
 }
 
