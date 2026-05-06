@@ -4,6 +4,11 @@ import { IComando } from './comando';
 import { IModeloDispositivo } from './modelo-dispositivo';
 import { IModoLuminaria, IReporteGenerico } from './reporte-generico';
 
+export type TipoDispositivoLorawan =
+  | 'Luminaria GPE'
+  | 'Luminaria Wellness'
+  | 'Luminaria ACTIS FING';
+
 //Las luminarias ACTIS pueden tener más de un modo de funcionamiento en simultáneo (ej: astronómico + fotocélula para el encendido).
 export interface IModosACTIS {
   fotocelula?: boolean;
@@ -16,15 +21,15 @@ export interface IModosACTIS {
 // Energía de dispositivo GPE = Reactive Power de dispositivo Wellness = Consumo acumulado (kWh)
 //Esta es la estructura de la config de un dispositivoGPE. A partir de sus valores se va a generar un payload para cambiar la configuración del dispositivo
 
-export interface IConfigDispositivoGPEPayload {
-  //Config byte
+export interface IConfigGeneralGPE {
+  //Llegan con cada reporte de estado
   mode?: IModoLuminaria;
   estadoRele?: boolean;
   dimmerHabilitado?: boolean;
   energiaExterna?: boolean;
   adrHabilitado?: boolean;
 
-  //Otros
+  //Datos de configuración (llegan al inicio del firmware o por pedido de downlink)
   limLuzInferior?: number;
   limLuzSuperior?: number;
   offsetGPSAmanecer?: number;
@@ -82,64 +87,6 @@ export interface PayloadGetStateActis {
   fecha?: string;
 }
 
-export interface IPaquetesDispositivoLorawan {
-  inicioSesion?: Date; //Cuando inició la sesión actual del dispositivo
-  fCntInicial?: number; // fCnt inicial (normalmente 0, 1 o 2)
-  ultimoFcnt?: number; // Último fCnt recibido
-  framesRecibidos?: number; //Cantidad de frames recibidos
-  perdidaPaquetes?: number; // Porcentaje de pérdida de paquetes
-}
-export interface IConfigDispositivoLuminaria {
-  // TODO: Definir los tipos de las propiedades cuando sean conocidos
-  [key: string]: any;
-}
-
-// Union type para config (retrocompatibilidad - ahora se usa MapaConfigDispositivo)
-export type IDispositivoLuminariaConfig =
-  | IDispositivoLuminariaGPE
-  | IDispositivoLuminariaWellness
-  | IDispositivoLuminariaACTIS;
-
-//Si se trata de una luminaria Wellness, esta es la info que se va a cargar en la config del dispositivo
-export interface IDispositivoLuminariaGPE {
-  //Datos de configuración (llegan al inicio del firmware o por pedido de downlink)
-  limLuzInferior?: number;
-  limLuzSuperior?: number;
-  offsetGPSAmanecer?: number;
-  offsetGPSAtardecer?: number;
-  timeZone?: number;
-  frecReporte?: number;
-  dataRate?: number;
-
-  //Datos de estado (llegan cada 10 minutos)
-  mode?: IModoLuminaria;
-  estadoRele?: boolean;
-  dimmerHabilitado?: boolean;
-  energiaExterna?: boolean;
-  adrHabilitado?: boolean;
-  alarma?: string;
-
-  //Datos de consumo (llegan cada 1 hora)
-  corriente?: number; //mA
-  voltaje?: number; //V
-  potencia?: number; //W
-  energia?: number; //kWh
-  energiaTotal?: number; //kWh
-  factorPotencia?: number;
-
-  //Configuración modo calendario
-  configCalendario?: IDimmerCalendarioConfig;
-}
-export interface IDispositivoLuminariaWellness {
-  mode?: IModoLuminaria;
-  activePowerTotal?: number; // kWh - acumulada (A pesar de que digen power, realmente son energía)
-  reactivePowerTotal?: number; // kWh - acumulada
-  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
-  alarma?: string;
-}
-
-// ===== ACTIS FING =====
-
 // Estructura de perfiles de dimerizado para ACTIS FING
 export interface ICambioDimmingACTIS {
   offsetMinutos?: number; // -720 a 720 desde medianoche
@@ -173,6 +120,39 @@ export interface IPerfilesDimmingACTIS {
   perfilDiaEspecial2?: IPerfilDiaEspecial;
   perfilDiaEspecial3?: IPerfilDiaEspecial;
   perfilDiaEspecial4?: IPerfilDiaEspecial;
+}
+
+export interface IPaquetesDispositivoLorawan {
+  inicioSesion?: Date; //Cuando inició la sesión actual del dispositivo
+  fCntInicial?: number; // fCnt inicial (normalmente 0, 1 o 2)
+  ultimoFcnt?: number; // Último fCnt recibido
+  framesRecibidos?: number; //Cantidad de frames recibidos
+  perdidaPaquetes?: number; // Porcentaje de pérdida de paquetes
+}
+
+/* ────────────────────────────────────────────────
+ *  CONFIGURACIONES DE DISPOSITIVOS
+ * ────────────────────────────────────────────────*/
+
+// Union type para config (retrocompatibilidad - ahora se usa MapaConfigDispositivo)
+export type IDispositivoLuminariaConfig =
+  | IDispositivoLuminariaGPE
+  | IDispositivoLuminariaWellness
+  | IDispositivoLuminariaACTIS;
+
+export interface IDispositivoLuminariaGPE {
+  configGeneral?: IConfigGeneralGPE;
+  configCalendario?: IDimmerCalendarioConfig;
+  alarma?: string;
+}
+
+//⚠️⚠️⚠️⚠️⚠️ No deberían haber datos energéticos en las configuraciones de los dispositivos. Peor bueno, son Wellness y ni se usan
+export interface IDispositivoLuminariaWellness {
+  mode?: IModoLuminaria;
+  activePowerTotal?: number; // kWh - acumulada (A pesar de que digen power, realmente son energía)
+  reactivePowerTotal?: number; // kWh - acumulada
+  turnOnOffStatus?: boolean; // True: Encendido, False: Apagado
+  alarma?: string;
 }
 
 // Configuración para dispositivos ACTIS FING
@@ -234,15 +214,10 @@ export interface IDispositivoLuminariaACTIS {
   };
 }
 
-export type TipoDispositivoLorawan =
-  | 'Luminaria GPE'
-  | 'Luminaria Wellness'
-  | 'Luminaria ACTIS FING';
-
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO → CONFIG (TYPE-SAFE)
  * ────────────────────────────────────────────────*/
-
+//Estas son las configs reales de los dispositivos, las cuales se obtienen por uplinks
 export type MapaConfigDispositivo = {
   'Luminaria GPE': IDispositivoLuminariaGPE;
   'Luminaria Wellness': IDispositivoLuminariaWellness;
