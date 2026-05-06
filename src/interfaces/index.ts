@@ -6,7 +6,7 @@ export * from './client';
 export * from './cliente';
 export * from './codigos-dispositivo';
 export * from './comando';
-export * from './config-dispositivo';
+export * from './config-deseada';
 export * from './config-evento-usuario';
 export * from './config-marker';
 export * from './config-reenvios';
