@@ -40,8 +40,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   ultimoReportePeriodico?: MapaValoresReportePeriodico[T]; // Ultimo reporte periodico recibido
   ultimoReporteEnergia?: MapaValoresReporteEnergia[T]; // Ultimo reporte energia recibido
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
-  idPerfilDimming?: string; // Valores por defecto para el comando de dimming
-  idPerfilConfig?: string; // Valores por defecto para el comando de configuracion
+  idPerfilConfig?: string;
   tipoEnergizado?: ITipoEnergizado;
 
   // Estado actual de la luminaria
