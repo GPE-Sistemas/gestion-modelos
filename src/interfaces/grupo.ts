@@ -24,7 +24,6 @@ export interface IGrupo {
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
-  perfilDimming?: IConfigPerfil;
   perfilConfig?: IConfigPerfil;
 }
 

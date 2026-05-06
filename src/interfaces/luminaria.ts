@@ -52,7 +52,6 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   dispositivo?: IDispositivoLorawan;
   modeloDispositivo?: IModeloDispositivo;
   grupos?: IGrupo[];
-  perfilDimming?: IConfigPerfil;
   perfilConfig?: IConfigPerfil;
 }
 
@@ -66,7 +65,6 @@ type OmitirCreate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilDimming'
   | 'perfilConfig';
 
 export type ICreateLuminaria =
@@ -83,7 +81,6 @@ type OmitirUpdate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilDimming'
   | 'perfilConfig';
 
 export type IUpdateLuminaria =
