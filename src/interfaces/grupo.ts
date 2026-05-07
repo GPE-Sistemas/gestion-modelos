@@ -15,7 +15,7 @@ export interface IGrupo {
   nombre?: string;
   color?: string;
   categoria?: CategoriaGrupo;
-  idPerfilConfig?: string;
+  idPerfilConfig?: string[];
 
   // Integracion Soflex
   fleetId?: string;
@@ -24,7 +24,7 @@ export interface IGrupo {
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
-  perfilConfig?: IConfigPerfil;
+  perfilConfigs?: IConfigPerfil[];
 }
 
 type OmitirCreate = '_id' | 'cliente';
