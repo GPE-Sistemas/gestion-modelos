@@ -56,7 +56,7 @@ export interface IConfigDeseadaBase<T extends keyof MapaConfigDeseada> {
   // Info de carga
   fechaCreacion?: string; // Default: Date.now
   fechaAplicacion?: string;
-  deveui?: string;
+  idEntidad?: string;
   config?: MapaConfigDeseada[T];
   estado?: Estado;
 
