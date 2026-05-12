@@ -9,7 +9,7 @@ import {
 export type Estado = 'Coincide' | 'No coincide';
 
 /* ────────────────────────────────────────────────
- *  CONFIGS DESEADAS POR TIPO
+ *  CONFIGS DESEADAS POR TIPO (Tienen correlación con las configuraciones REALES de los dispositivos para hacer comparaciones)
  *  (subset de MapaConfigDispositivo: se excluyen
  *   alarma, reporteFechaHora, activePowerTotal,
  *   reactivePowerTotal, turnOnOffStatus)
