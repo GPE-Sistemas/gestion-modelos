@@ -72,6 +72,8 @@ export interface IActivo {
   ///alta de activo
   fechaAlta?: string;
   imagenes?: string[];
+  // es la imagen en la poscion 0 de imagenes, pero reducida para usarla en el mapa
+  imagenMiniatura?: string;
   identificacion?: string;
   categoria?: ICategoriaActivo;
   funcion?: FuncionActivo;
