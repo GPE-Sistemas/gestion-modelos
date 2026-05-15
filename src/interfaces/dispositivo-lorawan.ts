@@ -4,6 +4,10 @@ import { IComando } from './comando';
 import { IModeloDispositivo } from './modelo-dispositivo';
 import { IModoLuminaria, IReporteGenerico } from './reporte-generico';
 
+/* ────────────────────────────────────────────────
+ *  TIPOS, PAYLOADS E INTERFACES
+ * ────────────────────────────────────────────────*/
+
 export type TipoDispositivoLorawan =
   | 'Luminaria GPE'
   | 'Luminaria Wellness'
@@ -80,11 +84,40 @@ export interface PayloadSetManualActis {
 //puerto 130 (reporte energía)
 //puerto 120 (sensado de la fotocélula)
 //puerto 121 (reporte fecha/hora)
+//Cada bit del byte enviado solicita un reporte distinto del controlador.
 export interface PayloadGetStateActis {
-  reporteEnergia: boolean;
-  reporteEstado?: boolean;
-  fotocelula?: boolean;
-  fecha?: string;
+  reporteEnergia?: boolean; // bit0 - puerto 130
+  reporteEstado?: boolean; // bit1 - puerto 131
+  fotocelula?: boolean; // bit2 - puerto 120
+  fechaHora?: boolean; // bit3 - puerto 121
+}
+
+// ===== PAYLOAD GET CONFIG ACTIS (Puerto 15) =====
+//Uplinks asociados:
+// puerto 10 (setMode)
+// puerto 12 (setOffset - reloj astronómico)
+// puerto 13 (setThreshold - umbrales fotocélula)
+// puerto 14 (setCoordinates)
+//Cada bit del byte enviado al puerto 15 solicita la configuración correspondiente.
+export interface PayloadGetConfigActis {
+  setMode?: boolean; // bit0 - puerto 10
+  setOffset?: boolean; // bit1 - puerto 12
+  setThreshold?: boolean; // bit2 - puerto 13
+  setCoordinates?: boolean; // bit3 - puerto 14
+}
+
+// ===== PAYLOAD GET CONFIG GENERAL ACTIS (Puerto 45) =====
+//Uplinks asociados:
+// puerto 110 (versión FW microcontrolador)
+// puerto 111 (versión FW módulo XDot)
+// puerto 43  (configuración de reportes -> setReportConfig)
+// puerto 44  (configuración de ACKs    -> setACKConfig)
+//Cada bit del byte enviado solicita un parámetro distinto de la configuración general.
+export interface PayloadGetConfigGeneralActis {
+  versionFirmwareMCU?: boolean; // bit0 - puerto 110
+  versionFirmwareXDot?: boolean; // bit1 - puerto 111
+  configReportes?: boolean; // bit2 - puerto 43 (setReportConfig)
+  configACK?: boolean; // bit3 - puerto 44 (setACKConfig)
 }
 
 // Estructura de perfiles de dimerizado para ACTIS FING
