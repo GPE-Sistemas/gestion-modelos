@@ -1,5 +1,8 @@
 import { ICliente } from './cliente';
-import { TipoDispositivoLorawan } from './dispositivo-lorawan';
+import {
+  IDispositivoLorawan,
+  TipoDispositivoLorawan,
+} from './dispositivo-lorawan';
 import { IModeloDispositivo } from './modelo-dispositivo';
 
 // Estado de cada job en la cola de downlinks. Se persiste en la BD para
@@ -75,7 +78,7 @@ export interface IDownlinkJob {
   //Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
-  modeloDispositivo?: IModeloDispositivo;
+  dispositivo?: IDispositivoLorawan;
 }
 
 type OmitirCreate =
