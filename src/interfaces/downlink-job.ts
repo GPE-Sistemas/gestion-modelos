@@ -1,4 +1,6 @@
+import { ICliente } from './cliente';
 import { TipoDispositivoLorawan } from './dispositivo-lorawan';
+import { IModeloDispositivo } from './modelo-dispositivo';
 
 // Estado de cada job en la cola de downlinks. Se persiste en la BD para
 // auditoría y para que la UI pueda mostrar progreso. Espejo (en parte) del
@@ -69,6 +71,11 @@ export interface IDownlinkJob {
   fechaProgramada?: string; // cuando se encola en BullMQ con delay
   fechaEnviado?: string;
   fechaConfirmado?: string;
+
+  //Populate
+  cliente?: ICliente;
+  ancestros?: ICliente[];
+  modeloDispositivo?: IModeloDispositivo;
 }
 
 type OmitirCreate =
