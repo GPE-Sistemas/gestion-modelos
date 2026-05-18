@@ -163,6 +163,17 @@ export interface IPaquetesDispositivoLorawan {
   perdidaPaquetes?: number; // Porcentaje de pérdida de paquetes
 }
 
+// Último gateway que captó el dispositivo. Se actualiza en cada uplink (o cada
+// cierto TTL, en lora-luminarias) eligiendo el de mejor SNR (relación señal/ruido). Lo usa el orchestrator de downlinks (en el Cron)
+// para hacer throttling por gateway (airtime compartido).
+
+export interface IUltimoGateway {
+  gatewayEui?: string;
+  rssi?: number;
+  snr?: number;
+  fechaCaptura?: string; // ISO timestamp
+}
+
 /* ────────────────────────────────────────────────
  *  CONFIGURACIONES DE DISPOSITIVOS
  * ────────────────────────────────────────────────*/
@@ -283,6 +294,7 @@ export interface IDispositivoLorawanBase<
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
   paquetes?: IPaquetesDispositivoLorawan; //Información para calcular la pérdida de paquetes
+  ultimoGateway?: IUltimoGateway; //Gateway con mejor señal en el último uplink capturado
 
   // Datos para el lora server
   deveui?: string;

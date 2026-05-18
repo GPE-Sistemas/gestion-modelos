@@ -1,3 +1,4 @@
+export * from "./config-diff";
 export * from "./coordenadas";
 export * from "./direccionV2";
 export * from "./downlink";

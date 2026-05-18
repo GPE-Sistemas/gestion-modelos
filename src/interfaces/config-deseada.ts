@@ -1,18 +1,22 @@
+import { IGeoJSONPoint } from '../auxiliares';
 import { ICliente } from './cliente';
 import {
   IDispositivoLorawan,
   IDispositivoLuminariaACTIS,
   IDispositivoLuminariaGPE,
   IDispositivoLuminariaWellness,
+  IModosACTIS,
+  IPerfilesDimmingACTIS,
 } from './dispositivo-lorawan';
 
-export type Estado = 'Coincide' | 'No coincide';
+// 'Pendiente' indica creada/modificada pero aún no comparada por el reconciliador.
+export type Estado = 'Coincide' | 'No coincide' | 'Pendiente';
 
 /* ────────────────────────────────────────────────
  *  CONFIGS DESEADAS POR TIPO (Tienen correlación con las configuraciones REALES de los dispositivos para hacer comparaciones)
  *  (subset de MapaConfigDispositivo: se excluyen
  *   alarma, reporteFechaHora, activePowerTotal,
- *   reactivePowerTotal, turnOnOffStatus)
+ *   reactivePowerTotal, turnOnOffStatus, versiones de firmware, etc. — son campos no configurables)
  * ────────────────────────────────────────────────*/
 
 export type IConfigDeseadaLuminariaGPE = Omit<
@@ -27,7 +31,7 @@ export type IConfigDeseadaLuminariaWellness = Omit<
 
 export type IConfigDeseadaLuminariaACTIS = Omit<
   IDispositivoLuminariaACTIS,
-  'alarma' | 'reporteFechaHora'
+  'alarma' | 'reporteFechaHora' | 'versionFirmware' | 'versionModuloLoRa'
 >;
 
 /* ────────────────────────────────────────────────
@@ -39,6 +43,21 @@ export type MapaConfigDeseada = {
   'Luminaria Wellness': IConfigDeseadaLuminariaWellness;
   'Luminaria ACTIS FING': IConfigDeseadaLuminariaACTIS;
 };
+
+/* ────────────────────────────────────────────────
+ *  DIFFS DE RECONCILIACIÓN
+ * ────────────────────────────────────────────────*/
+
+// Cada diff identifica un campo que no coincide entre la config deseada y la
+// real del dispositivo. El reconciliador lo usa para resolver qué downlink
+// disparar y qué get encadenar para refrescar dispositivo.config tras el set.
+export interface IDiffConfig {
+  campo: string; // dot path (ej: "fotocelula.umbralSuperior")
+  esperado: unknown;
+  real: unknown;
+  puertoDownlink: number; // puerto del set corrector
+  puertoGet?: number; // puerto del get que refresca dispositivo.config (ACTIS)
+}
 
 /* ────────────────────────────────────────────────
  *  BASE CONFIG DESEADA (GENÉRICO)
@@ -59,6 +78,13 @@ export interface IConfigDeseadaBase<T extends keyof MapaConfigDeseada> {
   idEntidad?: string;
   config?: MapaConfigDeseada[T];
   estado?: Estado;
+
+  // Reconciliación (escritos por el cron reconciliador)
+  diffs?: IDiffConfig[]; // campos en discrepancia tras la última comparación
+  ultimaComparacion?: string; // ISO timestamp de la última comparación realizada por el reconciliador
+  ultimaReconciliacion?: string; // ISO timestamp del último set disparado
+  reintentosReconciliacion?: number; // counter para back-off
+  bloqueadoHasta?: string; // ISO. Si > now no se reintenta (circuit breaker)
 
   // Virtuals
   dispositivo?: IDispositivoLorawan;
