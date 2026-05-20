@@ -15,6 +15,7 @@ export type AccionesRol =
   | 'Logs - Ver logs despachos'
   | 'Logs - Ver logs eventos trackers test'
   | 'Logs - Ver logs reenvios'
+  | 'Logs - Ver métricas downlinks'
   // *******************************************
   // MODULO ADMINISTRACIÓN
   // *******************************************
