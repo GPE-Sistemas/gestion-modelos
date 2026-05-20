@@ -15,6 +15,7 @@ export * from './despacho';
 export * from './dispositivo-alarma';
 export * from './dispositivo-lorawan';
 export * from './documentacion';
+export * from './downlink-job';
 export * from './envio-vehiculo';
 export * from './estado-entidad';
 export * from './excepcion';
