@@ -42,6 +42,7 @@ export * from './tracker';
 export * from './tratamiento-evento';
 export * from './twilio-templates';
 export * from './ubicacion';
+export * from './visita-ubicacion';
 export * from './usuario';
 export * from './destinatario-asistencia';
 export * from './emergencias';
