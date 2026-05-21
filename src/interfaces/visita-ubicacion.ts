@@ -22,6 +22,8 @@ export interface IVisitaUbicacion {
   cantidadReportes?: number;
   yaEstabaAlInicio?: boolean;
   seguiaAlFinal?: boolean;
+  entradaCoords?: [number, number];
+  salidaCoords?: [number, number];
   trips?: IVisitaTrip[];
 }
 
