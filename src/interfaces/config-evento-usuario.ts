@@ -64,17 +64,6 @@ export interface CondicionNotificacion {
     divergenciaGPS?: boolean;
   };
 
-  luminaria?: {
-    potencia?: {
-      'superior a': number;
-      'inferior a': number;
-    };
-    voltaje?: {
-      'superior a': number;
-      'inferior a': number;
-    };
-  };
-
   alarma?: {
     // se le asigna el codigo reportado, y notifica si llega ese evento dentro del periodo o cronograma
     'llega evento'?: string[];
@@ -112,17 +101,6 @@ export interface CondicionNotificacionCache {
       fuera?: boolean;
     };
     divergenciaGPS?: boolean;
-  };
-
-  luminaria?: {
-    potencia?: {
-      'superior a': number;
-      'inferior a': number;
-    };
-    voltaje?: {
-      'superior a': number;
-      'inferior a': number;
-    };
   };
 
   alarma?: {
