@@ -10,19 +10,6 @@ export type FormatosMensajeComunicador =
   | 'Dahua'
   | 'Hikvision';
 
-export interface PotenciasDimerizacionLuminarias {
-  dim10?: number;
-  dim20?: number;
-  dim30?: number;
-  dim40?: number;
-  dim50?: number;
-  dim60?: number;
-  dim70?: number;
-  dim80?: number;
-  dim90?: number;
-  dim100?: number;
-}
-
 export type NivelDimerizacion =
   | 'dim10'
   | 'dim20'
@@ -39,10 +26,10 @@ export type NivelDimerizacion =
 // esperados y sus margenes bidireccionales de tolerancia.
 export interface IPuntoCurvaLuminaria {
   potenciaW?: number; // Wd a este dim (W)
-  factorPotencia?: number; // cfidim a este dim (0..1)
+  factorPotencia?: number; // cfidim a este dim (0..1). También llamado cosφ.
 
-  margenPotenciaSuperior?: number; // alarma si W >= Wd * (1 + pct/100)
-  margenPotenciaInferior?: number; // alarma si W <= Wd * (1 - pct/100)
+  margenPotenciaSuperior?: number; // alarma si W >= Wd * (1 + potencia/100)
+  margenPotenciaInferior?: number; // alarma si W <= Wd * (1 - potencia/100)
   margenFactorPotenciaSuperior?: number; // delta abs — alarma si cosφ > cfidim + margen
   margenFactorPotenciaInferior?: number; // delta abs — alarma si cosφ < cfidim - margen
 }
