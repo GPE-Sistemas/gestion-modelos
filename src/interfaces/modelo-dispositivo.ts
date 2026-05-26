@@ -25,7 +25,7 @@ export type NivelDimerizacion =
 // Punto de la curva: en un nivel de dimerización dado, valores eléctricos
 // esperados y sus margenes bidireccionales de tolerancia.
 export interface IPuntoCurvaLuminaria {
-  potenciaW?: number; // Wd a este dim (W)
+  potencia?: number; // W a un determinado dimming (Wd)
   factorPotencia?: number; // cfidim a este dim (0..1). También llamado cosφ.
 
   margenPotenciaSuperior?: number; // alarma si W >= Wd * (1 + potencia/100)
