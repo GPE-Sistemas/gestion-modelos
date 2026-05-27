@@ -64,22 +64,21 @@ export interface CondicionNotificacion {
     divergenciaGPS?: boolean;
   };
 
-  luminaria?: {
-    potencia?: {
-      'superior a': number;
-      'inferior a': number;
-    };
-    voltaje?: {
-      'superior a': number;
-      'inferior a': number;
-    };
-  };
-
   alarma?: {
     // se le asigna el codigo reportado, y notifica si llega ese evento dentro del periodo o cronograma
     'llega evento'?: string[];
     // se le asigna el codigo reportado, y notifica si no llega ese evento dentro del periodo o cronograma
     'no llega evento'?: string[];
+  };
+  luminaria?: {
+    potencia?: {
+      'superior a'?: number;
+      'inferior a'?: number;
+    };
+    voltaje?: {
+      'superior a'?: number;
+      'inferior a'?: number;
+    };
   };
   usuario?: {
     llegoEn: {
@@ -114,22 +113,21 @@ export interface CondicionNotificacionCache {
     divergenciaGPS?: boolean;
   };
 
-  luminaria?: {
-    potencia?: {
-      'superior a': number;
-      'inferior a': number;
-    };
-    voltaje?: {
-      'superior a': number;
-      'inferior a': number;
-    };
-  };
-
   alarma?: {
     // se le asigna el codigo reportado, y notifica si llega ese evento dentro del periodo o cronograma
     'llega evento'?: string[];
     // se le asigna el codigo reportado, y notifica si no llega ese evento dentro del periodo o cronograma
     'no llega evento'?: string[];
+  };
+  luminaria?: {
+    potencia?: {
+      'superior a'?: number;
+      'inferior a'?: number;
+    };
+    voltaje?: {
+      'superior a'?: number;
+      'inferior a'?: number;
+    };
   };
   usuario?: {
     llegoEn: {

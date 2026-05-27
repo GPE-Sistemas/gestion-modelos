@@ -289,8 +289,8 @@ export interface IDispositivoLorawanBase<
   fechaUltimaComunicacion?: string;
   ultimoReporte?: IReporteGenerico;
   margin?: number; //Es la señal del dispositivo, expresada en dB
-  frecReporte?: number;
-  //En Wellness es 15 minutos, en GPE y ACTIS se considera la frecuencia de reporte periódico
+  tiempoLimiteComunicacion?: number; // Tiempo máximo sin reportar (en horas) antes de generar evento "Sin comunicación".
+
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
   paquetes?: IPaquetesDispositivoLorawan; //Información para calcular la pérdida de paquetes

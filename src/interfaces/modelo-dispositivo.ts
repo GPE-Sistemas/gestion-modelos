@@ -10,22 +10,46 @@ export type FormatosMensajeComunicador =
   | 'Dahua'
   | 'Hikvision';
 
-export interface PotenciasDimerizacionLuminarias {
-  dim10?: number;
-  dim20?: number;
-  dim30?: number;
-  dim40?: number;
-  dim50?: number;
-  dim60?: number;
-  dim70?: number;
-  dim80?: number;
-  dim90?: number;
-  dim100?: number;
+export type NivelDimerizacion =
+  | 'dim10'
+  | 'dim20'
+  | 'dim30'
+  | 'dim40'
+  | 'dim50'
+  | 'dim60'
+  | 'dim70'
+  | 'dim80'
+  | 'dim90'
+  | 'dim100';
+
+// Punto de la curva: en un nivel de dimerización dado, valores eléctricos
+// esperados y sus margenes bidireccionales de tolerancia.
+export interface IPuntoCurvaLuminaria {
+  potencia?: number; // W a un determinado dimming (Wd)
+  factorPotencia?: number; // cfidim a este dim (0..1). También llamado cosφ.
+
+  margenPotenciaSuperior?: number; // alarma si W >= Wd * (1 + potencia/100)
+  margenPotenciaInferior?: number; // alarma si W <= Wd * (1 - potencia/100)
+  margenFactorPotenciaSuperior?: number; // delta abs — alarma si cosφ > cfidim + margen
+  margenFactorPotenciaInferior?: number; // delta abs — alarma si cosφ < cfidim - margen
 }
+
+export type ICurvaDimerizacionLuminaria = {
+  [K in NivelDimerizacion]?: IPuntoCurvaLuminaria;
+};
+
+// Voltaje: independiente del dim.
+export interface IConfigVoltajeLuminaria {
+  nominalV?: number; // Vn (típicamente 230)
+  margenSuperiorV?: number; // Θv — alarma si V >= Vn + Θv
+  margenInferiorV?: number; // alarma si V <= Vn - margenInferiorV
+}
+
 export interface IDetallesLuminarias {
   horasVida?: number;
-  potencia?: PotenciasDimerizacionLuminarias;
-  voltaje?: number;
+
+  voltaje?: IConfigVoltajeLuminaria;
+  dimerizacion?: ICurvaDimerizacionLuminaria;
 }
 
 export interface IModeloDispositivo {

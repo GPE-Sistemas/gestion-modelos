@@ -77,6 +77,7 @@ export interface IReporteLuminariaGPEEnergia {
   esDeDia?: boolean;
   horaAmanecer?: string;
   horaAtardecer?: string;
+  alarmas?: string[];
 }
 
 export interface IReporteLuminariaWellness {
@@ -92,6 +93,7 @@ export interface IReporteLuminariaWellness {
   lumenes?: number;
   modo?: IModoLuminaria;
   modoForzado?: ModoForzado;
+  alarmas?: string[];
 }
 
 // ===== ACTIS FING =====
@@ -106,6 +108,7 @@ export interface IReporteLuminariaACTISEstado {
   horaAmanecer?: string;
   horaAtardecer?: string;
   tiempoEncendida?: number; // En horas
+  alarmas?: string[];
 }
 
 // Reporte de energía (Puerto 130: 3 bytes - voltaje delta, corriente, factor de potencia)
