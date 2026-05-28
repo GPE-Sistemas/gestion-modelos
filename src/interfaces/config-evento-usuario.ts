@@ -173,6 +173,9 @@ export interface IConfigEventoUsuario {
   atender?: boolean;
   // Si es true solo el propio cliente lo puede ver/atender
   noDerivar?: boolean;
+  // Marca configs autogeneradas por el sistema (p.ej. "Seguimiento ambulancia").
+  // Backend la setea al autocrear. Cliente filtra esDelSistema: { $ne: true } para ocultarlas del usuario.
+  esDelSistema?: boolean;
   // Tipo de envio de la notificacion
   tipoEnvio?: TipoEnvio;
   // Tipo de dispositivo
