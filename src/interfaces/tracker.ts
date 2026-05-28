@@ -49,6 +49,8 @@ export interface ITracker {
   sim1?: ISim;
   sim2?: ISim;
   frecReporte?: number;
+  // Activa/desactiva remotamente el tracking GPS (solo aplica a tipo='Telefono').
+  trackingActivo?: boolean;
   //
   idServiciosContratados?: string[];
   // Populate
