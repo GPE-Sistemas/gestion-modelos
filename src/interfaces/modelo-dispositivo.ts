@@ -8,7 +8,8 @@ export type FormatosMensajeComunicador =
   | 'Nanocomm ED5200'
   | 'Garnet'
   | 'Dahua'
-  | 'Hikvision';
+  | 'Hikvision'
+  | 'Intelbras';
 
 export type NivelDimerizacion =
   | 'dim10'
