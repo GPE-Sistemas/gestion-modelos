@@ -4,6 +4,7 @@ import { IConfigPerfil } from './config-perfil';
 import { IDispositivoLorawan } from './dispositivo-lorawan';
 import { IGrupo } from './grupo';
 import { IModeloDispositivo } from './modelo-dispositivo';
+import { IPuesta } from './puesta';
 import { IReporteBase } from './reporte-generico';
 
 export type EstadoLuminaria = 'Operativa' | 'Mantenimiento';
@@ -31,9 +32,10 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   idsAncestros?: string[];
   deveui?: string; // Deveui del dispositivo lorawan
   identificacion?: string;
-  ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria
+  ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria (si hay idPuesta, se coloca la de la puesta)
   direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
+  idPuesta?: string; // (opcional, solo clientes con moduloLuminarias.usaPuestas)
   idsGrupos?: string[];
   tiempoEncendida?: number; // En horas
   tipoDispositivo?: T; // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
@@ -53,6 +55,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   modeloDispositivo?: IModeloDispositivo;
   grupos?: IGrupo[];
   perfilConfig?: IConfigPerfil;
+  puesta?: IPuesta;
 }
 
 ////// CREATE
@@ -65,7 +68,8 @@ type OmitirCreate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilConfig';
+  | 'perfilConfig'
+  | 'puesta';
 
 export type ICreateLuminaria =
   | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirCreate>
@@ -81,7 +85,8 @@ type OmitirUpdate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilConfig';
+  | 'perfilConfig'
+  | 'puesta';
 
 export type IUpdateLuminaria =
   | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirUpdate>

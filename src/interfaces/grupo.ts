@@ -6,7 +6,8 @@ export type CategoriaGrupo =
   | 'Flota'
   | 'Activo'
   | 'Normal'
-  | 'Luminaria';
+  | 'Luminaria'
+  | 'Puesta';
 
 export interface IGrupo {
   _id?: string;
