@@ -1,5 +1,6 @@
 import { IGeoJSONPoint } from '../auxiliares';
 import { ICliente } from './cliente';
+import { NivelObjetivo } from './comando';
 import { IConfigPerfil } from './config-perfil';
 import { IDispositivoLorawan } from './dispositivo-lorawan';
 import { IGrupo } from './grupo';
@@ -123,4 +124,24 @@ export interface IDiaCorteEnergia {
 export interface IResumenCortesEnergiaSemana {
   dias?: IDiaCorteEnergia[];
   totalLuminariasAfectadas?: number; // Cantidad única de luminarias afectadas en toda la semana
+}
+
+//Dado un nivel de elección (luminaria, grupo, puesta o grupo de puestas), devuelve la jerarquía de luminarias afectadas (según la configuración de perfil)
+export interface IJerarquiaObjetivo {
+  nivel: NivelObjetivo;
+  luminarias: IJerarquiaLuminaria[];
+  resumenPorTipo: Record<
+    string,
+    { total: number; elegibles: number; ignoradas: number }
+  >;
+}
+
+export interface IJerarquiaLuminaria {
+  _id: string;
+  identificacion?: string;
+  deveui?: string;
+  tipo: string;
+  perfilNivel: NivelObjetivo | null;
+  perfilNombre: string | null;
+  elegible: boolean;
 }
