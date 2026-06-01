@@ -18,11 +18,7 @@ export type IEstadoComando =
  * Eje de PROCEDENCIA (qué entidad/acción originó el comando), ortogonal al `origen` (`OrigenDownlinkJob`, que es el eje de POLÍTICA: cómo se trata el
  * downlink).
  */
-export type NivelObjetivo =
-  | 'luminaria'
-  | 'grupo'
-  | 'puesta'
-  | 'puntoAlimentacion';
+export type NivelObjetivo = 'luminaria' | 'grupo' | 'puesta' | 'grupoPuesta';
 
 export interface IObjetivoComando {
   nivel: NivelObjetivo;

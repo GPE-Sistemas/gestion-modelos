@@ -126,7 +126,7 @@ export interface IResumenCortesEnergiaSemana {
   totalLuminariasAfectadas?: number; // Cantidad única de luminarias afectadas en toda la semana
 }
 
-//Dado un nivel de elección (luminaria, grupo, puesta o grupo de puestas), devuelve la jerarquía de luminarias afectadas (según la configuración de perfil)
+// Arma la jerarquía de perfiles/elegibilidad de las luminarias de un objetivo, para que la UI muestre qué luminaria recibe el comando y por qué.
 export interface IJerarquiaObjetivo {
   nivel: NivelObjetivo;
   luminarias: IJerarquiaLuminaria[];
