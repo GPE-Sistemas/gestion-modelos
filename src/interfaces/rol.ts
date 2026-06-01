@@ -225,6 +225,10 @@ export type AccionesRol =
   | 'Luminarias - Crear agrupaciones'
   | 'Luminarias - Editar agrupaciones'
   | 'Luminarias - Eliminar agrupaciones'
+  //Puestas
+  | 'Luminarias - Crear puestas'
+  | 'Luminarias - Editar puestas'
+  | 'Luminarias - Eliminar puestas'
   // *******************************************
   // MODULO ACTIVOS
   // *******************************************
