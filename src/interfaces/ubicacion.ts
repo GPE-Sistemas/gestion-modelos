@@ -13,7 +13,8 @@ export type ICategoriaUbicacion =
   | 'Centro de Atención'
   | 'Hospital'
   | 'Destino Emergencia'
-  | 'Vehiculos';
+  | 'Vehiculos'
+  | 'Luminarias';
 
 /* ────────────────────────────────────────────────
  *  VALORES POR CATEGORÍA
@@ -29,6 +30,8 @@ export interface IValoresUbicacionActivos {}
 export interface IValoresUbicacionDestinoEmergencia {}
 
 export interface IValoresUbicacionVehiculos {}
+
+export interface IValoresUbicacionLuminarias {}
 
 export interface IValoresUbicacionCentroAtencion {
   telefono?: string;
@@ -56,6 +59,7 @@ export type MapaValoresUbicacion = {
   Hospital: IValoresUbicacionHospital;
   'Destino Emergencia': IValoresUbicacionDestinoEmergencia;
   Vehiculos: IValoresUbicacionVehiculos;
+  Luminarias: IValoresUbicacionLuminarias;
 };
 
 /* ────────────────────────────────────────────────
@@ -91,7 +95,8 @@ export type IUbicacion =
   | IUbicacionBase<'Centro de Atención'>
   | IUbicacionBase<'Hospital'>
   | IUbicacionBase<'Destino Emergencia'>
-  | IUbicacionBase<'Vehiculos'>;
+  | IUbicacionBase<'Vehiculos'>
+  | IUbicacionBase<'Luminarias'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
@@ -106,7 +111,8 @@ export type ICreateUbicacion =
   | Omit<IUbicacionBase<'Centro de Atención'>, Omitir>
   | Omit<IUbicacionBase<'Hospital'>, Omitir>
   | Omit<IUbicacionBase<'Destino Emergencia'>, Omitir>
-  | Omit<IUbicacionBase<'Vehiculos'>, Omitir>;
+  | Omit<IUbicacionBase<'Vehiculos'>, Omitir>
+  | Omit<IUbicacionBase<'Luminarias'>, Omitir>;
 
 export type IUpdateUbicacion =
   | ({ categoria: 'Terminal' } & Partial<
@@ -129,6 +135,9 @@ export type IUpdateUbicacion =
     >)
   | ({ categoria: 'Vehiculos' } & Partial<
       Omit<IUbicacionBase<'Vehiculos'>, Omitir | 'categoria'>
+    >)
+  | ({ categoria: 'Luminarias' } & Partial<
+      Omit<IUbicacionBase<'Luminarias'>, Omitir | 'categoria'>
     >);
 /* ────────────────────────────────────────────────
  *  CACHE (sin virtuals)

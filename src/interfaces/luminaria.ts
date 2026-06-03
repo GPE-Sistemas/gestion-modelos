@@ -1,9 +1,11 @@
 import { IGeoJSONPoint } from '../auxiliares';
 import { ICliente } from './cliente';
+import { NivelObjetivo } from './comando';
 import { IConfigPerfil } from './config-perfil';
 import { IDispositivoLorawan } from './dispositivo-lorawan';
 import { IGrupo } from './grupo';
 import { IModeloDispositivo } from './modelo-dispositivo';
+import { IPuesta } from './puesta';
 import { IReporteBase } from './reporte-generico';
 
 export type EstadoLuminaria = 'Operativa' | 'Mantenimiento';
@@ -31,9 +33,10 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   idsAncestros?: string[];
   deveui?: string; // Deveui del dispositivo lorawan
   identificacion?: string;
-  ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria
+  ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion de la luminaria (si hay idPuesta, se coloca la de la puesta)
   direccion?: string; // Direccion de la luminaria
   idModeloDispositivo?: string; // ID del modelo de dispositivo
+  idPuesta?: string; // (opcional, solo clientes con moduloLuminarias.usaPuestas)
   idsGrupos?: string[];
   tiempoEncendida?: number; // En horas
   tipoDispositivo?: T; // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
@@ -53,6 +56,16 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   modeloDispositivo?: IModeloDispositivo;
   grupos?: IGrupo[];
   perfilConfig?: IConfigPerfil;
+  puesta?: IPuesta;
+
+  // Computado (no persistido): perfil efectivo resuelto por jerarquía
+  // (luminaria > grupo por prioridad > puesta > grupo de puestas). Solo se
+  // completa cuando la query pide `incluirPerfilEfectivo`.
+  perfilEfectivo?: {
+    nivel: NivelObjetivo;
+    idFuente: string;
+    nombre?: string | null;
+  } | null;
 }
 
 ////// CREATE
@@ -65,7 +78,8 @@ type OmitirCreate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilConfig';
+  | 'perfilConfig'
+  | 'puesta';
 
 export type ICreateLuminaria =
   | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirCreate>
@@ -81,7 +95,8 @@ type OmitirUpdate =
   | 'dispositivo'
   | 'modeloDispositivo'
   | 'grupos'
-  | 'perfilConfig';
+  | 'perfilConfig'
+  | 'puesta';
 
 export type IUpdateLuminaria =
   | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirUpdate>
@@ -118,4 +133,47 @@ export interface IDiaCorteEnergia {
 export interface IResumenCortesEnergiaSemana {
   dias?: IDiaCorteEnergia[];
   totalLuminariasAfectadas?: number; // Cantidad única de luminarias afectadas en toda la semana
+}
+
+// Arma la jerarquía de perfiles/elegibilidad de las luminarias de un objetivo, para que la UI muestre qué luminaria recibe el comando y por qué.
+export interface IJerarquiaObjetivo {
+  nivel: NivelObjetivo;
+  luminarias: IJerarquiaLuminaria[];
+  resumenPorTipo: Record<
+    string,
+    { total: number; elegibles: number; ignoradas: number }
+  >;
+}
+
+export interface IJerarquiaLuminaria {
+  _id: string;
+  identificacion?: string;
+  deveui?: string;
+  tipo: string;
+  perfilNivel: NivelObjetivo | null;
+  perfilNombre: string | null;
+  elegible: boolean;
+}
+
+// Cadena ASCENDENTE de jerarquía de UNA luminaria: todos los contenedores por
+// encima (la propia luminaria, sus grupos, su puesta, los grupos de la puesta)
+// con el perfil que cada uno tiene para el tipo de la luminaria y la prioridad
+// (en los grupos). Marca cuál es la FUENTE del perfil efectivo.
+export interface INivelJerarquiaLuminaria {
+  nivel: NivelObjetivo;
+  id: string;
+  nombre?: string;
+  perfilNombre?: string | null;
+  prioridad?: number | null; // solo grupos / grupos de puesta
+  esEfectivo: boolean; // este contenedor provee el perfil efectivo
+}
+
+export interface IJerarquiaAscendenteLuminaria {
+  tipo: string;
+  niveles: INivelJerarquiaLuminaria[];
+  efectivo: {
+    nivel: NivelObjetivo;
+    id: string;
+    perfilNombre?: string | null;
+  } | null;
 }

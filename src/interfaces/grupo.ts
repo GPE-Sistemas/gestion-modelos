@@ -6,7 +6,8 @@ export type CategoriaGrupo =
   | 'Flota'
   | 'Activo'
   | 'Normal'
-  | 'Luminaria';
+  | 'Luminaria'
+  | 'Puesta';
 
 export interface IGrupo {
   _id?: string;
@@ -16,6 +17,7 @@ export interface IGrupo {
   color?: string;
   categoria?: CategoriaGrupo;
   idsPerfilConfig?: string[];
+  prioridad?: number;
 
   // Integracion Soflex
   fleetId?: string;

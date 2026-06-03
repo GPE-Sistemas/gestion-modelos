@@ -150,6 +150,7 @@ export interface IModuloLuminarias {
   derivarEventos?: boolean;
   derivarEventosTecnicos?: boolean;
   compartirLuminarias?: boolean;
+  usaPuestas?: boolean; // Habilita la creación de puestas y la relación puesta-luminaria
   informe?: IConfigInformes;
 }
 

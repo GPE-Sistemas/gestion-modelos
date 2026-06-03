@@ -1,9 +1,9 @@
 import { ICliente } from './cliente';
+import { IObjetivoComando } from './comando';
 import {
   IDispositivoLorawan,
   TipoDispositivoLorawan,
 } from './dispositivo-lorawan';
-import { IModeloDispositivo } from './modelo-dispositivo';
 
 // Estado de cada job en la cola de downlinks. Se persiste en la BD para
 // auditoría y para que la UI pueda mostrar progreso. Espejo (en parte) del
@@ -19,11 +19,11 @@ export type EstadoDownlinkJob =
   | 'Cancelado' // cancelado por superseding job
   | 'Fallido'; // error técnico tras N reintentos
 
-// Origen permite filtrar/diferenciar reintentos, auditoría y políticas.
+// Origen = eje de POLÍTICA (cómo se trata el downlink). Lo leen el processor (expiresAt) y el cron de reintento. Los orígenes actuales son (Manual, Reconciliacion y AutoGetActis).
+// La PROCEDENCIA (de qué nivel/entidad nació) vive en `objetivo` (ver IObjetivoComando).
 export type OrigenDownlinkJob =
   | 'Reconciliacion' // Viene del Cron cuando intenta ajustar la configuración del dispositivo si esta difiere de la configuración deseada
-  | 'GrupoManual' // Viene de la UI cuando se envian comandos grupales
-  | 'IndividualManual' // Viene de la UI cuando se envian comandos individuales
+  | 'Manual' // Viene de la UI: cualquier acción de usuario (individual, grupo, puesta o grupos de puestas)
   | 'AutoGetActis'; // Es un caso particular de las luminarias ACTIS. Luego de que se ejecuta un comando del tipo set, para refeljar cambios en la configuración se requiere un comando del tipo get.
 
 // Get encadenado tras un set ACTIS. El processor lee este campo y, tras enviar
@@ -44,6 +44,7 @@ export interface IDownlinkJob {
   tipoDispositivo?: TipoDispositivoLorawan;
 
   origen: OrigenDownlinkJob;
+  objetivo?: IObjetivoComando; // Procedencia: desde qué nivel/entidad se originó (se propaga al IComando)
   idEjecucion?: string; // batch id (uuid) — agrupa todos los jobs de una acción
   idJobBull?: string; // BullMQ job id
 

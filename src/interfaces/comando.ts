@@ -12,6 +12,20 @@ export type IEstadoComando =
   | 'No Ejecutado'
   | 'Descartado';
 
+/**
+ * Nivel/objetivo desde el que se origina un comando o downlink.
+ *
+ * Eje de PROCEDENCIA (qué entidad/acción originó el comando), ortogonal al `origen` (`OrigenDownlinkJob`, que es el eje de POLÍTICA: cómo se trata el
+ * downlink).
+ */
+export type NivelObjetivo = 'luminaria' | 'grupo' | 'puesta' | 'grupoPuesta';
+
+export interface IObjetivoComando {
+  nivel: NivelObjetivo;
+  id: string; // _id del objetivo (luminaria / grupo de luminarias/ puesta / grupo de puestas)
+  nombre?: string; // Denormalizado para que la UI muestre sin populate
+}
+
 export interface IComando {
   _id?: string;
   idCliente?: string;
@@ -35,6 +49,7 @@ export interface IComando {
   fallos?: number;
   fCnt?: string;
   idChirpstack?: string;
+  objetivo?: IObjetivoComando; // Procedencia: desde qué nivel/entidad se originó (luminaria/grupo/puesta/punto-alim)
 
   // Virtuals
   tracker?: ITracker;
