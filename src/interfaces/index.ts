@@ -33,6 +33,7 @@ export * from './recordatorio';
 export * from './recorrido';
 export * from './servicio';
 export * from './servicio-contratado';
+export * from './facturacion-cliente';
 export * from './soap';
 export * from './tipo-evento';
 export * from './token';
