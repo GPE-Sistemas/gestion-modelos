@@ -1,4 +1,4 @@
-import { ICliente } from './cliente';
+import { ICliente, ITipoCliente } from './cliente';
 
 export type MonedaFacturacion = 'ARS' | 'USD';
 
@@ -65,4 +65,17 @@ export interface IFacturacionEnCurso {
   totalReal: number;
   /** Descuento por clientes hijos bonificados (bruto = neto + bonificación). */
   bonificacion: { totalEstimado: number; totalReal: number };
+  /** Aporte de cada hijo directo (no bonificado, no raíz independiente). */
+  hijos: IDetalleClienteFacturacion[];
+  /** Detalle de cada cliente bonificado (descontado del total). */
+  bonificados: IDetalleClienteFacturacion[];
+}
+
+/** Aporte/descuento de un cliente al total del cliente facturable. */
+export interface IDetalleClienteFacturacion {
+  idCliente: string;
+  nombre?: string;
+  tipoCliente?: ITipoCliente;
+  costoEstimado: number;
+  costoReal: number;
 }
