@@ -17,6 +17,7 @@ export interface IGrupo {
   color?: string;
   categoria?: CategoriaGrupo;
   idsPerfilConfig?: string[];
+  prioridad?: number;
 
   // Integracion Soflex
   fleetId?: string;
