@@ -65,6 +65,16 @@ export interface IFacturacionEnCurso {
   totalReal: number;
   /** Descuento por clientes hijos bonificados (bruto = neto + bonificación). */
   bonificacion: { totalEstimado: number; totalReal: number };
+  /**
+   * Costo real del mes pasado por categoría (del resumen ya creado para el
+   * cliente; puede no existir → 0), para comparar contra el estimado actual.
+   */
+  mesPasado: {
+    trackers: number;
+    alarmas: number;
+    camaras: number;
+    total: number;
+  };
   /** Aporte de cada hijo directo (no bonificado, no raíz independiente). */
   hijos: IDetalleClienteFacturacion[];
   /** Detalle de cada cliente bonificado (descontado del total). */
@@ -78,4 +88,6 @@ export interface IDetalleClienteFacturacion {
   tipoCliente?: ITipoCliente;
   costoEstimado: number;
   costoReal: number;
+  /** Total del resumen del mes pasado de ese cliente (puede no existir → 0). */
+  costoPasado?: number;
 }
