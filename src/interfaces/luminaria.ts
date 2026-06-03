@@ -145,3 +145,26 @@ export interface IJerarquiaLuminaria {
   perfilNombre: string | null;
   elegible: boolean;
 }
+
+// Cadena ASCENDENTE de jerarquía de UNA luminaria: todos los contenedores por
+// encima (la propia luminaria, sus grupos, su puesta, los grupos de la puesta)
+// con el perfil que cada uno tiene para el tipo de la luminaria y la prioridad
+// (en los grupos). Marca cuál es la FUENTE del perfil efectivo.
+export interface INivelJerarquiaLuminaria {
+  nivel: NivelObjetivo;
+  id: string;
+  nombre?: string;
+  perfilNombre?: string | null;
+  prioridad?: number | null; // solo grupos / grupos de puesta
+  esEfectivo: boolean; // este contenedor provee el perfil efectivo
+}
+
+export interface IJerarquiaAscendenteLuminaria {
+  tipo: string;
+  niveles: INivelJerarquiaLuminaria[];
+  efectivo: {
+    nivel: NivelObjetivo;
+    id: string;
+    perfilNombre?: string | null;
+  } | null;
+}
