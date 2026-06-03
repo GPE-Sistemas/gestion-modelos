@@ -11,8 +11,10 @@ export type TipoResumenDatos =
   | 'Combustible Horario Vehículos'
   | 'Informe Cargas Combustible'
   | 'Informe Eventos Sospechosos Combustible'
-  | 'Informe Mensual Flota Combustible';
+  | 'Informe Mensual Flota Combustible'
+  | 'Gastos del Cliente';
 export type TipoEntidadResumen = 'Luminaria' | 'Vehículo' | 'Alarma';
+export type MonedaResumen = 'ARS' | 'USD';
 /* ────────────────────────────────────────────────
  *  RESÚMENES
  * ────────────────────────────────────────────────*/
@@ -166,6 +168,26 @@ export interface IConsumoCombustibleVehiculos {
   vehiculosConConsumo?: number; // Vehículos que tenían consumo promedio y valores de odómetro
 }
 /* ────────────────────────────────────────────────
+ *  GASTOS DEL CLIENTE
+ * ────────────────────────────────────────────────*/
+
+/** Gasto facturado de una categoría de dispositivos. */
+export interface IDetalleGastoCategoria {
+  cantidadTotal?: number;     // dispositivos totales del cliente (ej. 100)
+  cantidadFacturada?: number; // los considerados en la cotización (ej. 10)
+  precioUnitario?: number;    // a cuánto se cobró cada uno
+  subtotal?: number;          // cantidadFacturada * precioUnitario
+}
+
+export interface IResumenGastosCliente {
+  trackers?: IDetalleGastoCategoria;
+  alarmas?: IDetalleGastoCategoria;
+  camaras?: IDetalleGastoCategoria;
+  total?: number;             // suma de los subtotales de las 3 categorías
+  moneda?: MonedaResumen;
+}
+
+/* ────────────────────────────────────────────────
  *  MAPA DE TIPO DE RESUMEN
  * ────────────────────────────────────────────────*/
 
@@ -179,6 +201,7 @@ export type MapaResumenDatos = {
   'Informe Cargas Combustible': IInformeCargasCombustible;
   'Informe Eventos Sospechosos Combustible': IInformeEventosSospechosos;
   'Informe Mensual Flota Combustible': IInformeMensualFlotaCombustible;
+  'Gastos del Cliente': IResumenGastosCliente;
 };
 
 /* ────────────────────────────────────────────────
@@ -219,7 +242,8 @@ export type IResumenDatos =
   | IResumenDatosBase<'Combustible Horario Vehículos'>
   | IResumenDatosBase<'Informe Cargas Combustible'>
   | IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>
-  | IResumenDatosBase<'Informe Mensual Flota Combustible'>;
+  | IResumenDatosBase<'Informe Mensual Flota Combustible'>
+  | IResumenDatosBase<'Gastos del Cliente'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
@@ -257,7 +281,8 @@ export type ICreateResumenDatos =
   | Omit<
       Partial<IResumenDatosBase<'Informe Mensual Flota Combustible'>>,
       OmitirCreate
-    >;
+    >
+  | Omit<Partial<IResumenDatosBase<'Gastos del Cliente'>>, OmitirCreate>;
 
 type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
 
@@ -291,4 +316,5 @@ export type IUpdateResumenDatos =
   | Omit<
       Partial<IResumenDatosBase<'Informe Mensual Flota Combustible'>>,
       OmitirUpdate
-    >;
+    >
+  | Omit<Partial<IResumenDatosBase<'Gastos del Cliente'>>, OmitirUpdate>;
