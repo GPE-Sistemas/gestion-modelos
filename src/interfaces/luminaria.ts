@@ -57,6 +57,15 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   grupos?: IGrupo[];
   perfilConfig?: IConfigPerfil;
   puesta?: IPuesta;
+
+  // Computado (no persistido): perfil efectivo resuelto por jerarquía
+  // (luminaria > grupo por prioridad > puesta > grupo de puestas). Solo se
+  // completa cuando la query pide `incluirPerfilEfectivo`.
+  perfilEfectivo?: {
+    nivel: NivelObjetivo;
+    idFuente: string;
+    nombre?: string | null;
+  } | null;
 }
 
 ////// CREATE
