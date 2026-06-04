@@ -179,12 +179,21 @@ export interface IDetalleGastoCategoria {
   subtotal?: number;          // cantidadFacturada * precioUnitario
 }
 
+/** Gasto que generó un hijo directo en el período del resumen. */
+export interface IGastoHijoResumen {
+  idCliente?: string;
+  nombre?: string;
+  total?: number;
+}
+
 export interface IResumenGastosCliente {
   trackers?: IDetalleGastoCategoria;
   alarmas?: IDetalleGastoCategoria;
   camaras?: IDetalleGastoCategoria;
   total?: number;             // suma de los subtotales de las 3 categorías
   moneda?: MonedaResumen;
+  /** Desglose por hijo directo (no bonificado, no raíz independiente). */
+  hijos?: IGastoHijoResumen[];
 }
 
 /* ────────────────────────────────────────────────
