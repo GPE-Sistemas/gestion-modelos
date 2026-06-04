@@ -179,11 +179,21 @@ export interface IDetalleGastoCategoria {
   subtotal?: number;          // cantidadFacturada * precioUnitario
 }
 
+/** Gasto facturado de una categoría para un hijo (cantidad + subtotal). */
+export interface IGastoHijoCategoria {
+  cantidad?: number; // dispositivos facturados del hijo
+  subtotal?: number; // cantidad * precio unitario del facturable
+}
+
 /** Gasto que generó un hijo directo en el período del resumen. */
 export interface IGastoHijoResumen {
   idCliente?: string;
   nombre?: string;
   total?: number;
+  // Desglose por categoría (cantidad facturada y subtotal)
+  trackers?: IGastoHijoCategoria;
+  alarmas?: IGastoHijoCategoria;
+  camaras?: IGastoHijoCategoria;
 }
 
 export interface IResumenGastosCliente {

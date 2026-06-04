@@ -74,6 +74,12 @@ export interface IFacturacionEnCurso {
     alarmas: number;
     camaras: number;
     total: number;
+    /** Cantidades facturadas del mes anterior (del resumen), por categoría. */
+    cantidades?: {
+      trackers: number;
+      alarmas: number;
+      camaras: number;
+    };
   };
   /** Aporte de cada hijo directo (no bonificado, no raíz independiente). */
   hijos: IDetalleClienteFacturacion[];
@@ -90,4 +96,19 @@ export interface IDetalleClienteFacturacion {
   costoReal: number;
   /** Total del resumen del mes pasado de ese cliente (puede no existir → 0). */
   costoPasado?: number;
+  /** Cantidades de dispositivos del cliente (activos = consolidados). */
+  cantidades?: {
+    trackers: { total: number; activos: number };
+    alarmas: { total: number; activos: number };
+    camaras: { total: number };
+  };
+  /**
+   * Desglose del mes pasado por categoría (del resumen guardado del
+   * facturable; puede no existir en resúmenes viejos).
+   */
+  pasado?: {
+    trackers?: { cantidad?: number; subtotal?: number };
+    alarmas?: { cantidad?: number; subtotal?: number };
+    camaras?: { cantidad?: number; subtotal?: number };
+  };
 }
