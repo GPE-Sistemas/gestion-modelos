@@ -1,6 +1,11 @@
 import { ICliente } from './cliente';
 
-export type AgrupacionTiempo = 'Diario' | 'Semanal' | 'Mensual' | 'Anual' | 'Horario';
+export type AgrupacionTiempo =
+  | 'Diario'
+  | 'Semanal'
+  | 'Mensual'
+  | 'Anual'
+  | 'Horario';
 export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
 export type TipoResumenDatos =
   | 'Consumo Mensual Luminarias'
@@ -13,7 +18,7 @@ export type TipoResumenDatos =
   | 'Informe Eventos Sospechosos Combustible'
   | 'Informe Mensual Flota Combustible'
   | 'Gastos del Cliente';
-export type TipoEntidadResumen = 'Luminaria' | 'Vehículo' | 'Alarma';
+export type TipoEntidadResumen = 'Luminaria' | 'Puesta' | 'Vehículo' | 'Alarma';
 export type MonedaResumen = 'ARS' | 'USD';
 /* ────────────────────────────────────────────────
  *  RESÚMENES
@@ -94,9 +99,9 @@ export interface ICombustibleHorarioVehiculo {
 export interface IEventoCargaCombustible {
   idActivo?: string;
   nombreActivo?: string;
-  fecha?: string;            // ISO timestamp del evento
-  litrosCargados?: number;   // variacionCombustible (positivo)
-  nivelPostCarga?: number;   // nivelPostVariacion
+  fecha?: string; // ISO timestamp del evento
+  litrosCargados?: number; // variacionCombustible (positivo)
+  nivelPostCarga?: number; // nivelPostVariacion
   odometro?: number;
   geojson?: { type: 'Point'; coordinates: [number, number] };
   direccion?: string;
@@ -118,9 +123,9 @@ export interface IEventoDescargaCombustible {
   idActivo?: string;
   nombreActivo?: string;
   fecha?: string;
-  litrosDescargados?: number;   // |variacionCombustible|
+  litrosDescargados?: number; // |variacionCombustible|
   nivelAntes?: number;
-  nivelDespues?: number;        // nivelPostVariacion
+  nivelDespues?: number; // nivelPostVariacion
   odometro?: number;
   geojson?: { type: 'Point'; coordinates: [number, number] };
   direccion?: string;
@@ -143,7 +148,7 @@ export interface IEstadisticaVehiculoCombustible {
   nombreActivo?: string;
   kmRecorridos?: number;
   litrosCargados?: number;
-  rendimientoL100km?: number;   // L/100km (null si sin datos de odómetro)
+  rendimientoL100km?: number; // L/100km (null si sin datos de odómetro)
   cantidadCargas?: number;
   cantidadEventosSospechosos?: number;
 }
@@ -173,10 +178,10 @@ export interface IConsumoCombustibleVehiculos {
 
 /** Gasto facturado de una categoría de dispositivos. */
 export interface IDetalleGastoCategoria {
-  cantidadTotal?: number;     // dispositivos totales del cliente (ej. 100)
+  cantidadTotal?: number; // dispositivos totales del cliente (ej. 100)
   cantidadFacturada?: number; // los considerados en la cotización (ej. 10)
-  precioUnitario?: number;    // a cuánto se cobró cada uno
-  subtotal?: number;          // cantidadFacturada * precioUnitario
+  precioUnitario?: number; // a cuánto se cobró cada uno
+  subtotal?: number; // cantidadFacturada * precioUnitario
 }
 
 /** Gasto facturado de una categoría para un hijo (cantidad + subtotal). */
@@ -200,7 +205,7 @@ export interface IResumenGastosCliente {
   trackers?: IDetalleGastoCategoria;
   alarmas?: IDetalleGastoCategoria;
   camaras?: IDetalleGastoCategoria;
-  total?: number;             // suma de los subtotales de las 3 categorías
+  total?: number; // suma de los subtotales de las 3 categorías
   moneda?: MonedaResumen;
   /** Desglose por hijo directo (no bonificado, no raíz independiente). */
   hijos?: IGastoHijoResumen[];
@@ -289,10 +294,7 @@ export type ICreateResumenDatos =
       Partial<IResumenDatosBase<'Combustible Horario Vehículos'>>,
       OmitirCreate
     >
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Cargas Combustible'>>,
-      OmitirCreate
-    >
+  | Omit<Partial<IResumenDatosBase<'Informe Cargas Combustible'>>, OmitirCreate>
   | Omit<
       Partial<IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>>,
       OmitirCreate
@@ -324,10 +326,7 @@ export type IUpdateResumenDatos =
       Partial<IResumenDatosBase<'Combustible Horario Vehículos'>>,
       OmitirUpdate
     >
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Cargas Combustible'>>,
-      OmitirUpdate
-    >
+  | Omit<Partial<IResumenDatosBase<'Informe Cargas Combustible'>>, OmitirUpdate>
   | Omit<
       Partial<IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>>,
       OmitirUpdate
