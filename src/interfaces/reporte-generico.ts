@@ -109,6 +109,7 @@ export interface IReporteLuminariaACTISEstado {
   horaAmanecer?: string;
   horaAtardecer?: string;
   tiempoEncendida?: number; // En horas
+  fechaCambioEstado?: string; // ISO, hora aprox. del último cambio encendido<->apagado
   alarmas?: string[];
 }
 
