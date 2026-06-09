@@ -9,7 +9,11 @@ export type FormatosMensajeComunicador =
   | 'Garnet'
   | 'Dahua'
   | 'Hikvision'
-  | 'Intelbras';
+  | 'Intelbras'
+  // UNICOM "WiFi DUO": comunicador WiFi (AVR128 + ESP32) que habla MQTT
+  // contra el broker propio de IRIX. NO usa SIM/GPRS (sim1/sim2/numeroAbonado
+  // quedan vacíos); su identidad es el devid en idUnicoComunicador.
+  | 'UNICOM';
 
 export type NivelDimerizacion =
   | 'dim10'

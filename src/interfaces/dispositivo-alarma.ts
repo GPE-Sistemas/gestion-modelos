@@ -52,6 +52,11 @@ export interface ISensorPorZona {
   marca?: string;
   tipo?: CodigoTipoSensor;
   modelo?: string;
+  // UNICOM (sensores RF inalámbricos). El panel guarda por sensor el código RF
+  // (3 bytes) + un atributo que codifica el modo de zona (attr = 0x10 + code).
+  codigoRf?: string; // 6 hex (3 bytes), ej. "AABBCC"
+  modoRf?: string; // modo de zona UNICOM "R###" (Interior, Entrada/Salida, Perimetral, ...)
+  attrRf?: number; // byte de atributo (0x10 + code del modo)
 }
 export interface IParticionZona {
   nombre?: string;
@@ -98,6 +103,30 @@ export type CodigoTipoSensor =
   | 'AMK';
 export type ModoSensor = 'Seguidor' | 'Demorado' | 'Instantaneo';
 export type Operador = 'Personal' | 'Claro' | 'Movistar' | 'Tuenti' | 'Otro';
+
+/// UNICOM "WiFi DUO" ──────────────────────────────────────────────
+/// Comunicador WiFi (no SIM) que opera por MQTT contra el broker propio
+/// de IRIX. Modos de armado del panel (selectivo = total excluyendo zonas).
+export type ModoArmadoUnicom = 'Total' | 'Perimetral' | 'Selectivo' | 'Desarmado';
+
+export interface IEstadoArmadoUnicom {
+  modo?: ModoArmadoUnicom;
+  zonasExcluidas?: number[]; // solo para 'Selectivo' (zonas excluidas del armado)
+  actualizado?: string; // fecha ISO del último cambio de estado conocido
+}
+
+/// Config por dispositivo del comunicador UNICOM. La identidad es el devid
+/// (= idUnicoComunicador, "uw"+MAC). El broker/credenciales son de flota y
+/// viven a nivel backend (env), NO por dispositivo en DB. Los topics se
+/// derivan del devid (cmd/<devid>, dev/uw/0001/<devid>).
+export interface IConfigComunicadorUnicom {
+  devid?: string; // "uw"+MAC (redundante con idUnicoComunicador, por claridad)
+  canal?: string; // "chan" del firmware (ej. "dev")
+  topicCmd?: string; // override opcional del topic de comandos
+  topicDev?: string; // override opcional del topic de eventos
+  tls?: boolean; // reservado: hoy plaintext, TLS es mejora futura
+}
+
 export interface IDispositivoAlarma {
   _id?: string;
   //
@@ -124,6 +153,10 @@ export interface IDispositivoAlarma {
   idsCamaras?: string[];
   armado?: boolean[];
   armando?: string;
+  // UNICOM: estado de armado con semántica propia (total/perimetral/selectivo).
+  // Additive — NO reemplaza `armado`/`TiposDeArmado` (uso productivo de otras alarmas).
+  estadoArmadoUnicom?: IEstadoArmadoUnicom;
+  configUnicom?: IConfigComunicadorUnicom;
   imagenes?: string[];
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;

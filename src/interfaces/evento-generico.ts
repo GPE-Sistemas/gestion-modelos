@@ -1,7 +1,7 @@
 // evento-generico.ts
 import { ICliente, IConfigHorario } from './cliente';
 import { ITracker } from './tracker';
-import { IDispositivoAlarma } from './dispositivo-alarma';
+import { IDispositivoAlarma, ModoArmadoUnicom } from './dispositivo-alarma';
 import { IActivo } from './activo';
 import { IConfigEventoUsuario } from './config-evento-usuario';
 import { SonidoEvento } from './categoria-evento';
@@ -144,6 +144,12 @@ export interface IValoresEventoAlarma extends IValoresEventoBase {
   codigoAlarma?: string;
   codigoComunicador?: string;
   tiposEvento?: ('Armado' | 'Desarmado' | 'Detonación' | 'Test')[];
+  // UNICOM (additive): datos crudos del evento MQTT para trazabilidad/diagnóstico.
+  cidUnicom?: string; // "<estado> <opcode>" original, ej. "3 407"
+  opcodeUnicom?: string; // opcode del cid, ej. "407"
+  modoArmado?: ModoArmadoUnicom; // si el evento es de armado/desarmado
+  idSensor?: number; // índice del sensor en reportes 1 606 / disparos 1 134
+  crf?: string; // 8 hex del reporte de sensor (código RF + attr)
 }
 
 export interface IValoresEventoLuminaria extends IValoresEventoBase {
