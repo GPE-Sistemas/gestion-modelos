@@ -19,7 +19,7 @@ export type ModoForzado =
 export type IModoLuminaria =
   | 'Indeterminado'
   | 'Fotocélula'
-  | 'Calendario'
+  | 'Astronómico'
   | 'Por Defecto'
   | 'Manual';
 
