@@ -11,7 +11,11 @@ export type IEntidades =
   | 'Cliente'
   | 'Alarma'
   | 'Vehículo'
-  | 'Colectivo';
+  | 'Colectivo'
+  | 'Dispositivo Lorawan'
+  | 'Puesta'
+  | 'Grupo'
+  | 'Configuración de Perfil';
 
 export interface IAsignacion {
   _id?: string;
