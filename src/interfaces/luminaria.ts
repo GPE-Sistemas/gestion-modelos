@@ -8,8 +8,24 @@ import { IModeloDispositivo } from './modelo-dispositivo';
 import { IPuesta } from './puesta';
 import { IReporteBase } from './reporte-generico';
 
-export type EstadoLuminaria = 'Operativa' | 'Mantenimiento';
+export type EstadoOperativoLuminaria = 'Operativa' | 'Mantenimiento';
 export type ITipoEnergizado = 'Continuo' | 'Nocturno'; //Continuo: Siempre reportando, Nocturno: Solo reporta de noche porque a la mañana se apaga porque se le corta la energía
+
+// Estado calculado de funcionamiento (modelo de 6 estados).
+// Lo escribe el backend (gestion-lora-luminarias en uplinks + gestion-cron cada 1 min) y lo lee el front. Ver PLAN_ESTADO_LUMINARIAS_BACKEND.md.
+//   0 Sin nodo | 1 Error de comunicación | 2 Error de encendido | 3 Alarma |
+//   4 Encendida | 5 Apagada
+export type CodigoEstadoLuminaria = 0 | 1 | 2 | 3 | 4 | 5;
+
+export interface IEstadoLuminariaCalculado {
+  codigo: CodigoEstadoLuminaria;
+  encendida: boolean | null;
+  motivo?: string; // ej. 'Desenergizada (horario diurno)' — flag persistido hasta el próximo reporte
+  alarmas?: string[]; // snapshot de valores.alarmas al momento de evaluar (drilldown)
+  fechaEvaluacion: string; // ISO — última vez que se evaluó
+  fechaCambio: string; // ISO — desde cuándo está en este código
+  origen: 'uplink' | 'cron';
+}
 
 export type MapaValoresReportePeriodico = {
   'Luminaria GPE': IReporteBase<'Luminaria GPE Periódico'>;
@@ -45,9 +61,8 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
   idPerfilConfig?: string;
   tipoEnergizado?: ITipoEnergizado;
-
-  // Estado actual de la luminaria
-  estado?: EstadoLuminaria;
+  estadoOperativo?: EstadoOperativoLuminaria; // Condición administrativa (Operativa/Mantenimiento)
+  estado?: IEstadoLuminariaCalculado; // Estado calculado de funcionamiento (6 estados). Escrito por backend (uplinks + cron); persiste hasta el próximo cambio.
 
   // Virtuals
   cliente?: ICliente;
