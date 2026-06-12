@@ -174,6 +174,19 @@ export interface IUltimoGateway {
   fechaCaptura?: string; // ISO timestamp
 }
 
+// Rastreo del cron de consulta de configuración inicial (gestion-cron). Una
+// luminaria cuyo dispositivo nunca tuvo perfil ni SET manual nunca recibe un
+// `get`, por lo que `config` queda vacía. Ese cron envía los GET pertinentes
+// (origen 'ConsultaConfig') para hacer el bootstrap de la config real. Este
+// sub-doc evita bucles infinitos en dispositivos que no responden: cuenta los
+// intentos sin respuesta y bloquea temporalmente (circuit breaker) tras superar
+// el máximo.
+export interface IConsultaConfigDispositivo {
+  intentos?: number; // ciclos consultados sin que la config se complete
+  ultimaConsulta?: string; // ISO — última vez que se enviaron los gets
+  bloqueadoHasta?: string; // ISO — circuit breaker, no se consulta hasta que expire
+}
+
 /* ────────────────────────────────────────────────
  *  CONFIGURACIONES DE DISPOSITIVOS
  * ────────────────────────────────────────────────*/
@@ -295,6 +308,7 @@ export interface IDispositivoLorawanBase<
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
   paquetes?: IPaquetesDispositivoLorawan; //Información para calcular la pérdida de paquetes
   ultimoGateway?: IUltimoGateway; //Gateway con mejor señal en el último uplink capturado
+  consultaConfig?: IConsultaConfigDispositivo; //Rastreo del cron de consulta de configuración inicial (bootstrap de config).
 
   // Datos para el lora server
   deveui?: string;

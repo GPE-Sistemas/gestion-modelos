@@ -24,7 +24,8 @@ export type EstadoDownlinkJob =
 export type OrigenDownlinkJob =
   | 'Reconciliacion' // Viene del Cron cuando intenta ajustar la configuración del dispositivo si esta difiere de la configuración deseada
   | 'Manual' // Viene de la UI: cualquier acción de usuario (individual, grupo, puesta o grupos de puestas)
-  | 'AutoGetActis'; // Es un caso particular de las luminarias ACTIS. Luego de que se ejecuta un comando del tipo set, para refeljar cambios en la configuración se requiere un comando del tipo get.
+  | 'AutoGetActis' // Es un caso particular de las luminarias ACTIS. Luego de que se ejecuta un comando del tipo set, para refeljar cambios en la configuración se requiere un comando del tipo get.
+  | 'ConsultaConfig'; // Viene del Cron de consulta de configuración inicial: GETs puros para hacer el bootstrap de dispositivo.config en luminarias que nunca tuvieron perfil ni SET manual (config vacía). No escribe IConfigDeseada ni se reintenta.
 
 // Get encadenado tras un set ACTIS. El processor lee este campo y, tras enviar
 // el set, encola un nuevo job (origen='AutoGetActis') con el delay indicado.
