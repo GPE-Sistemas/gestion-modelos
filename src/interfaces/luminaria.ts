@@ -24,6 +24,7 @@ export interface IEstadoLuminariaCalculado {
   alarmas?: string[]; // snapshot de valores.alarmas al momento de evaluar (drilldown)
   fechaEvaluacion: string; // ISO — última vez que se evaluó
   fechaCambio: string; // ISO — desde cuándo está en este código
+  fechaCambioEncendida?: string; // ISO — último cambio de `encendida` (on↔off). Para la nocturna desenergizada marca el momento en que el sistema la consideró apagada
   origen: 'uplink' | 'cron';
 }
 
