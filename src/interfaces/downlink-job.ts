@@ -27,6 +27,18 @@ export type OrigenDownlinkJob =
   | 'AutoGetActis' // Es un caso particular de las luminarias ACTIS. Luego de que se ejecuta un comando del tipo set, para refeljar cambios en la configuración se requiere un comando del tipo get.
   | 'ConsultaConfig'; // Viene del Cron de consulta de configuración inicial: GETs puros para hacer el bootstrap de dispositivo.config en luminarias que nunca tuvieron perfil ni SET manual (config vacía). No escribe IConfigDeseada ni se reintenta.
 
+// Una entrada por intento de TRANSPORTE (reintento BullMQ del MISMO job). Es
+// append-only: el processor la agrega en cada outcome (Enviado/Descartado/Error)
+// vía $push, para que la UI muestre qué se intentó y cuándo, no solo el contador.
+// Los reintentos del RECONCILIADOR son jobs distintos → nodos propios, no entran acá.
+export interface IIntentoDownlink {
+  numero: number; // 1..N (attemptsMade + 1)
+  fecha: string; // ISO del intento
+  resultado: 'Enviado' | 'Descartado' | 'Error';
+  error?: string; // mensaje si falló o motivo de descarte
+  idComando?: string; // IComando creado en este intento (si hubo)
+}
+
 // Get encadenado tras un set ACTIS. El processor lee este campo y, tras enviar
 // el set, encola un nuevo job (origen='AutoGetActis') con el delay indicado.
 export interface IProximoGetDownlinkJob {
@@ -63,6 +75,7 @@ export interface IDownlinkJob {
   estado: EstadoDownlinkJob;
   intentos: number;
   ultimoError?: string;
+  intentosLog?: IIntentoDownlink[]; // historial append-only por intento de transporte
   idComando?: string; // se llena al crear el IComando real en BD
 
   // Auto-get encadenado (ACTIS)
