@@ -19,12 +19,12 @@ export type EstadoDownlinkJob =
   | 'Cancelado' // cancelado por superseding job
   | 'Fallido'; // error técnico tras N reintentos
 
-// Origen = eje de POLÍTICA (cómo se trata el downlink). Lo leen el processor (expiresAt) y el cron de reintento. Los orígenes actuales son (Manual, Reconciliacion y AutoGetActis).
+// Origen = eje de POLÍTICA (cómo se trata el downlink). Lo leen el processor (expiresAt) y el cron de reintento. Los orígenes actuales son (Manual, Reconciliacion y AutoGet).
 // La PROCEDENCIA (de qué nivel/entidad nació) vive en `objetivo` (ver IObjetivoComando).
 export type OrigenDownlinkJob =
   | 'Reconciliacion' // Viene del Cron cuando intenta ajustar la configuración del dispositivo si esta difiere de la configuración deseada
   | 'Manual' // Viene de la UI: cualquier acción de usuario (individual, grupo, puesta o grupos de puestas)
-  | 'AutoGetActis' // Es un caso particular de las luminarias ACTIS. Luego de que se ejecuta un comando del tipo set, para refeljar cambios en la configuración se requiere un comando del tipo get.
+  | 'AutoGet' // Get encadenado tras un SET que no autoreporta su cambio. Refresca dispositivo.config para cerrar el lazo del reconciliador.
   | 'ConsultaConfig'; // Viene del Cron de consulta de configuración inicial: GETs puros para hacer el bootstrap de dispositivo.config en luminarias que nunca tuvieron perfil ni SET manual (config vacía). No escribe IConfigDeseada ni se reintenta.
 
 // Una entrada por intento de TRANSPORTE (reintento BullMQ del MISMO job). Es
@@ -39,8 +39,9 @@ export interface IIntentoDownlink {
   idComando?: string; // IComando creado en este intento (si hubo)
 }
 
-// Get encadenado tras un set ACTIS. El processor lee este campo y, tras enviar
-// el set, encola un nuevo job (origen='AutoGetActis') con el delay indicado.
+// Get encadenado tras un SET que no autoreporta su cambio. El processor lee este
+// campo y, tras enviar el set, encola un nuevo job (origen='AutoGet') con el
+// delay indicado.
 export interface IProximoGetDownlinkJob {
   puerto: number;
   payload: string;
