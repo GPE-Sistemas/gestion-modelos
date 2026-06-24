@@ -20,6 +20,7 @@ export * from './envio-vehiculo';
 export * from './estado-entidad';
 export * from './excepcion';
 export * from './grupo';
+export * from './grupo-usuario';
 export * from './log-despacho';
 export * from './log-reenvio';
 export * from './log-trackeo';
