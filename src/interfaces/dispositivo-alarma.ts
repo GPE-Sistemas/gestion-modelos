@@ -1,5 +1,5 @@
 import { ICamara } from './camara';
-import { ICliente, IConfigHorario } from './cliente';
+import { ICliente, IConfigHorario, ICredencialesAlarma } from './cliente';
 import { Dia } from './config-evento-usuario';
 import { estadoCuenta } from './estado-entidad';
 import { IModeloDispositivo } from './modelo-dispositivo';
@@ -170,6 +170,8 @@ export interface IDispositivoAlarma {
   idServiciosContratados?: string[];
   clave?: string;
   contraClave?: string;
+  // undefined = usar credenciales del cliente (config.credencialesAlarmas)
+  credencialesAlarma?: ICredencialesAlarma;
   tipoComercio?: string;
   tipoCategoria?: string;
   // Populate
