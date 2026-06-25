@@ -145,6 +145,43 @@ export interface IReporteTracker4G extends IReporteTracker {
   triperoStateDuration?: number;
   triperoCurrentTripId?: string;
   triperoCurrentTripDistance?: number;
+  // Telemetría OBD/CAN del vehículo (ej: Queclink GV350CEU, reporte ERI con
+  // <ERI Mask> bit 2). Presente solo cuando el equipo está cableado al CAN bus.
+  obd?: IReporteTrackerOBD;
+}
+
+/**
+ * Telemetría OBD leída del CAN bus del vehículo (bloque CAN Data del reporte ERI
+ * de Queclink). Todos los campos son opcionales: el equipo sólo envía los que su
+ * <CAN Bus Report Mask> habilita y que el vehículo expone. La firma de índice
+ * cubre los campos menos comunes (camión/tacógrafo/eléctrico) sin enumerarlos.
+ */
+export interface IReporteTrackerOBD {
+  vin?: string; // Número de chasis
+  ignicionKey?: number; // Estado de ignición leído del CAN (0-2)
+  distanciaTotal?: number; // Odómetro del vehículo
+  distanciaTotalFuente?: 'dashboard' | 'impulsos';
+  combustibleUsadoTotal?: number; // Combustible consumido acumulado
+  combustibleUsadoTotalUnidad?: 'L' | 'K';
+  rpm?: number; // Revoluciones del motor
+  velocidad?: number; // Velocidad del vehículo (km/h) según CAN
+  temperaturaRefrigerante?: number; // °C
+  consumoCombustible?: number; // L/100km o L/h
+  nivelCombustible?: number; // Nivel de combustible
+  nivelCombustibleUnidad?: 'L' | '%';
+  autonomia?: number; // Km estimados con el combustible restante (hm)
+  pedalAcelerador?: number; // % de presión del pedal
+  horasMotor?: number; // Horas totales de motor
+  tiempoConduccion?: number; // Horas en marcha
+  tiempoRalenti?: number; // Horas en ralentí
+  combustibleRalenti?: number; // Combustible consumido en ralentí
+  combustibleRalentiUnidad?: 'L' | 'K';
+  temperaturaAmbiente?: number; // °C
+  dtc?: string[]; // Códigos de falla activos (DTC)
+  canMaskRaw?: string; // <CAN Bus Report Mask> crudo (diagnóstico)
+  _parcial?: boolean; // true si quedó un sub-bloque sin parsear (ver rawTail)
+  rawTail?: string; // Resto crudo del bloque CAN no decodificado
+  [campo: string]: unknown; // Campos extra (ejes, tacógrafo, eléctrico, etc.)
 }
 
 export interface IReporteTrackerT1000B extends IReporteTracker {
