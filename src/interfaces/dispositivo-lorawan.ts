@@ -17,8 +17,6 @@ export type TipoDispositivoLorawan =
 export interface IModosACTIS {
   fotocelula?: boolean;
   astronomico?: boolean;
-  manual?: boolean;
-  rele?: boolean;
 }
 //Notas: En el caso de estos dispositivos:
 // Potencia de dispositivo GPE = consumo instantáneo (W)
@@ -60,7 +58,6 @@ export interface PayloadSetModeActis {
     apagadoHabilitado?: boolean; // bit3
   };
   iniciarEncendida?: boolean; // bit4 - Estado inicial al salir de modo manual
-  modoRele?: boolean; //Es un flag que se incluye para generar el comando que se enviará a Chirpstack
 }
 
 // ===== PAYLOAD MODO MANUAL ACTIS (Puerto 11) =====

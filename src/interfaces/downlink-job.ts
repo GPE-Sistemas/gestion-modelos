@@ -82,7 +82,6 @@ export interface IDownlinkJob {
   // Auto-get encadenado (ACTIS)
   proximoGet?: IProximoGetDownlinkJob;
 
-  // Datos extra que se propagan al IComando (ej: modoRele para pto 10)
   datosExtra?: Record<string, any>;
 
   //Fechas
