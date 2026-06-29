@@ -209,6 +209,7 @@ export interface IModuloAdministracion {
   activo?: boolean;
   crearUsuarios?: boolean;
   crearServicios?: boolean;
+  verApikeys?: boolean;
   crearApikeys?: boolean;
 
   //Trackers
