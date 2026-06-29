@@ -115,6 +115,19 @@ export interface IEstadoArmadoUnicom {
   actualizado?: string; // fecha ISO del último cambio de estado conocido
 }
 
+/// Último estado de energía/panel del UNICOM, decodificado del bitmask `sts` que el equipo
+/// reporta por MQTT. Lo persiste el gateway (gestion-api-alarmas) en el doc para que el resto
+/// del sistema (p.ej. consultarEstado → indicadores batería/220V) lo lea sin depender del broker.
+export interface IUltimoEstadoUnicom {
+  hay220v?: boolean; // false = falta de energía (corte 220V)
+  bateriaBaja?: boolean;
+  armadoTotal?: boolean;
+  perimetral?: boolean;
+  disparo?: boolean;
+  sirena?: boolean;
+  fecha?: string; // ISO del último sts procesado
+}
+
 /// Config por dispositivo del comunicador UNICOM. La identidad es el devid
 /// (= idUnicoComunicador, "uw"+MAC). El broker/credenciales son de flota y
 /// viven a nivel backend (env), NO por dispositivo en DB. Los topics se
@@ -157,6 +170,8 @@ export interface IDispositivoAlarma {
   // Additive — NO reemplaza `armado`/`TiposDeArmado` (uso productivo de otras alarmas).
   estadoArmadoUnicom?: IEstadoArmadoUnicom;
   configUnicom?: IConfigComunicadorUnicom;
+  // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
+  ultimoEstadoUnicom?: IUltimoEstadoUnicom;
   imagenes?: string[];
   ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
