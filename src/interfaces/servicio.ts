@@ -35,6 +35,7 @@ export interface IServicio {
   costo?: number;
   litrosCargados?: number;
   idProveedor?: string;
+  fotos?: string[];
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
