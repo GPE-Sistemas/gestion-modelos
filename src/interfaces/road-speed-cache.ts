@@ -1,5 +1,13 @@
 import { IGeoJSONPoint } from '../auxiliares';
 
+// Versión reducida para enviar límites de velocidad entre gestion-api-gestion y gestion-api-eventos
+export interface ISpeedLimitResult {
+  maxspeed?: number; // km/h
+  unidad?: string;
+  desconocido?: boolean;
+  confianza?: 'explicito' | 'inferido';
+  fuente?: 'tomtom' | 'osm' | 'fallback';
+}
 export interface IRoadSpeedCache {
   _id?: string;
   fechaCreacion?: string;
@@ -14,10 +22,14 @@ export interface IRoadSpeedCache {
 
 type OmitirCreate = '_id';
 
-export interface ICreateRoadSpeedCache
-  extends Omit<Partial<IRoadSpeedCache>, OmitirCreate> {}
+export interface ICreateRoadSpeedCache extends Omit<
+  Partial<IRoadSpeedCache>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate = '_id';
 
-export interface IUpdateRoadSpeedCache
-  extends Omit<Partial<IRoadSpeedCache>, OmitirUpdate> {}
+export interface IUpdateRoadSpeedCache extends Omit<
+  Partial<IRoadSpeedCache>,
+  OmitirUpdate
+> {}
