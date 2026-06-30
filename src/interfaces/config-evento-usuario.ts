@@ -38,6 +38,12 @@ export interface CondicionNotificacion {
     velocidad?: {
       'superior a': number;
     };
+    // Exceso de velocidad según el límite legal de la calle/ruta (no un umbral fijo).
+    // El límite se resuelve por backend (TomTom/OSM, ver feature exceso de velocidad).
+    excesoVelocidadCalle?: {
+      tolerancia?: number; // ej. 0.1 (+10%) sobre el límite antes de generar; default 0.1
+      umbralFallback?: number; // km/h a usar si la vía no tiene dato de límite
+    };
     estacionado?: {
       ubicacionEstacionado?: IGeoJSONPoint;
       distanciaDeAviso?: number;
@@ -92,6 +98,10 @@ export interface CondicionNotificacionCache {
   activo?: {
     velocidad?: {
       'superior a': number;
+    };
+    excesoVelocidadCalle?: {
+      tolerancia?: number;
+      umbralFallback?: number;
     };
     estacionado?: {
       ubicacionEstacionado?: IGeoJSONPoint;
