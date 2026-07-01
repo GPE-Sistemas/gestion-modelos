@@ -46,14 +46,14 @@ export interface IServicio {
   usuario?: IUsuario;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'activo' | 'proveedor';
+type OmitirCreate = '_id' | 'cliente' | 'activo' | 'proveedor' | 'usuario';
 
 export interface ICreateServicio extends Omit<
   Partial<IServicio>,
   OmitirCreate
 > {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'activo' | 'proveedor';
+type OmitirUpdate = '_id' | 'cliente' | 'activo' | 'proveedor' | 'usuario';
 
 export interface IUpdateServicio extends Omit<
   Partial<IServicio>,
