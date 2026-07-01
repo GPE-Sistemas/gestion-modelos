@@ -2,6 +2,7 @@ import { ICoordenadas } from '../auxiliares';
 import { IActivo } from './activo';
 import { ICliente } from './cliente';
 import { IProveedor } from './proveedor';
+import { IUsuario } from './usuario';
 
 export type TipoServicio = 'Gasto' | 'Mantenimiento' | 'Combustible';
 export type CategoriaServicio = 'Colectivo' | 'Vehiculo';
@@ -36,11 +37,13 @@ export interface IServicio {
   litrosCargados?: number;
   idProveedor?: string;
   fotos?: string[];
+  idUsuario?: string;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
   proveedor?: IProveedor;
   activo?: IActivo;
+  usuario?: IUsuario;
 }
 
 type OmitirCreate = '_id' | 'cliente' | 'activo' | 'proveedor';
