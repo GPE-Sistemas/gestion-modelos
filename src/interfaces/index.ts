@@ -62,6 +62,7 @@ export * from './config-perfil';
 export * from './prediccion-cercana';
 export * from './sirena';
 export * from './geo-cache';
+export * from './road-speed-cache';
 export * from './gateway';
 export * from './metricas-gateway';
 export * from './resumen-datos';
