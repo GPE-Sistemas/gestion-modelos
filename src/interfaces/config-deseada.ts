@@ -74,6 +74,7 @@ export interface IConfigDeseadaBase<T extends keyof MapaConfigDeseada> {
 
   // Info de carga
   fechaCreacion?: string; // Default: Date.now
+  fechaActualizacion?: string; // Última vez que cambió el contenido de la configuración deseada
   fechaAplicacion?: string;
   idEntidad?: string;
   config?: MapaConfigDeseada[T];
@@ -109,6 +110,7 @@ type Omitir =
   | '_id'
   | 'idsAncestros'
   | 'fechaCreacion'
+  | 'fechaActualizacion'
   | 'dispositivo'
   | 'cliente'
   | 'ancestros';
