@@ -169,6 +169,7 @@ export interface IConsumoCombustibleVehiculos {
   consumoCiudad?: number; // litros cada 100 km (ciudad) — snapshot del vehículo individual
   consumoEstimado?: number; // litros (según km y promedio de consumoRuta/consumoCiudad)
   consumoDeclarado?: number; // litros (según lo cargado en los servicios del vehículo)
+  consumoReal?: number; // litros (según caídas de nivel del sensor, de 'Combustible Horario Vehículos')
   vehiculosConsiderados?: number; // Vehículos totales analizados (mínimamente tenían odómetro)
   vehiculosConConsumo?: number; // Vehículos que tenían consumo promedio y valores de odómetro
 }
