@@ -6,10 +6,7 @@ export interface IFacturacionCliente {
   _id?: string;
   idCliente?: string;
   idsAncestros?: string[];
-  costoTracker?: number; // costo por unidad de tracker
-  costoCamara?: number; // costo por unidad de cámara
-  costoAlarma?: number; // costo por unidad de alarma
-  moneda?: MonedaFacturacion;
+  activa?: boolean;
   /**
    * Si true, el cliente no se cobra: su costo se descuenta del cliente
    * facturable padre (línea de bonificación). Si false/undefined y el
@@ -48,14 +45,10 @@ export interface IUpdateFacturacionCliente extends Omit<
 export interface ICategoriaFacturacionEnCurso {
   total: number;
   activos: number;
-  costoUnitario: number;
-  costoEstimado: number;
-  costoReal: number;
 }
 
 export interface IFacturacionEnCurso {
   idCliente: string;
-  moneda?: MonedaFacturacion;
   periodoInicio: string; // ISO, inicio del mes en curso
   // Categorías y totales = NETO (lo que efectivamente paga el cliente).
   trackers: ICategoriaFacturacionEnCurso;
