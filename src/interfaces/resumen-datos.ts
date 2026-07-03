@@ -180,14 +180,11 @@ export interface IConsumoCombustibleVehiculos {
 export interface IDetalleGastoCategoria {
   cantidadTotal?: number; // dispositivos totales del cliente (ej. 100)
   cantidadFacturada?: number; // los considerados en la cotización (ej. 10)
-  precioUnitario?: number; // a cuánto se cobró cada uno
-  subtotal?: number; // cantidadFacturada * precioUnitario
 }
 
 /** Gasto facturado de una categoría para un hijo (cantidad + subtotal). */
 export interface IGastoHijoCategoria {
   cantidad?: number; // dispositivos facturados del hijo
-  subtotal?: number; // cantidad * precio unitario del facturable
 }
 
 /** Gasto que generó un hijo directo en el período del resumen. */
@@ -206,7 +203,6 @@ export interface IResumenGastosCliente {
   alarmas?: IDetalleGastoCategoria;
   camaras?: IDetalleGastoCategoria;
   total?: number; // suma de los subtotales de las 3 categorías
-  moneda?: MonedaResumen;
   /** Desglose por hijo directo (no bonificado, no raíz independiente). */
   hijos?: IGastoHijoResumen[];
 }
