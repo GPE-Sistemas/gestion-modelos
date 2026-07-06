@@ -35,12 +35,10 @@ export interface IUpdateFacturacionCliente extends Omit<
  * ────────────────────────────────────────────────*/
 
 /**
- * Detalle por categoría de la facturación en curso.
+ * Detalle por categoría de la facturación en curso (solo cantidades).
  * - total: dispositivos totales del cliente.
- * - activos: los que cuentan para la cotización (trackers/alarmas con
- *   reporte en el mes; cámaras = total).
- * - costoEstimado = total * costoUnitario (fantasma).
- * - costoReal = activos * costoUnitario (lo que seguro se factura).
+ * - activos: los que cuentan (trackers/alarmas con reporte en el mes;
+ *   cámaras = total).
  */
 export interface ICategoriaFacturacionEnCurso {
   total: number;
