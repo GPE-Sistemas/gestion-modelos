@@ -300,6 +300,9 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   // Campos comunes a eventos operacionales
   notificar?: boolean;
   atender?: boolean;
+  /** Derivado en backend (hooks): atender===true && estado en estados activos.
+   *  Indexado parcialmente para acelerar la consulta de eventos "a atender". */
+  requiereAtencion?: boolean;
   noDerivar?: boolean;
   posponerHasta?: string;
   categoria?: string; // Nombre de la categoria del tipo de evento
@@ -403,6 +406,7 @@ export type IEventoGenerico =
 type OmitirCreate =
   | '_id'
   | 'idsAncestros'
+  | 'requiereAtencion'
   | 'cliente'
   | 'ancestros'
   | 'tracker'
