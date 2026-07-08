@@ -81,6 +81,7 @@ export type estadoEventoTecnico =
   | 'Asignado'
   | 'En Atención'
   | 'Pendiente de Aprobación'
+  | 'Firma Cliente'
   | 'Finalizado';
 
 export type estadoEvento =
