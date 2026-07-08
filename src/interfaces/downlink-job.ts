@@ -61,6 +61,7 @@ export interface IDownlinkJob {
   objetivo?: IObjetivoComando; // Procedencia: desde qué nivel/entidad se originó (se propaga al IComando)
   idEjecucion?: string; // batch id (uuid) — agrupa todos los jobs de una acción
   idJobBull?: string; // BullMQ job id
+  indicePaso?: number; //posición de este downlink dentro del plan ordenado del dispositivo
 
   puerto: number;
   payload: string;
