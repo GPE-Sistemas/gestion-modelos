@@ -107,7 +107,11 @@ export type Operador = 'Personal' | 'Claro' | 'Movistar' | 'Tuenti' | 'Otro';
 /// UNICOM "WiFi DUO" ──────────────────────────────────────────────
 /// Comunicador WiFi (no SIM) que opera por MQTT contra el broker propio
 /// de IRIX. Modos de armado del panel (selectivo = total excluyendo zonas).
-export type ModoArmadoUnicom = 'Total' | 'Perimetral' | 'Selectivo' | 'Desarmado';
+export type ModoArmadoUnicom =
+  | 'Total'
+  | 'Perimetral'
+  | 'Selectivo'
+  | 'Desarmado';
 
 export interface IEstadoArmadoUnicom {
   modo?: ModoArmadoUnicom;
@@ -165,7 +169,7 @@ export interface IDispositivoAlarma {
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
   armado?: boolean[];
-  armando?: string;
+  armadoPor?: string[];
   // UNICOM: estado de armado con semántica propia (total/perimetral/selectivo).
   // Additive — NO reemplaza `armado`/`TiposDeArmado` (uso productivo de otras alarmas).
   estadoArmadoUnicom?: IEstadoArmadoUnicom;
