@@ -169,7 +169,7 @@ export interface IDispositivoAlarma {
   camarasPorZona?: ICamaraAlarma[];
   idsCamaras?: string[];
   armado?: boolean[];
-  armadoPor?: string[];
+  armadoPor?: (string | null)[];
   // UNICOM: estado de armado con semántica propia (total/perimetral/selectivo).
   // Additive — NO reemplaza `armado`/`TiposDeArmado` (uso productivo de otras alarmas).
   estadoArmadoUnicom?: IEstadoArmadoUnicom;
