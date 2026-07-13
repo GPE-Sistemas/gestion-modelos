@@ -146,6 +146,8 @@ export type AccionesRol =
   | 'Servicio Técnico - Eliminar solicitudes'
   | 'Servicio Técnico - Reasignar solicitudes'
   | 'Servicio Técnico - Atender solicitudes'
+  | 'Servicio Técnico - Ver pedidos de materiales'
+  | 'Servicio Técnico - Gestionar pedidos de materiales'
   // *******************************************
   // MODULO ALARMAS
   // *******************************************

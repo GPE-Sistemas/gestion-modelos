@@ -26,6 +26,7 @@ export * from './log-reenvio';
 export * from './log-trackeo';
 export * from './log-twilio';
 export * from './luminaria';
+export * from './material-servicio-tecnico';
 export * from './puesta';
 export * from './modelo-dispositivo';
 export * from './nota';
