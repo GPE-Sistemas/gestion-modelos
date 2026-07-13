@@ -57,6 +57,10 @@ export interface IConfigCliente {
   idsClientesQuePuedenAtenderEventos?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   configHorarioAtencion?: IConfigHorario;
+  /** Si es true, los operadores de este cliente pueden sumarse a atender
+   *  eventos que ya están siendo atendidos por otro operador.
+   *  Default false: solo un operador atiende a la vez (lock). */
+  atencionMultipleEventos?: boolean;
   solicitantesEmergencias?: string[];
   solicitantePredeterminado?: string;
   credencialesAlarmas?: ICredencialesAlarma[];

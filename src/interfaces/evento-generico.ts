@@ -327,6 +327,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   // Populate opcional
   cliente?: ICliente;
   ancestros?: ICliente[];
+  usuariosAtendiendo?: IUsuario[];
   // idEntidad
   tracker?: ITracker;
   alarma?: IDispositivoAlarma;
@@ -410,6 +411,7 @@ type OmitirCreate =
   | 'requiereAtencion'
   | 'cliente'
   | 'ancestros'
+  | 'usuariosAtendiendo'
   | 'tracker'
   | 'alarma'
   | 'luminaria'
@@ -530,6 +532,7 @@ export type IEventoGenericoCache = Omit<
   IEventoGenerico,
   | 'cliente'
   | 'ancestros'
+  | 'usuariosAtendiendo'
   | 'tracker'
   | 'vehiculo'
   | 'alarma'
