@@ -4,10 +4,15 @@ import { IUsuario } from './usuario';
 
 export type TipoMaterialServicioTecnico = 'usado' | 'pedido';
 
+/**
+ * Flujo del pedido: Pendiente (lo pide el técnico) → Aprobado (operador)
+ * → Usado (el técnico vuelve, termina el trabajo y lo marca). Anulado en
+ * cualquier punto previo a Usado.
+ */
 export type EstadoPedidoMaterial =
   | 'Pendiente'
-  | 'Derivado'
-  | 'Entregado'
+  | 'Aprobado'
+  | 'Usado'
   | 'Anulado';
 
 export interface IMaterialServicioTecnico {
