@@ -327,6 +327,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   // Populate opcional
   cliente?: ICliente;
   ancestros?: ICliente[];
+  usuariosAtendiendo?: IUsuario[];
   // idEntidad
   tracker?: ITracker;
   alarma?: IDispositivoAlarma;
@@ -410,6 +411,7 @@ type OmitirCreate =
   | 'requiereAtencion'
   | 'cliente'
   | 'ancestros'
+  | 'usuariosAtendiendo'
   | 'tracker'
   | 'alarma'
   | 'luminaria'
@@ -523,6 +525,27 @@ export type IUpdateEventoGenerico =
     >);
 
 /* ────────────────────────────────────────────────
+ *  ATENCIÓN (arrays idsUsuariosAtendiendo / idsClientesAtendiendo)
+ * ────────────────────────────────────────────────*/
+
+export type AccionAtencionEvento = 'atender' | 'desatender' | 'limpiar';
+
+/** Body de PUT /eventos-genericos/:id/atencion (api-datos).
+ *  Actualiza estado + arrays de atención en una sola operación atómica
+ *  ($addToSet/$pull), sin ventana de carrera entre operadores. */
+export interface IActualizarAtencionEventoGenerico {
+  accion: AccionAtencionEvento;
+  idUsuario: string;
+  idCliente: string;
+  estado: EstadoEvento;
+  /** Solo para 'limpiar' (En Espera) */
+  posponerHasta?: string;
+  /** Solo para 'atender': si es true, falla con 409 si otro usuario ya está
+   *  atendiendo (lock de atención única). */
+  exclusivo?: boolean;
+}
+
+/* ────────────────────────────────────────────────
  *  TIPO CACHE (SIN POPULATE)
  * ────────────────────────────────────────────────*/
 
@@ -530,6 +553,7 @@ export type IEventoGenericoCache = Omit<
   IEventoGenerico,
   | 'cliente'
   | 'ancestros'
+  | 'usuariosAtendiendo'
   | 'tracker'
   | 'vehiculo'
   | 'alarma'
