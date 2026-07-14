@@ -69,6 +69,12 @@ export interface IUsuario {
   hash?: string;
   datosPersonales?: IDatosPersonales;
   config?: IConfigUsuario;
+  // Estadísticas de uso (actividad). Se actualizan en cada login exitoso
+  // (grant password o Google / auto-registro), NO en los refresh de token.
+  // Detalle temporal (DAU/WAU/MAU, series) vive en la colección LoginEvento.
+  ultimoLogin?: string;
+  primerLogin?: string;
+  cantidadLogins?: number;
   // Populate / Virtual
   cliente?: ICliente;
   ancestros?: ICliente[];
@@ -77,10 +83,14 @@ export interface IUsuario {
   permisos?: IPermiso[];
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'fechaCreacion';
+// Las métricas de uso las escribe internamente el registro de login, nunca el
+// cliente: se excluyen del create/update público (anti mass-assignment).
+type CamposStats = 'ultimoLogin' | 'primerLogin' | 'cantidadLogins';
+
+type OmitirCreate = '_id' | 'cliente' | 'fechaCreacion' | CamposStats;
 
 export interface ICreateUsuario extends Omit<Partial<IUsuario>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'fechaCreacion';
+type OmitirUpdate = '_id' | 'cliente' | 'fechaCreacion' | CamposStats;
 
 export interface IUpdateUsuario extends Omit<Partial<IUsuario>, OmitirUpdate> {}

@@ -48,6 +48,7 @@ export * from './twilio-templates';
 export * from './ubicacion';
 export * from './visita-ubicacion';
 export * from './usuario';
+export * from './login-evento';
 export * from './permiso';
 export * from './destinatario-asistencia';
 export * from './emergencias';
