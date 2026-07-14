@@ -7,6 +7,9 @@ export type AccionesRol =
   | 'Eventos - Ver eventos'
   | 'Eventos - Atender eventos'
   | 'Eventos - Finalizar eventos'
+  // Ver en el listado los eventos que otro operador ya está atendiendo
+  // (sin esta acción, en modo atención simple, se ocultan)
+  | 'Eventos - Ver eventos en atención'
   // *******************************************
   // LOGS
   // *******************************************
