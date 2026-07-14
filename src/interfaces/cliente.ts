@@ -34,6 +34,15 @@ export interface IIntegracionSoflex {
   parentFleetId?: string;
 }
 
+/** Control de inactividad de operadores (popup de confirmación de actividad
+ *  en gestion-web-cliente). Aplica a usuarios con rol Operador. */
+export interface IControlInactividad {
+  /** Minutos sin actividad hasta mostrar el cartel de confirmación */
+  limTiempoInactividad?: number;
+  /** Segundos que tiene el operador para confirmar que está activo */
+  limTiempoConfirm?: number;
+}
+
 export interface IConfigCliente {
   imagenes?: IImagenesCliente;
   tema?: ITemaCliente;
@@ -66,6 +75,7 @@ export interface IConfigCliente {
   credencialesAlarmas?: ICredencialesAlarma[];
   integracionSoflex?: IIntegracionSoflex;
   verTrafico?: boolean;
+  controlInactividad?: IControlInactividad;
 }
 
 // Informes
