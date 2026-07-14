@@ -60,7 +60,14 @@ export interface IClaveUsuarioAlarma {
 export interface IUsuario {
   _id?: string;
   identificacionInterna?: string;
+  /**
+   * @deprecated El cliente del usuario se resuelve por su Permiso
+   * (Permiso.nombreUsuario === Usuario.usuario → Permiso.idCliente), no por este
+   * campo. No usar para agrupar/scopear por cliente: los auto-registrados lo
+   * tienen vacío.
+   */
   idCliente?: string;
+  /** @deprecated Deriva de {@link idCliente} (deprecado). Usar el permiso. */
   idsAncestros?: string[];
   //
   idExterno?: string;
