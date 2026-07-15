@@ -216,6 +216,11 @@ export interface IModuloAdministracion {
   verApikeys?: boolean;
   crearApikeys?: boolean;
 
+  //Eventos Personalizados
+  verCategoriasEventos?: boolean;
+  verTiposEventos?: boolean;
+  verEventosPersonalizados?: boolean;
+
   //Trackers
   activoTrackers?: boolean;
   crearTrackers?: boolean;
