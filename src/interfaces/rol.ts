@@ -79,19 +79,25 @@ export type AccionesRol =
   | 'Administración - Crear roles'
   | 'Administración - Editar roles'
   | 'Administración - Eliminar roles'
+  // Eventos Personalizados
+  | 'Administración - Ver eventos personalizados'
+  | 'Administración - Crear eventos personalizados'
+  | 'Administración - Editar eventos personalizados'
+  | 'Administración - Eliminar eventos personalizados'
+  // Categorías Eventos
+  | 'Administración - Ver categorias eventos'
+  | 'Administración - Crear categorias eventos'
+  | 'Administración - Editar categorias eventos'
+  | 'Administración - Eliminar categorias eventos'
+  // Tipos de Eventos (listado categorias)
+  | 'Administración - Ver listado categorias'
+  | 'Administración - Crear listado categorias'
+  | 'Administración - Editar listado categorias'
+  | 'Administración - Eliminar listado categorias'
   // *******************************************
   // CONFIGURACIONES
   // *******************************************
   | 'Configuraciones - Configurar cliente'
-  | 'Configuraciones - Crear eventos personalizados'
-  | 'Configuraciones - Editar eventos personalizados'
-  | 'Configuraciones - Eliminar eventos personalizados'
-  | 'Configuraciones - Crear categorias eventos'
-  | 'Configuraciones - Editar categorias eventos'
-  | 'Configuraciones - Eliminar categorias eventos'
-  | 'Configuraciones - Crear listado categorias'
-  | 'Configuraciones - Editar listado categorias'
-  | 'Configuraciones - Eliminar listado categorias'
   | 'Configuraciones - Crear codigos alarmas'
   | 'Configuraciones - Editar codigos alarmas'
   | 'Configuraciones - Eliminar codigos alarmas'
