@@ -145,6 +145,10 @@ export interface IValoresEventoAlarma extends IValoresEventoBase {
   codigoAlarma?: string;
   codigoComunicador?: string;
   tiposEvento?: ('Armado' | 'Desarmado' | 'Detonación' | 'Test')[];
+  // Usuario que generó el armado/desarmado. Ausentes si no se pudo resolver
+  // (armado rápido/llave/automático, zona sin contacto configurado, eventos históricos).
+  idUsuario?: string; // Solo si se resolvió a un IUsuario de la plataforma
+  usuario?: string; // Nombre ya resuelto (denormalizado): IUsuario, contacto del panel o "Usuario N"
   // UNICOM (additive): datos crudos del evento MQTT para trazabilidad/diagnóstico.
   cidUnicom?: string; // "<estado> <opcode>" original, ej. "3 407"
   opcodeUnicom?: string; // opcode del cid, ej. "407"
