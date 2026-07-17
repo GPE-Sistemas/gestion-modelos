@@ -1,22 +1,124 @@
 // evento-generico.ts
 import { IEntidades } from './asignacion';
-import { ICliente, IConfigHorario } from './cliente';
-import { ITracker } from './tracker';
-import { IDispositivoAlarma, ModoArmadoUnicom } from './dispositivo-alarma';
-import { IActivo } from './activo';
-import { IConfigEventoUsuario } from './config-evento-usuario';
-import { SonidoEvento } from './categoria-evento';
-import { IUsuario } from './usuario';
-import { ILuminaria } from './luminaria';
-import { IBotonBluetooth } from './boton-bluetooth';
-import { IReporteGenerico } from './reporte-generico';
-import { IDestinatarioAsistencia } from './destinatario-asistencia';
-import { IEmergencia } from './emergencias';
-import { IPersonalSalud } from './personal-salud';
-import { IGeoJSONPoint } from '../auxiliares';
-import { ISirena } from './sirena';
-import { IUbicacion } from './ubicacion';
-import { IGateway } from './gateway';
+import { z } from 'zod';
+import { ClienteSchema, ConfigHorarioSchema, ICliente, IConfigHorario } from './cliente';
+import type { ITracker } from './tracker';
+import { ModoArmadoUnicomSchema } from './dispositivo-alarma';
+import type { IDispositivoAlarma } from './dispositivo-alarma';
+import type { IActivo } from './activo';
+import type { IConfigEventoUsuario } from './config-evento-usuario';
+import { SonidoEventoSchema } from './categoria-evento';
+import type { IUsuario } from './usuario';
+import type { ILuminaria } from './luminaria';
+import { BotonBluetoothSchema, IBotonBluetooth } from './boton-bluetooth';
+import type { IReporteGenerico } from './reporte-generico';
+import type { IDestinatarioAsistencia } from './destinatario-asistencia';
+import type { IEmergencia } from './emergencias';
+import { PersonalSaludSchema, IPersonalSalud } from './personal-salud';
+import { GeoJSONPointSchema } from '../auxiliares';
+import { SirenaSchema, ISirena } from './sirena';
+import type { IUbicacion } from './ubicacion';
+import { GatewaySchema, IGateway } from './gateway';
+
+/* ────────────────────────────────────────────────
+ *  TIPOS DE EVENTO (DISCRIMINANTE)
+ * ────────────────────────────────────────────────*/
+
+export const TipoEventoGenericoSchema = z.enum([
+  'Evento Colectivo',
+  'Evento Activo',
+  'Evento Tracker',
+  'Evento Vehiculo',
+  'Evento Alarma',
+  'Evento Luminaria',
+  'Evento Gateway',
+  'Evento BotonBLE',
+  'Evento Sirena',
+  'Evento Técnico Alarma',
+  'Evento Técnico Tracker',
+  'Evento Técnico Vehículo',
+  'Evento Técnico Luminaria',
+  'Evento Técnico Sirena',
+  'Evento Técnico Gateway',
+  'Evento Emergencia Médica',
+  'Evento Emergencia Bomberos',
+]);
+export type TipoEventoGenerico = z.infer<typeof TipoEventoGenericoSchema>;
+
+/* ────────────────────────────────────────────────
+ *  CATEGORIAS
+ * ────────────────────────────────────────────────*/
+export const CategoriaSchema = z.enum([
+  'Evento', // Eventos operacionales que pueden ser atendidos. (colectivos, activos, trackers, vehículos, alarmas, luminarias, botón BLE, gateways)
+  'Servicio Técnico', // Eventos técnicos (alarma, tracker, luminaria)
+  'Seguimiento Emergencia', // Eventos de emergencia (médica, bomberos)
+  'Verificación', // Eventos de verificación (subir fotos y notas de entidades particulares)
+]);
+export type Categoria = z.infer<typeof CategoriaSchema>;
+
+/* ────────────────────────────────────────────────
+ *  Auxiliares
+ * ────────────────────────────────────────────────*/
+export const RangoHorarioSchema = z.object({
+  dias: z.array(z.string()).optional(), // ['Lunes', 'Martes', ...]
+  horarioDesde: z.string().optional(), // '08:00'
+  horarioHasta: z.string().optional(), // '18:00'
+});
+export type RangoHorario = z.infer<typeof RangoHorarioSchema>;
+
+export const CategoriaTecnicaSchema = z.enum([
+  'Alarma',
+  'Tracker',
+  'Vehículo',
+  'Luminaria',
+  'Sirena',
+  'Gateway',
+]);
+export type CategoriaTecnica = z.infer<typeof CategoriaTecnicaSchema>;
+
+export const EstadoEventoTecnicoSchema = z.enum([
+  'Pendiente',
+  'Asignado',
+  'En Atención',
+  'Pendiente de Aprobación',
+  'Firma Cliente',
+  'Finalizado',
+]);
+export type estadoEventoTecnico = z.infer<typeof EstadoEventoTecnicoSchema>;
+
+export const EstadoEventoSchema = z.enum([
+  'Sin Tratamiento',
+  'Pendiente',
+  'En Atención',
+  'En Espera',
+  'Liberada',
+  'Finalizada',
+]);
+export type estadoEvento = z.infer<typeof EstadoEventoSchema>;
+
+export const EstadoEmergenciaMedicaSchema = z.enum([
+  'Pendiente', // Auxilio recién creado
+  'Asignada', // Se asignó vehículo/médico/enfermero
+  'Reasignada', //Se reasignó vehículo/médico/enfermero
+  'En tránsito', // El vehículo salió del centro
+  'Llegó a destino', // El vehículo llegó al lugar de la emergencia
+  'Rumbo a hospital', // El vehículo sale hacia el hospital
+  'Llegada a hospital', //El vehículo Llegó al hospital
+  'Finalizada', // La emergencia fue tratada. Ya sea porque se llegó al hospital o no
+  'Cancelada', // La emergencia se canceló
+]);
+export type EstadoEmergenciaMedica = z.infer<typeof EstadoEmergenciaMedicaSchema>;
+
+export const EstadoEmergenciaBomberosSchema = z.enum([
+  'Pendiente', // Auxilio recién creado
+  'Asignada', // Se asignó vehículo
+  'Reasignada', //Se reasignó vehículo
+  'En tránsito', // El vehículo salió del centro
+  'Llegó a destino', // El vehículo llegó al lugar de la emergencia
+  'Finalizada', // La emergencia fue tratada
+  'Cancelada', // La emergencia se canceló
+]);
+export type EstadoEmergenciaBomberos = z.infer<typeof EstadoEmergenciaBomberosSchema>;
 
 /* ────────────────────────────────────────────────
  *  ALIAS DE TIPOS EXISTENTES
@@ -28,184 +130,181 @@ export type EstadoEventoEmergencia =
   | EstadoEmergenciaMedica
   | EstadoEmergenciaBomberos;
 
-/* ────────────────────────────────────────────────
- *  TIPOS DE EVENTO (DISCRIMINANTE)
- * ────────────────────────────────────────────────*/
+export const EstadoEventoEmergenciaSchema = z.union([
+  EstadoEmergenciaMedicaSchema,
+  EstadoEmergenciaBomberosSchema,
+]);
 
-export type TipoEventoGenerico =
-  | 'Evento Colectivo'
-  | 'Evento Activo'
-  | 'Evento Tracker'
-  | 'Evento Vehiculo'
-  | 'Evento Alarma'
-  | 'Evento Luminaria'
-  | 'Evento Gateway'
-  | 'Evento BotonBLE'
-  | 'Evento Sirena'
-  | 'Evento Técnico Alarma'
-  | 'Evento Técnico Tracker'
-  | 'Evento Técnico Vehículo'
-  | 'Evento Técnico Luminaria'
-  | 'Evento Técnico Sirena'
-  | 'Evento Técnico Gateway'
-  | 'Evento Emergencia Médica'
-  | 'Evento Emergencia Bomberos';
+export const ContactIDSchema = z.object({
+  numeroCuenta: z.string().optional(),
+  tipoMensaje: z.string().optional(),
+  calificadorDeEvento: z.string().optional(),
+  codigoDeEvento: z.string().optional(),
+  numeroDeParticion: z.string().optional(),
+  numeroDeZona: z.string().optional(),
+  checksum: z.string().optional(),
+});
+export type IContactID = z.infer<typeof ContactIDSchema>;
 
-/* ────────────────────────────────────────────────
- *  CATEGORIAS
- * ────────────────────────────────────────────────*/
-export type Categoria =
-  | 'Evento' // Eventos operacionales que pueden ser atendidos. (colectivos, activos, trackers, vehículos, alarmas, luminarias, botón BLE, gateways)
-  | 'Servicio Técnico' // Eventos técnicos (alarma, tracker, luminaria)
-  | 'Seguimiento Emergencia' // Eventos de emergencia (médica, bomberos)
-  | 'Verificación'; // Eventos de verificación (subir fotos y notas de entidades particulares)
-
-/* ────────────────────────────────────────────────
- *  Auxiliares
- * ────────────────────────────────────────────────*/
-export interface RangoHorario {
-  dias?: string[]; // ['Lunes', 'Martes', ...]
-  horarioDesde?: string; // '08:00'
-  horarioHasta?: string; // '18:00'
-}
-
-export type CategoriaTecnica =
-  | 'Alarma'
-  | 'Tracker'
-  | 'Vehículo'
-  | 'Luminaria'
-  | 'Sirena'
-  | 'Gateway';
-
-export type estadoEventoTecnico =
-  | 'Pendiente'
-  | 'Asignado'
-  | 'En Atención'
-  | 'Pendiente de Aprobación'
-  | 'Firma Cliente'
-  | 'Finalizado';
-
-export type estadoEvento =
-  | 'Sin Tratamiento'
-  | 'Pendiente'
-  | 'En Atención'
-  | 'En Espera'
-  | 'Liberada'
-  | 'Finalizada';
-
-export type EstadoEmergenciaMedica =
-  | 'Pendiente' // Auxilio recién creado
-  | 'Asignada' // Se asignó vehículo/médico/enfermero
-  | 'Reasignada' //Se reasignó vehículo/médico/enfermero
-  | 'En tránsito' // El vehículo salió del centro
-  | 'Llegó a destino' // El vehículo llegó al lugar de la emergencia
-  | 'Rumbo a hospital' // El vehículo sale hacia el hospital
-  | 'Llegada a hospital' //El vehículo Llegó al hospital
-  | 'Finalizada' // La emergencia fue tratada. Ya sea porque se llegó al hospital o no
-  | 'Cancelada'; // La emergencia se canceló
-
-export type EstadoEmergenciaBomberos =
-  | 'Pendiente' // Auxilio recién creado
-  | 'Asignada' // Se asignó vehículo
-  | 'Reasignada' //Se reasignó vehículo
-  | 'En tránsito' // El vehículo salió del centro
-  | 'Llegó a destino' // El vehículo llegó al lugar de la emergencia
-  | 'Finalizada' // La emergencia fue tratada
-  | 'Cancelada'; // La emergencia se canceló
-
-export interface IContactID {
-  numeroCuenta?: string;
-  tipoMensaje?: string;
-  calificadorDeEvento?: string;
-  codigoDeEvento?: string;
-  numeroDeParticion?: string;
-  numeroDeZona?: string;
-  checksum?: string;
-}
 /* ────────────────────────────────────────────────
  *  VALORES ESPECÍFICOS POR TIPO DE EVENTO
  * ────────────────────────────────────────────────*/
 
 // IValoresEventoOperacional
 // Separar en Alarmas - Trackers (Colectivos/Activos/Vehículos) - Luminarias
-export interface IValoresEventoBase {
-  titulo?: string;
-  mensaje?: string;
-  color?: string;
-  sonido?: SonidoEvento;
-}
+export const ValoresEventoBaseSchema = z.object({
+  titulo: z.string().optional(),
+  mensaje: z.string().optional(),
+  color: z.string().optional(),
+  sonido: SonidoEventoSchema.optional(),
+});
+export type IValoresEventoBase = z.infer<typeof ValoresEventoBaseSchema>;
 
-export interface IValoresEventoTracker extends IValoresEventoBase {
-  geojson?: IGeoJSONPoint;
-  codigoTracker?: string;
-  direccion?: string; // Coordenadas traducidas a dirección legible
-}
+export const ValoresEventoTrackerSchema = ValoresEventoBaseSchema.extend({
+  geojson: GeoJSONPointSchema.optional(),
+  codigoTracker: z.string().optional(),
+  direccion: z.string().optional(), // Coordenadas traducidas a dirección legible
+});
+export type IValoresEventoTracker = z.infer<typeof ValoresEventoTrackerSchema>;
 
-export interface IValoresEventoAlarma extends IValoresEventoBase {
-  contactId?: IContactID;
-  codigoAlarma?: string;
-  codigoComunicador?: string;
-  tiposEvento?: ('Armado' | 'Desarmado' | 'Detonación' | 'Test')[];
+export const ValoresEventoAlarmaSchema = ValoresEventoBaseSchema.extend({
+  contactId: ContactIDSchema.optional(),
+  codigoAlarma: z.string().optional(),
+  codigoComunicador: z.string().optional(),
+  tiposEvento: z
+    .array(z.enum(['Armado', 'Desarmado', 'Detonación', 'Test']))
+    .optional(),
   // Usuario que generó el armado/desarmado. Ausentes si no se pudo resolver
   // (armado rápido/llave/automático, zona sin contacto configurado, eventos históricos).
-  idUsuario?: string; // Solo si se resolvió a un IUsuario de la plataforma
-  usuario?: string; // Nombre ya resuelto (denormalizado): IUsuario, contacto del panel o "Usuario N"
+  idUsuario: z.string().optional(), // Solo si se resolvió a un IUsuario de la plataforma
+  usuario: z.string().optional(), // Nombre ya resuelto (denormalizado): IUsuario, contacto del panel o "Usuario N"
   // UNICOM (additive): datos crudos del evento MQTT para trazabilidad/diagnóstico.
-  cidUnicom?: string; // "<estado> <opcode>" original, ej. "3 407"
-  opcodeUnicom?: string; // opcode del cid, ej. "407"
-  modoArmado?: ModoArmadoUnicom; // si el evento es de armado/desarmado
-  idSensor?: number; // índice del sensor en reportes 1 606 / disparos 1 134
-  crf?: string; // 8 hex del reporte de sensor (código RF + attr)
-}
+  cidUnicom: z.string().optional(), // "<estado> <opcode>" original, ej. "3 407"
+  opcodeUnicom: z.string().optional(), // opcode del cid, ej. "407"
+  // ModoArmadoUnicomSchema es un z.enum chico y dispositivo-alarma (V2) ya no
+  // importa valores intra-SCC → import de valor sin ciclo runtime.
+  modoArmado: ModoArmadoUnicomSchema.optional(), // si el evento es de armado/desarmado
+  idSensor: z.number().optional(), // índice del sensor en reportes 1 606 / disparos 1 134
+  crf: z.string().optional(), // 8 hex del reporte de sensor (código RF + attr)
+});
+export type IValoresEventoAlarma = z.infer<typeof ValoresEventoAlarmaSchema>;
 
-export interface IValoresEventoLuminaria extends IValoresEventoBase {
-  geojson?: IGeoJSONPoint;
-}
+export const ValoresEventoLuminariaSchema = ValoresEventoBaseSchema.extend({
+  geojson: GeoJSONPointSchema.optional(),
+});
+export type IValoresEventoLuminaria = z.infer<typeof ValoresEventoLuminariaSchema>;
 
-export interface IValoresEventoBotonBLE extends IValoresEventoBase {
-  geojson?: IGeoJSONPoint;
-}
+export const ValoresEventoBotonBLESchema = ValoresEventoBaseSchema.extend({
+  geojson: GeoJSONPointSchema.optional(),
+});
+export type IValoresEventoBotonBLE = z.infer<typeof ValoresEventoBotonBLESchema>;
 
-export interface IValoresEventoGateway extends IValoresEventoBase {
-  geojson?: IGeoJSONPoint;
-}
+export const ValoresEventoGatewaySchema = ValoresEventoBaseSchema.extend({
+  geojson: GeoJSONPointSchema.optional(),
+});
+export type IValoresEventoGateway = z.infer<typeof ValoresEventoGatewaySchema>;
 
-export interface IValoresEventoSirena extends IValoresEventoBase {
-  idSirena?: string;
-  chipId?: string;
-  origen?: 'APP' | 'Botón' | 'Monitoreo'; /// Pánico (APP) - Manual (Botón físico) - Monitoreo (¿Programado o algo así?)
-  efecto?: 'Reflector' | 'Sirena' | 'Pánico'; /// Reflector (Luz) - Sirena (Sonido) - Pánico (Luz y Sonido)
-  direccion?: string; // Dirección parseada de la sirena
-  idVecino?: string;
-  nombreVecino?: string;
-  telefono?: string; // Solo del vecino
-  idUsuario?: string; // Si viene de monitoreo
-  usuario?: string; // Si viene de monitoreo
-  geojson?: IGeoJSONPoint; /// Ubicación del vecino cuando es APP Sirena en lkos otros casos.
-}
+export const ValoresEventoSirenaSchema = ValoresEventoBaseSchema.extend({
+  idSirena: z.string().optional(),
+  chipId: z.string().optional(),
+  origen: z.enum(['APP', 'Botón', 'Monitoreo']).optional(), /// Pánico (APP) - Manual (Botón físico) - Monitoreo (¿Programado o algo así?)
+  efecto: z.enum(['Reflector', 'Sirena', 'Pánico']).optional(), /// Reflector (Luz) - Sirena (Sonido) - Pánico (Luz y Sonido)
+  direccion: z.string().optional(), // Dirección parseada de la sirena
+  idVecino: z.string().optional(),
+  nombreVecino: z.string().optional(),
+  telefono: z.string().optional(), // Solo del vecino
+  idUsuario: z.string().optional(), // Si viene de monitoreo
+  usuario: z.string().optional(), // Si viene de monitoreo
+  geojson: GeoJSONPointSchema.optional(), /// Ubicación del vecino cuando es APP Sirena en lkos otros casos.
+});
+export type IValoresEventoSirena = z.infer<typeof ValoresEventoSirenaSchema>;
 
 // Valores para eventos técnicos
-export interface IValoresEventoTecnico extends IValoresEventoBase {
-  categoria?: CategoriaTecnica;
-  solicitante?: {
-    nombre?: string;
-    telefono?: string;
-    email?: string;
-  };
-  disponibilidad?: RangoHorario[];
-  prioridad?: 'Normal' | 'Alta' | 'Urgente';
-  numeroIncidente?: string; // Random cuando se crea.
-}
+export const ValoresEventoTecnicoSchema = ValoresEventoBaseSchema.extend({
+  categoria: CategoriaTecnicaSchema.optional(),
+  solicitante: z
+    .object({
+      nombre: z.string().optional(),
+      telefono: z.string().optional(),
+      email: z.string().optional(),
+    })
+    .optional(),
+  disponibilidad: z.array(RangoHorarioSchema).optional(),
+  prioridad: z.enum(['Normal', 'Alta', 'Urgente']).optional(),
+  numeroIncidente: z.string().optional(), // Random cuando se crea.
+});
+export type IValoresEventoTecnico = z.infer<typeof ValoresEventoTecnicoSchema>;
 
 // Valores para eventos de emergencia
-export interface IValoresEventoEmergencia extends IValoresEventoBase {
-  ubicacionActual?: IGeoJSONPoint; //Es la ubicación donde se generó el evento. Cuando se crea la emergencia, el primer evento no tiene ubicación porque no tiene ninguna ambulancia asignada
-  direccionActual?: string;
-  motivoCancelacion?: string;
-  motivoReasignacion?: string;
-  observaciones?: string;
-  diagnostico?: string;
-}
+export const ValoresEventoEmergenciaSchema = ValoresEventoBaseSchema.extend({
+  ubicacionActual: GeoJSONPointSchema.optional(), //Es la ubicación donde se generó el evento. Cuando se crea la emergencia, el primer evento no tiene ubicación porque no tiene ninguna ambulancia asignada
+  direccionActual: z.string().optional(),
+  motivoCancelacion: z.string().optional(),
+  motivoReasignacion: z.string().optional(),
+  observaciones: z.string().optional(),
+  diagnostico: z.string().optional(),
+});
+export type IValoresEventoEmergencia = z.infer<typeof ValoresEventoEmergenciaSchema>;
+
+/* ────────────────────────────────────────────────
+ *  DETALLES (sub-objetos con populates)
+ * ────────────────────────────────────────────────*/
+
+/** Cambio de entidad propuesto por el técnico durante la atención de un servicio
+ *  técnico. Ej: cambio de nodo de una luminaria. Se aplica recién cuando
+ *  administración aprueba (finaliza) el evento. */
+export const CambioEntidadPropuestoSchema = z.object({
+  tipoEntidad: z.custom<IEntidades>().optional(),
+  idEntidadAnterior: z.string().optional(),
+  idEntidadNueva: z.string().optional(),
+  aplicado: z.boolean().optional(), // false hasta que administración aprueba
+  fechaAplicado: z.string().optional(),
+});
+export type CambioEntidadPropuesto = z.infer<
+  typeof CambioEntidadPropuestoSchema
+>;
+
+// Populates intra-SCC como z.custom (import type-only): un schema real acá
+// arrastra el shape completo del ciclo y revienta la serialización de
+// declarations (TS7056) acá y en los consumidores NestJS.
+export const DetallesTecnicosSchema = z.object({
+  idTecnicoAsignado: z.string().optional(),
+  fechaDisponibleParaTratar: z.string().optional(),
+  cambioEntidadPropuesto: CambioEntidadPropuestoSchema.optional(),
+
+  // Populate opcional
+  tecnico: z.custom<IUsuario>().optional(),
+});
+export type DetallesTecnicos = z.infer<typeof DetallesTecnicosSchema>;
+
+export const DetallesEmergenciasSchema = z.object({
+  // Ubicaciones
+  idEmergencia: z.string().optional(),
+  idCentroDeAtencion: z.string().optional(),
+  idHospital: z.string().optional(),
+
+  // Cosas que deberían ser usuarios, pero algunas no lo son.
+  idDestinatarioAsistencia: z.string().optional(),
+  idChofer: z.string().optional(),
+  idMovilUsuario: z.string().optional(),
+  idsMedicos: z.array(z.string()).optional(),
+  idsEnfermeros: z.array(z.string()).optional(),
+  idUsuarioResponsable: z.string().optional(),
+  idMovilAsignado: z.string().optional(),
+
+  // Populate opcional
+  destinatarioAsistencia: z.custom<IDestinatarioAsistencia>().optional(),
+  emergencia: z.custom<IEmergencia>().optional(),
+  chofer: z.custom<IUsuario>().optional(),
+  centroDeAtencion: z.custom<IUbicacion>().optional(),
+  movilUsuario: z.custom<IUsuario>().optional(),
+  medicos: z.array(PersonalSaludSchema).optional(),
+  enfermeros: z.array(PersonalSaludSchema).optional(),
+  hospital: z.custom<IUbicacion>().optional(),
+  usuarioResponsable: z.custom<IUsuario>().optional(),
+  movilAsignado: z.custom<IActivo>().optional(),
+});
+export type DetallesEmergencias = z.infer<typeof DetallesEmergenciasSchema>;
 
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPOS DE EVENTO → VALORES Y ESTADO
@@ -285,6 +384,9 @@ export type MapaEventoGenerico = {
 
 /* ────────────────────────────────────────────────
  *  BASE DEL EVENTO (GENÉRICO)
+ *
+ *  Tipo legacy hand-written: el discriminante `tipoEvento` es OPCIONAL acá,
+ *  pero REQUERIDO en los schemas Zod de abajo. Por eso NO se deriva con z.infer.
  * ────────────────────────────────────────────────*/
 
 export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
@@ -346,53 +448,6 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   reporte?: IReporteGenerico;
   configEventoUsuario?: IConfigEventoUsuario;
 }
-
-/** Cambio de entidad propuesto por el técnico durante la atención de un servicio
- *  técnico. Ej: cambio de nodo de una luminaria. Se aplica recién cuando
- *  administración aprueba (finaliza) el evento. */
-export type CambioEntidadPropuesto = {
-  tipoEntidad?: IEntidades;
-  idEntidadAnterior?: string;
-  idEntidadNueva?: string;
-  aplicado?: boolean; // false hasta que administración aprueba
-  fechaAplicado?: string;
-};
-
-export type DetallesTecnicos = {
-  idTecnicoAsignado?: string;
-  fechaDisponibleParaTratar?: string;
-  cambioEntidadPropuesto?: CambioEntidadPropuesto;
-  // Populate opcional
-  tecnico?: IUsuario;
-};
-
-export type DetallesEmergencias = {
-  // Ubicaciones
-  idEmergencia?: string;
-  idCentroDeAtencion?: string;
-  idHospital?: string;
-
-  // Cosas que deberían ser usuarios, pero algunas no lo son.
-  idDestinatarioAsistencia?: string;
-  idChofer?: string;
-  idMovilUsuario?: string;
-  idsMedicos?: string[];
-  idsEnfermeros?: string[];
-  idUsuarioResponsable?: string;
-  idMovilAsignado?: string;
-
-  // Populate opcional
-  destinatarioAsistencia?: IDestinatarioAsistencia;
-  emergencia?: IEmergencia;
-  chofer?: IUsuario;
-  centroDeAtencion?: IUbicacion;
-  movilUsuario?: IUsuario;
-  medicos?: IPersonalSalud[];
-  enfermeros?: IPersonalSalud[];
-  hospital?: IUbicacion;
-  usuarioResponsable?: IUsuario;
-  movilAsignado?: IActivo;
-};
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
@@ -544,22 +599,30 @@ export type IUpdateEventoGenerico =
  *  ATENCIÓN (arrays idsUsuariosAtendiendo / idsClientesAtendiendo)
  * ────────────────────────────────────────────────*/
 
-export type AccionAtencionEvento = 'atender' | 'desatender' | 'limpiar';
+export const AccionAtencionEventoSchema = z.enum([
+  'atender',
+  'desatender',
+  'limpiar',
+]);
+export type AccionAtencionEvento = z.infer<typeof AccionAtencionEventoSchema>;
 
 /** Body de PUT /eventos-genericos/:id/atencion (api-datos).
  *  Actualiza estado + arrays de atención en una sola operación atómica
  *  ($addToSet/$pull), sin ventana de carrera entre operadores. */
-export interface IActualizarAtencionEventoGenerico {
-  accion: AccionAtencionEvento;
-  idUsuario: string;
-  idCliente: string;
-  estado: EstadoEvento;
+export const ActualizarAtencionEventoGenericoSchema = z.object({
+  accion: AccionAtencionEventoSchema,
+  idUsuario: z.string(),
+  idCliente: z.string(),
+  estado: EstadoEventoSchema,
   /** Solo para 'limpiar' (En Espera) */
-  posponerHasta?: string;
+  posponerHasta: z.string().optional(),
   /** Solo para 'atender': si es true, falla con 409 si otro usuario ya está
    *  atendiendo (lock de atención única). */
-  exclusivo?: boolean;
-}
+  exclusivo: z.boolean().optional(),
+});
+export type IActualizarAtencionEventoGenerico = z.infer<
+  typeof ActualizarAtencionEventoGenericoSchema
+>;
 
 /* ────────────────────────────────────────────────
  *  TIPO CACHE (SIN POPULATE)
@@ -598,3 +661,180 @@ export type IEventoGenericoCache = Omit<
     | 'usuarioResponsable'
   >;
 };
+
+/* ────────────────────────────────────────────────
+ *  SCHEMAS ZOD (nuevos, discriminante REQUERIDO)
+ *
+ *  Para validación runtime y JSON Schema de datos nuevos. A diferencia de los
+ *  tipos legacy de arriba, acá `tipoEvento` es obligatorio (z.discriminatedUnion
+ *  lo exige). Los populates hacia el SCC van como getters (ciclo de imports);
+ *  `reporte` usa z.custom para conservar el tipo legacy IReporteGenerico.
+ * ────────────────────────────────────────────────*/
+
+// Populates intra-SCC como z.custom (import type-only) — ver comentario en
+// DetallesTecnicosSchema. Sin getters, el objeto es spreadeable.
+const camposComunesEvento = {
+  _id: z.string().optional(),
+  fechaCreacion: z.string().optional(),
+  expireAt: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  filtrador: CategoriaSchema.optional(), // Para las vistas de atender
+  notificar: z.boolean().optional(),
+  atender: z.boolean().optional(),
+  /** Derivado en backend (hooks): atender===true && estado en estados activos. */
+  requiereAtencion: z.boolean().optional(),
+  noDerivar: z.boolean().optional(),
+  posponerHasta: z.string().optional(),
+  categoria: z.string().optional(), // Nombre de la categoria del tipo de evento
+  prioridad: z.number().optional(),
+  repetido: z.number().optional(),
+  fechaUltimoRepetido: z.string().optional(),
+  tiempoRespuesta: z.number().optional(),
+  idEntidad: z.string().optional(), // Lo que generó el evento
+  idReporte: z.string().optional(), // En caso de ser un evento generado por un reporte automático
+  idConfigEventoUsuario: z.string().optional(),
+  detallesTecnicos: DetallesTecnicosSchema.optional(),
+  detallesEmergencias: DetallesEmergenciasSchema.optional(),
+  idsClientesQuePuedenAtender: z.array(z.string()).optional(),
+  configHorariosAtencion: z.array(ConfigHorarioSchema).optional(),
+  idsClientesAtendiendo: z.array(z.string()).optional(),
+  idsUsuariosAtendiendo: z.array(z.string()).optional(),
+  // Populates fuera del SCC (directas)
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  botonBluetooth: BotonBluetoothSchema.optional(),
+  sirena: SirenaSchema.optional(),
+  gateway: GatewaySchema.optional(),
+  // Populates intra-SCC → z.custom
+  usuariosAtendiendo: z.array(z.custom<IUsuario>()).optional(),
+  tracker: z.custom<ITracker>().optional(),
+  alarma: z.custom<IDispositivoAlarma>().optional(),
+  luminaria: z.custom<ILuminaria>().optional(),
+  usuario: z.custom<IUsuario>().optional(),
+  activo: z.custom<IActivo>().optional(),
+  configEventoUsuario: z.custom<IConfigEventoUsuario>().optional(),
+  // Tipo legacy con discriminante opcional → z.custom conserva compatibilidad
+  reporte: z.custom<IReporteGenerico>().optional(),
+};
+
+const varianteEvento = <
+  T extends TipoEventoGenerico,
+  V extends z.ZodTypeAny,
+  E extends z.ZodTypeAny,
+>(
+  tipo: T,
+  valores: V,
+  estado: E,
+) =>
+  z.object({
+    ...camposComunesEvento,
+    tipoEvento: z.literal(tipo),
+    estado: estado.optional(),
+    valores: valores.optional(),
+  });
+
+const vEvtColectivo = varianteEvento('Evento Colectivo', ValoresEventoTrackerSchema, EstadoEventoSchema);
+const vEvtActivo = varianteEvento('Evento Activo', ValoresEventoTrackerSchema, EstadoEventoSchema);
+const vEvtTracker = varianteEvento('Evento Tracker', ValoresEventoTrackerSchema, EstadoEventoSchema);
+const vEvtVehiculo = varianteEvento('Evento Vehiculo', ValoresEventoTrackerSchema, EstadoEventoSchema);
+const vEvtAlarma = varianteEvento('Evento Alarma', ValoresEventoAlarmaSchema, EstadoEventoSchema);
+const vEvtLuminaria = varianteEvento('Evento Luminaria', ValoresEventoLuminariaSchema, EstadoEventoSchema);
+const vEvtGateway = varianteEvento('Evento Gateway', ValoresEventoGatewaySchema, EstadoEventoSchema);
+const vEvtBotonBLE = varianteEvento('Evento BotonBLE', ValoresEventoBotonBLESchema, EstadoEventoSchema);
+const vEvtSirena = varianteEvento('Evento Sirena', ValoresEventoSirenaSchema, EstadoEventoSchema);
+const vEvtTecAlarma = varianteEvento('Evento Técnico Alarma', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
+const vEvtTecTracker = varianteEvento('Evento Técnico Tracker', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
+const vEvtTecVehiculo = varianteEvento('Evento Técnico Vehículo', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
+const vEvtTecLuminaria = varianteEvento('Evento Técnico Luminaria', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
+const vEvtTecSirena = varianteEvento('Evento Técnico Sirena', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
+const vEvtTecGateway = varianteEvento('Evento Técnico Gateway', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
+const vEvtEmergenciaMedica = varianteEvento('Evento Emergencia Médica', ValoresEventoEmergenciaSchema, EstadoEmergenciaMedicaSchema);
+const vEvtEmergenciaBomberos = varianteEvento('Evento Emergencia Bomberos', ValoresEventoEmergenciaSchema, EstadoEmergenciaBomberosSchema);
+
+// Anotación explícita: el tipo inferido de una discriminated union de 17
+// variantes (cada una embebiendo ClienteSchema) excede el límite de
+// serialización de declarations (TS7056). z.ZodType<tipo legacy> es honesto
+// (el parse devuelve esa forma) y se emite por referencia.
+export const EventoGenericoSchema: z.ZodType<IEventoGenerico> =
+  z.discriminatedUnion('tipoEvento', [
+  vEvtColectivo,
+  vEvtActivo,
+  vEvtTracker,
+  vEvtVehiculo,
+  vEvtAlarma,
+  vEvtLuminaria,
+  vEvtGateway,
+  vEvtBotonBLE,
+  vEvtSirena,
+  vEvtTecAlarma,
+  vEvtTecTracker,
+  vEvtTecVehiculo,
+  vEvtTecLuminaria,
+  vEvtTecSirena,
+  vEvtTecGateway,
+  vEvtEmergenciaMedica,
+  vEvtEmergenciaBomberos,
+]);
+
+// Mismo set que el type OmitirCreate de arriba (sirena NO se omite, igual que el original)
+const omitirCreateUpdateEvento = {
+  _id: true,
+  idsAncestros: true,
+  requiereAtencion: true,
+  cliente: true,
+  ancestros: true,
+  usuariosAtendiendo: true,
+  tracker: true,
+  alarma: true,
+  luminaria: true,
+  usuario: true,
+  activo: true,
+  gateway: true,
+  botonBluetooth: true,
+  configEventoUsuario: true,
+  reporte: true,
+} as const;
+
+export const CreateEventoGenericoSchema: z.ZodType<ICreateEventoGenerico> =
+  z.discriminatedUnion('tipoEvento', [
+  vEvtColectivo.omit(omitirCreateUpdateEvento),
+  vEvtActivo.omit(omitirCreateUpdateEvento),
+  vEvtTracker.omit(omitirCreateUpdateEvento),
+  vEvtVehiculo.omit(omitirCreateUpdateEvento),
+  vEvtAlarma.omit(omitirCreateUpdateEvento),
+  vEvtLuminaria.omit(omitirCreateUpdateEvento),
+  vEvtGateway.omit(omitirCreateUpdateEvento),
+  vEvtBotonBLE.omit(omitirCreateUpdateEvento),
+  vEvtSirena.omit(omitirCreateUpdateEvento),
+  vEvtTecAlarma.omit(omitirCreateUpdateEvento),
+  vEvtTecTracker.omit(omitirCreateUpdateEvento),
+  vEvtTecVehiculo.omit(omitirCreateUpdateEvento),
+  vEvtTecLuminaria.omit(omitirCreateUpdateEvento),
+  vEvtTecSirena.omit(omitirCreateUpdateEvento),
+  vEvtTecGateway.omit(omitirCreateUpdateEvento),
+  vEvtEmergenciaMedica.omit(omitirCreateUpdateEvento),
+  vEvtEmergenciaBomberos.omit(omitirCreateUpdateEvento),
+]);
+
+// Update: parcial pero con el discriminante requerido de nuevo (patrón UpdatePermisoSchema de acceso-modelos)
+export const UpdateEventoGenericoSchema: z.ZodType<IUpdateEventoGenerico> =
+  z.discriminatedUnion('tipoEvento', [
+  vEvtColectivo.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Colectivo') }),
+  vEvtActivo.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Activo') }),
+  vEvtTracker.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Tracker') }),
+  vEvtVehiculo.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Vehiculo') }),
+  vEvtAlarma.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Alarma') }),
+  vEvtLuminaria.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Luminaria') }),
+  vEvtGateway.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Gateway') }),
+  vEvtBotonBLE.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento BotonBLE') }),
+  vEvtSirena.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Sirena') }),
+  vEvtTecAlarma.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Alarma') }),
+  vEvtTecTracker.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Tracker') }),
+  vEvtTecVehiculo.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Vehículo') }),
+  vEvtTecLuminaria.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Luminaria') }),
+  vEvtTecSirena.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Sirena') }),
+  vEvtTecGateway.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Gateway') }),
+  vEvtEmergenciaMedica.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Emergencia Médica') }),
+  vEvtEmergenciaBomberos.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Emergencia Bomberos') }),
+]);
