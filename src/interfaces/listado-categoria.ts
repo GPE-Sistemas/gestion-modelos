@@ -1,54 +1,63 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export type ITipoListadoCategoria =
+export const TipoListadoCategoriaSchema = z.enum([
   //PARA TIPOS DE EVENTOS
-  | 'Evento-Alarma'
-  | 'Evento-Tracker'
-  | 'Evento-Luminaria'
-  | 'Evento-Sirena'
-  | 'Evento-Gateway'
-  | 'Evento-Activo'
+  'Evento-Alarma',
+  'Evento-Tracker',
+  'Evento-Luminaria',
+  'Evento-Sirena',
+  'Evento-Gateway',
+  'Evento-Activo',
   //PARA EMERGENCIAS MÉDICAS
-  | 'Sintomas'
-  | 'Diagnosticos'
+  'Sintomas',
+  'Diagnosticos',
   //PARA SERVICIOS TÉCNICOS
-  | 'Evento-Tecnico-Tracker'
-  | 'Evento-Tecnico-Alarma'
-  | 'Evento-Tecnico-Vehiculo'
-  | 'Evento-Tecnico-Luminaria'
-  | 'Evento-Tecnico-Sirena'
-  | 'Evento-Tecnico-Gateway'
-  | 'Evento-Tecnico-Activo';
+  'Evento-Tecnico-Tracker',
+  'Evento-Tecnico-Alarma',
+  'Evento-Tecnico-Vehiculo',
+  'Evento-Tecnico-Luminaria',
+  'Evento-Tecnico-Sirena',
+  'Evento-Tecnico-Gateway',
+  'Evento-Tecnico-Activo',
+]);
+export type ITipoListadoCategoria = z.infer<typeof TipoListadoCategoriaSchema>;
 
-export interface IListadoCategoria {
-  _id?: string;
+export const ListadoCategoriaSchema = z.object({
+  _id: z.string().optional(),
   //
-  nombre?: string;
-  categoria?: ITipoListadoCategoria;
-  idCliente?: string;
-  idsAncestros?: string[];
-  default?: boolean;
-  global?: boolean;
+  nombre: z.string().optional(),
+  categoria: TipoListadoCategoriaSchema.optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  default: z.boolean().optional(),
+  global: z.boolean().optional(),
   //Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type IListadoCategoria = z.infer<typeof ListadoCategoriaSchema>;
 
-type OmitirCreate = '_id' | 'cliente';
+export const CreateListadoCategoriaSchema = ListadoCategoriaSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateListadoCategoria = z.infer<
+  typeof CreateListadoCategoriaSchema
+>;
 
-export interface ICreateListadoCategoria extends Omit<
-  Partial<IListadoCategoria>,
-  OmitirCreate
-> {}
+export const UpdateListadoCategoriaSchema = ListadoCategoriaSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateListadoCategoria = z.infer<
+  typeof UpdateListadoCategoriaSchema
+>;
 
-type OmitirUpdate = '_id' | 'cliente';
-
-export interface IUpdateListadoCategoria extends Omit<
-  Partial<IListadoCategoria>,
-  OmitirUpdate
-> {}
-
-export interface IListadoCategoriaCache extends Omit<
-  IListadoCategoria,
-  'cliente' | 'ancestros'
-> {}
+export const ListadoCategoriaCacheSchema = ListadoCategoriaSchema.omit({
+  cliente: true,
+  ancestros: true,
+});
+export type IListadoCategoriaCache = z.infer<
+  typeof ListadoCategoriaCacheSchema
+>;

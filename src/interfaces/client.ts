@@ -1,17 +1,18 @@
-export interface IClient {
-  _id?: string;
-  id?: string;
-  clientSecret?: string;
-  grants?: string[];
-  redirectUris?: string[];
-  accessTokenLifetime?: number;
-  refreshTokenLifetime?: number;
-}
+import { z } from 'zod';
 
-type OmitirCreate = '_id';
+export const ClientSchema = z.object({
+  _id: z.string().optional(),
+  id: z.string().optional(),
+  clientSecret: z.string().optional(),
+  grants: z.array(z.string()).optional(),
+  redirectUris: z.array(z.string()).optional(),
+  accessTokenLifetime: z.number().optional(),
+  refreshTokenLifetime: z.number().optional(),
+});
+export type IClient = z.infer<typeof ClientSchema>;
 
-export interface ICreateClient extends Omit<Partial<IClient>, OmitirCreate> {}
+export const CreateClientSchema = ClientSchema.omit({ _id: true });
+export type ICreateClient = z.infer<typeof CreateClientSchema>;
 
-type OmitirUpdate = '_id';
-
-export interface IUpdateClient extends Omit<Partial<IClient>, OmitirUpdate> {}
+export const UpdateClientSchema = ClientSchema.omit({ _id: true });
+export type IUpdateClient = z.infer<typeof UpdateClientSchema>;

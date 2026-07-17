@@ -1,89 +1,117 @@
-import { ICliente } from './cliente';
-import { ICategoriaEvento } from './categoria-evento';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import { CategoriaEventoSchema } from './categoria-evento';
 
-export interface ICodigoDispositivoEntrada {
-  codigo?: string;
-  descripcion?: string;
-  idCategoriaEvento?: string;
+export const CodigoDispositivoEntradaSchema = z.object({
+  codigo: z.string().optional(),
+  descripcion: z.string().optional(),
+  idCategoriaEvento: z.string().optional(),
   // Populate
-  categoriaEvento?: ICategoriaEvento;
-}
+  categoriaEvento: CategoriaEventoSchema.optional(),
+});
+export type ICodigoDispositivoEntrada = z.infer<
+  typeof CodigoDispositivoEntradaSchema
+>;
 
-export type FlagsTrackers = 'Posicion' | 'Ignición' | 'Emergencia' | 'Batería';
+export const FlagsTrackersSchema = z.enum([
+  'Posicion',
+  'Ignición',
+  'Emergencia',
+  'Batería',
+]);
+export type FlagsTrackers = z.infer<typeof FlagsTrackersSchema>;
 
-export interface ICodigoDispositivoEntradaCache extends Omit<
-  ICodigoDispositivoEntrada,
-  'categoriaEvento'
-> {}
+export const CodigoDispositivoEntradaCacheSchema =
+  CodigoDispositivoEntradaSchema.omit({
+    categoriaEvento: true,
+  });
+export type ICodigoDispositivoEntradaCache = z.infer<
+  typeof CodigoDispositivoEntradaCacheSchema
+>;
 
-export interface ICodigoDispositivo {
-  codigo?: string;
-  descripcion?: string;
-  idCategoriaEvento?: string;
-  mostrarZona?: boolean;
-  mostrarUsuario?: boolean;
-  armado?: boolean;
-  desarmado?: boolean;
-  detonacion?: boolean;
-  test?: boolean;
-  notificar?: boolean;
-  minutosEsperaAutomatica?: number; // Los eventos generados se ponen en espera automaticamente por este tiempo
-  cierraCodigosEventos?: string[]; // Si se genera un evento con este codigo, se cierran los eventos con estos codigos del array
+export const CodigoDispositivoSchema = z.object({
+  codigo: z.string().optional(),
+  descripcion: z.string().optional(),
+  idCategoriaEvento: z.string().optional(),
+  mostrarZona: z.boolean().optional(),
+  mostrarUsuario: z.boolean().optional(),
+  armado: z.boolean().optional(),
+  desarmado: z.boolean().optional(),
+  detonacion: z.boolean().optional(),
+  test: z.boolean().optional(),
+  notificar: z.boolean().optional(),
+  minutosEsperaAutomatica: z.number().optional(), // Los eventos generados se ponen en espera automaticamente por este tiempo
+  cierraCodigosEventos: z.array(z.string()).optional(), // Si se genera un evento con este codigo, se cierran los eventos con estos codigos del array
 
-  flagsTrackers?: FlagsTrackers[];
+  flagsTrackers: z.array(FlagsTrackersSchema).optional(),
   // Populate
-  categoriaEvento?: ICategoriaEvento;
-}
+  categoriaEvento: CategoriaEventoSchema.optional(),
+});
+export type ICodigoDispositivo = z.infer<typeof CodigoDispositivoSchema>;
 
-export interface ICodigoDispositivoCache extends Omit<
-  ICodigoDispositivo,
-  'categoriaEvento'
-> {}
+export const CodigoDispositivoCacheSchema = CodigoDispositivoSchema.omit({
+  categoriaEvento: true,
+});
+export type ICodigoDispositivoCache = z.infer<
+  typeof CodigoDispositivoCacheSchema
+>;
 
-export type TipoDispositivo =
-  | 'Tracker'
-  | 'Alarma'
-  | 'Comunicador'
-  | 'NVR'
-  | 'Cámara'
-  | 'Luminaria'
-  | 'DispositivoLorawan'
-  | 'BotonBLE'
-  | 'Sirena';
+export const TipoDispositivoSchema = z.enum([
+  'Tracker',
+  'Alarma',
+  'Comunicador',
+  'NVR',
+  'Cámara',
+  'Luminaria',
+  'DispositivoLorawan',
+  'BotonBLE',
+  'Sirena',
+]);
+export type TipoDispositivo = z.infer<typeof TipoDispositivoSchema>;
 
-export interface ICodigosDispositivo {
-  _id?: string;
+export const CodigosDispositivoSchema = z.object({
+  _id: z.string().optional(),
   //
-  nombre?: string;
-  tipo?: TipoDispositivo;
-  codigos?: ICodigoDispositivo[];
-  codigosEntrada?: ICodigoDispositivoEntrada[];
-  idCliente?: string;
-  idsAncestros?: string[];
-  global?: boolean;
+  nombre: z.string().optional(),
+  tipo: TipoDispositivoSchema.optional(),
+  codigos: z.array(CodigoDispositivoSchema).optional(),
+  codigosEntrada: z.array(CodigoDispositivoEntradaSchema).optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  global: z.boolean().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type ICodigosDispositivo = z.infer<typeof CodigosDispositivoSchema>;
 
-export interface ICodigosDispositivoCache extends Omit<
-  ICodigosDispositivo,
-  'cliente' | 'ancestros' | 'codigos' | 'codigosEntrada'
-> {
-  codigos?: ICodigoDispositivoCache[];
-  codigosEntrada?: ICodigoDispositivoEntradaCache[];
-}
+export const CodigosDispositivoCacheSchema = CodigosDispositivoSchema.omit({
+  cliente: true,
+  ancestros: true,
+  codigos: true,
+  codigosEntrada: true,
+}).extend({
+  codigos: z.array(CodigoDispositivoCacheSchema).optional(),
+  codigosEntrada: z.array(CodigoDispositivoEntradaCacheSchema).optional(),
+});
+export type ICodigosDispositivoCache = z.infer<
+  typeof CodigosDispositivoCacheSchema
+>;
 
-type OmitirCreate = '_id' | 'cliente' | 'ancestros';
+export const CreateCodigosDispositivoSchema = CodigosDispositivoSchema.omit({
+  _id: true,
+  cliente: true,
+  ancestros: true,
+});
+export type ICreateCodigosDispositivo = z.infer<
+  typeof CreateCodigosDispositivoSchema
+>;
 
-export interface ICreateCodigosDispositivo extends Omit<
-  Partial<ICodigosDispositivo>,
-  OmitirCreate
-> {}
-
-type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
-
-export interface IUpdateCodigosDispositivo extends Omit<
-  Partial<ICodigosDispositivo>,
-  OmitirUpdate
-> {}
+export const UpdateCodigosDispositivoSchema = CodigosDispositivoSchema.omit({
+  _id: true,
+  cliente: true,
+  ancestros: true,
+});
+export type IUpdateCodigosDispositivo = z.infer<
+  typeof UpdateCodigosDispositivoSchema
+>;

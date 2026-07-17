@@ -1,28 +1,32 @@
-import { ICliente } from './cliente';
-import { IModeloDispositivo } from './modelo-dispositivo';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import { ModeloDispositivoSchema } from './modelo-dispositivo';
 
-export interface IBotonBluetooth {
-  _id?: string;
-  idModeloDispositivo?: string;
+export const BotonBluetoothSchema = z.object({
+  _id: z.string().optional(),
+  idModeloDispositivo: z.string().optional(),
 
-  fechaCreacion?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  mac?: string;
-  serialNumber?: string;
+  fechaCreacion: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  mac: z.string().optional(),
+  serialNumber: z.string().optional(),
 
   //Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  modeloDispositivo?: IModeloDispositivo;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  modeloDispositivo: ModeloDispositivoSchema.optional(),
+});
+export type IBotonBluetooth = z.infer<typeof BotonBluetoothSchema>;
 
-type OmitirCreate = '_id' | 'cliente';
+export const CreateBotonBluetoothSchema = BotonBluetoothSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateBotonBluetooth = z.infer<typeof CreateBotonBluetoothSchema>;
 
-export interface ICreateBotonBluetooth
-  extends Omit<Partial<IBotonBluetooth>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'cliente';
-
-export interface IUpdateBotonBluetooth
-  extends Omit<Partial<IBotonBluetooth>, OmitirUpdate> {}
+export const UpdateBotonBluetoothSchema = BotonBluetoothSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateBotonBluetooth = z.infer<typeof UpdateBotonBluetoothSchema>;

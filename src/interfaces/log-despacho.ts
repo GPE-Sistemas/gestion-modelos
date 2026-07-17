@@ -1,26 +1,34 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export interface ILogDespacho {
-  _id: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  fechaCreacion?: string;
-  expireAt?: string;
-  idExternoVehiculo?: string;
-  idExternoRecorrido?: string;
-  idExternoChofer?: string;
-  fecha?: string;
+export const LogDespachoSchema = z.object({
+  _id: z.string(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  fechaCreacion: z.string().optional(),
+  expireAt: z.string().optional(),
+  idExternoVehiculo: z.string().optional(),
+  idExternoRecorrido: z.string().optional(),
+  idExternoChofer: z.string().optional(),
+  fecha: z.string().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type ILogDespacho = z.infer<typeof LogDespachoSchema>;
 
 ////// CREATE
-type OmitirCreate = '_id' | 'fechaCreacion' | 'cliente';
-export interface ICreateLogDespacho
-  extends Omit<Partial<ILogDespacho>, OmitirCreate> {}
+export const CreateLogDespachoSchema = LogDespachoSchema.omit({
+  _id: true,
+  fechaCreacion: true,
+  cliente: true,
+});
+export type ICreateLogDespacho = z.infer<typeof CreateLogDespachoSchema>;
 
 ////// UPDATE
-type OmitirUpdate = '_id' | 'fechaCreacion' | 'cliente';
-export interface IUpdateLogDespacho
-  extends Omit<Partial<ILogDespacho>, OmitirUpdate> {}
+export const UpdateLogDespachoSchema = LogDespachoSchema.omit({
+  _id: true,
+  fechaCreacion: true,
+  cliente: true,
+});
+export type IUpdateLogDespacho = z.infer<typeof UpdateLogDespachoSchema>;

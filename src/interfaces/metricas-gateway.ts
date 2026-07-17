@@ -1,42 +1,54 @@
-import { ICliente } from './cliente';
-import { IGateway } from './gateway';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import { GatewaySchema } from './gateway';
 
-export type PeriodoMetrica = 'hora' | 'dia';
+export const PeriodoMetricaSchema = z.enum(['hora', 'dia']);
+export type PeriodoMetrica = z.infer<typeof PeriodoMetricaSchema>;
 
 /**
  * Métricas agregadas de Time on Air por gateway y canal
  */
-export interface IMetricasGateway {
-  _id?: string;
+export const MetricasGatewaySchema = z.object({
+  _id: z.string().optional(),
   /** Referencia al Gateway en MongoDB */
-  idGateway?: string;
+  idGateway: z.string().optional(),
   /** EUI del gateway (para queries directas sin join) */
-  gatewayEui: string;
+  gatewayEui: z.string(),
   /** Cliente dueño del dispositivo que generó el uplink (para filtro cross-tenant) */
-  idClienteDispositivo?: string;
+  idClienteDispositivo: z.string().optional(),
   /** Inicio del periodo de agregación (ISO string) */
-  fecha: string;
+  fecha: z.string(),
   /** Granularidad de la agregación */
-  periodo: PeriodoMetrica;
+  periodo: PeriodoMetricaSchema,
   /** Frecuencia/canal en Hz (ej: 915400000) */
-  canal: number;
+  canal: z.number(),
 
   /** Suma total de Time on Air en milisegundos */
-  totalToA: number;
+  totalToA: z.number(),
   /** Cantidad de uplinks en el periodo */
-  cantidadUplinks: number;
+  cantidadUplinks: z.number(),
 
   // Virtuals
-  gateway?: IGateway;
-  clienteDispositivo?: ICliente;
-}
+  gateway: GatewaySchema.optional(),
+  clienteDispositivo: ClienteSchema.optional(),
+});
+export type IMetricasGateway = z.infer<typeof MetricasGatewaySchema>;
 
-type OmitirCreate = '_id';
+export const CreateMetricasGatewaySchema = MetricasGatewaySchema.omit({
+  _id: true,
+}).partial();
+export type ICreateMetricasGateway = z.infer<
+  typeof CreateMetricasGatewaySchema
+>;
 
-export interface ICreateMetricasGateway
-  extends Omit<Partial<IMetricasGateway>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'gatewayEui' | 'idClienteDispositivo' | 'fecha' | 'periodo' | 'canal';
-
-export interface IUpdateMetricasGateway
-  extends Omit<Partial<IMetricasGateway>, OmitirUpdate> {}
+export const UpdateMetricasGatewaySchema = MetricasGatewaySchema.omit({
+  _id: true,
+  gatewayEui: true,
+  idClienteDispositivo: true,
+  fecha: true,
+  periodo: true,
+  canal: true,
+}).partial();
+export type IUpdateMetricasGateway = z.infer<
+  typeof UpdateMetricasGatewaySchema
+>;

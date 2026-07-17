@@ -1,106 +1,121 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export interface ISoap {
-  _id?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  fechaCreacion?: string;
+export const SoapAltaSchema = z.object({
+  grupoEconomico: z.number().optional(),
+  empresa: z.number().optional(),
+  linea: z.number().optional(),
+  nroInterno: z.number().optional(),
+  legajoChofer: z.number().optional(),
+  salidaDateTime: z.string().optional(),
+  codigoRamal: z.number().optional(),
+  sentido: z.number().optional(),
+  llegadaDateTime: z.string().optional(),
+  numeroVueltaTurno: z.number().optional(),
+  idDiagramaDaz: z.number().optional(),
+  idTurnoDaz: z.number().optional(),
+  turno: z.string().optional(),
+  seccionadoCsv: z.string().optional(),
+});
+export type ISoapAlta = z.infer<typeof SoapAltaSchema>;
 
-  alta?: ISoapAlta;
-  create?: ISoapCreate;
-  altaChofer?: ISoapAltaChofer;
-  obtenerChoferes?: ISoapObtenerChoferes;
-  altaPorMinuta?: ISoapAltaPorMinuta;
-  altaPorMinutaChofer?: ISoapAltaPorMinutaChofer;
-  baja?: ISoapBaja;
+export const SoapCreateSchema = z.object({
+  grupoEconomico: z.instanceof(Int16Array).optional(),
+  empresa: z.instanceof(Int16Array).optional(),
+  linea: z.instanceof(Int16Array).optional(),
+  nroInterno: z.instanceof(Int16Array).optional(),
+  legajoChofer: z.instanceof(Int16Array).optional(),
+  salida: z.string().optional(), //dateTimeInt16Array;
+  codigoRamal: z.instanceof(Int16Array).optional(),
+  sentido: z.instanceof(Int16Array).optional(),
+  llegada: z.string().optional(), //dateTimeInt16Array;
+  numeroVueltaTurno: z.instanceof(Int16Array).optional(),
+  idDiagramaDaz: z.instanceof(Int16Array).optional(),
+  idTurnoDaz: z.instanceof(Int16Array).optional(),
+  turno: z.number().optional(), //charInt16Array;
+  seccionado: z.string().optional(), //ArrayOfKeyValuePairOfInt32DateTimeInt16Array;
+});
+export type ISoapCreate = z.infer<typeof SoapCreateSchema>;
+
+export const SoapAltaChoferSchema = z.object({
+  grupoEconomico: z.number().optional(),
+  empresa: z.number().optional(),
+  linea: z.number().optional(),
+  legajoChofer: z.number().optional(),
+  NombreChofer: z.string().optional(),
+});
+export type ISoapAltaChofer = z.infer<typeof SoapAltaChoferSchema>;
+
+export const SoapObtenerChoferesSchema = z.object({
+  grupoEconomico: z.number().optional(),
+  empresa: z.number().optional(),
+  linea: z.number().optional(),
+});
+export type ISoapObtenerChoferes = z.infer<typeof SoapObtenerChoferesSchema>;
+
+export const SoapAltaPorMinutaSchema = z.object({
+  grupoEconomico: z.number().optional(),
+  empresa: z.number().optional(),
+  linea: z.number().optional(),
+  nroInterno: z.number().optional(),
+  legajoChofer: z.number().optional(),
+  salidaDateTime: z.string().optional(),
+  idMinutaSauron: z.number().optional(),
+});
+export type ISoapAltaPorMinuta = z.infer<typeof SoapAltaPorMinutaSchema>;
+
+export const SoapAltaPorMinutaChoferSchema = z.object({
+  grupoEconomico: z.number().optional(),
+  empresa: z.number().optional(),
+  linea: z.number().optional(),
+  nroInterno: z.number().optional(),
+  legajoChofer: z.number().optional(),
+  salidaDateTime: z.string().optional(),
+  idMinutaSauron: z.number().optional(),
+  nombreChofer: z.string().optional(),
+  dniChofer: z.string().optional(),
+});
+export type ISoapAltaPorMinutaChofer = z.infer<
+  typeof SoapAltaPorMinutaChoferSchema
+>;
+
+export const SoapBajaSchema = z.object({
+  idHorarioOjoSauron: z.number().optional(),
+  motivo: z.number().optional(),
+  descripcionMotivo: z.string().optional(),
+  lineaDaz: z.number().optional(),
+  nroInterno: z.number().optional(),
+});
+export type ISoapBaja = z.infer<typeof SoapBajaSchema>;
+
+export const SoapSchema = z.object({
+  _id: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  fechaCreacion: z.string().optional(),
+
+  alta: SoapAltaSchema.optional(),
+  create: SoapCreateSchema.optional(),
+  altaChofer: SoapAltaChoferSchema.optional(),
+  obtenerChoferes: SoapObtenerChoferesSchema.optional(),
+  altaPorMinuta: SoapAltaPorMinutaSchema.optional(),
+  altaPorMinutaChofer: SoapAltaPorMinutaChoferSchema.optional(),
+  baja: SoapBajaSchema.optional(),
 
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type ISoap = z.infer<typeof SoapSchema>;
 
-type OmitirCreate = '_id' | 'cliente';
+export const CreateSoapSchema = SoapSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateSoap = z.infer<typeof CreateSoapSchema>;
 
-export interface ICreateSoap extends Omit<Partial<ISoap>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'cliente';
-
-export interface IUpdateSoap extends Omit<Partial<ISoap>, OmitirUpdate> {}
-
-export interface ISoapAlta {
-  grupoEconomico?: number;
-  empresa?: number;
-  linea?: number;
-  nroInterno?: number;
-  legajoChofer?: number;
-  salidaDateTime?: string;
-  codigoRamal?: number;
-  sentido?: number;
-  llegadaDateTime?: string;
-  numeroVueltaTurno?: number;
-  idDiagramaDaz?: number;
-  idTurnoDaz?: number;
-  turno?: string;
-  seccionadoCsv?: string;
-}
-
-export interface ISoapCreate {
-  grupoEconomico?: Int16Array;
-  empresa?: Int16Array;
-  linea?: Int16Array;
-  nroInterno?: Int16Array;
-  legajoChofer?: Int16Array;
-  salida?: string; //dateTimeInt16Array;
-  codigoRamal?: Int16Array;
-  sentido?: Int16Array;
-  llegada?: string; //dateTimeInt16Array;
-  numeroVueltaTurno?: Int16Array;
-  idDiagramaDaz?: Int16Array;
-  idTurnoDaz?: Int16Array;
-  turno?: number; //charInt16Array;
-  seccionado?: string; //ArrayOfKeyValuePairOfInt32DateTimeInt16Array;
-}
-
-export interface ISoapAltaChofer {
-  grupoEconomico?: number;
-  empresa?: number;
-  linea?: number;
-  legajoChofer?: number;
-  NombreChofer?: string;
-}
-
-export interface ISoapObtenerChoferes {
-  grupoEconomico?: number;
-  empresa?: number;
-  linea?: number;
-}
-
-export interface ISoapAltaPorMinuta {
-  grupoEconomico?: number;
-  empresa?: number;
-  linea?: number;
-  nroInterno?: number;
-  legajoChofer?: number;
-  salidaDateTime?: string;
-  idMinutaSauron?: number;
-}
-
-export interface ISoapAltaPorMinutaChofer {
-  grupoEconomico?: number;
-  empresa?: number;
-  linea?: number;
-  nroInterno?: number;
-  legajoChofer?: number;
-  salidaDateTime?: string;
-  idMinutaSauron?: number;
-  nombreChofer?: string;
-  dniChofer?: string;
-}
-
-export interface ISoapBaja {
-  idHorarioOjoSauron?: number;
-  motivo?: number;
-  descripcionMotivo?: string;
-  lineaDaz?: number;
-  nroInterno?: number;
-}
+export const UpdateSoapSchema = SoapSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateSoap = z.infer<typeof UpdateSoapSchema>;

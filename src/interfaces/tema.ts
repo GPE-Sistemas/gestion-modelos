@@ -1,86 +1,107 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export type IMotorEfectoFullscreen = 'particulas';
+export const MotorEfectoFullscreenSchema = z.enum(['particulas']);
+export type IMotorEfectoFullscreen = z.infer<
+  typeof MotorEfectoFullscreenSchema
+>;
 
-export interface IRangoNumerico {
-  min: number;
-  max: number;
-}
+export const RangoNumericoSchema = z.object({
+  min: z.number(),
+  max: z.number(),
+});
+export type IRangoNumerico = z.infer<typeof RangoNumericoSchema>;
 
-export interface IDiaMes {
-  mes: number; // 0-11
-  dia: number; // 1-31
-}
+export const DiaMesSchema = z.object({
+  mes: z.number(), // 0-11
+  dia: z.number(), // 1-31
+});
+export type IDiaMes = z.infer<typeof DiaMesSchema>;
 
-export interface IRangoRecurrenteAnual {
-  inicio: IDiaMes;
-  fin: IDiaMes;
-}
+export const RangoRecurrenteAnualSchema = z.object({
+  inicio: DiaMesSchema,
+  fin: DiaMesSchema,
+});
+export type IRangoRecurrenteAnual = z.infer<typeof RangoRecurrenteAnualSchema>;
 
-export interface IDecal {
-  urlAsset: string;
-  tamanoPct?: number; // 0-100
-}
+export const DecalSchema = z.object({
+  urlAsset: z.string(),
+  tamanoPct: z.number().optional(), // 0-100
+});
+export type IDecal = z.infer<typeof DecalSchema>;
 
-export interface IEfectoFullscreen {
-  motor: IMotorEfectoFullscreen;
-  spriteUrl: string;
-  cantidad: number; // 1-128
-  velocidad: IRangoNumerico; // segundos por ciclo
-  tamano: IRangoNumerico; // pixeles
-  drift: number; // pixeles laterales (0 = caída recta)
-  paleta?: string[]; // hex tints opcionales
-}
+export const EfectoFullscreenSchema = z.object({
+  motor: MotorEfectoFullscreenSchema,
+  spriteUrl: z.string(),
+  cantidad: z.number(), // 1-128
+  velocidad: RangoNumericoSchema, // segundos por ciclo
+  tamano: RangoNumericoSchema, // pixeles
+  drift: z.number(), // pixeles laterales (0 = caída recta)
+  paleta: z.array(z.string()).optional(), // hex tints opcionales
+});
+export type IEfectoFullscreen = z.infer<typeof EfectoFullscreenSchema>;
 
-export interface ITemaPayload {
-  decalAvatar?: IDecal;
-  decalLogoLogin?: IDecal;
-  decalTopbar?: IDecal;
-  decalLogin?: IDecal;
-  efectoFullscreen?: IEfectoFullscreen;
-}
+export const TemaPayloadSchema = z.object({
+  decalAvatar: DecalSchema.optional(),
+  decalLogoLogin: DecalSchema.optional(),
+  decalTopbar: DecalSchema.optional(),
+  decalLogin: DecalSchema.optional(),
+  efectoFullscreen: EfectoFullscreenSchema.optional(),
+});
+export type ITemaPayload = z.infer<typeof TemaPayloadSchema>;
 
-export interface ITema {
-  _id?: string;
+export const TemaSchema = z.object({
+  _id: z.string().optional(),
   //
-  nombre?: string;
-  descripcion?: string;
-  activa?: boolean;
-  fechaInicio?: string;
-  fechaFin?: string;
-  diasRecurrentes?: IRangoRecurrenteAnual;
-  prioridad?: number; // 0-100
-  global?: boolean;
-  idCliente?: string;
-  idsAncestros?: string[];
-  payload?: ITemaPayload;
-  fechaCreacion?: string;
-  fechaActualizacion?: string;
+  nombre: z.string().optional(),
+  descripcion: z.string().optional(),
+  activa: z.boolean().optional(),
+  fechaInicio: z.string().optional(),
+  fechaFin: z.string().optional(),
+  diasRecurrentes: RangoRecurrenteAnualSchema.optional(),
+  prioridad: z.number().optional(), // 0-100
+  global: z.boolean().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  payload: TemaPayloadSchema.optional(),
+  fechaCreacion: z.string().optional(),
+  fechaActualizacion: z.string().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type ITema = z.infer<typeof TemaSchema>;
 
-type OmitirCreate = '_id' | 'cliente' | 'ancestros' | 'fechaCreacion' | 'fechaActualizacion';
+export const CreateTemaSchema = TemaSchema.omit({
+  _id: true,
+  cliente: true,
+  ancestros: true,
+  fechaCreacion: true,
+  fechaActualizacion: true,
+});
+export type ICreateTema = z.infer<typeof CreateTemaSchema>;
 
-export interface ICreateTema extends Omit<
-  Partial<ITema>,
-  OmitirCreate
-> {}
+export const UpdateTemaSchema = TemaSchema.omit({
+  _id: true,
+  cliente: true,
+  ancestros: true,
+  fechaCreacion: true,
+  fechaActualizacion: true,
+});
+export type IUpdateTema = z.infer<typeof UpdateTemaSchema>;
 
-type OmitirUpdate = '_id' | 'cliente' | 'ancestros' | 'fechaCreacion' | 'fechaActualizacion';
+export const TemaCacheSchema = TemaSchema.omit({
+  cliente: true,
+  ancestros: true,
+});
+export type ITemaCache = z.infer<typeof TemaCacheSchema>;
 
-export interface IUpdateTema extends Omit<
-  Partial<ITema>,
-  OmitirUpdate
-> {}
-
-export interface ITemaCache extends Omit<
-  ITema,
-  'cliente' | 'ancestros'
-> {}
-
-export interface ITemaPublico extends Omit<
-  ITema,
-  'cliente' | 'ancestros' | 'idCliente' | 'idsAncestros' | 'fechaCreacion' | 'fechaActualizacion'
-> {}
+export const TemaPublicoSchema = TemaSchema.omit({
+  cliente: true,
+  ancestros: true,
+  idCliente: true,
+  idsAncestros: true,
+  fechaCreacion: true,
+  fechaActualizacion: true,
+});
+export type ITemaPublico = z.infer<typeof TemaPublicoSchema>;
