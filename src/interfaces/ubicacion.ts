@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { GeoJSONSchema, IGeoJSON } from '../auxiliares';
 import { ClienteSchema, ICliente } from './cliente';
-import { TipoEmergenciaSchema } from './emergencias';
+import { TipoEmergenciaSchema, TipoEmergencia } from './emergencias';
 
 /* ────────────────────────────────────────────────
  *  CATEGORÍAS
@@ -39,34 +39,40 @@ export type ICategoriaUbicacion =
 
 //Por ahora estarán vacíos
 export const ValoresUbicacionTerminalSchema = z.object({});
-export type IValoresUbicacionTerminal = z.infer<
-  typeof ValoresUbicacionTerminalSchema
->;
+// Tipo hand-written (no z.infer): participa como valores de un miembro de la
+// union discriminada IUbicacion; z.infer rompe el narrowing por categoria en
+// consumidores (doc Mongoose → IUbicacion). Ver ICategoriaUbicacion.
+export interface IValoresUbicacionTerminal {}
 
 export const ValoresUbicacionDomicilioSchema = z.object({});
-export type IValoresUbicacionDomicilio = z.infer<
-  typeof ValoresUbicacionDomicilioSchema
->;
+// Tipo hand-written (no z.infer): participa como valores de un miembro de la
+// union discriminada IUbicacion; z.infer rompe el narrowing por categoria en
+// consumidores (doc Mongoose → IUbicacion). Ver ICategoriaUbicacion.
+export interface IValoresUbicacionDomicilio {}
 
 export const ValoresUbicacionActivosSchema = z.object({});
-export type IValoresUbicacionActivos = z.infer<
-  typeof ValoresUbicacionActivosSchema
->;
+// Tipo hand-written (no z.infer): participa como valores de un miembro de la
+// union discriminada IUbicacion; z.infer rompe el narrowing por categoria en
+// consumidores (doc Mongoose → IUbicacion). Ver ICategoriaUbicacion.
+export interface IValoresUbicacionActivos {}
 
 export const ValoresUbicacionDestinoEmergenciaSchema = z.object({});
-export type IValoresUbicacionDestinoEmergencia = z.infer<
-  typeof ValoresUbicacionDestinoEmergenciaSchema
->;
+// Tipo hand-written (no z.infer): participa como valores de un miembro de la
+// union discriminada IUbicacion; z.infer rompe el narrowing por categoria en
+// consumidores (doc Mongoose → IUbicacion). Ver ICategoriaUbicacion.
+export interface IValoresUbicacionDestinoEmergencia {}
 
 export const ValoresUbicacionVehiculosSchema = z.object({});
-export type IValoresUbicacionVehiculos = z.infer<
-  typeof ValoresUbicacionVehiculosSchema
->;
+// Tipo hand-written (no z.infer): participa como valores de un miembro de la
+// union discriminada IUbicacion; z.infer rompe el narrowing por categoria en
+// consumidores (doc Mongoose → IUbicacion). Ver ICategoriaUbicacion.
+export interface IValoresUbicacionVehiculos {}
 
 export const ValoresUbicacionLuminariasSchema = z.object({});
-export type IValoresUbicacionLuminarias = z.infer<
-  typeof ValoresUbicacionLuminariasSchema
->;
+// Tipo hand-written (no z.infer): participa como valores de un miembro de la
+// union discriminada IUbicacion; z.infer rompe el narrowing por categoria en
+// consumidores (doc Mongoose → IUbicacion). Ver ICategoriaUbicacion.
+export interface IValoresUbicacionLuminarias {}
 
 export const ValoresUbicacionCentroAtencionSchema = z.object({
   telefono: z.string().optional(),
@@ -76,9 +82,12 @@ export const ValoresUbicacionCentroAtencionSchema = z.object({
   tipoEmergencia: TipoEmergenciaSchema.optional(),
   activo: z.boolean().optional(),
 });
-export type IValoresUbicacionCentroAtencion = z.infer<
-  typeof ValoresUbicacionCentroAtencionSchema
->;
+export interface IValoresUbicacionCentroAtencion {
+  telefono?: string;
+  email?: string;
+  tipoEmergencia?: TipoEmergencia;
+  activo?: boolean;
+}
 
 export const ValoresUbicacionHospitalSchema = z.object({
   telefono: z.string().optional(),
@@ -86,9 +95,12 @@ export const ValoresUbicacionHospitalSchema = z.object({
   gestion: z.enum(['Público', 'Privado', 'Público-privado']).optional(),
   activo: z.boolean().optional(),
 });
-export type IValoresUbicacionHospital = z.infer<
-  typeof ValoresUbicacionHospitalSchema
->;
+export interface IValoresUbicacionHospital {
+  telefono?: string;
+  email?: string;
+  gestion?: 'Público' | 'Privado' | 'Público-privado';
+  activo?: boolean;
+}
 
 /* ────────────────────────────────────────────────
  *  MAPA CATEGORÍA → VALORES
