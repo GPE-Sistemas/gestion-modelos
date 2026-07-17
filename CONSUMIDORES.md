@@ -1,13 +1,32 @@
 # Consumidores de gestion-modelos
 
-Relevado 2026-07-17 (migración a Zod v4) grepeando `"modelos"` en los `package.json` de los repos locales de `Repos/GPE/`.
+Relevado 2026-07-17 (migración a Zod v4): (1) `"modelos"` en los `package.json`
+de los repos locales de `Repos/GPE/`; (2) barrido de imágenes deployadas en
+`Repos/GPE/DevOps/iot-cluster/novit/apis-gestion-irix/{gestion-prod,gestion-test}`.
 
-> ⚠️ **Esta lista puede estar incompleta.** La fuente de verdad de lo que está
-> deployado es `Repos/GPE/DevOps/iot-cluster/` (manifiestos K8s por cliente:
-> novit, smartium, bioanalitica, oficinas, uvcarg). **Pendiente**: barrer los
-> deployments/images de iot-cluster para completar esta lista ANTES de mergear
-> a main — el hook `prepare` de la git-dep corre en el `npm install` de TODOS
-> los consumidores; si el build fallara, les rompe el install.
+> El hook `prepare` de la git-dep corre en el `npm install` de TODOS los
+> consumidores; si el build de gestion-modelos fallara, les rompe el install.
+> Por eso importa la lista completa. iot-cluster hoy solo tiene el cliente
+> **novit** activo (más `acceso-coliving`, que usa acceso-modelos, no este);
+> el CLAUDE.md menciona bioanalitica/smartium/etc. pero están en `_deprecated`/
+> `_otros` o ya no se manifiestan acá.
+
+## Deployados en prod SIN repo clonado localmente (VERIFICAR)
+
+El barrido de iot-cluster encontró estos servicios NestJS corriendo en
+`gestion-prod` (y varios también en `gestion-test`) que NO tengo clonados, así
+que no pude leer su `package.json`. Son candidatos a consumir `modelos/src` y
+hay que confirmar su build contra la rama antes del merge:
+
+`gestion-api-consultas`, `gestion-api-notificaciones`,
+`gestion-api-trackeo-colectivos`, `gestion-coap`, `gestion-dispositivos-lora`,
+`gestion-irix-deeplinks`, `gestion-qualcomm-aware`, `gestion-twilio-api`,
+`gestion-websocket-traccar` (todos en prod). En test además:
+`gestion-api-reportes-truchos`.
+
+No dependen de gestion-modelos (npm): `gestion-trackers-go` (Go), y los sidecars
+externos del manifiesto (`go2rtc`, `mediaMTX`, `rtspToWeb`, `traccar`, `emqx5`,
+`loki-stack`).
 
 ## Consumidores locales detectados (dependencia `gestion-modelos`)
 
@@ -25,12 +44,15 @@ Relevado 2026-07-17 (migración a Zod v4) grepeando `"modelos"` en los `package.
 | gestion-api-websocket-io | (default) | |
 | gestion-cron | `#main` | |
 | gestion-lora-luminarias | `#main` | |
-| gestion-web-cliente | `#main` | Angular; `declaration: false`, `strict: true` |
-| gestion-websocket | (default) | |
+| gestion-web-cliente | `#main` | Angular; `declaration: false`, `strict: true`; deployado (prod+test) |
+| gestion-websocket | (default) | deployado en prod |
 | seguridad-boton-nest | — | referencia a gestion-modelos detectada, confirmar |
 | seguridad-boton-web | — | ídem |
 
-No consumidores (usan `transporte-modelos`): gestion-api-auth, gestion-api-integraciones.
+Todos los de arriba salvo trackers (deprecado) y camaras/websocket aparecen
+también en el manifiesto de prod o test de novit → deploy real, aplican el
+cambio. `gestion-api-auth` y `gestion-api-integraciones` están deployados pero
+usan `transporte-modelos`, NO este paquete.
 
 ## Cambios de contrato a verificar por consumidor (migración Zod)
 
