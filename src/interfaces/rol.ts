@@ -94,6 +94,8 @@ export type AccionesRol =
   | 'Administración - Crear listado categorias'
   | 'Administración - Editar listado categorias'
   | 'Administración - Eliminar listado categorias'
+  // Inactividad de usuarios
+  | 'Administración - Ver inactividad usuarios'
   // *******************************************
   // CONFIGURACIONES
   // *******************************************
