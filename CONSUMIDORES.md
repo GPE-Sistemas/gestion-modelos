@@ -77,6 +77,21 @@ usan `transporte-modelos`, NO este paquete.
    el `npm install` del consumidor compila el paquete y hoistea zod. El import
    `from 'modelos/src'` sigue funcionando igual.
 
+## Fricciones de adopción detectadas (probando en gestion-api-datos)
+
+La migración es transparente salvo en las **entidades que son uniones
+discriminadas** (hoy `IUbicacion`, y las genéricas reporte/evento). Al asignar
+un documento Mongoose a esos tipos, TS falla el narrowing si el paquete usa
+`z.infer` en las piezas de la union. Ya corregido en el paquete (commits de la
+rama), pero es el patrón a vigilar si se agregan uniones discriminadas nuevas:
+- discriminante = type alias de literales plano (NO `z.infer<z.enum>`)
+- `valores` de cada variante = interface hand-written (NO `z.infer<z.object>`)
+- populate hacia la union desde otra entidad = `z.custom<ITipo>()` (NO el schema)
+
+Verificado end-to-end: **gestion-api-datos compila 0 errores** (`nest build`
+genera `dist/main.js`) contra la rama, y los 6 consumidores deployados +
+api-gestion también (ver estado abajo).
+
 ## Checklist de adopción por consumidor
 
 - [ ] `npm run modelos` (o reinstalar la dep) apuntando a la rama/main nueva
