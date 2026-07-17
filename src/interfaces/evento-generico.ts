@@ -347,20 +347,21 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   configEventoUsuario?: IConfigEventoUsuario;
 }
 
+/** Cambio de entidad propuesto por el técnico durante la atención de un servicio
+ *  técnico. Ej: cambio de nodo de una luminaria. Se aplica recién cuando
+ *  administración aprueba (finaliza) el evento. */
+export type CambioEntidadPropuesto = {
+  tipoEntidad?: IEntidades;
+  idEntidadAnterior?: string;
+  idEntidadNueva?: string;
+  aplicado?: boolean; // false hasta que administración aprueba
+  fechaAplicado?: string;
+};
+
 export type DetallesTecnicos = {
   idTecnicoAsignado?: string;
   fechaDisponibleParaTratar?: string;
-
-  /** Cambio de entidad propuesto por el técnico durante la atención de un servicio técnico. Ej: cambio de nodo de una luminaria
-   *  Se aplica recién cuando administración aprueba (finaliza) el evento. */
-  cambioEntidadPropuesto?: {
-    tipoEntidad?: IEntidades;
-    idEntidadAnterior?: string;
-    idEntidadNueva?: string;
-    aplicado?: boolean; // false hasta que administración aprueba
-    fechaAplicado?: string;
-  };
-
+  cambioEntidadPropuesto?: CambioEntidadPropuesto;
   // Populate opcional
   tecnico?: IUsuario;
 };
