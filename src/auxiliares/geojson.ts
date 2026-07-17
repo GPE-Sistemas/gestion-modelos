@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 // GEOJSON
 // https://www.mongodb.com/docs/manual/reference/geojson/
 // type es el tipo de objeto a guardar
@@ -8,12 +10,8 @@
 //  coordinates: [number, number];
 //
 
-export type IGeoJSON =
-  | IGeoJSONPoint
-  | IGeoJSONCircle
-  | IGeoJSONLineString
-  | IGeoJSONPolygon
-  | IGeoJSONMultiPolygon;
+/** [longitud, latitud] */
+const PuntoCoord = z.tuple([z.number(), z.number()]);
 
 /**
  * 🗺️
@@ -27,10 +25,10 @@ export type IGeoJSON =
  * --- coordinates[1] = latitud
  *
  */
-export interface IGeoJSONPoint {
-  type: "Point";
-  coordinates: [number, number];
-}
+export const GeoJSONPointSchema = z.object({
+  type: z.literal("Point"),
+  coordinates: PuntoCoord,
+});
 
 /**
  * 🗺️
@@ -46,11 +44,11 @@ export interface IGeoJSONPoint {
  * - radius: radio del círculo
  *
  */
-export interface IGeoJSONCircle {
-  type: "Point";
-  coordinates: [number, number];
-  radius: number;
-}
+export const GeoJSONCircleSchema = z.object({
+  type: z.literal("Point"),
+  coordinates: PuntoCoord,
+  radius: z.number(),
+});
 
 /**
  * 🗺️
@@ -64,10 +62,10 @@ export interface IGeoJSONCircle {
  * --- coordinates[n][1] = latitud del punto n
  *
  */
-export interface IGeoJSONLineString {
-  type: "LineString";
-  coordinates: [number, number][];
-}
+export const GeoJSONLineStringSchema = z.object({
+  type: z.literal("LineString"),
+  coordinates: z.array(PuntoCoord),
+});
 
 /**
  * 🗺️
@@ -83,10 +81,10 @@ export interface IGeoJSONLineString {
  * --- coordinates[0][n][1] = latitud del punto n del anillo
  *
  */
-export interface IGeoJSONPolygon {
-  type: "Polygon";
-  coordinates: [[number, number][]];
-}
+export const GeoJSONPolygonSchema = z.object({
+  type: z.literal("Polygon"),
+  coordinates: z.tuple([z.array(PuntoCoord)]),
+});
 
 /**
  * 🗺️
@@ -104,7 +102,23 @@ export interface IGeoJSONPolygon {
  * --- coordinates[ i ][ j ][ k ][ 1 ] = latitud del punto k del anillo j del polígono i
  *
  */
-export interface IGeoJSONMultiPolygon {
-  type: "MultiPolygon";
-  coordinates: number[][][][];
-}
+export const GeoJSONMultiPolygonSchema = z.object({
+  type: z.literal("MultiPolygon"),
+  coordinates: z.array(z.array(z.array(z.array(z.number())))),
+});
+
+// Point y Circle comparten type: "Point" → no puede ser discriminatedUnion
+export const GeoJSONSchema = z.union([
+  GeoJSONPointSchema,
+  GeoJSONCircleSchema,
+  GeoJSONLineStringSchema,
+  GeoJSONPolygonSchema,
+  GeoJSONMultiPolygonSchema,
+]);
+
+export type IGeoJSONPoint = z.infer<typeof GeoJSONPointSchema>;
+export type IGeoJSONCircle = z.infer<typeof GeoJSONCircleSchema>;
+export type IGeoJSONLineString = z.infer<typeof GeoJSONLineStringSchema>;
+export type IGeoJSONPolygon = z.infer<typeof GeoJSONPolygonSchema>;
+export type IGeoJSONMultiPolygon = z.infer<typeof GeoJSONMultiPolygonSchema>;
+export type IGeoJSON = z.infer<typeof GeoJSONSchema>;

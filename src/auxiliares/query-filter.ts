@@ -1,3 +1,5 @@
+// Tipos estructurales genéricos de queries Mongo: quedan TS puro, sin schema Zod
+// (IFilter<T> es recursivo y genérico; no hay valor runtime que validar acá).
 export interface IQueryParam {
   page?: string | number;
   limit?: string | number;

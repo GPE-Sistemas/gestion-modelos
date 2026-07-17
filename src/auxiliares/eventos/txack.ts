@@ -1,40 +1,48 @@
-import { DeviceInfo } from "./uplink";
+import { z } from "zod";
+import { DeviceInfoSchema } from "./uplink";
 
-export interface ITxack {
-  downlinkId?: number;
-  time?: string;
-  deviceInfo?: DeviceInfo;
-  queueItemId?: string;
-  fCntDown?: number;
-  gatewayId?: string;
-  txInfo?: TxInfoTxack;
-}
+export const LoraTxackSchema = z.object({
+  bandwidth: z.number().optional(),
+  spreadingFactor: z.number().optional(),
+  codeRate: z.string().optional(),
+  polarizationInversion: z.boolean().optional(),
+});
+export type LoraTxack = z.infer<typeof LoraTxackSchema>;
 
-export interface TxInfoTxack {
-  frequency?: number;
-  power?: number;
-  modulation?: ModulationTxack;
-  timing?: Timing;
-  context?: string;
-}
+export const ModulationTxackSchema = z.object({
+  lora: LoraTxackSchema.optional(),
+});
+export type ModulationTxack = z.infer<typeof ModulationTxackSchema>;
 
-export interface ModulationTxack {
-  lora?: LoraTxack;
-}
+export const TimingSchema = z.object({
+  delay: z
+    .object({
+      delay: z.string().optional(),
+    })
+    .optional(),
+  immediately: z.object({}).optional(),
+});
+export type Timing = z.infer<typeof TimingSchema>;
 
-export interface LoraTxack {
-  bandwidth?: number;
-  spreadingFactor?: number;
-  codeRate?: string;
-  polarizationInversion?: boolean;
-}
+export const TxInfoTxackSchema = z.object({
+  frequency: z.number().optional(),
+  power: z.number().optional(),
+  modulation: ModulationTxackSchema.optional(),
+  timing: TimingSchema.optional(),
+  context: z.string().optional(),
+});
+export type TxInfoTxack = z.infer<typeof TxInfoTxackSchema>;
 
-export interface Timing {
-  delay?: {
-    delay?: string;
-  };
-  immediately?: {};
-}
+export const TxackSchema = z.object({
+  downlinkId: z.number().optional(),
+  time: z.string().optional(),
+  deviceInfo: DeviceInfoSchema.optional(),
+  queueItemId: z.string().optional(),
+  fCntDown: z.number().optional(),
+  gatewayId: z.string().optional(),
+  txInfo: TxInfoTxackSchema.optional(),
+});
+export type ITxack = z.infer<typeof TxackSchema>;
 
 export const EXAMPLE_TXACK: ITxack = {
   downlinkId: 259727475,

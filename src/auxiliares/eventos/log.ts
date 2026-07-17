@@ -1,13 +1,15 @@
-import { DeviceInfo } from "./uplink";
+import { z } from "zod";
+import { DeviceInfoSchema } from "./uplink";
 
-export interface ILog {
-  time?: string;
-  deviceInfo?: DeviceInfo;
-  level?: string; // "ERROR", "WARNING", "INFO"
-  code?: string; // "DOWNLINK_GATEWAY", "UPLINK_F_CNT_RETRANSMISSION", etc.
-  description?: string;
-  context?: Record<string, any>;
-}
+export const LogSchema = z.object({
+  time: z.string().optional(),
+  deviceInfo: DeviceInfoSchema.optional(),
+  level: z.string().optional(), // "ERROR", "WARNING", "INFO"
+  code: z.string().optional(), // "DOWNLINK_GATEWAY", "UPLINK_F_CNT_RETRANSMISSION", etc.
+  description: z.string().optional(),
+  context: z.record(z.string(), z.any()).optional(),
+});
+export type ILog = z.infer<typeof LogSchema>;
 
 export const EXAMPLE_LOG_ERROR: ILog = {
   time: "2025-12-11T20:49:52.238228508+00:00",
@@ -45,7 +47,8 @@ export const EXAMPLE_LOG_WARNING: ILog = {
   },
   level: "WARNING",
   code: "UPLINK_F_CNT_RETRANSMISSION",
-  description: "Uplink was flagged as re-transmission / frame-counter did not increment",
+  description:
+    "Uplink was flagged as re-transmission / frame-counter did not increment",
   context: {
     deduplication_id: "8ec164e1-b5b3-4de6-94fa-9b5516347585",
   },

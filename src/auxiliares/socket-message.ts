@@ -1,32 +1,35 @@
-export interface ISocketMessage {
+import { z } from "zod";
+
+export const SocketMessageSchema = z.object({
   /**
    * Las entidades modificadas (clientes, usuarios, etc)
    */
-  paths?: string[];
+  paths: z.array(z.string()).optional(),
   /**
    * Metodo HTTP ejecutado (post, put, delete)
    */
-  method?: string;
+  method: z.string().optional(),
   /**
    * El id del usuario que ejecutó la accion
    */
-  idUser?: string;
+  idUser: z.string().optional(),
   /**
    * El id del cliente del usuario que ejecutó la accion
    */
-  idCliente?: string;
+  idCliente: z.string().optional(),
   /**
    * El body que se devolvio al usuario
    * En caso de post o put, el body es el nuevo objeto
    * En caso de delete, el body es un objeto { _id: "id del objeto eliminado" }
    */
-  body?: Record<string, any>;
+  body: z.record(z.string(), z.any()).optional(),
   /**
    * Por que el usuario recibio el mensaje (para debug mas que nada)
    */
-  motivo?: string;
+  motivo: z.string().optional(),
   /**
    * La aplicacion que envio el mensaje
    */
-  aplicacion?: string;
-}
+  aplicacion: z.string().optional(),
+});
+export type ISocketMessage = z.infer<typeof SocketMessageSchema>;

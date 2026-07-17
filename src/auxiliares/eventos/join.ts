@@ -1,12 +1,14 @@
-import { DeviceInfo } from "./uplink";
+import { z } from "zod";
+import { DeviceInfoSchema } from "./uplink";
 
-export interface IJoin {
-  deduplicationId?: string;
-  time?: string;
-  deviceInfo?: DeviceInfo;
-  devAddr?: string;
-  regionConfigId?: string;
-}
+export const JoinSchema = z.object({
+  deduplicationId: z.string().optional(),
+  time: z.string().optional(),
+  deviceInfo: DeviceInfoSchema.optional(),
+  devAddr: z.string().optional(),
+  regionConfigId: z.string().optional(),
+});
+export type IJoin = z.infer<typeof JoinSchema>;
 
 export const EXAMPLE_JOIN: IJoin = {
   deduplicationId: "b09a7839-a7c5-44ed-82db-3b02c076813a",
