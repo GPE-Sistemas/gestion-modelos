@@ -17,7 +17,21 @@ export const CategoriaUbicacionSchema = z.enum([
   'Vehiculos',
   'Luminarias',
 ]);
-export type ICategoriaUbicacion = z.infer<typeof CategoriaUbicacionSchema>;
+// Discriminante de la union IUbicacion: DEBE ser un type alias de literales
+// plano, NO z.infer<typeof CategoriaUbicacionSchema>. TS no reconoce el tipo
+// inferido de z.enum como discriminante válido para narrowear una
+// discriminatedUnion, y los consumidores que tipan un campo Mongoose con
+// ICategoriaUbicacion y lo asignan a IUbicacion (ej. api-datos ubicacion/
+// service.ts) fallan (TS2322). El schema runtime sigue siendo z.enum abajo.
+export type ICategoriaUbicacion =
+  | 'Terminal'
+  | 'Domicilio'
+  | 'Activos'
+  | 'Centro de Atención'
+  | 'Hospital'
+  | 'Destino Emergencia'
+  | 'Vehiculos'
+  | 'Luminarias';
 
 /* ────────────────────────────────────────────────
  *  VALORES POR CATEGORÍA
