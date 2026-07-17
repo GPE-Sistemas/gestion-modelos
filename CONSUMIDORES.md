@@ -92,6 +92,23 @@ Verificado end-to-end: **gestion-api-datos compila 0 errores** (`nest build`
 genera `dist/main.js`) contra la rama, y los 6 consumidores deployados +
 api-gestion también (ver estado abajo).
 
+## Estado de verificación (build contra la rama feat/migracion-zod-v4)
+
+**18 consumidores NestJS deployados en novit: 0 errores de build cada uno.**
+api-datos + api-gestion + notificaciones + trackeo-colectivos + dispositivos-lora
++ qualcomm-aware + twilio-api + websocket-traccar + alarmas + cache + eventos +
+sirenas + t1000b + websocket-io + cron + lora-luminarias + websocket + camaras.
+
+Además, **api-datos corrió estable en el cluster de test** (imagen de la rama,
+pod Running/ready, 0 restarts, atendiendo tráfico real, sin ZodError/crash).
+
+Pendientes de verificar antes del merge:
+- **gestion-web-cliente** (Angular): validado a nivel typecheck con perfil
+  `strict:true` (0 errores); falta `ng build` real.
+- **seguridad-boton-nest** y **seguridad-boton-web** (subsistema Seguridad):
+  consumen gestion-modelos bajo el alias **`modelos-gestion`** (import
+  `modelos-gestion/src`), no `modelos`. Aplican el cambio al mergear.
+
 ## Checklist de adopción por consumidor
 
 - [ ] `npm run modelos` (o reinstalar la dep) apuntando a la rama/main nueva
