@@ -1,5 +1,6 @@
 import { IEntidades } from './asignacion';
 import { ICliente } from './cliente';
+import { IDispositivoLorawan } from './dispositivo-lorawan';
 import { IEventoGenerico } from './evento-generico';
 import { IUsuario } from './usuario';
 
@@ -43,6 +44,7 @@ export interface IMaterialServicioTecnico {
   ancestros?: ICliente[];
   evento?: IEventoGenerico;
   usuario?: IUsuario;
+  dispositivoLorawan?: IDispositivoLorawan; // populate de idEntidad cuando tipoEntidad === 'Dispositivo Lorawan'
 }
 
 type OmitirCreate =

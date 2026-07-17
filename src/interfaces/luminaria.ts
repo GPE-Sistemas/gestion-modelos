@@ -73,6 +73,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   // Virtuals
   cliente?: ICliente;
   ancestros?: ICliente[];
+  clientesQuePuedenAtenderEventosTecnicos?: ICliente[]; // populate de idsClientesQuePuedenAtenderEventosTecnicos
   dispositivo?: IDispositivoLorawan;
   modeloDispositivo?: IModeloDispositivo;
   grupos?: IGrupo[];
