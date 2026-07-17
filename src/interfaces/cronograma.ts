@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ClienteSchema } from './cliente';
 import { DiaSchema } from './config-evento-usuario';
-import { UbicacionSchema } from './ubicacion';
+import type { IUbicacion } from './ubicacion';
 
 export const TipoDeCronogramaSchema = z.enum(['despacho', 'turnos']);
 export type TipoDeCronograma = z.infer<typeof TipoDeCronogramaSchema>;
@@ -38,7 +38,10 @@ export const CronogramaSchema = z.object({
   // Populate
   cliente: ClienteSchema.optional(),
   ancestros: z.array(ClienteSchema).optional(),
-  ubicacion: UbicacionSchema.optional(),
+  // Populate hacia una union discriminada (IUbicacion): z.custom con el tipo
+  // hand-written, NO UbicacionSchema. z.infer del schema union rompe el
+  // narrowing por categoria al asignar un doc Mongoose en consumidores.
+  ubicacion: z.custom<IUbicacion>().optional(),
 });
 export type ICronograma = z.infer<typeof CronogramaSchema>;
 
