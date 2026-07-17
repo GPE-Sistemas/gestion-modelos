@@ -1,8 +1,27 @@
 {
   "name": "gestion-modelos",
-  "version": "1.0.0",
-  "description": "Modelos para el sitema de gestión",
+  "version": "2.0.0",
+  "description": "Modelos para el sistema de gestión. Schemas Zod + tipos TypeScript inferidos.",
   "author": "GPE Sistemas",
   "license": "Private",
-  "repository": "https://github.com/GPE-Sistemas/gestion-modelos"
+  "repository": "https://github.com/GPE-Sistemas/gestion-modelos",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "gen:json-schema": "node scripts/gen-json-schema.mjs",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
 }
