@@ -1,59 +1,59 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { ICronograma } from './cronograma';
-import { IRecorrido } from './recorrido';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ActivoSchema } from './activo';
+import { ClienteSchema } from './cliente';
+import { CronogramaSchema } from './cronograma';
+import { RecorridoSchema } from './recorrido';
+import { UsuarioSchema } from './usuario';
 
-export interface IDespacho {
-  _id?: string;
+export const DespachoSchema = z.object({
+  _id: z.string().optional(),
   //
-  idCliente?: string;
-  idsAncestros?: string[];
-  idUsuario?: string;
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idUsuario: z.string().optional(),
   //
-  fechaCreacion?: string;
-  fecha?: string;
-  hora?: string; // Sale
-  salio?: string; // Salió
-  idCronograma?: string;
-  idActivo?: string;
-  idChofer?: string;
-  idsRecorridos?: string[];
-  idRecorridoActual?: string;
-  completado?: boolean; /// Que los datos son iguales al cronograma
-  cancelado?: boolean; /// Que el despacho fue cancelado
+  fechaCreacion: z.string().optional(),
+  fecha: z.string().optional(),
+  hora: z.string().optional(), // Sale
+  salio: z.string().optional(), // Salió
+  idCronograma: z.string().optional(),
+  idActivo: z.string().optional(),
+  idChofer: z.string().optional(),
+  idsRecorridos: z.array(z.string()).optional(),
+  idRecorridoActual: z.string().optional(),
+  completado: z.boolean().optional(), /// Que los datos son iguales al cronograma
+  cancelado: z.boolean().optional(), /// Que el despacho fue cancelado
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  usuario?: IUsuario;
-  activo?: IActivo;
-  chofer?: IUsuario;
-  recorridos?: IRecorrido[];
-  cronograma?: ICronograma;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  usuario: UsuarioSchema.optional(),
+  activo: ActivoSchema.optional(),
+  chofer: UsuarioSchema.optional(),
+  recorridos: z.array(RecorridoSchema).optional(),
+  cronograma: CronogramaSchema.optional(),
+});
+export type IDespacho = z.infer<typeof DespachoSchema>;
 
-type OmitirCreate =
-  | '_id'
-  | 'cliente'
-  | 'usuario'
-  | 'fechaCreacion'
-  | 'activo'
-  | 'chofer'
-  | 'recorridos'
-  | 'cronograma';
+export const CreateDespachoSchema = DespachoSchema.omit({
+  _id: true,
+  cliente: true,
+  usuario: true,
+  fechaCreacion: true,
+  activo: true,
+  chofer: true,
+  recorridos: true,
+  cronograma: true,
+});
+export type ICreateDespacho = z.infer<typeof CreateDespachoSchema>;
 
-export interface ICreateDespacho
-  extends Omit<Partial<IDespacho>, OmitirCreate> {}
-
-type OmitirUpdate =
-  | '_id'
-  | 'cliente'
-  | 'usuario'
-  | 'fechaCreacion'
-  | 'activo'
-  | 'chofer'
-  | 'recorridos'
-  | 'cronograma';
-
-export interface IUpdateDespacho
-  extends Omit<Partial<IDespacho>, OmitirUpdate> {}
+export const UpdateDespachoSchema = DespachoSchema.omit({
+  _id: true,
+  cliente: true,
+  usuario: true,
+  fechaCreacion: true,
+  activo: true,
+  chofer: true,
+  recorridos: true,
+  cronograma: true,
+});
+export type IUpdateDespacho = z.infer<typeof UpdateDespachoSchema>;

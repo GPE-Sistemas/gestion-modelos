@@ -1,24 +1,33 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IDocumentacion } from './documentacion';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ActivoSchema } from './activo';
+import { ClienteSchema } from './cliente';
+import { DocumentacionSchema } from './documentacion';
+import { UsuarioSchema } from './usuario';
 
-export type TipoRecordatorio = 'km' | 'fecha';
-export type CategoriaRecordatorio = 'Colectivo' | 'Vehiculo';
-export type SubcategoriaRecordatorio =
-  | 'Cambio de aceite y filtro'
-  | 'Cambio de aceite de caja'
-  | 'Cambio de líquido refrigerante'
-  | 'Cambio de filtro de combustible'
-  | 'Cambio de filtro de aire'
-  | 'Cambio de filtro de habitáculo'
-  | 'Cambio de batería'
-  | 'Cambio de cubiertas'
-  | 'Cambio de luces'
-  | 'Cambio de líquido de frenos'
-  | 'Cambio de pastillas de freno'
-  | 'Cambio de bujías'
-  | 'Otro';
+export const TipoRecordatorioSchema = z.enum(['km', 'fecha']);
+export type TipoRecordatorio = z.infer<typeof TipoRecordatorioSchema>;
+
+export const CategoriaRecordatorioSchema = z.enum(['Colectivo', 'Vehiculo']);
+export type CategoriaRecordatorio = z.infer<typeof CategoriaRecordatorioSchema>;
+
+export const SubcategoriaRecordatorioSchema = z.enum([
+  'Cambio de aceite y filtro',
+  'Cambio de aceite de caja',
+  'Cambio de líquido refrigerante',
+  'Cambio de filtro de combustible',
+  'Cambio de filtro de aire',
+  'Cambio de filtro de habitáculo',
+  'Cambio de batería',
+  'Cambio de cubiertas',
+  'Cambio de luces',
+  'Cambio de líquido de frenos',
+  'Cambio de pastillas de freno',
+  'Cambio de bujías',
+  'Otro',
+]);
+export type SubcategoriaRecordatorio = z.infer<
+  typeof SubcategoriaRecordatorioSchema
+>;
 
 //RECORDATORIOS DE MANTENIMIENTO
 //- Se generan desde los módulos de vehículos o colectivos en el front end
@@ -36,43 +45,48 @@ export type SubcategoriaRecordatorio =
 //- La documentación de licencia/seguro es para choferes y conductores, se crean desde el listado de choferes/conductores en la acción documentos
 
 //💡💡💡 Creo que esto de los recordatorios debería ser mas genérico porque podría servir para otras entidades. Además, actualmente es confuso porque se mezclan recordatorios de mantenimiento con los de documentación. Podríamos agregar un campo "tipo" que indique si es un recordatorio de mantenimiento o de documentación, y así podríamos tener campos específicos para cada tipo sin que queden confusos.
-export interface IRecordatorio {
-  _id?: string;
-  categoria?: CategoriaRecordatorio;
-  subcategoria?: SubcategoriaRecordatorio;
-  idCliente?: string;
-  idsAncestros?: string[];
-  idUsuario?: string;
-  tipo?: TipoRecordatorio[];
-  notificado?: boolean;
-  fechaLimite?: string;
-  fechaCreacion?: string;
-  kmLimite?: number;
-  idActivo?: string;
-  idDocumentacion?: string;
-  detallesDelMantenimiento?: string;
-  repetible?: boolean;
-  frecuenciaKm?: number;
-  frecuenciaDia?: number;
+export const RecordatorioSchema = z.object({
+  _id: z.string().optional(),
+  categoria: CategoriaRecordatorioSchema.optional(),
+  subcategoria: SubcategoriaRecordatorioSchema.optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idUsuario: z.string().optional(),
+  tipo: z.array(TipoRecordatorioSchema).optional(),
+  notificado: z.boolean().optional(),
+  fechaLimite: z.string().optional(),
+  fechaCreacion: z.string().optional(),
+  kmLimite: z.number().optional(),
+  idActivo: z.string().optional(),
+  idDocumentacion: z.string().optional(),
+  detallesDelMantenimiento: z.string().optional(),
+  repetible: z.boolean().optional(),
+  frecuenciaKm: z.number().optional(),
+  frecuenciaDia: z.number().optional(),
 
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  usuario?: IUsuario;
-  activo?: IActivo;
-  documentacion?: IDocumentacion;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  usuario: UsuarioSchema.optional(),
+  activo: ActivoSchema.optional(),
+  documentacion: DocumentacionSchema.optional(),
+});
+export type IRecordatorio = z.infer<typeof RecordatorioSchema>;
 
-type OmitirCreate = '_id' | 'cliente' | 'activo' | 'documentacion' | 'usuario';
+export const CreateRecordatorioSchema = RecordatorioSchema.omit({
+  _id: true,
+  cliente: true,
+  activo: true,
+  documentacion: true,
+  usuario: true,
+});
+export type ICreateRecordatorio = z.infer<typeof CreateRecordatorioSchema>;
 
-export interface ICreateRecordatorio extends Omit<
-  Partial<IRecordatorio>,
-  OmitirCreate
-> {}
-
-type OmitirUpdate = '_id' | 'cliente' | 'activo' | 'documentacion' | 'usuario';
-
-export interface IUpdateRecordatorio extends Omit<
-  Partial<IRecordatorio>,
-  OmitirUpdate
-> {}
+export const UpdateRecordatorioSchema = RecordatorioSchema.omit({
+  _id: true,
+  cliente: true,
+  activo: true,
+  documentacion: true,
+  usuario: true,
+});
+export type IUpdateRecordatorio = z.infer<typeof UpdateRecordatorioSchema>;

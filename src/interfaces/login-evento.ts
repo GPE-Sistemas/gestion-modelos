@@ -1,8 +1,17 @@
-import { ICliente } from './cliente';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import { UsuarioSchema } from './usuario';
 
-export type MetodoLogin = 'password' | 'google';
-export type PlataformaLogin = 'web' | 'android' | 'ios' | 'desconocida';
+export const MetodoLoginSchema = z.enum(['password', 'google']);
+export type MetodoLogin = z.infer<typeof MetodoLoginSchema>;
+
+export const PlataformaLoginSchema = z.enum([
+  'web',
+  'android',
+  'ios',
+  'desconocida',
+]);
+export type PlataformaLogin = z.infer<typeof PlataformaLoginSchema>;
 
 /**
  * Evento de login de un usuario. Se inserta uno por login exitoso (grant
@@ -16,78 +25,91 @@ export type PlataformaLogin = 'web' | 'android' | 'ios' | 'desconocida';
  *
  * La colección tiene un índice TTL sobre `fecha` (retención 1 año).
  */
-export interface ILoginEvento {
-  _id?: string;
+export const LoginEventoSchema = z.object({
+  _id: z.string().optional(),
   // Vínculo con el usuario que inició sesión.
-  idUsuario?: string;
+  idUsuario: z.string().optional(),
   // Nombre de usuario denormalizado (lowercase), por si el usuario se borra.
-  usuario?: string;
+  usuario: z.string().optional(),
   // Cliente del usuario al momento del login (puede no tener).
-  idCliente?: string;
+  idCliente: z.string().optional(),
   // Cadena de clientes ancestros del idCliente, para roll-up por subárbol.
-  idsAncestros?: string[];
+  idsAncestros: z.array(z.string()).optional(),
   // Momento del login. Ancla del índice TTL.
-  fecha?: string;
-  metodo?: MetodoLogin;
-  plataforma?: PlataformaLogin;
+  fecha: z.string().optional(),
+  metodo: MetodoLoginSchema.optional(),
+  plataforma: PlataformaLoginSchema.optional(),
   // User-Agent crudo (best-effort), por si luego se quiere afinar plataforma.
-  userAgent?: string;
+  userAgent: z.string().optional(),
   // Populate / Virtual
-  usuarioDoc?: IUsuario;
-  cliente?: ICliente;
-}
+  usuarioDoc: UsuarioSchema.optional(),
+  cliente: ClienteSchema.optional(),
+});
+export type ILoginEvento = z.infer<typeof LoginEventoSchema>;
 
-type OmitirCreate = '_id' | 'usuarioDoc' | 'cliente';
-
-export interface ICreateLoginEvento
-  extends Omit<Partial<ILoginEvento>, OmitirCreate> {}
+export const CreateLoginEventoSchema = LoginEventoSchema.omit({
+  _id: true,
+  usuarioDoc: true,
+  cliente: true,
+});
+export type ICreateLoginEvento = z.infer<typeof CreateLoginEventoSchema>;
 
 // ---- Tipos de retorno de las estadísticas de uso (solo lectura) ----
 
-export interface IEstadisticasResumen {
-  desde?: string;
-  hasta?: string;
+export const EstadisticasResumenSchema = z.object({
+  desde: z.string().optional(),
+  hasta: z.string().optional(),
   // Usuarios activos únicos en las últimas 24h / 7d / 30d.
-  dau?: number;
-  wau?: number;
-  mau?: number;
+  dau: z.number().optional(),
+  wau: z.number().optional(),
+  mau: z.number().optional(),
   // Totales dentro del rango [desde, hasta].
-  totalLogins?: number;
-  usuariosActivos?: number;
+  totalLogins: z.number().optional(),
+  usuariosActivos: z.number().optional(),
   // Universo total de usuarios registrados (con y sin actividad).
-  usuariosRegistrados?: number;
-}
+  usuariosRegistrados: z.number().optional(),
+});
+export type IEstadisticasResumen = z.infer<typeof EstadisticasResumenSchema>;
 
-export interface IEstadisticasSeriePunto {
-  fecha?: string; // día (YYYY-MM-DD)
-  logins?: number;
-  usuariosActivos?: number;
-}
+export const EstadisticasSeriePuntoSchema = z.object({
+  fecha: z.string().optional(), // día (YYYY-MM-DD)
+  logins: z.number().optional(),
+  usuariosActivos: z.number().optional(),
+});
+export type IEstadisticasSeriePunto = z.infer<
+  typeof EstadisticasSeriePuntoSchema
+>;
 
-export interface IEstadisticasPorCliente {
-  idCliente?: string;
-  nombre?: string;
-  nivel?: number;
-  totalLogins?: number;
-  usuariosActivos?: number;
-  dau?: number;
-  wau?: number;
-  mau?: number;
-}
+export const EstadisticasPorClienteSchema = z.object({
+  idCliente: z.string().optional(),
+  nombre: z.string().optional(),
+  nivel: z.number().optional(),
+  totalLogins: z.number().optional(),
+  usuariosActivos: z.number().optional(),
+  dau: z.number().optional(),
+  wau: z.number().optional(),
+  mau: z.number().optional(),
+});
+export type IEstadisticasPorCliente = z.infer<
+  typeof EstadisticasPorClienteSchema
+>;
 
-export interface IEstadisticasPorUsuario {
-  idUsuario?: string;
-  usuario?: string;
-  nombre?: string;
-  idCliente?: string;
-  clienteNombre?: string;
-  ultimoLogin?: string;
-  primerLogin?: string;
-  cantidadLogins?: number; // acumulado histórico (contador en Usuario)
-  loginsRango?: number; // logins dentro de [desde, hasta]
-  diasActivosRango?: number; // días distintos con al menos un login en el rango
-  rachaActual?: number; // días consecutivos activos hasta hoy
-  diasDesdeUltimoLogin?: number;
-  plataformas?: string[];
-  metodos?: string[];
-}
+export const EstadisticasPorUsuarioSchema = z.object({
+  idUsuario: z.string().optional(),
+  usuario: z.string().optional(),
+  nombre: z.string().optional(),
+  idCliente: z.string().optional(),
+  clienteNombre: z.string().optional(),
+  ultimoLogin: z.string().optional(),
+  primerLogin: z.string().optional(),
+  cantidadLogins: z.number().optional(), // acumulado histórico (contador en Usuario)
+  loginsRango: z.number().optional(), // logins dentro de [desde, hasta]
+  diasActivosRango: z.number().optional(), // días distintos con al menos un login en el rango
+  rachaActual: z.number().optional(), // días consecutivos activos hasta hoy
+  diasDesdeUltimoLogin: z.number().optional(),
+  plataformas: z.array(z.string()).optional(),
+  metodos: z.array(z.string()).optional(),
+});
+export type IEstadisticasPorUsuario = z.infer<
+  typeof EstadisticasPorUsuarioSchema
+>;

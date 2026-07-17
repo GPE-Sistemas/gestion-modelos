@@ -1,51 +1,53 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IGrupo } from './grupo';
-import { IParada, IRecorrido } from './recorrido';
+import { z } from 'zod';
+import { ActivoSchema } from './activo';
+import { ClienteSchema } from './cliente';
+import { GrupoSchema } from './grupo';
+import { ParadaSchema, RecorridoSchema } from './recorrido';
 
-export interface ITrackeo {
-  _id?: string;
+export const TrackeoSchema = z.object({
+  _id: z.string().optional(),
   //
-  idCliente?: string;
-  idsAncestros?: string[];
-  idGrupo?: string;
-  idRecorrido?: string;
-  idActivo?: string;
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idGrupo: z.string().optional(),
+  idRecorrido: z.string().optional(),
+  idActivo: z.string().optional(),
 
-  fecha?: string;
-  idParada?: string;
-  indiceParada?: number;
-  fechaProximaParada?: string;
-  idProximaParada?: string;
+  fecha: z.string().optional(),
+  idParada: z.string().optional(),
+  indiceParada: z.number().optional(),
+  fechaProximaParada: z.string().optional(),
+  idProximaParada: z.string().optional(),
 
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  grupo?: IGrupo;
-  activo?: IActivo;
-  recorrido?: IRecorrido;
-  parada?: IParada;
-  proximaParada?: IParada;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  grupo: GrupoSchema.optional(),
+  activo: ActivoSchema.optional(),
+  recorrido: RecorridoSchema.optional(),
+  parada: ParadaSchema.optional(),
+  proximaParada: ParadaSchema.optional(),
+});
+export type ITrackeo = z.infer<typeof TrackeoSchema>;
 
-type OmitirCreate =
-  | '_id'
-  | 'cliente'
-  | 'grupo'
-  | 'activo'
-  | 'recorrido'
-  | 'parada'
-  | 'proximaParada';
+export const CreateTrackeoSchema = TrackeoSchema.omit({
+  _id: true,
+  cliente: true,
+  grupo: true,
+  activo: true,
+  recorrido: true,
+  parada: true,
+  proximaParada: true,
+});
+export type ICreateTrackeo = z.infer<typeof CreateTrackeoSchema>;
 
-export interface ICreateTrackeo extends Omit<Partial<ITrackeo>, OmitirCreate> {}
-
-type OmitirUpdate =
-  | '_id'
-  | 'cliente'
-  | 'grupo'
-  | 'activo'
-  | 'recorrido'
-  | 'parada'
-  | 'proximaParada';
-
-export interface IUpdateTrackeo extends Omit<Partial<ITrackeo>, OmitirUpdate> {}
+export const UpdateTrackeoSchema = TrackeoSchema.omit({
+  _id: true,
+  cliente: true,
+  grupo: true,
+  activo: true,
+  recorrido: true,
+  parada: true,
+  proximaParada: true,
+});
+export type IUpdateTrackeo = z.infer<typeof UpdateTrackeoSchema>;

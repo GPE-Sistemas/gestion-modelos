@@ -77,7 +77,12 @@ function main() {
     }
 
     try {
-      const jsonSchema = z.toJSONSchema(value, { target: "openapi-3.0" });
+      // unrepresentable: 'any' → los z.custom (populates del SCC) se emiten
+      // como {} (any) en vez de fallar
+      const jsonSchema = z.toJSONSchema(value, {
+        target: "openapi-3.0",
+        unrepresentable: "any",
+      });
       const payload = JSON.stringify(jsonSchema, null, 2);
       writeFileSync(join(OUT_DIR, `${name}.json`), payload + "\n", "utf-8");
       defs[name] = jsonSchema;

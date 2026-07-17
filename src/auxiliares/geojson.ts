@@ -116,9 +116,33 @@ export const GeoJSONSchema = z.union([
   GeoJSONMultiPolygonSchema,
 ]);
 
-export type IGeoJSONPoint = z.infer<typeof GeoJSONPointSchema>;
-export type IGeoJSONCircle = z.infer<typeof GeoJSONCircleSchema>;
-export type IGeoJSONLineString = z.infer<typeof GeoJSONLineStringSchema>;
-export type IGeoJSONPolygon = z.infer<typeof GeoJSONPolygonSchema>;
-export type IGeoJSONMultiPolygon = z.infer<typeof GeoJSONMultiPolygonSchema>;
-export type IGeoJSON = z.infer<typeof GeoJSONSchema>;
+// Tipos hand-written (NO z.infer): los consumidores compilan este fuente con
+// strictNullChecks: false y la inferencia de Zod v4 se degrada sin strict
+// (ej: [number, number] → [number?, number?, ...unknown[]]).
+export interface IGeoJSONPoint {
+  type: 'Point';
+  coordinates: [number, number];
+}
+export interface IGeoJSONCircle {
+  type: 'Point';
+  coordinates: [number, number];
+  radius: number;
+}
+export interface IGeoJSONLineString {
+  type: 'LineString';
+  coordinates: [number, number][];
+}
+export interface IGeoJSONPolygon {
+  type: 'Polygon';
+  coordinates: [[number, number][]];
+}
+export interface IGeoJSONMultiPolygon {
+  type: 'MultiPolygon';
+  coordinates: number[][][][];
+}
+export type IGeoJSON =
+  | IGeoJSONPoint
+  | IGeoJSONCircle
+  | IGeoJSONLineString
+  | IGeoJSONPolygon
+  | IGeoJSONMultiPolygon;
