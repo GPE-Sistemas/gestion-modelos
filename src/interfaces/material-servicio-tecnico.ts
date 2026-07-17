@@ -1,34 +1,40 @@
+import { IEntidades } from './asignacion';
 import { ICliente } from './cliente';
 import { IEventoGenerico } from './evento-generico';
 import { IUsuario } from './usuario';
 
-export type TipoMaterialServicioTecnico = 'usado' | 'pedido';
+/**
+ * - 'usado' / 'pedido': material dentro de un servicio técnico (idEventoGenerico presente). Solo aparecen si se creó un evento técnico, esto lo gestiona el técnico.
+ * - 'asignado': material/entidad en el stock (caja) del técnico que el fue asignado, sin evento (idEventoGenerico ausente). Puede ser algo libre (cables, herramientas) o una entidad del sistema referenciada por idEntidad/tipoEntidad (ej: un Dispositivo Lorawan disponible para cambio de nodo de luminaria).
+ */
+export type TipoMaterialServicioTecnico = 'usado' | 'pedido' | 'asignado';
 
 /**
  * Flujo del pedido: Pendiente (lo pide el técnico) → Aprobado (operador)
- * → Usado (el técnico vuelve, termina el trabajo y lo marca). Anulado en
- * cualquier punto previo a Usado.
+ * → Usado (el técnico vuelve, termina el trabajo y lo marca). Anulado en cualquier punto previo a Usado.
+ * Para el stock asignado al técnico (tipo 'asignado'): Asignado ↔ Devuelto.
  */
 export type EstadoPedidoMaterial =
   | 'Pendiente'
   | 'Aprobado'
   | 'Usado'
-  | 'Anulado';
+  | 'Anulado'
+  | 'Asignado'
+  | 'Devuelto';
 
 export interface IMaterialServicioTecnico {
   _id?: string;
   idCliente?: string;
   idsAncestros?: string[];
-  /** Servicio técnico (evento genérico con filtrador 'Servicio Técnico') originario */
-  idEventoGenerico?: string;
-  /** Usuario que registró el material usado o solicitó el pedido */
-  idUsuario?: string;
+  idEventoGenerico?: string; //Ausente cuando el material es stock asignado a la caja del técnico (tipo 'asignado').
+  idUsuario?: string; //quien registró/solicitó el material, o a quien está asignado el stock
   tipo?: TipoMaterialServicioTecnico;
   descripcion?: string;
   cantidad?: number;
   imagenes?: string[];
-  /** Solo para tipo 'pedido' */
   estado?: EstadoPedidoMaterial;
+  idEntidad?: string; //Entidad del sistema referenciada por este material (opcional).
+  tipoEntidad?: IEntidades;
   /** Reservado para stock futuro: vínculo a artículo de inventario. No usar aún. */
   idArticulo?: string;
   fechaCreacion?: string;
@@ -47,10 +53,14 @@ type OmitirCreate =
   | 'usuario'
   | 'fechaCreacion';
 
-export interface ICreateMaterialServicioTecnico
-  extends Omit<Partial<IMaterialServicioTecnico>, OmitirCreate> {}
+export interface ICreateMaterialServicioTecnico extends Omit<
+  Partial<IMaterialServicioTecnico>,
+  OmitirCreate
+> {}
 
 type OmitirUpdate = OmitirCreate;
 
-export interface IUpdateMaterialServicioTecnico
-  extends Omit<Partial<IMaterialServicioTecnico>, OmitirUpdate> {}
+export interface IUpdateMaterialServicioTecnico extends Omit<
+  Partial<IMaterialServicioTecnico>,
+  OmitirUpdate
+> {}

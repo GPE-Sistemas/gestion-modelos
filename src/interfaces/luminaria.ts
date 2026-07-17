@@ -1,5 +1,5 @@
 import { IGeoJSONPoint } from '../auxiliares';
-import { ICliente } from './cliente';
+import { ICliente, IConfigHorario } from './cliente';
 import { NivelObjetivo } from './comando';
 import { IConfigPerfil } from './config-perfil';
 import { IDispositivoLorawan } from './dispositivo-lorawan';
@@ -64,6 +64,11 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   tipoEnergizado?: ITipoEnergizado;
   estadoOperativo?: EstadoOperativoLuminaria; // Condición administrativa (Operativa/Mantenimiento)
   estado?: IEstadoLuminariaCalculado; // Estado calculado de funcionamiento (6 estados). Escrito por backend (uplinks + cron); persiste hasta el próximo cambio.
+
+  // Habilitación de Servicio Técnico
+  puedeSolicitarServicioTecnico?: boolean; // Si esta luminaria puede recibir servicio técnico
+  idsClientesQuePuedenAtenderEventosTecnicos?: string[]; // Clientes habilitados a atender el ST de esta luminaria
+  configHorariosAtencionTecnica?: IConfigHorario[]; // Clientes que atienden + ventanas horarias
 
   // Virtuals
   cliente?: ICliente;
