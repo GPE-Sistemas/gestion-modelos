@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ClienteSchema, ICliente } from './cliente';
+import { PuntoCoord } from '../auxiliares/geojson';
 
 export const AgrupacionTiempoSchema = z.enum([
   'Diario',
@@ -135,7 +136,7 @@ export type ICombustibleHorarioVehiculo = z.infer<
 
 const PuntoGeojsonSchema = z.object({
   type: z.literal('Point'),
-  coordinates: z.tuple([z.number(), z.number()]),
+  coordinates: PuntoCoord,
 });
 
 export const EventoCargaCombustibleSchema = z.object({

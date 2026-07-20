@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PuntoCoord } from '../auxiliares/geojson';
 
 export const ConfigHorarioSchema = z.object({
   idCliente: z.string().optional(), // undefined = default del cliente
@@ -330,9 +331,7 @@ export const ClienteSchema = z.object({
   poligono: z
     .object({
       type: z.literal('MultiPolygon'),
-      coordinates: z.array(
-        z.array(z.array(z.tuple([z.number(), z.number()]))),
-      ),
+      coordinates: z.array(z.array(z.array(PuntoCoord))),
     })
     .optional(),
   mapLayers: z.array(LayerMapaPersonalizadoSchema).optional(), //Capas de mapa personalizadas

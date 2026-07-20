@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PuntoCoord } from '../auxiliares/geojson';
 
 export const RolEnVisitaSchema = z.enum([
   'arribo',
@@ -31,8 +32,8 @@ export const VisitaUbicacionSchema = z.object({
   cantidadReportes: z.number().optional(),
   yaEstabaAlInicio: z.boolean().optional(),
   seguiaAlFinal: z.boolean().optional(),
-  entradaCoords: z.tuple([z.number(), z.number()]).optional(),
-  salidaCoords: z.tuple([z.number(), z.number()]).optional(),
+  entradaCoords: PuntoCoord.optional(),
+  salidaCoords: PuntoCoord.optional(),
   trips: z.array(VisitaTripSchema).optional(),
 });
 export type IVisitaUbicacion = z.infer<typeof VisitaUbicacionSchema>;

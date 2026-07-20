@@ -10,8 +10,18 @@ import { z } from "zod";
 //  coordinates: [number, number];
 //
 
-/** [longitud, latitud] */
-const PuntoCoord = z.tuple([z.number(), z.number()]);
+/**
+ * [longitud, latitud]
+ *
+ * El output de `z.tuple` en Zod v4 se infiere como `[number?, number?, ...unknown[]]`
+ * (sobre todo en consumidores con `strictNullChecks: false`), lo que rompe la
+ * asignación a `[number, number]`. Forzamos el tipo de salida con un cast: el
+ * runtime sigue validando la tupla, pero el tipo público es estable.
+ */
+export const PuntoCoord = z.tuple([
+  z.number(),
+  z.number(),
+]) as unknown as z.ZodType<[number, number]>;
 
 /**
  * 🗺️
@@ -25,7 +35,7 @@ const PuntoCoord = z.tuple([z.number(), z.number()]);
  * --- coordinates[1] = latitud
  *
  */
-export const GeoJSONPointSchema = z.object({
+export const GeoJSONPointSchema: z.ZodType<IGeoJSONPoint> = z.object({
   type: z.literal("Point"),
   coordinates: PuntoCoord,
 });
@@ -44,7 +54,7 @@ export const GeoJSONPointSchema = z.object({
  * - radius: radio del círculo
  *
  */
-export const GeoJSONCircleSchema = z.object({
+export const GeoJSONCircleSchema: z.ZodType<IGeoJSONCircle> = z.object({
   type: z.literal("Point"),
   coordinates: PuntoCoord,
   radius: z.number(),
@@ -62,7 +72,7 @@ export const GeoJSONCircleSchema = z.object({
  * --- coordinates[n][1] = latitud del punto n
  *
  */
-export const GeoJSONLineStringSchema = z.object({
+export const GeoJSONLineStringSchema: z.ZodType<IGeoJSONLineString> = z.object({
   type: z.literal("LineString"),
   coordinates: z.array(PuntoCoord),
 });
@@ -81,9 +91,11 @@ export const GeoJSONLineStringSchema = z.object({
  * --- coordinates[0][n][1] = latitud del punto n del anillo
  *
  */
-export const GeoJSONPolygonSchema = z.object({
+export const GeoJSONPolygonSchema: z.ZodType<IGeoJSONPolygon> = z.object({
   type: z.literal("Polygon"),
-  coordinates: z.tuple([z.array(PuntoCoord)]),
+  coordinates: z.tuple([z.array(PuntoCoord)]) as unknown as z.ZodType<
+    [[number, number][]]
+  >,
 });
 
 /**
@@ -102,13 +114,13 @@ export const GeoJSONPolygonSchema = z.object({
  * --- coordinates[ i ][ j ][ k ][ 1 ] = latitud del punto k del anillo j del polígono i
  *
  */
-export const GeoJSONMultiPolygonSchema = z.object({
+export const GeoJSONMultiPolygonSchema: z.ZodType<IGeoJSONMultiPolygon> = z.object({
   type: z.literal("MultiPolygon"),
   coordinates: z.array(z.array(z.array(z.array(z.number())))),
 });
 
 // Point y Circle comparten type: "Point" → no puede ser discriminatedUnion
-export const GeoJSONSchema = z.union([
+export const GeoJSONSchema: z.ZodType<IGeoJSON> = z.union([
   GeoJSONPointSchema,
   GeoJSONCircleSchema,
   GeoJSONLineStringSchema,
