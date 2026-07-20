@@ -1,21 +1,25 @@
-import { IClient } from './client';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ClientSchema } from './client';
+import { UsuarioSchema } from './usuario';
 
-export interface IToken {
-  _id?: string;
-  accessToken?: string;
-  accessTokenExpiresAt?: string;
-  refreshToken?: string;
-  refreshTokenExpiresAt?: string;
-  scope?: string | string[];
-  client?: IClient;
-  user?: IUsuario;
-}
+export const TokenSchema = z.object({
+  _id: z.string().optional(),
+  accessToken: z.string().optional(),
+  accessTokenExpiresAt: z.string().optional(),
+  refreshToken: z.string().optional(),
+  refreshTokenExpiresAt: z.string().optional(),
+  scope: z.union([z.string(), z.array(z.string())]).optional(),
+  client: ClientSchema.optional(),
+  user: UsuarioSchema.optional(),
+});
+export type IToken = z.infer<typeof TokenSchema>;
 
-type OmitirCreate = '_id';
+export const CreateTokenSchema = TokenSchema.omit({
+  _id: true,
+});
+export type ICreateToken = z.infer<typeof CreateTokenSchema>;
 
-export interface ICreateToken extends Omit<Partial<IToken>, OmitirCreate> {}
-
-type OmitirUpdate = '_id';
-
-export interface IUpdateToken extends Omit<Partial<IToken>, OmitirUpdate> {}
+export const UpdateTokenSchema = TokenSchema.omit({
+  _id: true,
+});
+export type IUpdateToken = z.infer<typeof UpdateTokenSchema>;

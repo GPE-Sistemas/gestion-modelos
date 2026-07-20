@@ -1,98 +1,126 @@
-import { ICliente } from './cliente';
-import { ICodigosDispositivo, TipoDispositivo } from './codigos-dispositivo';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import {
+  CodigosDispositivoSchema,
+  TipoDispositivoSchema,
+} from './codigos-dispositivo';
 
-export type FormatosMensajeComunicador =
-  | 'Garnet-Titanium'
-  | 'TECHNO 123'
-  | 'Netio'
-  | 'Nanocomm ED5200'
-  | 'Garnet'
-  | 'Dahua'
-  | 'Hikvision'
-  | 'Intelbras'
+export const FormatosMensajeComunicadorSchema = z.enum([
+  'Garnet-Titanium',
+  'TECHNO 123',
+  'Netio',
+  'Nanocomm ED5200',
+  'Garnet',
+  'Dahua',
+  'Hikvision',
+  'Intelbras',
   // UNICOM "WiFi DUO": comunicador WiFi (AVR128 + ESP32) que habla MQTT
   // contra el broker propio de IRIX. NO usa SIM/GPRS (sim1/sim2/numeroAbonado
   // quedan vacíos); su identidad es el devid en idUnicoComunicador.
-  | 'UNICOM';
+  'UNICOM',
+]);
+export type FormatosMensajeComunicador = z.infer<
+  typeof FormatosMensajeComunicadorSchema
+>;
 
-export type NivelDimerizacion =
-  | 'dim10'
-  | 'dim20'
-  | 'dim30'
-  | 'dim40'
-  | 'dim50'
-  | 'dim60'
-  | 'dim70'
-  | 'dim80'
-  | 'dim90'
-  | 'dim100';
+export const NivelDimerizacionSchema = z.enum([
+  'dim10',
+  'dim20',
+  'dim30',
+  'dim40',
+  'dim50',
+  'dim60',
+  'dim70',
+  'dim80',
+  'dim90',
+  'dim100',
+]);
+export type NivelDimerizacion = z.infer<typeof NivelDimerizacionSchema>;
 
 // Punto de la curva: en un nivel de dimerización dado, valores eléctricos
 // esperados y sus margenes bidireccionales de tolerancia.
-export interface IPuntoCurvaLuminaria {
-  potencia?: number; // W a un determinado dimming (Wd)
-  factorPotencia?: number; // cfidim a este dim (0..1). También llamado cosφ.
+export const PuntoCurvaLuminariaSchema = z.object({
+  potencia: z.number().optional(), // W a un determinado dimming (Wd)
+  factorPotencia: z.number().optional(), // cfidim a este dim (0..1). También llamado cosφ.
 
-  margenPotenciaSuperior?: number; // alarma si W >= Wd * (1 + potencia/100)
-  margenPotenciaInferior?: number; // alarma si W <= Wd * (1 - potencia/100)
-  margenFactorPotenciaSuperior?: number; // delta abs — alarma si cosφ > cfidim + margen
-  margenFactorPotenciaInferior?: number; // delta abs — alarma si cosφ < cfidim - margen
-}
+  margenPotenciaSuperior: z.number().optional(), // alarma si W >= Wd * (1 + potencia/100)
+  margenPotenciaInferior: z.number().optional(), // alarma si W <= Wd * (1 - potencia/100)
+  margenFactorPotenciaSuperior: z.number().optional(), // delta abs — alarma si cosφ > cfidim + margen
+  margenFactorPotenciaInferior: z.number().optional(), // delta abs — alarma si cosφ < cfidim - margen
+});
+export type IPuntoCurvaLuminaria = z.infer<typeof PuntoCurvaLuminariaSchema>;
 
-export type ICurvaDimerizacionLuminaria = {
-  [K in NivelDimerizacion]?: IPuntoCurvaLuminaria;
-};
+export const CurvaDimerizacionLuminariaSchema = z.partialRecord(
+  NivelDimerizacionSchema,
+  PuntoCurvaLuminariaSchema,
+);
+export type ICurvaDimerizacionLuminaria = z.infer<
+  typeof CurvaDimerizacionLuminariaSchema
+>;
 
 // Voltaje: independiente del dim.
-export interface IConfigVoltajeLuminaria {
-  nominalV?: number; // Vn (típicamente 230)
-  margenSuperiorV?: number; // Θv — alarma si V >= Vn + Θv
-  margenInferiorV?: number; // alarma si V <= Vn - margenInferiorV
-}
+export const ConfigVoltajeLuminariaSchema = z.object({
+  nominalV: z.number().optional(), // Vn (típicamente 230)
+  margenSuperiorV: z.number().optional(), // Θv — alarma si V >= Vn + Θv
+  margenInferiorV: z.number().optional(), // alarma si V <= Vn - margenInferiorV
+});
+export type IConfigVoltajeLuminaria = z.infer<
+  typeof ConfigVoltajeLuminariaSchema
+>;
 
-export interface IDetallesLuminarias {
-  horasVida?: number;
+export const DetallesLuminariasSchema = z.object({
+  horasVida: z.number().optional(),
 
-  voltaje?: IConfigVoltajeLuminaria;
-  dimerizacion?: ICurvaDimerizacionLuminaria;
-}
+  voltaje: ConfigVoltajeLuminariaSchema.optional(),
+  dimerizacion: CurvaDimerizacionLuminariaSchema.optional(),
+});
+export type IDetallesLuminarias = z.infer<typeof DetallesLuminariasSchema>;
 
-export interface IModeloDispositivo {
-  _id?: string;
+export const ModeloDispositivoSchema = z.object({
+  _id: z.string().optional(),
 
   //
-  tipo?: TipoDispositivo;
-  marca?: string;
-  modelo?: string;
-  formatoMensaje?: FormatosMensajeComunicador;
-  idCodigos?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
+  tipo: TipoDispositivoSchema.optional(),
+  marca: z.string().optional(),
+  modelo: z.string().optional(),
+  formatoMensaje: FormatosMensajeComunicadorSchema.optional(),
+  idCodigos: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
 
   //Datos técnicos para luminarias
-  luminarias?: IDetallesLuminarias;
-  global?: boolean;
+  luminarias: DetallesLuminariasSchema.optional(),
+  global: z.boolean().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  codigos?: ICodigosDispositivo;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  codigos: CodigosDispositivoSchema.optional(),
+});
+export type IModeloDispositivo = z.infer<typeof ModeloDispositivoSchema>;
 
-type OmitirCreate = '_id' | 'codigos' | 'cliente';
+export const CreateModeloDispositivoSchema = ModeloDispositivoSchema.omit({
+  _id: true,
+  codigos: true,
+  cliente: true,
+});
+export type ICreateModeloDispositivo = z.infer<
+  typeof CreateModeloDispositivoSchema
+>;
 
-export interface ICreateModeloDispositivo extends Omit<
-  Partial<IModeloDispositivo>,
-  OmitirCreate
-> {}
+export const UpdateModeloDispositivoSchema = ModeloDispositivoSchema.omit({
+  _id: true,
+  codigos: true,
+  cliente: true,
+});
+export type IUpdateModeloDispositivo = z.infer<
+  typeof UpdateModeloDispositivoSchema
+>;
 
-type OmitirUpdate = '_id' | 'codigos' | 'cliente';
-
-export interface IUpdateModeloDispositivo extends Omit<
-  Partial<IModeloDispositivo>,
-  OmitirUpdate
-> {}
-
-export interface IModeloDispositivoCache extends Omit<
-  IModeloDispositivo,
-  'cliente' | 'ancestros' | 'codigos'
-> {}
+export const ModeloDispositivoCacheSchema = ModeloDispositivoSchema.omit({
+  cliente: true,
+  ancestros: true,
+  codigos: true,
+});
+export type IModeloDispositivoCache = z.infer<
+  typeof ModeloDispositivoCacheSchema
+>;

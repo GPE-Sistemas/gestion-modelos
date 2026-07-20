@@ -1,56 +1,58 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IEventoGenerico } from './evento-generico';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ActivoSchema } from './activo';
+import { ClienteSchema } from './cliente';
+import type { IEventoGenerico } from './evento-generico';
+import { UsuarioSchema } from './usuario';
 
-export type EstadoEnvioVehiculo =
-  | 'Asignado'
-  | 'En Camino'
-  | 'Rechazado'
-  | 'Finalizado'
-  | 'En Destino';
+export const EstadoEnvioVehiculoSchema = z.enum([
+  'Asignado',
+  'En Camino',
+  'Rechazado',
+  'Finalizado',
+  'En Destino',
+]);
+export type EstadoEnvioVehiculo = z.infer<typeof EstadoEnvioVehiculoSchema>;
 
-export interface IEnvioVehiculo {
-  _id?: string;
-  fechaCreacion?: string;
-  fechaFinalizacion?: string;
-  descripcion?: string;
-  estado?: EstadoEnvioVehiculo;
+export const EnvioVehiculoSchema = z.object({
+  _id: z.string().optional(),
+  fechaCreacion: z.string().optional(),
+  fechaFinalizacion: z.string().optional(),
+  descripcion: z.string().optional(),
+  estado: EstadoEnvioVehiculoSchema.optional(),
   ///
-  idCliente?: string;
-  idsAncestros?: string[];
-  idConductor?: string;
-  idsEventos?: string[];
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idConductor: z.string().optional(),
+  idsEventos: z.array(z.string()).optional(),
   //Usuario que lo crea
-  idUsuario?: string;
-  idActivo?: string;
+  idUsuario: z.string().optional(),
+  idActivo: z.string().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  conductor?: IUsuario;
-  usuario?: IUsuario;
-  eventos?: IEventoGenerico[];
-  activo?: IActivo;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  conductor: UsuarioSchema.optional(),
+  usuario: UsuarioSchema.optional(),
+  eventos: z.array(z.custom<IEventoGenerico>()).optional(),
+  activo: ActivoSchema.optional(),
+});
+export type IEnvioVehiculo = z.infer<typeof EnvioVehiculoSchema>;
 
-type OmitirCreate =
-  | '_id'
-  | 'usuario'
-  | 'activo'
-  | 'cliente'
-  | 'conductor'
-  | 'eventos';
+export const CreateEnvioVehiculoSchema = EnvioVehiculoSchema.omit({
+  _id: true,
+  usuario: true,
+  activo: true,
+  cliente: true,
+  conductor: true,
+  eventos: true,
+});
+export type ICreateEnvioVehiculo = z.infer<typeof CreateEnvioVehiculoSchema>;
 
-export interface ICreateEnvioVehiculo
-  extends Omit<Partial<IEnvioVehiculo>, OmitirCreate> {}
-
-type OmitirUpdate =
-  | '_id'
-  | 'usuario'
-  | 'activo'
-  | 'cliente'
-  | 'conductor'
-  | 'eventos';
-
-export interface IUpdateEnvioVehiculo
-  extends Omit<Partial<IEnvioVehiculo>, OmitirUpdate> {}
+export const UpdateEnvioVehiculoSchema = EnvioVehiculoSchema.omit({
+  _id: true,
+  usuario: true,
+  activo: true,
+  cliente: true,
+  conductor: true,
+  eventos: true,
+});
+export type IUpdateEnvioVehiculo = z.infer<typeof UpdateEnvioVehiculoSchema>;

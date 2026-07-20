@@ -1,65 +1,71 @@
-import { ICoordenadas } from '../auxiliares';
-import { IParada } from './recorrido';
+import { z } from 'zod';
+import { CoordenadasSchema } from '../auxiliares';
+import { ParadaSchema } from './recorrido';
 
 /**
  * Interfaz para la predicción de llegada de un vehículo a una parada
  */
-export interface ICercana {
+export const CercanaSchema = z.object({
   /**
    * Tiempo estimado de llegada en segundos (solo viaje)
    */
-  tiempo?: number;
+  tiempo: z.number().optional(),
   /**
    * Tiempo procesado en segundos (viaje + tiempos de parada)
    */
-  tiempoProcesado?: number;
+  tiempoProcesado: z.number().optional(),
   /**
    * Paradas restantes antes de llegar al destino
    */
-  paradasRestantes?: IParada[];
+  paradasRestantes: z.array(ParadaSchema).optional(),
   /**
    * Distancia en metros hasta la parada destino
    */
-  distancia?: number;
+  distancia: z.number().optional(),
   /**
    * Geometría de la ruta calculada
    */
-  ruta?: ICoordenadas[];
+  ruta: z.array(CoordenadasSchema).optional(),
   /**
    * Información del vehículo
    */
-  vehiculo?: {
-    /**
-     * Ubicación actual del vehículo
-     */
-    ubicacionActual?: ICoordenadas;
-    /**
-     * Identificación del vehículo
-     */
-    identificacion?: string;
-    /**
-     * Dominio del vehículo (patente)
-     */
-    dominio?: string;
-  };
+  vehiculo: z
+    .object({
+      /**
+       * Ubicación actual del vehículo
+       */
+      ubicacionActual: CoordenadasSchema.optional(),
+      /**
+       * Identificación del vehículo
+       */
+      identificacion: z.string().optional(),
+      /**
+       * Dominio del vehículo (patente)
+       */
+      dominio: z.string().optional(),
+    })
+    .optional(),
   /**
    * Información del último trackeo registrado
    */
-  trackeo?: {
-    /**
-     * Fecha del último trackeo
-     */
-    fecha?: string;
-    /**
-     * Nombre de la última parada registrada
-     */
-    parada?: string;
-  };
+  trackeo: z
+    .object({
+      /**
+       * Fecha del último trackeo
+       */
+      fecha: z.string().optional(),
+      /**
+       * Nombre de la última parada registrada
+       */
+      parada: z.string().optional(),
+    })
+    .optional(),
   /**
    * Mensaje en caso de no haber vehículos disponibles
    */
-  mensaje?: string;
-}
+  mensaje: z.string().optional(),
+});
+export type ICercana = z.infer<typeof CercanaSchema>;
 
 /**
  * Interfaz para la respuesta del endpoint de predicciones cercanas
@@ -69,57 +75,60 @@ export interface ICercana {
  * cercanas (radio 50m), mostrando solo la parada más cercana por recorrido.
  * La predicción es opcional y solo está presente cuando hay vehículos disponibles.
  */
-export interface IPrediccionCercana {
+export const PrediccionCercanaSchema = z.object({
   /**
    * Información de la parada más cercana del recorrido
    */
-  parada: IParada;
+  parada: ParadaSchema,
   /**
    * Información resumida del recorrido
    */
-  recorrido: {
+  recorrido: z.object({
     /**
      * ID del recorrido
      */
-    _id: string;
+    _id: z.string(),
     /**
      * Nombre/número del recorrido
      */
-    nombre: string;
+    nombre: z.string(),
     /**
      * Destino del recorrido
      */
-    destino?: string;
+    destino: z.string().optional(),
     /**
      * Color del recorrido (para UI)
      */
-    color?: string;
+    color: z.string().optional(),
     /**
      * Nombre de la flota/línea (ej: "518")
      */
-    nombreFlota?: string;
+    nombreFlota: z.string().optional(),
     /**
      * Información del grupo/línea al que pertenece el recorrido
      */
-    grupo?: {
-      /**
-       * ID del grupo
-       */
-      _id?: string;
-      /**
-       * Nombre del grupo/línea
-       */
-      nombre?: string;
-      /**
-       * Color del grupo/línea
-       */
-      color?: string;
-    };
-  };
+    grupo: z
+      .object({
+        /**
+         * ID del grupo
+         */
+        _id: z.string().optional(),
+        /**
+         * Nombre del grupo/línea
+         */
+        nombre: z.string().optional(),
+        /**
+         * Color del grupo/línea
+         */
+        color: z.string().optional(),
+      })
+      .optional(),
+  }),
   /**
    * Predicción de llegada del próximo vehículo (opcional)
    * Solo presente cuando hay un vehículo disponible en el recorrido.
    * Si no hay predicción, el totem puede mostrar "No disponible" o similar.
    */
-  prediccion?: ICercana;
-}
+  prediccion: CercanaSchema.optional(),
+});
+export type IPrediccionCercana = z.infer<typeof PrediccionCercanaSchema>;

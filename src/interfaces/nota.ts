@@ -1,59 +1,77 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IDispositivoAlarma } from './dispositivo-alarma';
-import { ILuminaria } from './luminaria';
+import { z } from 'zod';
+import { ActivoSchema } from './activo';
+import { ClienteSchema } from './cliente';
+import { DispositivoAlarmaSchema } from './dispositivo-alarma';
+import { LuminariaSchema } from './luminaria';
 
-export type TipoNota = 'Contacto' | 'Nota';
+export const TipoNotaSchema = z.enum(['Contacto', 'Nota']);
+export type TipoNota = z.infer<typeof TipoNotaSchema>;
 
-export interface IInformacionNota {
-  nota?: string;
-}
+export const InformacionNotaSchema = z.object({
+  nota: z.string().optional(),
+});
+export type IInformacionNota = z.infer<typeof InformacionNotaSchema>;
 
-export interface IInformacionContacto {
-  contacto?: string;
-  telefono?: string;
-  interno?: string;
-  email?: string;
+export const InformacionContactoSchema = z.object({
+  contacto: z.string().optional(),
+  telefono: z.string().optional(),
+  interno: z.string().optional(),
+  email: z.string().optional(),
 
   // Solo cuando es contacto de alarma
-  palabraSeguridadNormal?: string;
-  palabraSeguridadEmergencia?: string;
-  numeroUsuarioAlarma?: number;
-  particion: number;
-}
+  palabraSeguridadNormal: z.string().optional(),
+  palabraSeguridadEmergencia: z.string().optional(),
+  numeroUsuarioAlarma: z.number().optional(),
+  particion: z.number(),
+});
+export type IInformacionContacto = z.infer<typeof InformacionContactoSchema>;
 
-export type IInformacion = IInformacionNota & IInformacionContacto;
-export interface INota {
-  _id?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  idAsignado?: string;
-  permanente?: boolean;
-  vigenciaDesde?: string;
-  vigenciaHasta?: string;
-  tipo?: TipoNota;
-  informacion?: IInformacion;
-  orden?: number;
+// IInformacion era IInformacionNota & IInformacionContacto (intersección de objetos)
+export const InformacionSchema = InformacionNotaSchema.extend(
+  InformacionContactoSchema.shape,
+);
+export type IInformacion = z.infer<typeof InformacionSchema>;
+
+export const NotaSchema = z.object({
+  _id: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idAsignado: z.string().optional(),
+  permanente: z.boolean().optional(),
+  vigenciaDesde: z.string().optional(),
+  vigenciaHasta: z.string().optional(),
+  tipo: TipoNotaSchema.optional(),
+  informacion: InformacionSchema.optional(),
+  orden: z.number().optional(),
   //Para contactos
-  inhabilitadoDesde?: string; //Durante el período inhabilitado, no se mostrará el conatcto en el tratamiento de los eventos
-  inhabilitadoHasta?: string;
+  inhabilitadoDesde: z.string().optional(), //Durante el período inhabilitado, no se mostrará el conatcto en el tratamiento de los eventos
+  inhabilitadoHasta: z.string().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  activo?: IActivo;
-  alarma?: IDispositivoAlarma;
-  luminaria?: ILuminaria;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  activo: ActivoSchema.optional(),
+  alarma: DispositivoAlarmaSchema.optional(),
+  luminaria: LuminariaSchema.optional(),
+});
+export type INota = z.infer<typeof NotaSchema>;
 
-type OmitirCreate = '_id' | 'cliente';
+export const CreateNotaSchema = NotaSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateNota = z.infer<typeof CreateNotaSchema>;
 
-export interface ICreateNota extends Omit<Partial<INota>, OmitirCreate> {}
+export const UpdateNotaSchema = NotaSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateNota = z.infer<typeof UpdateNotaSchema>;
 
-type OmitirUpdate = '_id' | 'cliente';
-
-export interface IUpdateNota extends Omit<Partial<INota>, OmitirUpdate> {}
-
-export interface INotaCache extends Omit<
-  INota,
-  'cliente' | 'ancestros' | 'activo' | 'alarma' | 'luminaria'
-> {}
+export const NotaCacheSchema = NotaSchema.omit({
+  cliente: true,
+  ancestros: true,
+  activo: true,
+  alarma: true,
+  luminaria: true,
+});
+export type INotaCache = z.infer<typeof NotaCacheSchema>;

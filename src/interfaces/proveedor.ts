@@ -1,27 +1,35 @@
-import { ICoordenadas } from '../auxiliares';
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { CoordenadasSchema } from '../auxiliares';
+import { ClienteSchema } from './cliente';
 
-export type TipoProveedor = 'Mecanico' | 'Combustible' | 'Otro';
-export type CategoriaProveedor = 'Colectivo' | 'Vehiculo';
-export interface IProveedor {
-  _id?: string;
-  categoria?: CategoriaProveedor;
-  tipos?: TipoProveedor[];
-  idCliente?: string;
-  idsAncestros?: string[];
-  nombre?: string;
-  ubicacion?: ICoordenadas;
+export const TipoProveedorSchema = z.enum(['Mecanico', 'Combustible', 'Otro']);
+export type TipoProveedor = z.infer<typeof TipoProveedorSchema>;
+
+export const CategoriaProveedorSchema = z.enum(['Colectivo', 'Vehiculo']);
+export type CategoriaProveedor = z.infer<typeof CategoriaProveedorSchema>;
+
+export const ProveedorSchema = z.object({
+  _id: z.string().optional(),
+  categoria: CategoriaProveedorSchema.optional(),
+  tipos: z.array(TipoProveedorSchema).optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  nombre: z.string().optional(),
+  ubicacion: CoordenadasSchema.optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type IProveedor = z.infer<typeof ProveedorSchema>;
 
-type OmitirCreate = '_id' | 'cliente';
+export const CreateProveedorSchema = ProveedorSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateProveedor = z.infer<typeof CreateProveedorSchema>;
 
-export interface ICreateProveedor
-  extends Omit<Partial<IProveedor>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'cliente';
-
-export interface IUpdateProveedor
-  extends Omit<Partial<IProveedor>, OmitirUpdate> {}
+export const UpdateProveedorSchema = ProveedorSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateProveedor = z.infer<typeof UpdateProveedorSchema>;

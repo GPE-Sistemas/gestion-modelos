@@ -1,13 +1,15 @@
-import { DeviceInfo } from "./uplink";
+import { z } from "zod";
+import { DeviceInfoSchema } from "./uplink";
 
-export interface IAck {
-  deduplicationId?: string;
-  time?: string;
-  deviceInfo?: DeviceInfo;
-  queueItemId?: string;
-  acknowledged?: boolean;
-  fCntDown?: number;
-}
+export const AckSchema = z.object({
+  deduplicationId: z.string().optional(),
+  time: z.string().optional(),
+  deviceInfo: DeviceInfoSchema.optional(),
+  queueItemId: z.string().optional(),
+  acknowledged: z.boolean().optional(),
+  fCntDown: z.number().optional(),
+});
+export type IAck = z.infer<typeof AckSchema>;
 
 export const EXAMPLE_ACK: IAck = {
   deduplicationId: "cd1a76ec-ece8-412e-8948-add1030c29c7",

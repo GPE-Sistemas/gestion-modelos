@@ -1,23 +1,36 @@
-export interface IMetricasGateways {
-  rxPackets: IMetricaItem; //Paquetes recibidos
-  rxPacketsPerDr: IMetricaItem; //Paquetes recibidos por data rate
-  rxPacketsPerFreq: IMetricaItem; //Paquetes recibidos por frecuencia
-  txPackets: IMetricaItem; //Paquetes transmitidos
-  txPacketsPerDr: IMetricaItem; //Paquetes transmitidos por data rate
-  txPacketsPerFreq: IMetricaItem; //Paquetes transmitidos por frecuencia
-  txPacketsPerStatus: IMetricaItem; //Paquetes transmitidos por estado
-}
+import { z } from 'zod';
 
-export interface IMetricaItem {
-  datasets: IMetricaDataset[];
-  kind: string;
-  name: string;
-  timestamps: string[];
-}
+export const MetricaDatasetSchema = z.object({
+  data: z.array(z.number()),
+  label: z.string(),
+});
+export type IMetricaDataset = z.infer<typeof MetricaDatasetSchema>;
 
-export interface IMetricaDataset {
-  data: number[];
-  label: string;
-}
+export const MetricaItemSchema = z.object({
+  datasets: z.array(MetricaDatasetSchema),
+  kind: z.string(),
+  name: z.string(),
+  timestamps: z.array(z.string()),
+});
+export type IMetricaItem = z.infer<typeof MetricaItemSchema>;
 
-export type aggregationGatewaysMetrics = 'HOUR' | 'DAY' | 'MONTH' | 'MINUTE';
+export const MetricasGatewaysSchema = z.object({
+  rxPackets: MetricaItemSchema, //Paquetes recibidos
+  rxPacketsPerDr: MetricaItemSchema, //Paquetes recibidos por data rate
+  rxPacketsPerFreq: MetricaItemSchema, //Paquetes recibidos por frecuencia
+  txPackets: MetricaItemSchema, //Paquetes transmitidos
+  txPacketsPerDr: MetricaItemSchema, //Paquetes transmitidos por data rate
+  txPacketsPerFreq: MetricaItemSchema, //Paquetes transmitidos por frecuencia
+  txPacketsPerStatus: MetricaItemSchema, //Paquetes transmitidos por estado
+});
+export type IMetricasGateways = z.infer<typeof MetricasGatewaysSchema>;
+
+export const AggregationGatewaysMetricsSchema = z.enum([
+  'HOUR',
+  'DAY',
+  'MONTH',
+  'MINUTE',
+]);
+export type aggregationGatewaysMetrics = z.infer<
+  typeof AggregationGatewaysMetricsSchema
+>;

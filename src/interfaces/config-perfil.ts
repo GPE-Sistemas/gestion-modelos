@@ -1,17 +1,22 @@
-import { ICliente } from './cliente';
-import {
+import { z } from 'zod';
+import { ClienteSchema, ICliente } from './cliente';
+import type {
   IDispositivoLuminariaACTIS,
   IDispositivoLuminariaGPE,
   IDispositivoLuminariaWellness,
   IPerfilesDimmingACTIS,
 } from './dispositivo-lorawan';
 
-export type TipoEntidadConfigPerfil =
-  | 'Luminaria'
-  | 'Colectivo'
-  | 'Activo'
-  | 'Tracker'
-  | 'Vehiculo';
+export const TipoEntidadConfigPerfilSchema = z.enum([
+  'Luminaria',
+  'Colectivo',
+  'Activo',
+  'Tracker',
+  'Vehiculo',
+]);
+export type TipoEntidadConfigPerfil = z.infer<
+  typeof TipoEntidadConfigPerfilSchema
+>;
 
 //Estos perfiles definen valores por defecto de configuraciones que tienen que tener ciertas entidades.
 //Ej: en luminarias, definen configuraciones que se envían mediante comandos.
@@ -77,9 +82,57 @@ export interface IConfigPerfilBase<T extends keyof MapaConfigPerfil> {
   ancestros?: ICliente[];
 }
 
+// Campos comunes a todas las variantes (sin tipoConfig/valores, que discriminan)
+const ConfigPerfilCamposSchema = z.object({
+  _id: z.string().optional(),
+  fechaCreacion: z.string().optional(),
+  nombre: z.string().optional(),
+  global: z.boolean().optional(), // Si es global, puede ser usado por cualquier cliente.
+
+  // Tenant
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+
+  // Tipo y datos
+  tipoEntidad: TipoEntidadConfigPerfilSchema.optional(),
+
+  // Populate
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+
+// Populates intra-SCC como z.custom (import type-only): un schema real acá
+// arrastra el shape completo del ciclo y revienta la serialización de
+// declarations (TS7056) acá y en los consumidores NestJS.
+const VarianteConfigPerfilLuminariaGPE = ConfigPerfilCamposSchema.extend({
+  tipoConfig: z.literal('Luminaria GPE').optional(),
+  valores: z.custom<IConfigPerfilLuminariaGPE>().optional(),
+});
+const VarianteConfigPerfilLuminariaWellness = ConfigPerfilCamposSchema.extend({
+  tipoConfig: z.literal('Luminaria Wellness').optional(),
+  valores: z.custom<IConfigPerfilLuminariaWellness>().optional(),
+});
+const VarianteConfigPerfilLuminariaACTISGeneral =
+  ConfigPerfilCamposSchema.extend({
+    tipoConfig: z.literal('Luminaria ACTIS FING General').optional(),
+    valores: z.custom<IConfigPerfilLuminariaACTISGeneral>().optional(),
+  });
+const VarianteConfigPerfilLuminariaACTISDimming =
+  ConfigPerfilCamposSchema.extend({
+    tipoConfig: z.literal('Luminaria ACTIS FING Dimming').optional(),
+    valores: z.custom<IConfigPerfilLuminariaACTISDimming>().optional(),
+  });
+
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
  * ────────────────────────────────────────────────*/
+
+export const ConfigPerfilSchema = z.union([
+  VarianteConfigPerfilLuminariaGPE,
+  VarianteConfigPerfilLuminariaWellness,
+  VarianteConfigPerfilLuminariaACTISGeneral,
+  VarianteConfigPerfilLuminariaACTISDimming,
+]);
 
 export type IConfigPerfil =
   | IConfigPerfilBase<'Luminaria GPE'>
@@ -91,11 +144,29 @@ export type IConfigPerfil =
  *  CREATE / UPDATE - UNIONES DISCRIMINADAS
  * ────────────────────────────────────────────────*/
 
+const camposOmitidos: {
+  _id: true;
+  idsAncestros: true;
+  cliente: true;
+  ancestros: true;
+} = {
+  _id: true,
+  idsAncestros: true,
+  cliente: true,
+  ancestros: true,
+};
+
 type Omitir = '_id' | 'idsAncestros' | 'cliente' | 'ancestros';
 
 /** Create: no incluimos virtuales/ids manejados por backend.
  *  Mantiene `tipoConfig` como discriminante.
  */
+export const CreateConfigPerfilSchema = z.union([
+  VarianteConfigPerfilLuminariaGPE.omit(camposOmitidos),
+  VarianteConfigPerfilLuminariaWellness.omit(camposOmitidos),
+  VarianteConfigPerfilLuminariaACTISGeneral.omit(camposOmitidos),
+  VarianteConfigPerfilLuminariaACTISDimming.omit(camposOmitidos),
+]);
 export type ICreateConfigPerfil =
   | Omit<IConfigPerfilBase<'Luminaria GPE'>, Omitir>
   | Omit<IConfigPerfilBase<'Luminaria Wellness'>, Omitir>
@@ -105,6 +176,20 @@ export type ICreateConfigPerfil =
 /** Update: campos parciales pero `tipoConfig` se mantiene para discriminar.
  *  TS valida que `valores` corresponda al `tipoConfig`.
  */
+export const UpdateConfigPerfilSchema = z.union([
+  VarianteConfigPerfilLuminariaGPE.omit(camposOmitidos).required({
+    tipoConfig: true,
+  }),
+  VarianteConfigPerfilLuminariaWellness.omit(camposOmitidos).required({
+    tipoConfig: true,
+  }),
+  VarianteConfigPerfilLuminariaACTISGeneral.omit(camposOmitidos).required({
+    tipoConfig: true,
+  }),
+  VarianteConfigPerfilLuminariaACTISDimming.omit(camposOmitidos).required({
+    tipoConfig: true,
+  }),
+]);
 export type IUpdateConfigPerfil =
   | ({ tipoConfig: 'Luminaria GPE' } & Partial<
       Omit<IConfigPerfilBase<'Luminaria GPE'>, Omitir | 'tipoConfig'>

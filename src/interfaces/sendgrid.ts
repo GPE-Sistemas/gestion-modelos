@@ -1,38 +1,48 @@
 // EMAIL
 
-import { IModuloSendgrid } from './cliente';
+import { z } from 'zod';
+import { ModuloSendgridSchema } from './cliente';
 
-export interface IEmailDataBase {
-  sid: string;
-  subject?: string;
-}
+export const EmailDataBaseSchema = z.object({
+  sid: z.string(),
+  subject: z.string().optional(),
+});
+export type IEmailDataBase = z.infer<typeof EmailDataBaseSchema>;
 
-export interface IEmailGenerico extends IEmailDataBase {
-  [key: string]: string | undefined;
-}
+export const EmailGenericoSchema = EmailDataBaseSchema.catchall(
+  z.string().optional(),
+);
+export type IEmailGenerico = z.infer<typeof EmailGenericoSchema>;
 
-export interface IEmailResetPassword extends IEmailDataBase {
-  token: string;
-}
+export const EmailResetPasswordSchema = EmailDataBaseSchema.extend({
+  token: z.string(),
+});
+export type IEmailResetPassword = z.infer<typeof EmailResetPasswordSchema>;
 
-export interface IEmailNuevoUsuario extends IEmailDataBase {
-  usuario: string;
-  password: string;
-}
+export const EmailNuevoUsuarioSchema = EmailDataBaseSchema.extend({
+  usuario: z.string(),
+  password: z.string(),
+});
+export type IEmailNuevoUsuario = z.infer<typeof EmailNuevoUsuarioSchema>;
 
-export interface IEmailCambioPassword extends IEmailDataBase {
-  codigo: string;
-}
+export const EmailCambioPasswordSchema = EmailDataBaseSchema.extend({
+  codigo: z.string(),
+});
+export type IEmailCambioPassword = z.infer<typeof EmailCambioPasswordSchema>;
 
-export interface IEmailTwilio {
-  email?: string;
-  datos?:
-    | IEmailGenerico
-    | IEmailResetPassword
-    | IEmailNuevoUsuario
-    | IEmailCambioPassword;
-  idCliente?: string;
-  usuario?: string;
-  twilio?: IModuloSendgrid;
-  extra?: Record<string, any>;
-}
+export const EmailTwilioSchema = z.object({
+  email: z.string().optional(),
+  datos: z
+    .union([
+      EmailGenericoSchema,
+      EmailResetPasswordSchema,
+      EmailNuevoUsuarioSchema,
+      EmailCambioPasswordSchema,
+    ])
+    .optional(),
+  idCliente: z.string().optional(),
+  usuario: z.string().optional(),
+  twilio: ModuloSendgridSchema.optional(),
+  extra: z.record(z.string(), z.any()).optional(),
+});
+export type IEmailTwilio = z.infer<typeof EmailTwilioSchema>;

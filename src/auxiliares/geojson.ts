@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 // GEOJSON
 // https://www.mongodb.com/docs/manual/reference/geojson/
 // type es el tipo de objeto a guardar
@@ -8,12 +10,18 @@
 //  coordinates: [number, number];
 //
 
-export type IGeoJSON =
-  | IGeoJSONPoint
-  | IGeoJSONCircle
-  | IGeoJSONLineString
-  | IGeoJSONPolygon
-  | IGeoJSONMultiPolygon;
+/**
+ * [longitud, latitud]
+ *
+ * El output de `z.tuple` en Zod v4 se infiere como `[number?, number?, ...unknown[]]`
+ * (sobre todo en consumidores con `strictNullChecks: false`), lo que rompe la
+ * asignación a `[number, number]`. Forzamos el tipo de salida con un cast: el
+ * runtime sigue validando la tupla, pero el tipo público es estable.
+ */
+export const PuntoCoord = z.tuple([
+  z.number(),
+  z.number(),
+]) as unknown as z.ZodType<[number, number]>;
 
 /**
  * 🗺️
@@ -27,10 +35,10 @@ export type IGeoJSON =
  * --- coordinates[1] = latitud
  *
  */
-export interface IGeoJSONPoint {
-  type: "Point";
-  coordinates: [number, number];
-}
+export const GeoJSONPointSchema: z.ZodType<IGeoJSONPoint> = z.object({
+  type: z.literal("Point"),
+  coordinates: PuntoCoord,
+});
 
 /**
  * 🗺️
@@ -46,11 +54,11 @@ export interface IGeoJSONPoint {
  * - radius: radio del círculo
  *
  */
-export interface IGeoJSONCircle {
-  type: "Point";
-  coordinates: [number, number];
-  radius: number;
-}
+export const GeoJSONCircleSchema: z.ZodType<IGeoJSONCircle> = z.object({
+  type: z.literal("Point"),
+  coordinates: PuntoCoord,
+  radius: z.number(),
+});
 
 /**
  * 🗺️
@@ -64,10 +72,10 @@ export interface IGeoJSONCircle {
  * --- coordinates[n][1] = latitud del punto n
  *
  */
-export interface IGeoJSONLineString {
-  type: "LineString";
-  coordinates: [number, number][];
-}
+export const GeoJSONLineStringSchema: z.ZodType<IGeoJSONLineString> = z.object({
+  type: z.literal("LineString"),
+  coordinates: z.array(PuntoCoord),
+});
 
 /**
  * 🗺️
@@ -83,10 +91,12 @@ export interface IGeoJSONLineString {
  * --- coordinates[0][n][1] = latitud del punto n del anillo
  *
  */
-export interface IGeoJSONPolygon {
-  type: "Polygon";
-  coordinates: [[number, number][]];
-}
+export const GeoJSONPolygonSchema: z.ZodType<IGeoJSONPolygon> = z.object({
+  type: z.literal("Polygon"),
+  coordinates: z.tuple([z.array(PuntoCoord)]) as unknown as z.ZodType<
+    [[number, number][]]
+  >,
+});
 
 /**
  * 🗺️
@@ -104,7 +114,47 @@ export interface IGeoJSONPolygon {
  * --- coordinates[ i ][ j ][ k ][ 1 ] = latitud del punto k del anillo j del polígono i
  *
  */
+export const GeoJSONMultiPolygonSchema: z.ZodType<IGeoJSONMultiPolygon> = z.object({
+  type: z.literal("MultiPolygon"),
+  coordinates: z.array(z.array(z.array(z.array(z.number())))),
+});
+
+// Point y Circle comparten type: "Point" → no puede ser discriminatedUnion
+export const GeoJSONSchema: z.ZodType<IGeoJSON> = z.union([
+  GeoJSONPointSchema,
+  GeoJSONCircleSchema,
+  GeoJSONLineStringSchema,
+  GeoJSONPolygonSchema,
+  GeoJSONMultiPolygonSchema,
+]);
+
+// Tipos hand-written (NO z.infer): los consumidores compilan este fuente con
+// strictNullChecks: false y la inferencia de Zod v4 se degrada sin strict
+// (ej: [number, number] → [number?, number?, ...unknown[]]).
+export interface IGeoJSONPoint {
+  type: 'Point';
+  coordinates: [number, number];
+}
+export interface IGeoJSONCircle {
+  type: 'Point';
+  coordinates: [number, number];
+  radius: number;
+}
+export interface IGeoJSONLineString {
+  type: 'LineString';
+  coordinates: [number, number][];
+}
+export interface IGeoJSONPolygon {
+  type: 'Polygon';
+  coordinates: [[number, number][]];
+}
 export interface IGeoJSONMultiPolygon {
-  type: "MultiPolygon";
+  type: 'MultiPolygon';
   coordinates: number[][][][];
 }
+export type IGeoJSON =
+  | IGeoJSONPoint
+  | IGeoJSONCircle
+  | IGeoJSONLineString
+  | IGeoJSONPolygon
+  | IGeoJSONMultiPolygon;

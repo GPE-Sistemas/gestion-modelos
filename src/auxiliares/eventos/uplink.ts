@@ -1,97 +1,115 @@
-export interface IUplink {
-  deduplicationId?: string;
-  time?: string;
-  deviceInfo?: DeviceInfo;
-  devAddr?: string;
-  adr?: boolean;
-  dr?: number;
-  fCnt?: number;
-  fPort?: number;
-  confirmed?: boolean;
-  data?: string;
-  object?: IObjectUplink;
-  rxInfo?: RxInfo[];
-  txInfo?: TxInfo;
-  regionConfigId?: string;
-}
+import { z } from "zod";
 
-export interface DeviceInfo {
-  tenantId?: string;
-  tenantName?: string;
-  applicationId?: string;
-  applicationName?: string;
-  deviceProfileId?: string;
-  deviceProfileName?: string;
-  deviceName?: string;
-  devEui?: string;
-  deviceClassEnabled?: string;
-  tags?: Tags;
-}
+export const TagsSchema = z.record(z.string(), z.string());
+export type Tags = z.infer<typeof TagsSchema>;
 
-export interface Tags {
-  [key: string]: string;
-}
+export const DeviceInfoSchema = z.object({
+  tenantId: z.string().optional(),
+  tenantName: z.string().optional(),
+  applicationId: z.string().optional(),
+  applicationName: z.string().optional(),
+  deviceProfileId: z.string().optional(),
+  deviceProfileName: z.string().optional(),
+  deviceName: z.string().optional(),
+  devEui: z.string().optional(),
+  deviceClassEnabled: z.string().optional(),
+  tags: TagsSchema.optional(),
+});
+export type DeviceInfo = z.infer<typeof DeviceInfoSchema>;
 
-export interface IObjectUplink {
-  err?: number;
-  valid?: boolean;
-  payload?: string;
-  messages?: Array<IMessageUplink[]>;
-  errMessage?: string;
-}
+export const PositioningStatusSchema = z.object({
+  id: z.number().optional(),
+  statusName: z.string().optional(),
+});
+export type IPositioningStatus = z.infer<typeof PositioningStatusSchema>;
 
-export interface IMessageUplink {
-  measurementValue?:
-    | IMeasurementValueElementUplink[]
-    | IPositioningStatus
-    | number;
-  timestamp?: number;
-  measurementId?: string;
-  motionId?: number;
-  type?: string;
-}
+export const MeasurementValueElementUplinkSchema = z.object({
+  mac: z.string().optional(),
+  rssi: z.number().optional(),
+});
+export type IMeasurementValueElementUplink = z.infer<
+  typeof MeasurementValueElementUplinkSchema
+>;
 
-export interface IPositioningStatus {
-  id?: number;
-  statusName?: string;
-}
+export const MessageUplinkSchema = z.object({
+  measurementValue: z
+    .union([
+      z.array(MeasurementValueElementUplinkSchema),
+      PositioningStatusSchema,
+      z.number(),
+    ])
+    .optional(),
+  timestamp: z.number().optional(),
+  measurementId: z.string().optional(),
+  motionId: z.number().optional(),
+  type: z.string().optional(),
+});
+export type IMessageUplink = z.infer<typeof MessageUplinkSchema>;
 
-export interface IMeasurementValueElementUplink {
-  mac?: string;
-  rssi?: number;
-}
-export interface RxInfo {
-  gatewayId?: string;
-  uplinkId?: number;
-  gwTime?: string;
-  nsTime?: string;
-  timeSinceGpsEpoch?: string;
-  rssi?: number;
-  snr?: number;
-  location?: Location;
-  context?: string;
-  crcStatus?: string;
-}
+export const ObjectUplinkSchema = z.object({
+  err: z.number().optional(),
+  valid: z.boolean().optional(),
+  payload: z.string().optional(),
+  messages: z.array(z.array(MessageUplinkSchema)).optional(),
+  errMessage: z.string().optional(),
+});
+export type IObjectUplink = z.infer<typeof ObjectUplinkSchema>;
 
-export interface Location {
-  latitude?: number;
-  longitude?: number;
-}
+export const LocationSchema = z.object({
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+});
+export type Location = z.infer<typeof LocationSchema>;
 
-export interface TxInfo {
-  frequency?: number;
-  modulation?: Modulation;
-}
+export const RxInfoSchema = z.object({
+  gatewayId: z.string().optional(),
+  uplinkId: z.number().optional(),
+  gwTime: z.string().optional(),
+  nsTime: z.string().optional(),
+  timeSinceGpsEpoch: z.string().optional(),
+  rssi: z.number().optional(),
+  snr: z.number().optional(),
+  location: LocationSchema.optional(),
+  context: z.string().optional(),
+  crcStatus: z.string().optional(),
+});
+export type RxInfo = z.infer<typeof RxInfoSchema>;
 
-export interface Modulation {
-  lora?: Lora;
-}
+export const LoraSchema = z.object({
+  bandwidth: z.number().optional(),
+  spreadingFactor: z.number().optional(),
+  codeRate: z.string().optional(),
+});
+export type Lora = z.infer<typeof LoraSchema>;
 
-export interface Lora {
-  bandwidth?: number;
-  spreadingFactor?: number;
-  codeRate?: string;
-}
+export const ModulationSchema = z.object({
+  lora: LoraSchema.optional(),
+});
+export type Modulation = z.infer<typeof ModulationSchema>;
+
+export const TxInfoSchema = z.object({
+  frequency: z.number().optional(),
+  modulation: ModulationSchema.optional(),
+});
+export type TxInfo = z.infer<typeof TxInfoSchema>;
+
+export const UplinkSchema = z.object({
+  deduplicationId: z.string().optional(),
+  time: z.string().optional(),
+  deviceInfo: DeviceInfoSchema.optional(),
+  devAddr: z.string().optional(),
+  adr: z.boolean().optional(),
+  dr: z.number().optional(),
+  fCnt: z.number().optional(),
+  fPort: z.number().optional(),
+  confirmed: z.boolean().optional(),
+  data: z.string().optional(),
+  object: ObjectUplinkSchema.optional(),
+  rxInfo: z.array(RxInfoSchema).optional(),
+  txInfo: TxInfoSchema.optional(),
+  regionConfigId: z.string().optional(),
+});
+export type IUplink = z.infer<typeof UplinkSchema>;
 
 export const EXAMPLE_UPLINK: IUplink = {
   deduplicationId: "8dc86175-520c-4b1e-9f12-1bd8fa2756c8",

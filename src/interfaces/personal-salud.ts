@@ -1,30 +1,32 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export interface IPersonalSalud {
-  _id?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
+export const PersonalSaludSchema = z.object({
+  _id: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
 
-  fechaCreacion?: string;
-  nombre?: string; // Nombre completo
-  rol?: 'Médico' | 'Enfermero';
-  matricula?: string; // Matrícula profesional
-  dni?: string;
-  telefono?: string;
-  email?: string;
-  activo?: boolean; // Disponibilidad laboral
+  fechaCreacion: z.string().optional(),
+  nombre: z.string().optional(), // Nombre completo
+  rol: z.enum(['Médico', 'Enfermero']).optional(),
+  matricula: z.string().optional(), // Matrícula profesional
+  dni: z.string().optional(),
+  telefono: z.string().optional(),
+  email: z.string().optional(),
+  activo: z.boolean().optional(), // Disponibilidad laboral
 
   //Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type IPersonalSalud = z.infer<typeof PersonalSaludSchema>;
 
-type OmitirCreate = '_id';
+export const CreatePersonalSaludSchema = PersonalSaludSchema.omit({
+  _id: true,
+});
+export type ICreatePersonalSalud = z.infer<typeof CreatePersonalSaludSchema>;
 
-export interface ICreatePersonalSalud
-  extends Omit<Partial<IPersonalSalud>, OmitirCreate> {}
-
-type OmitirUpdate = '_id';
-
-export interface IUpdatePersonalSalud
-  extends Omit<Partial<IPersonalSalud>, OmitirUpdate> {}
+export const UpdatePersonalSaludSchema = PersonalSaludSchema.omit({
+  _id: true,
+});
+export type IUpdatePersonalSalud = z.infer<typeof UpdatePersonalSaludSchema>;

@@ -1,403 +1,411 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export type AccionesRol =
+export const AccionesRolSchema = z.enum([
   // *******************************************
   // EVENTOS
   // *******************************************
-  | 'Eventos - Ver eventos'
-  | 'Eventos - Atender eventos'
-  | 'Eventos - Finalizar eventos'
+  'Eventos - Ver eventos',
+  'Eventos - Atender eventos',
+  'Eventos - Finalizar eventos',
   // Ver en el listado los eventos que otro operador ya está atendiendo
   // (sin esta acción, en modo atención simple, se ocultan)
-  | 'Eventos - Ver eventos en atención'
+  'Eventos - Ver eventos en atención',
   // *******************************************
   // LOGS
   // *******************************************
-  | 'Logs - Ver logs http'
-  | 'Logs - Ver logs eventos lora'
-  | 'Logs - Ver logs despachos'
-  | 'Logs - Ver logs eventos trackers test'
-  | 'Logs - Ver logs reenvios'
-  | 'Logs - Ver métricas downlinks'
+  'Logs - Ver logs http',
+  'Logs - Ver logs eventos lora',
+  'Logs - Ver logs despachos',
+  'Logs - Ver logs eventos trackers test',
+  'Logs - Ver logs reenvios',
+  'Logs - Ver métricas downlinks',
   // *******************************************
   // MODULO ADMINISTRACIÓN
   // *******************************************
   // Clientes
-  | 'Administración - Ver clientes'
-  | 'Administración - Crear clientes'
-  | 'Administración - Editar clientes'
-  | 'Administración - Eliminar clientes'
-  | 'Administración - Deshabilitar / habilitar clientes'
+  'Administración - Ver clientes',
+  'Administración - Crear clientes',
+  'Administración - Editar clientes',
+  'Administración - Eliminar clientes',
+  'Administración - Deshabilitar / habilitar clientes',
   // Usuarios
-  | 'Administración - Ver usuarios'
-  | 'Administración - Crear usuarios'
-  | 'Administración - Editar usuarios'
-  | 'Administración - Eliminar usuarios'
+  'Administración - Ver usuarios',
+  'Administración - Crear usuarios',
+  'Administración - Editar usuarios',
+  'Administración - Eliminar usuarios',
   // Técnicos
-  | 'Administración - Ver técnicos'
-  | 'Administración - Crear técnicos'
-  | 'Administración - Editar técnicos'
-  | 'Administración - Eliminar técnicos'
+  'Administración - Ver técnicos',
+  'Administración - Crear técnicos',
+  'Administración - Editar técnicos',
+  'Administración - Eliminar técnicos',
   // Dispositivos Lorawan
-  | 'Administración - Ver dispositivos Lorawan'
-  | 'Administración - Crear dispositivos Lorawan'
-  | 'Administración - Editar dispositivos Lorawan'
-  | 'Administración - Eliminar dispositivos Lorawan'
+  'Administración - Ver dispositivos Lorawan',
+  'Administración - Crear dispositivos Lorawan',
+  'Administración - Editar dispositivos Lorawan',
+  'Administración - Eliminar dispositivos Lorawan',
   // Gateways
-  | 'Administración - Ver gateways'
-  | 'Administración - Crear gateways'
-  | 'Administración - Editar gateways'
-  | 'Administración - Eliminar gateways'
+  'Administración - Ver gateways',
+  'Administración - Crear gateways',
+  'Administración - Editar gateways',
+  'Administración - Eliminar gateways',
   // Botones Ble
-  | 'Administración - Ver botones Ble'
-  | 'Administración - Eliminar botones Ble'
+  'Administración - Ver botones Ble',
+  'Administración - Eliminar botones Ble',
   // Trackers
-  | 'Administración - Ver trackers'
-  | 'Administración - Crear trackers'
-  | 'Administración - Editar trackers'
-  | 'Administración - Eliminar trackers'
+  'Administración - Ver trackers',
+  'Administración - Crear trackers',
+  'Administración - Editar trackers',
+  'Administración - Eliminar trackers',
   // Servicios Ofrecidos
-  | 'Administración - Ver servicios ofrecidos'
-  | 'Administración - Crear servicios ofrecidos'
-  | 'Administración - Editar servicios ofrecidos'
-  | 'Administración - Eliminar servicios ofrecidos'
+  'Administración - Ver servicios ofrecidos',
+  'Administración - Crear servicios ofrecidos',
+  'Administración - Editar servicios ofrecidos',
+  'Administración - Eliminar servicios ofrecidos',
   // Apikeys
-  | 'Administración - Ver apikeys'
-  | 'Administración - Crear apikeys'
-  | 'Administración - Editar apikeys'
-  | 'Administración - Eliminar apikeys'
+  'Administración - Ver apikeys',
+  'Administración - Crear apikeys',
+  'Administración - Editar apikeys',
+  'Administración - Eliminar apikeys',
   // Config. de reenvios
-  | 'Administración - Ver configuraciones de reenvíos'
-  | 'Administración - Crear configuraciones de reenvíos'
-  | 'Administración - Editar configuraciones de reenvíos'
-  | 'Administración - Eliminar configuraciones de reenvíos'
+  'Administración - Ver configuraciones de reenvíos',
+  'Administración - Crear configuraciones de reenvíos',
+  'Administración - Editar configuraciones de reenvíos',
+  'Administración - Eliminar configuraciones de reenvíos',
   // Integraciones
-  | 'Administración - Ver integraciones'
-  | 'Administración - Crear integraciones'
+  'Administración - Ver integraciones',
+  'Administración - Crear integraciones',
   // Roles
-  | 'Administración - Ver roles'
-  | 'Administración - Crear roles'
-  | 'Administración - Editar roles'
-  | 'Administración - Eliminar roles'
+  'Administración - Ver roles',
+  'Administración - Crear roles',
+  'Administración - Editar roles',
+  'Administración - Eliminar roles',
   // Eventos Personalizados
-  | 'Administración - Ver eventos personalizados'
-  | 'Administración - Crear eventos personalizados'
-  | 'Administración - Editar eventos personalizados'
-  | 'Administración - Eliminar eventos personalizados'
+  'Administración - Ver eventos personalizados',
+  'Administración - Crear eventos personalizados',
+  'Administración - Editar eventos personalizados',
+  'Administración - Eliminar eventos personalizados',
   // Categorías Eventos
-  | 'Administración - Ver categorias eventos'
-  | 'Administración - Crear categorias eventos'
-  | 'Administración - Editar categorias eventos'
-  | 'Administración - Eliminar categorias eventos'
+  'Administración - Ver categorias eventos',
+  'Administración - Crear categorias eventos',
+  'Administración - Editar categorias eventos',
+  'Administración - Eliminar categorias eventos',
   // Tipos de Eventos (listado categorias)
-  | 'Administración - Ver listado categorias'
-  | 'Administración - Crear listado categorias'
-  | 'Administración - Editar listado categorias'
-  | 'Administración - Eliminar listado categorias'
+  'Administración - Ver listado categorias',
+  'Administración - Crear listado categorias',
+  'Administración - Editar listado categorias',
+  'Administración - Eliminar listado categorias',
   // Inactividad de usuarios
-  | 'Administración - Ver inactividad usuarios'
+  'Administración - Ver inactividad usuarios',
   // *******************************************
   // CONFIGURACIONES
   // *******************************************
-  | 'Configuraciones - Configurar cliente'
-  | 'Configuraciones - Crear codigos alarmas'
-  | 'Configuraciones - Editar codigos alarmas'
-  | 'Configuraciones - Eliminar codigos alarmas'
-  | 'Configuraciones - Crear modelos alarmas'
-  | 'Configuraciones - Editar modelos alarmas'
-  | 'Configuraciones - Eliminar modelos alarmas'
-  | 'Configuraciones - Crear codigos comunicadores'
-  | 'Configuraciones - Editar codigos comunicadores'
-  | 'Configuraciones - Eliminar codigos comunicadores'
-  | 'Configuraciones - Crear modelos comunicadores'
-  | 'Configuraciones - Editar modelos comunicadores'
-  | 'Configuraciones - Eliminar modelos comunicadores'
-  | 'Configuraciones - Crear modelos cámaras'
-  | 'Configuraciones - Editar modelos cámaras'
-  | 'Configuraciones - Eliminar modelos cámaras'
-  | 'Configuraciones - Crear codigos sirenas'
-  | 'Configuraciones - Editar codigos sirenas'
-  | 'Configuraciones - Eliminar codigos sirenas'
-  | 'Configuraciones - Crear modelos sirenas'
-  | 'Configuraciones - Editar modelos sirenas'
-  | 'Configuraciones - Eliminar modelos sirenas'
-  | 'Configuraciones - Crear modelos luminarias'
-  | 'Configuraciones - Editar modelos luminarias'
-  | 'Configuraciones - Eliminar modelos luminarias'
-  | 'Configuraciones - Crear perfiles luminarias'
-  | 'Configuraciones - Editar perfiles luminarias'
-  | 'Configuraciones - Eliminar perfiles luminarias'
-  | 'Configuraciones - Crear codigos dispositivos lorawan'
-  | 'Configuraciones - Editar codigos dispositivos lorawan'
-  | 'Configuraciones - Eliminar codigos dispositivos lorawan'
-  | 'Configuraciones - Crear modelos dispositivos lorawan'
-  | 'Configuraciones - Editar modelos dispositivos lorawan'
-  | 'Configuraciones - Eliminar modelos dispositivos lorawan'
-  | 'Configuraciones - Crear codigos botones BLE'
-  | 'Configuraciones - Editar codigos botones BLE'
-  | 'Configuraciones - Eliminar codigos botones BLE'
-  | 'Configuraciones - Crear modelos botones BLE'
-  | 'Configuraciones - Editar modelos botones BLE'
-  | 'Configuraciones - Eliminar modelos botones BLE'
-  | 'Configuraciones - Crear codigos trackers'
-  | 'Configuraciones - Editar codigos trackers'
-  | 'Configuraciones - Eliminar codigos trackers'
-  | 'Configuraciones - Crear modelos trackers'
-  | 'Configuraciones - Editar modelos trackers'
-  | 'Configuraciones - Eliminar modelos trackers'
-  | 'Configuraciones - Crear iconos vehículos'
-  | 'Configuraciones - Editar iconos vehículos'
-  | 'Configuraciones - Eliminar iconos vehículos'
+  'Configuraciones - Configurar cliente',
+  'Configuraciones - Crear codigos alarmas',
+  'Configuraciones - Editar codigos alarmas',
+  'Configuraciones - Eliminar codigos alarmas',
+  'Configuraciones - Crear modelos alarmas',
+  'Configuraciones - Editar modelos alarmas',
+  'Configuraciones - Eliminar modelos alarmas',
+  'Configuraciones - Crear codigos comunicadores',
+  'Configuraciones - Editar codigos comunicadores',
+  'Configuraciones - Eliminar codigos comunicadores',
+  'Configuraciones - Crear modelos comunicadores',
+  'Configuraciones - Editar modelos comunicadores',
+  'Configuraciones - Eliminar modelos comunicadores',
+  'Configuraciones - Crear modelos cámaras',
+  'Configuraciones - Editar modelos cámaras',
+  'Configuraciones - Eliminar modelos cámaras',
+  'Configuraciones - Crear codigos sirenas',
+  'Configuraciones - Editar codigos sirenas',
+  'Configuraciones - Eliminar codigos sirenas',
+  'Configuraciones - Crear modelos sirenas',
+  'Configuraciones - Editar modelos sirenas',
+  'Configuraciones - Eliminar modelos sirenas',
+  'Configuraciones - Crear modelos luminarias',
+  'Configuraciones - Editar modelos luminarias',
+  'Configuraciones - Eliminar modelos luminarias',
+  'Configuraciones - Crear perfiles luminarias',
+  'Configuraciones - Editar perfiles luminarias',
+  'Configuraciones - Eliminar perfiles luminarias',
+  'Configuraciones - Crear codigos dispositivos lorawan',
+  'Configuraciones - Editar codigos dispositivos lorawan',
+  'Configuraciones - Eliminar codigos dispositivos lorawan',
+  'Configuraciones - Crear modelos dispositivos lorawan',
+  'Configuraciones - Editar modelos dispositivos lorawan',
+  'Configuraciones - Eliminar modelos dispositivos lorawan',
+  'Configuraciones - Crear codigos botones BLE',
+  'Configuraciones - Editar codigos botones BLE',
+  'Configuraciones - Eliminar codigos botones BLE',
+  'Configuraciones - Crear modelos botones BLE',
+  'Configuraciones - Editar modelos botones BLE',
+  'Configuraciones - Eliminar modelos botones BLE',
+  'Configuraciones - Crear codigos trackers',
+  'Configuraciones - Editar codigos trackers',
+  'Configuraciones - Eliminar codigos trackers',
+  'Configuraciones - Crear modelos trackers',
+  'Configuraciones - Editar modelos trackers',
+  'Configuraciones - Eliminar modelos trackers',
+  'Configuraciones - Crear iconos vehículos',
+  'Configuraciones - Editar iconos vehículos',
+  'Configuraciones - Eliminar iconos vehículos',
   // *******************************************
   // MODULO SERVICIO TECNICO
   // *******************************************
-  | 'Servicio Técnico - Ver solicitudes'
-  | 'Servicio Técnico - Crear solicitudes'
-  | 'Servicio Técnico - Editar solicitudes'
-  | 'Servicio Técnico - Eliminar solicitudes'
-  | 'Servicio Técnico - Reasignar solicitudes'
-  | 'Servicio Técnico - Atender solicitudes'
-  | 'Servicio Técnico - Ver pedidos de materiales'
-  | 'Servicio Técnico - Gestionar pedidos de materiales'
+  'Servicio Técnico - Ver solicitudes',
+  'Servicio Técnico - Crear solicitudes',
+  'Servicio Técnico - Editar solicitudes',
+  'Servicio Técnico - Eliminar solicitudes',
+  'Servicio Técnico - Reasignar solicitudes',
+  'Servicio Técnico - Atender solicitudes',
+  'Servicio Técnico - Ver pedidos de materiales',
+  'Servicio Técnico - Gestionar pedidos de materiales',
   // *******************************************
   // MODULO ALARMAS
   // *******************************************
-  | 'Alarmas - Crear'
-  | 'Alarmas - Editar'
-  | 'Alarmas - Eliminar'
-  | 'Alarmas - Exportar eventos'
-  | 'Alarmas - Dar de alta'
-  | 'Alarmas - Actualizar imágenes'
-  | 'Alarmas - Cambiar de cliente'
-  | 'Alarmas - Configurar comunicador'
-  | 'Alarmas - Solicitar servicio técnico'
-  | 'Alarmas - Cambiar estado de cuenta'
-  | 'Alarmas - Cambiar modo desactivado'
-  | 'Alarmas - Editar control horario'
-  | 'Alarmas - Editar contactos '
-  | 'Alarmas - Editar notas'
-  | 'Alarmas - Asignar cámaras'
-  | 'Alarmas - Enviar comandos'
+  'Alarmas - Crear',
+  'Alarmas - Editar',
+  'Alarmas - Eliminar',
+  'Alarmas - Exportar eventos',
+  'Alarmas - Dar de alta',
+  'Alarmas - Actualizar imágenes',
+  'Alarmas - Cambiar de cliente',
+  'Alarmas - Configurar comunicador',
+  'Alarmas - Solicitar servicio técnico',
+  'Alarmas - Cambiar estado de cuenta',
+  'Alarmas - Cambiar modo desactivado',
+  'Alarmas - Editar control horario',
+  'Alarmas - Editar contactos ',
+  'Alarmas - Editar notas',
+  'Alarmas - Asignar cámaras',
+  'Alarmas - Enviar comandos',
   // *******************************************
   // MODULO VEHÍCULOS
   // *******************************************
   // Vehículos
-  | 'Vehículos - Crear'
-  | 'Vehículos - Editar'
-  | 'Vehículos - Eliminar'
-  | 'Vehículos - Exportar eventos'
-  | 'Vehículos - Exportar Reportes'
-  | 'Vehículos - Dar de alta'
-  | 'Vehículos - Actualizar imágenes'
-  | 'Vehículos - Modo estacionado'
-  | 'Vehículos - Cambiar modo desactivado'
-  | 'Vehículos - Cambiar de cliente'
-  | 'Vehículos - Solicitar servicio técnico'
-  | 'Vehículos - Enviar comandos'
-  | 'Vehículos - Editar contactos '
-  | 'Vehículos - Editar notas'
-  | 'Vehículos - Editar documentos vehículo'
+  'Vehículos - Crear',
+  'Vehículos - Editar',
+  'Vehículos - Eliminar',
+  'Vehículos - Exportar eventos',
+  'Vehículos - Exportar Reportes',
+  'Vehículos - Dar de alta',
+  'Vehículos - Actualizar imágenes',
+  'Vehículos - Modo estacionado',
+  'Vehículos - Cambiar modo desactivado',
+  'Vehículos - Cambiar de cliente',
+  'Vehículos - Solicitar servicio técnico',
+  'Vehículos - Enviar comandos',
+  'Vehículos - Editar contactos ',
+  'Vehículos - Editar notas',
+  'Vehículos - Editar documentos vehículo',
   // Conductores
-  | 'Vehículos - Crear conductor'
-  | 'Vehículos - Editar conductor'
-  | 'Vehículos - Eliminar conductor'
-  | 'Vehículos - Asignar conductor'
-  | 'Vehículos - Crear documentos conductor'
-  | 'Vehículos - Editar documentos conductor'
-  | 'Vehículos - Eliminar documentos conductor'
+  'Vehículos - Crear conductor',
+  'Vehículos - Editar conductor',
+  'Vehículos - Eliminar conductor',
+  'Vehículos - Asignar conductor',
+  'Vehículos - Crear documentos conductor',
+  'Vehículos - Editar documentos conductor',
+  'Vehículos - Eliminar documentos conductor',
   // zonas, recorridos, flotas, recordatorios, servicios y proveedores
-  | 'Vehículos - Crear zonas'
-  | 'Vehículos - Editar zonas'
-  | 'Vehículos - Eliminar zonas'
-  | 'Vehículos - Crear recorridos'
-  | 'Vehículos - Editar recorridos'
-  | 'Vehículos - Eliminar recorridos'
-  | 'Vehículos - Crear flotas'
-  | 'Vehículos - Editar flotas'
-  | 'Vehículos - Eliminar flotas'
-  | 'Vehículos - Crear recordatorios'
-  | 'Vehículos - Editar recordatorios'
-  | 'Vehículos - Eliminar recordatorios'
-  | 'Vehículos - Crear servicios'
-  | 'Vehículos - Editar servicios'
-  | 'Vehículos - Eliminar servicios'
-  | 'Vehículos - Crear proveedores'
-  | 'Vehículos - Editar proveedores'
-  | 'Vehículos - Eliminar proveedores'
+  'Vehículos - Crear zonas',
+  'Vehículos - Editar zonas',
+  'Vehículos - Eliminar zonas',
+  'Vehículos - Crear recorridos',
+  'Vehículos - Editar recorridos',
+  'Vehículos - Eliminar recorridos',
+  'Vehículos - Crear flotas',
+  'Vehículos - Editar flotas',
+  'Vehículos - Eliminar flotas',
+  'Vehículos - Crear recordatorios',
+  'Vehículos - Editar recordatorios',
+  'Vehículos - Eliminar recordatorios',
+  'Vehículos - Crear servicios',
+  'Vehículos - Editar servicios',
+  'Vehículos - Eliminar servicios',
+  'Vehículos - Crear proveedores',
+  'Vehículos - Editar proveedores',
+  'Vehículos - Eliminar proveedores',
   // *******************************************
   // MODULO LUMINARIAS
   // *******************************************
-  | 'Luminarias - Crear'
-  | 'Luminarias - Editar'
-  | 'Luminarias - Eliminar'
-  | 'Luminarias - Enviar comandos'
-  | 'Luminarias - Solicitar servicio técnico'
-  | 'Luminarias - Editar contactos '
-  | 'Luminarias - Editar notas'
+  'Luminarias - Crear',
+  'Luminarias - Editar',
+  'Luminarias - Eliminar',
+  'Luminarias - Enviar comandos',
+  'Luminarias - Solicitar servicio técnico',
+  'Luminarias - Editar contactos ',
+  'Luminarias - Editar notas',
   // Agrupaciones
-  | 'Luminarias - Crear agrupaciones'
-  | 'Luminarias - Editar agrupaciones'
-  | 'Luminarias - Eliminar agrupaciones'
+  'Luminarias - Crear agrupaciones',
+  'Luminarias - Editar agrupaciones',
+  'Luminarias - Eliminar agrupaciones',
   //Puestas
-  | 'Luminarias - Crear puestas'
-  | 'Luminarias - Editar puestas'
-  | 'Luminarias - Eliminar puestas'
+  'Luminarias - Crear puestas',
+  'Luminarias - Editar puestas',
+  'Luminarias - Eliminar puestas',
   // *******************************************
   // MODULO ACTIVOS
   // *******************************************
   // Activos
-  | 'Activos - Crear'
-  | 'Activos - Editar'
-  | 'Activos - Eliminar'
-  | 'Activos - Exportar eventos'
-  | 'Activos - Exportar Reportes'
+  'Activos - Crear',
+  'Activos - Editar',
+  'Activos - Eliminar',
+  'Activos - Exportar eventos',
+  'Activos - Exportar Reportes',
   // | 'Activos - Dar de alta' // No esta implementado pero quizá se implemente en un futuro
   // | 'Activos - Actualizar imágenes' // No esta implementado pero quizá se implemente en un futuro
-  | 'Activos - Cambiar modo desactivado'
-  | 'Activos - Cambiar de cliente'
-  | 'Activos - Cambiar estado de cuenta'
-  | 'Activos - Solicitar servicio técnico'
+  'Activos - Cambiar modo desactivado',
+  'Activos - Cambiar de cliente',
+  'Activos - Cambiar estado de cuenta',
+  'Activos - Solicitar servicio técnico',
   // | 'Activos - Enviar comandos' // No esta implementado pero quizá se implemente en un futuro
-  | 'Activos - Editar contactos '
-  | 'Activos - Editar notas'
+  'Activos - Editar contactos ',
+  'Activos - Editar notas',
   // Ubicaciones, agrupaciones
-  | 'Activos - Crear ubicaciones'
-  | 'Activos - Editar ubicaciones'
-  | 'Activos - Eliminar ubicaciones'
-  | 'Activos - Crear agrupaciones'
-  | 'Activos - Editar agrupaciones'
-  | 'Activos - Eliminar agrupaciones'
+  'Activos - Crear ubicaciones',
+  'Activos - Editar ubicaciones',
+  'Activos - Eliminar ubicaciones',
+  'Activos - Crear agrupaciones',
+  'Activos - Editar agrupaciones',
+  'Activos - Eliminar agrupaciones',
   // *******************************************
   // MODULO TRASNPORTE PUBLICO / COLECTIVOS
   // *******************************************
   // Colectivos
-  | 'Colectivos - Crear'
-  | 'Colectivos - Editar'
-  | 'Colectivos - Eliminar'
-  | 'Colectivos - Exportar eventos'
-  | 'Colectivos - Exportar Reportes'
+  'Colectivos - Crear',
+  'Colectivos - Editar',
+  'Colectivos - Eliminar',
+  'Colectivos - Exportar eventos',
+  'Colectivos - Exportar Reportes',
   // | 'Colectivos - Dar de alta' // No esta implementado pero quizá se implemente en un futuro
   // | 'Colectivos - Actualizar imágenes' // No esta implementado pero quizá se implemente en un futuro
-  | 'Colectivos - Cambiar modo desactivado'
+  'Colectivos - Cambiar modo desactivado',
   // | 'Colectivos - Cambiar de cliente' // No esta implementado pero quizá se implemente en un futuro
-  | 'Colectivos - Solicitar servicio técnico'
-  | 'Colectivos - Setear odómetro'
+  'Colectivos - Solicitar servicio técnico',
+  'Colectivos - Setear odómetro',
   // | 'Colectivos - Enviar comandos' // No esta implementado pero quizá se implemente en un futuro
-  | 'Colectivos - Editar contactos '
-  | 'Colectivos - Editar notas'
-  | 'Colectivos - Editar documentos colectivo'
+  'Colectivos - Editar contactos ',
+  'Colectivos - Editar notas',
+  'Colectivos - Editar documentos colectivo',
   // Recorridos, terminales, líneas, choferes, cronogramas, recordatorios, servicios y proveedores
-  | 'Colectivos - Crear recorridos'
-  | 'Colectivos - Editar recorridos'
-  | 'Colectivos - Eliminar recorridos'
-  | 'Colectivos - Crear terminales'
-  | 'Colectivos - Editar terminales'
-  | 'Colectivos - Eliminar terminales'
-  | 'Colectivos - Crear líneas'
-  | 'Colectivos - Editar líneas'
-  | 'Colectivos - Eliminar líneas'
-  | 'Colectivos - Crear choferes'
-  | 'Colectivos - Editar choferes'
-  | 'Colectivos - Eliminar choferes'
-  | 'Colectivos - Crear cronogramas'
-  | 'Colectivos - Editar cronogramas'
-  | 'Colectivos - Eliminar cronogramas'
-  | 'Colectivos - Crear recordatorios'
-  | 'Colectivos - Editar recordatorios'
-  | 'Colectivos - Eliminar recordatorios'
-  | 'Colectivos - Crear servicios'
-  | 'Colectivos - Editar servicios'
-  | 'Colectivos - Eliminar servicios'
-  | 'Colectivos - Crear proveedores'
-  | 'Colectivos - Editar proveedores'
-  | 'Colectivos - Eliminar proveedores'
+  'Colectivos - Crear recorridos',
+  'Colectivos - Editar recorridos',
+  'Colectivos - Eliminar recorridos',
+  'Colectivos - Crear terminales',
+  'Colectivos - Editar terminales',
+  'Colectivos - Eliminar terminales',
+  'Colectivos - Crear líneas',
+  'Colectivos - Editar líneas',
+  'Colectivos - Eliminar líneas',
+  'Colectivos - Crear choferes',
+  'Colectivos - Editar choferes',
+  'Colectivos - Eliminar choferes',
+  'Colectivos - Crear cronogramas',
+  'Colectivos - Editar cronogramas',
+  'Colectivos - Eliminar cronogramas',
+  'Colectivos - Crear recordatorios',
+  'Colectivos - Editar recordatorios',
+  'Colectivos - Eliminar recordatorios',
+  'Colectivos - Crear servicios',
+  'Colectivos - Editar servicios',
+  'Colectivos - Eliminar servicios',
+  'Colectivos - Crear proveedores',
+  'Colectivos - Editar proveedores',
+  'Colectivos - Eliminar proveedores',
   // *******************************************
   // MODULO EMERGENCIAS MÉDICAS
   // *******************************************
   // Emergencias Médicas
-  | 'Emergencias Médicas - Crear'
-  | 'Emergencias Médicas - Importar'
-  | 'Emergencias Médicas - Editar'
-  | 'Emergencias Médicas - Eliminar'
-  | 'Emergencias Médicas - Reasignar'
-  | 'Emergencias Médicas - Finalizar'
-  | 'Emergencias Médicas - Cancelar'
+  'Emergencias Médicas - Crear',
+  'Emergencias Médicas - Importar',
+  'Emergencias Médicas - Editar',
+  'Emergencias Médicas - Eliminar',
+  'Emergencias Médicas - Reasignar',
+  'Emergencias Médicas - Finalizar',
+  'Emergencias Médicas - Cancelar',
   // Hospitales, centros médicos, personal de salud, solicitantes, pacientes
-  | 'Emergencias Médicas - Crear hospitales'
-  | 'Emergencias Médicas - Editar hospitales'
-  | 'Emergencias Médicas - Eliminar hospitales'
-  | 'Emergencias Médicas - Crear centros médicos'
-  | 'Emergencias Médicas - Editar centros médicos'
-  | 'Emergencias Médicas - Eliminar centros médicos'
-  | 'Emergencias Médicas - Crear personal de salud'
-  | 'Emergencias Médicas - Editar personal de salud'
-  | 'Emergencias Médicas - Eliminar personal de salud'
-  | 'Emergencias Médicas - Crear solicitantes'
-  | 'Emergencias Médicas - Editar solicitantes'
-  | 'Emergencias Médicas - Eliminar solicitantes'
-  | 'Emergencias Médicas - Crear pacientes'
-  | 'Emergencias Médicas - Editar pacientes'
-  | 'Emergencias Médicas - Eliminar pacientes'
+  'Emergencias Médicas - Crear hospitales',
+  'Emergencias Médicas - Editar hospitales',
+  'Emergencias Médicas - Eliminar hospitales',
+  'Emergencias Médicas - Crear centros médicos',
+  'Emergencias Médicas - Editar centros médicos',
+  'Emergencias Médicas - Eliminar centros médicos',
+  'Emergencias Médicas - Crear personal de salud',
+  'Emergencias Médicas - Editar personal de salud',
+  'Emergencias Médicas - Eliminar personal de salud',
+  'Emergencias Médicas - Crear solicitantes',
+  'Emergencias Médicas - Editar solicitantes',
+  'Emergencias Médicas - Eliminar solicitantes',
+  'Emergencias Médicas - Crear pacientes',
+  'Emergencias Médicas - Editar pacientes',
+  'Emergencias Médicas - Eliminar pacientes',
   // *******************************************
   // MODULO SIRENAS MUNICIPALES
   // *******************************************
   // Sirenas Municipales
-  | 'Sirenas Municipales - Sincronizar'
-  | 'Sirenas Municipales - Editar'
-  | 'Sirenas Municipales - Eliminar'
-  | 'Sirenas Municipales - Solicitar servicio técnico'
-  | 'Sirenas Municipales - Asignar cámaras'
+  'Sirenas Municipales - Sincronizar',
+  'Sirenas Municipales - Editar',
+  'Sirenas Municipales - Eliminar',
+  'Sirenas Municipales - Solicitar servicio técnico',
+  'Sirenas Municipales - Asignar cámaras',
   // *******************************************
   // MODULO CÁMARAS
   // *******************************************
   // Cámaras
-  | 'Cámaras - Crear cámara'
-  | 'Cámaras - Editar cámara'
-  | 'Cámaras - Eliminar cámara'
-  | 'Cámaras - Solicitar servicio técnico'
-  | 'Cámaras - Ver streaming'
-  | 'Cámaras - Descargar grabaciones'
+  'Cámaras - Crear cámara',
+  'Cámaras - Editar cámara',
+  'Cámaras - Eliminar cámara',
+  'Cámaras - Solicitar servicio técnico',
+  'Cámaras - Ver streaming',
+  'Cámaras - Descargar grabaciones',
   // *******************************************
   // MÓDULO AUDITORÍAS
   // *******************************************
-  | 'Auditorías - Ver auditorías'
+  'Auditorías - Ver auditorías',
   // *******************************************
   // MODULO ALERTAS SEGURIDAD
   // *******************************************
-  | 'Alertas Seguridad - Crear'
-  | 'Alertas Seguridad - Atender'
-  | 'Alertas Seguridad - Derivar'
-  | 'Alertas Seguridad - Exportar';
+  'Alertas Seguridad - Crear',
+  'Alertas Seguridad - Atender',
+  'Alertas Seguridad - Derivar',
+  'Alertas Seguridad - Exportar',
+]);
+export type AccionesRol = z.infer<typeof AccionesRolSchema>;
 
-export type FuncionesRol =
-  | 'Técnico' // Para elegir técnicos en solicitudes de servicio técnico y para vista especial en la app mobile
-  | 'Conductor' // Asignable a vehiculos (no colectivos)
-  | 'Chofer' // Asignable a colectivos
-  | 'Móvil Emergencias Médicas'; // Funciones especiales para emergencias medicas
+export const FuncionesRolSchema = z.enum([
+  'Técnico', // Para elegir técnicos en solicitudes de servicio técnico y para vista especial en la app mobile
+  'Conductor', // Asignable a vehiculos (no colectivos)
+  'Chofer', // Asignable a colectivos
+  'Móvil Emergencias Médicas', // Funciones especiales para emergencias medicas
+]);
+export type FuncionesRol = z.infer<typeof FuncionesRolSchema>;
 
-export interface IRol {
-  _id?: string;
+export const RolSchema = z.object({
+  _id: z.string().optional(),
   //
-  idCliente?: string;
-  idsAncestros?: string[];
-  default?: boolean;
-  global?: boolean;
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  default: z.boolean().optional(),
+  global: z.boolean().optional(),
 
-  nombre?: string;
-  acciones?: AccionesRol[];
-  funciones?: FuncionesRol[];
+  nombre: z.string().optional(),
+  acciones: z.array(AccionesRolSchema).optional(),
+  funciones: z.array(FuncionesRolSchema).optional(),
 
   //Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type IRol = z.infer<typeof RolSchema>;
 
-type OmitirCreate = '_id' | 'cliente';
+export const CreateRolSchema = RolSchema.omit({ _id: true, cliente: true });
+export type ICreateRol = z.infer<typeof CreateRolSchema>;
 
-export interface ICreateRol extends Omit<Partial<IRol>, OmitirCreate> {}
+export const UpdateRolSchema = RolSchema.omit({ _id: true, cliente: true });
+export type IUpdateRol = z.infer<typeof UpdateRolSchema>;
 
-type OmitirUpdate = '_id' | 'cliente';
-
-export interface IUpdateRol extends Omit<Partial<IRol>, OmitirUpdate> {}
-
-export interface IRolCache extends Omit<IRol, 'cliente' | 'ancestros'> {}
+export const RolCacheSchema = RolSchema.omit({
+  cliente: true,
+  ancestros: true,
+});
+export type IRolCache = z.infer<typeof RolCacheSchema>;

@@ -1,32 +1,31 @@
-import { IGeoJSONPoint } from '../auxiliares';
+import { z } from 'zod';
+import { GeoJSONPointSchema } from '../auxiliares';
 
-export interface IPartesDireccion {
-  calle?: string;
-  numero?: string;
-  barrio?: string;
-  ciudad?: string;
-  partido?: string;
-  provincia?: string;
-  pais?: string;
-  codigoPostal?: string;
-}
+export const PartesDireccionSchema = z.object({
+  calle: z.string().optional(),
+  numero: z.string().optional(),
+  barrio: z.string().optional(),
+  ciudad: z.string().optional(),
+  partido: z.string().optional(),
+  provincia: z.string().optional(),
+  pais: z.string().optional(),
+  codigoPostal: z.string().optional(),
+});
+export type IPartesDireccion = z.infer<typeof PartesDireccionSchema>;
 
-export interface IGeoCache {
-  _id?: string;
-  fechaCreacion?: string;
-  geojson?: IGeoJSONPoint;
-  geohash?: string;
-  direccion?: string;
-  partes?: IPartesDireccion;
-  fuente?: string; // Fuente de los datos (ej. Google Maps, OpenStreetMap, etc.)
-}
+export const GeoCacheSchema = z.object({
+  _id: z.string().optional(),
+  fechaCreacion: z.string().optional(),
+  geojson: GeoJSONPointSchema.optional(),
+  geohash: z.string().optional(),
+  direccion: z.string().optional(),
+  partes: PartesDireccionSchema.optional(),
+  fuente: z.string().optional(), // Fuente de los datos (ej. Google Maps, OpenStreetMap, etc.)
+});
+export type IGeoCache = z.infer<typeof GeoCacheSchema>;
 
-type OmitirCreate = '_id';
+export const CreateGeoCacheSchema = GeoCacheSchema.omit({ _id: true });
+export type ICreateGeoCache = z.infer<typeof CreateGeoCacheSchema>;
 
-export interface ICreateGeoCache
-  extends Omit<Partial<IGeoCache>, OmitirCreate> {}
-
-type OmitirUpdate = '_id';
-
-export interface IUpdateGeoCache
-  extends Omit<Partial<IGeoCache>, OmitirUpdate> {}
+export const UpdateGeoCacheSchema = GeoCacheSchema.omit({ _id: true });
+export type IUpdateGeoCache = z.infer<typeof UpdateGeoCacheSchema>;

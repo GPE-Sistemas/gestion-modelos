@@ -1,39 +1,45 @@
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { UsuarioSchema } from './usuario';
 import {
-  EstadoEvento,
-  EstadoEventoTecnico,
-  IEventoGenerico,
+  EstadoEventoSchema,
+  EstadoEventoTecnicoSchema,
 } from './evento-generico';
+import type { IEventoGenerico } from './evento-generico';
 
-export interface ITratamientoEvento {
-  _id?: string;
+export const TratamientoEventoSchema = z.object({
+  _id: z.string().optional(),
   //
-  nota?: string;
-  notaInterna?: string;
-  imagenes?: string[];
-  fechaCreacion?: string;
-  estado?: EstadoEvento;
+  nota: z.string().optional(),
+  notaInterna: z.string().optional(),
+  imagenes: z.array(z.string()).optional(),
+  fechaCreacion: z.string().optional(),
+  estado: EstadoEventoSchema.optional(),
   // Separados para no hinche las bolas el overlap.
-  estadoTecnico?: EstadoEventoTecnico;
-  esperaHasta?: string;
+  estadoTecnico: EstadoEventoTecnicoSchema.optional(),
+  esperaHasta: z.string().optional(),
   //
-  idsEventos?: string[];
-  idUsuario?: string;
+  idsEventos: z.array(z.string()).optional(),
+  idUsuario: z.string().optional(),
   // Populate
-  eventos?: IEventoGenerico[];
-  usuario?: IUsuario;
-}
+  eventos: z.array(z.custom<IEventoGenerico>()).optional(),
+  usuario: UsuarioSchema.optional(),
+});
+export type ITratamientoEvento = z.infer<typeof TratamientoEventoSchema>;
 
-type OmitirCreate = '_id' | 'eventos' | 'usuario';
+export const CreateTratamientoEventoSchema = TratamientoEventoSchema.omit({
+  _id: true,
+  eventos: true,
+  usuario: true,
+});
+export type ICreateTratamientoEvento = z.infer<
+  typeof CreateTratamientoEventoSchema
+>;
 
-export interface ICreateTratamientoEvento extends Omit<
-  Partial<ITratamientoEvento>,
-  OmitirCreate
-> {}
-
-type OmitirUpdate = '_id' | 'eventos' | 'usuario';
-
-export interface IUpdateTratamientoEvento extends Omit<
-  Partial<ITratamientoEvento>,
-  OmitirUpdate
-> {}
+export const UpdateTratamientoEventoSchema = TratamientoEventoSchema.omit({
+  _id: true,
+  eventos: true,
+  usuario: true,
+});
+export type IUpdateTratamientoEvento = z.infer<
+  typeof UpdateTratamientoEventoSchema
+>;

@@ -1,30 +1,42 @@
-import { ICliente } from "./cliente";
+import { z } from "zod";
+import { ClienteSchema } from "./cliente";
 
-export type ICategoriaTipoEvento = "Alarma" | "Tracker" | "Luminaria";
+export const CategoriaTipoEventoSchema = z.enum([
+  "Alarma",
+  "Tracker",
+  "Luminaria",
+]);
+export type ICategoriaTipoEvento = z.infer<typeof CategoriaTipoEventoSchema>;
 
-export interface ITipoEvento {
-  _id?: string;
+export const TipoEventoSchema = z.object({
+  _id: z.string().optional(),
   //
-  nombre?: string;
-  categoria?: ICategoriaTipoEvento;
-  idCliente?: string;
-  idsAncestros?: string[];
-  default?: boolean;
-  global?: boolean;
+  nombre: z.string().optional(),
+  categoria: CategoriaTipoEventoSchema.optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  default: z.boolean().optional(),
+  global: z.boolean().optional(),
   //Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type ITipoEvento = z.infer<typeof TipoEventoSchema>;
 
-type OmitirCreate = "_id" | "cliente";
+export const CreateTipoEventoSchema = TipoEventoSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateTipoEvento = z.infer<typeof CreateTipoEventoSchema>;
 
-export interface ICreateTipoEvento
-  extends Omit<Partial<ITipoEvento>, OmitirCreate> {}
+export const UpdateTipoEventoSchema = TipoEventoSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateTipoEvento = z.infer<typeof UpdateTipoEventoSchema>;
 
-type OmitirUpdate = "_id" | "cliente";
-
-export interface IUpdateTipoEvento
-  extends Omit<Partial<ITipoEvento>, OmitirUpdate> {}
-
-export interface ITipoEventoCache
-  extends Omit<ITipoEvento, "cliente" | "ancestros"> {}
+export const TipoEventoCacheSchema = TipoEventoSchema.omit({
+  cliente: true,
+  ancestros: true,
+});
+export type ITipoEventoCache = z.infer<typeof TipoEventoCacheSchema>;

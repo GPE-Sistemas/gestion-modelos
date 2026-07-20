@@ -1,43 +1,58 @@
-import { ICliente } from "./cliente";
+import { z } from "zod";
+import { ClienteSchema } from "./cliente";
 
-export type SonidoEvento = "Silencio" | "Campana" | "Sirena";
-export type TipoCategoria =
-  | "Activo"
-  | "Vehiculo"
-  | "Alarma"
-  | "Luminaria"
-  | "Sistema"
-  | "Otro";
+export const SonidoEventoSchema = z.enum(["Silencio", "Campana", "Sirena"]);
+export type SonidoEvento = z.infer<typeof SonidoEventoSchema>;
 
-export interface ICategoriaEvento {
-  _id?: string;
+export const TipoCategoriaSchema = z.enum([
+  "Activo",
+  "Vehiculo",
+  "Alarma",
+  "Luminaria",
+  "Sistema",
+  "Otro",
+]);
+export type TipoCategoria = z.infer<typeof TipoCategoriaSchema>;
+
+export const CategoriaEventoSchema = z.object({
+  _id: z.string().optional(),
   //
-  nombre?: string; // BUR
-  prioridad?: number; // 100
-  color?: string;
-  notificar?: boolean;
-  atender?: boolean;
-  noDerivar?: boolean;
-  sonido?: SonidoEvento;
-  modulo?: TipoCategoria;
-  idCliente?: string;
-  idsAncestros?: string[];
-  default?: boolean;
-  global?: boolean;
+  nombre: z.string().optional(), // BUR
+  prioridad: z.number().optional(), // 100
+  color: z.string().optional(),
+  notificar: z.boolean().optional(),
+  atender: z.boolean().optional(),
+  noDerivar: z.boolean().optional(),
+  sonido: SonidoEventoSchema.optional(),
+  modulo: TipoCategoriaSchema.optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  default: z.boolean().optional(),
+  global: z.boolean().optional(),
   //Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type ICategoriaEvento = z.infer<typeof CategoriaEventoSchema>;
 
-type OmitirCreate = "_id" | "cliente";
+export const CreateCategoriaEventoSchema = CategoriaEventoSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateCategoriaEvento = z.infer<
+  typeof CreateCategoriaEventoSchema
+>;
 
-export interface ICreateCategoriaEvento
-  extends Omit<Partial<ICategoriaEvento>, OmitirCreate> {}
+export const UpdateCategoriaEventoSchema = CategoriaEventoSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateCategoriaEvento = z.infer<
+  typeof UpdateCategoriaEventoSchema
+>;
 
-type OmitirUpdate = "_id" | "cliente";
-
-export interface IUpdateCategoriaEvento
-  extends Omit<Partial<ICategoriaEvento>, OmitirUpdate> {}
-
-export interface ICategoriaEventoCache
-  extends Omit<ICategoriaEvento, "cliente" | "ancestros"> {}
+export const CategoriaEventoCacheSchema = CategoriaEventoSchema.omit({
+  cliente: true,
+  ancestros: true,
+});
+export type ICategoriaEventoCache = z.infer<typeof CategoriaEventoCacheSchema>;

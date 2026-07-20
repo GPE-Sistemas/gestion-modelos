@@ -1,34 +1,48 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { ICodigoDispositivo } from './codigos-dispositivo';
-import { IDispositivoAlarma } from './dispositivo-alarma';
-import { IEventoGenerico } from './evento-generico';
-import { ITracker } from './tracker';
+import { z } from 'zod';
+import { ActivoSchema } from './activo';
+import { ClienteSchema } from './cliente';
+import { CodigoDispositivoSchema } from './codigos-dispositivo';
+import { DispositivoAlarmaSchema } from './dispositivo-alarma';
+import type { IEventoGenerico } from './evento-generico';
+import { TrackerSchema } from './tracker';
 
-export interface ICertificadoEntidad {
-  _id?: string;
+export const CertificadoEntidadSchema = z.object({
+  _id: z.string().optional(),
   //
-  idCliente?: string;
-  idsAncestros?: string[];
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
   //
-  idEntidad?: string;
-  fechaComienzo?: string;
-  fechaEmision?: string;
-  eventosRegistrados?: IEventoGenerico[];
-  codigosEsperados?: ICodigoDispositivo[];
+  idEntidad: z.string().optional(),
+  fechaComienzo: z.string().optional(),
+  fechaEmision: z.string().optional(),
+  eventosRegistrados: z.array(z.custom<IEventoGenerico>()).optional(),
+  codigosEsperados: z.array(CodigoDispositivoSchema).optional(),
   // Populate
-  tracker?: ITracker;
-  activo?: IActivo;
-  alarma?: IDispositivoAlarma;
-  cliente?: ICliente;
-}
+  tracker: TrackerSchema.optional(),
+  activo: ActivoSchema.optional(),
+  alarma: DispositivoAlarmaSchema.optional(),
+  cliente: ClienteSchema.optional(),
+});
+export type ICertificadoEntidad = z.infer<typeof CertificadoEntidadSchema>;
 
-type OmitirCreate = '_id' | 'cliente' | 'tracker' | 'alarma' | 'activo';
+export const CreateCertificadoEntidadSchema = CertificadoEntidadSchema.omit({
+  _id: true,
+  cliente: true,
+  tracker: true,
+  alarma: true,
+  activo: true,
+});
+export type ICreateCertificadoEntidad = z.infer<
+  typeof CreateCertificadoEntidadSchema
+>;
 
-export interface ICreateCertificadoEntidad
-  extends Omit<Partial<ICertificadoEntidad>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'cliente' | 'tracker' | 'alarma' | 'activo';
-
-export interface IUpdateCertificadoEntidad
-  extends Omit<Partial<ICertificadoEntidad>, OmitirUpdate> {}
+export const UpdateCertificadoEntidadSchema = CertificadoEntidadSchema.omit({
+  _id: true,
+  cliente: true,
+  tracker: true,
+  alarma: true,
+  activo: true,
+});
+export type IUpdateCertificadoEntidad = z.infer<
+  typeof UpdateCertificadoEntidadSchema
+>;

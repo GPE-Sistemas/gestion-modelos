@@ -1,48 +1,60 @@
-import { ICliente } from './cliente';
-import { Dia } from './config-evento-usuario';
-import { IUbicacion } from './ubicacion';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import { DiaSchema } from './config-evento-usuario';
+import type { IUbicacion } from './ubicacion';
 
-export interface ICronograma {
-  _id?: string;
+export const TipoDeCronogramaSchema = z.enum(['despacho', 'turnos']);
+export type TipoDeCronograma = z.infer<typeof TipoDeCronogramaSchema>;
+
+export const PeriodoSchema = z.object({
+  desde: z.string().optional(), // Sale
+  hasta: z.string().optional(), // Llega
+  datos: z.record(z.string(), z.any()).optional(), // Datos extras para el periodo, como el chofer, el vehículo, el usuario, etc
+});
+export type Periodo = z.infer<typeof PeriodoSchema>;
+
+export const ConfigCronogramaSchema = z.object({
+  color: z.string().optional(),
+  nombreParaMostrar: z.string().optional(),
+});
+export type ConfigCronograma = z.infer<typeof ConfigCronogramaSchema>;
+
+export const CronogramaSchema = z.object({
+  _id: z.string().optional(),
   //
-  idCliente?: string;
-  idsAncestros?: string[];
-  idUbicacion?: string;
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idUbicacion: z.string().optional(),
   //
-  fechaCreacion?: string;
-  automatico?: boolean;
-  dias?: Dia[];
-  nombre?: string;
-  descripcion?: string;
-  tipo?: TipoDeCronograma;
-  periodos?: Periodo[];
+  fechaCreacion: z.string().optional(),
+  automatico: z.boolean().optional(),
+  dias: z.array(DiaSchema).optional(),
+  nombre: z.string().optional(),
+  descripcion: z.string().optional(),
+  tipo: TipoDeCronogramaSchema.optional(),
+  periodos: z.array(PeriodoSchema).optional(),
   //
-  configuracion?: ConfigCronograma; // Colores, el nombre de de lo que se está mostrando, etc
+  configuracion: ConfigCronogramaSchema.optional(), // Colores, el nombre de de lo que se está mostrando, etc
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  ubicacion?: IUbicacion;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  // Populate hacia una union discriminada (IUbicacion): z.custom con el tipo
+  // hand-written, NO UbicacionSchema. z.infer del schema union rompe el
+  // narrowing por categoria al asignar un doc Mongoose en consumidores.
+  ubicacion: z.custom<IUbicacion>().optional(),
+});
+export type ICronograma = z.infer<typeof CronogramaSchema>;
 
-type OmitirCreate = '_id' | 'cliente' | 'ubicacion';
+export const CreateCronogramaSchema = CronogramaSchema.omit({
+  _id: true,
+  cliente: true,
+  ubicacion: true,
+});
+export type ICreateCronograma = z.infer<typeof CreateCronogramaSchema>;
 
-export interface ICreateCronograma
-  extends Omit<Partial<ICronograma>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'cliente' | 'ubicacion';
-
-export interface IUpdateCronograma
-  extends Omit<Partial<ICronograma>, OmitirUpdate> {}
-
-export type TipoDeCronograma = 'despacho' | 'turnos';
-
-export interface Periodo {
-  desde?: string; // Sale
-  hasta?: string; // Llega
-  datos?: Record<string, any>; // Datos extras para el periodo, como el chofer, el vehículo, el usuario, etc
-}
-
-export interface ConfigCronograma {
-  color?: string;
-  nombreParaMostrar?: string;
-}
+export const UpdateCronogramaSchema = CronogramaSchema.omit({
+  _id: true,
+  cliente: true,
+  ubicacion: true,
+});
+export type IUpdateCronograma = z.infer<typeof UpdateCronogramaSchema>;

@@ -1,79 +1,77 @@
-import { ICliente } from './cliente';
-import { IActivo } from './activo';
-import { ITracker } from './tracker';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import { ActivoSchema } from './activo';
+import { TrackerSchema } from './tracker';
+import { UsuarioSchema } from './usuario';
 
-export type IEntidades =
-  | 'Chofer'
-  | 'Activo'
-  | 'Tracker'
-  | 'Luminaria'
-  | 'Cliente'
-  | 'Alarma'
-  | 'Vehículo'
-  | 'Colectivo'
-  | 'Dispositivo Lorawan'
-  | 'Puesta'
-  | 'Grupo'
-  | 'Configuración de Perfil';
+export const EntidadesSchema = z.enum([
+  'Chofer',
+  'Activo',
+  'Tracker',
+  'Luminaria',
+  'Cliente',
+  'Alarma',
+  'Vehículo',
+  'Colectivo',
+  'Dispositivo Lorawan',
+  'Puesta',
+  'Grupo',
+  'Configuración de Perfil',
+]);
+export type IEntidades = z.infer<typeof EntidadesSchema>;
 
-export interface IAsignacion {
-  _id?: string;
+export const AsignacionSchema = z.object({
+  _id: z.string().optional(),
   //
-  fechaAsignacion?: string;
-  fechaDesasignacion?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  idUsuario?: string;
+  fechaAsignacion: z.string().optional(),
+  fechaDesasignacion: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idUsuario: z.string().optional(),
 
   // Id de la entidad a la que se le asigna algo
-  idEntidadModificada?: string;
-  tipoEntidadModificada?: IEntidades;
-  nombreEntidadModificada?: string;
+  idEntidadModificada: z.string().optional(),
+  tipoEntidadModificada: EntidadesSchema.optional(),
+  nombreEntidadModificada: z.string().optional(),
   // Id de la entidad que se asigna a la otra
-  idEntidadAsignada?: string;
-  tipoEntidadAsignada?: IEntidades;
-  nombreEntidadAsignada?: string;
+  idEntidadAsignada: z.string().optional(),
+  tipoEntidadAsignada: EntidadesSchema.optional(),
+  nombreEntidadAsignada: z.string().optional(),
 
   // Populate
-  cliente?: ICliente;
-  usuario?: IUsuario;
-  choferModificado?: IUsuario;
-  activoModificado?: IActivo;
-  trackerModificado?: ITracker;
-  choferAsignado?: IUsuario;
-  activoAsignado?: IActivo;
-  trackerAsignado?: ITracker;
-}
+  cliente: ClienteSchema.optional(),
+  usuario: UsuarioSchema.optional(),
+  choferModificado: UsuarioSchema.optional(),
+  activoModificado: ActivoSchema.optional(),
+  trackerModificado: TrackerSchema.optional(),
+  choferAsignado: UsuarioSchema.optional(),
+  activoAsignado: ActivoSchema.optional(),
+  trackerAsignado: TrackerSchema.optional(),
+});
+export type IAsignacion = z.infer<typeof AsignacionSchema>;
 
-type OmitirCreate =
-  | '_id'
-  | 'cliente'
-  | 'usuario'
-  | 'choferModificado'
-  | 'activoModificado'
-  | 'trackerModificado'
-  | 'choferAsignado'
-  | 'activoAsignado'
-  | 'trackerAsignado';
+export const CreateAsignacionSchema = AsignacionSchema.omit({
+  _id: true,
+  cliente: true,
+  usuario: true,
+  choferModificado: true,
+  activoModificado: true,
+  trackerModificado: true,
+  choferAsignado: true,
+  activoAsignado: true,
+  trackerAsignado: true,
+});
+export type ICreateAsignacion = z.infer<typeof CreateAsignacionSchema>;
 
-export interface ICreateAsignacion extends Omit<
-  Partial<IAsignacion>,
-  OmitirCreate
-> {}
-
-type OmitirUpdate =
-  | '_id'
-  | 'cliente'
-  | 'usuario'
-  | 'choferModificado'
-  | 'activoModificado'
-  | 'trackerModificado'
-  | 'choferAsignado'
-  | 'activoAsignado'
-  | 'trackerAsignado';
-
-export interface IUpdateAsignacion extends Omit<
-  Partial<IAsignacion>,
-  OmitirUpdate
-> {}
+export const UpdateAsignacionSchema = AsignacionSchema.omit({
+  _id: true,
+  cliente: true,
+  usuario: true,
+  choferModificado: true,
+  activoModificado: true,
+  trackerModificado: true,
+  choferAsignado: true,
+  activoAsignado: true,
+  trackerAsignado: true,
+});
+export type IUpdateAsignacion = z.infer<typeof UpdateAsignacionSchema>;

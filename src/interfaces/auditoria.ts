@@ -1,33 +1,36 @@
-import { ICliente } from './cliente';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
+import { UsuarioSchema } from './usuario';
 
-export type AccionAuditoria = 'Crear' | 'Editar' | 'Eliminar';
+export const AccionAuditoriaSchema = z.enum(['Crear', 'Editar', 'Eliminar']);
+export type AccionAuditoria = z.infer<typeof AccionAuditoriaSchema>;
 
-export interface IAuditoria {
-  _id?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  fechaCreacion?: string;
-  idUsuario?: string;
-  nombreUsuario?: string; // se persiste por si se borra el usuario
-  entidad?: string; // 'activos', 'usuarios', 'clientes', etc.
-  subPath?: string; // Lo que sigue en la ruta despues de la entidad
-  idEntidad?: string; // ID del documento afectado
-  accion?: AccionAuditoria;
-  cambios?: Record<string, unknown>; // { campo: valorNuevo }
-  valoresAnteriores?: Record<string, unknown>; // { campo: valorAntes } — solo para Editar
-  camposModificados?: string[]; // ['nombre', 'descripcion'] — indexable
+export const AuditoriaSchema = z.object({
+  _id: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  fechaCreacion: z.string().optional(),
+  idUsuario: z.string().optional(),
+  nombreUsuario: z.string().optional(), // se persiste por si se borra el usuario
+  entidad: z.string().optional(), // 'activos', 'usuarios', 'clientes', etc.
+  subPath: z.string().optional(), // Lo que sigue en la ruta despues de la entidad
+  idEntidad: z.string().optional(), // ID del documento afectado
+  accion: AccionAuditoriaSchema.optional(),
+  cambios: z.record(z.string(), z.unknown()).optional(), // { campo: valorNuevo }
+  valoresAnteriores: z.record(z.string(), z.unknown()).optional(), // { campo: valorAntes } — solo para Editar
+  camposModificados: z.array(z.string()).optional(), // ['nombre', 'descripcion'] — indexable
 
   // Populate
-  usuario?: IUsuario;
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  usuario: UsuarioSchema.optional(),
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type IAuditoria = z.infer<typeof AuditoriaSchema>;
 
-type OmitirCreate = '_id' | 'fechaCreacion';
-export interface ICreateAuditoria extends Omit<
-  Partial<IAuditoria>,
-  OmitirCreate
-> {}
+export const CreateAuditoriaSchema = AuditoriaSchema.omit({
+  _id: true,
+  fechaCreacion: true,
+});
+export type ICreateAuditoria = z.infer<typeof CreateAuditoriaSchema>;
 
 /// LAS AUDITORIAS SON INMUTABLES, FER.

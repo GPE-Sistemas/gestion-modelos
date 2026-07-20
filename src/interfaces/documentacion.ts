@@ -1,34 +1,43 @@
-import { IActivo } from './activo';
-import { ICliente } from './cliente';
-import { IUsuario } from './usuario';
+import { z } from 'zod';
+import { ActivoSchema } from './activo';
+import { ClienteSchema } from './cliente';
+import { UsuarioSchema } from './usuario';
 
-export type TipoDocumentacion = 'Licencia' | 'Seguro';
+export const TipoDocumentacionSchema = z.enum(['Licencia', 'Seguro']);
+export type TipoDocumentacion = z.infer<typeof TipoDocumentacionSchema>;
 
-export interface IDocumentacion {
-  _id?: string;
-  tipo?: TipoDocumentacion;
-  vencimiento?: string;
-  fechaCreacion?: string;
-  emision?: string;
-  descripcion?: string;
-  imagenes?: string[];
-  idCliente?: string;
-  idsAncestros?: string[];
-  idChofer?: string;
-  idActivo?: string;
+export const DocumentacionSchema = z.object({
+  _id: z.string().optional(),
+  tipo: TipoDocumentacionSchema.optional(),
+  vencimiento: z.string().optional(),
+  fechaCreacion: z.string().optional(),
+  emision: z.string().optional(),
+  descripcion: z.string().optional(),
+  imagenes: z.array(z.string()).optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  idChofer: z.string().optional(),
+  idActivo: z.string().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-  chofer?: IUsuario;
-  activo?: IActivo;
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+  chofer: UsuarioSchema.optional(),
+  activo: ActivoSchema.optional(),
+});
+export type IDocumentacion = z.infer<typeof DocumentacionSchema>;
 
-type OmitirCreate = '_id' | 'chofer' | 'activo' | 'Cliente';
+// El omit original incluía la clave 'Cliente' (con mayúscula), que no existe en
+// IDocumentacion y por lo tanto era un no-op; se descarta.
+export const CreateDocumentacionSchema = DocumentacionSchema.omit({
+  _id: true,
+  chofer: true,
+  activo: true,
+});
+export type ICreateDocumentacion = z.infer<typeof CreateDocumentacionSchema>;
 
-export interface ICreateDocumentacion
-  extends Omit<Partial<IDocumentacion>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'chofer' | 'activo' | 'Cliente';
-
-export interface IUpdateDocumentacion
-  extends Omit<Partial<IDocumentacion>, OmitirUpdate> {}
+export const UpdateDocumentacionSchema = DocumentacionSchema.omit({
+  _id: true,
+  chofer: true,
+  activo: true,
+});
+export type IUpdateDocumentacion = z.infer<typeof UpdateDocumentacionSchema>;

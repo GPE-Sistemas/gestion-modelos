@@ -1,20 +1,27 @@
-export interface ILogHttp {
-  _id?: string;
-  fechaCreacion?: string;
-  expireAt?: string;
-  method?: string;
-  url?: string;
-  path?: string;
-  body?: string;
-  headers?: string;
-  query?: string;
-  params?: string;
-}
+import { z } from 'zod';
 
-type OmitirCreate = '_id' | 'fechaCreacion';
+export const LogHttpSchema = z.object({
+  _id: z.string().optional(),
+  fechaCreacion: z.string().optional(),
+  expireAt: z.string().optional(),
+  method: z.string().optional(),
+  url: z.string().optional(),
+  path: z.string().optional(),
+  body: z.string().optional(),
+  headers: z.string().optional(),
+  query: z.string().optional(),
+  params: z.string().optional(),
+});
+export type ILogHttp = z.infer<typeof LogHttpSchema>;
 
-export interface ICreateLogHttp extends Omit<Partial<ILogHttp>, OmitirCreate> {}
+export const CreateLogHttpSchema = LogHttpSchema.omit({
+  _id: true,
+  fechaCreacion: true,
+});
+export type ICreateLogHttp = z.infer<typeof CreateLogHttpSchema>;
 
-type OmitirUpdate = '_id' | 'fechaCreacion';
-
-export interface IUpdateLogHttp extends Omit<Partial<ILogHttp>, OmitirUpdate> {}
+export const UpdateLogHttpSchema = LogHttpSchema.omit({
+  _id: true,
+  fechaCreacion: true,
+});
+export type IUpdateLogHttp = z.infer<typeof UpdateLogHttpSchema>;

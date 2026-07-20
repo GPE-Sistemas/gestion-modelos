@@ -1,212 +1,283 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema, ICliente } from './cliente';
+import { PuntoCoord } from '../auxiliares/geojson';
 
-export type AgrupacionTiempo =
-  | 'Diario'
-  | 'Semanal'
-  | 'Mensual'
-  | 'Anual'
-  | 'Horario';
-export type AgrupacionResumen = 'Cliente' | 'Grupo' | 'Individual';
-export type TipoResumenDatos =
-  | 'Consumo Mensual Luminarias'
-  | 'Encendido Diario Luminarias'
-  | 'Informe Diario Luminarias'
-  | 'Consumo Mensual Combustible Vehículos'
-  | 'Temperatura Horaria Vehículos'
-  | 'Combustible Horario Vehículos'
-  | 'Informe Cargas Combustible'
-  | 'Informe Eventos Sospechosos Combustible'
-  | 'Informe Mensual Flota Combustible'
-  | 'Gastos del Cliente';
-export type TipoEntidadResumen = 'Luminaria' | 'Puesta' | 'Vehículo' | 'Alarma';
-export type MonedaResumen = 'ARS' | 'USD';
+export const AgrupacionTiempoSchema = z.enum([
+  'Diario',
+  'Semanal',
+  'Mensual',
+  'Anual',
+  'Horario',
+]);
+export type AgrupacionTiempo = z.infer<typeof AgrupacionTiempoSchema>;
+
+export const AgrupacionResumenSchema = z.enum([
+  'Cliente',
+  'Grupo',
+  'Individual',
+]);
+export type AgrupacionResumen = z.infer<typeof AgrupacionResumenSchema>;
+
+export const TipoResumenDatosSchema = z.enum([
+  'Consumo Mensual Luminarias',
+  'Encendido Diario Luminarias',
+  'Informe Diario Luminarias',
+  'Consumo Mensual Combustible Vehículos',
+  'Temperatura Horaria Vehículos',
+  'Combustible Horario Vehículos',
+  'Informe Cargas Combustible',
+  'Informe Eventos Sospechosos Combustible',
+  'Informe Mensual Flota Combustible',
+  'Gastos del Cliente',
+]);
+export type TipoResumenDatos = z.infer<typeof TipoResumenDatosSchema>;
+
+export const TipoEntidadResumenSchema = z.enum([
+  'Luminaria',
+  'Puesta',
+  'Vehículo',
+  'Alarma',
+]);
+export type TipoEntidadResumen = z.infer<typeof TipoEntidadResumenSchema>;
+
+export const MonedaResumenSchema = z.enum(['ARS', 'USD']);
+export type MonedaResumen = z.infer<typeof MonedaResumenSchema>;
+
 /* ────────────────────────────────────────────────
  *  RESÚMENES
  * ────────────────────────────────────────────────*/
 
-export interface IConsumoMensualLuminarias {
-  consumoTotal?: number;
-  totalDispositivos?: number;
-}
+export const ConsumoMensualLuminariasSchema = z.object({
+  consumoTotal: z.number().optional(),
+  totalDispositivos: z.number().optional(),
+});
+export type IConsumoMensualLuminarias = z.infer<
+  typeof ConsumoMensualLuminariasSchema
+>;
 
-export interface IEncendidoDiarioLuminarias {
-  tiempoEncendidoTotal?: number;
-  totalDispositivos?: number;
-  tiempoEncendidoPromedio?: number;
-}
+export const EncendidoDiarioLuminariasSchema = z.object({
+  tiempoEncendidoTotal: z.number().optional(),
+  totalDispositivos: z.number().optional(),
+  tiempoEncendidoPromedio: z.number().optional(),
+});
+export type IEncendidoDiarioLuminarias = z.infer<
+  typeof EncendidoDiarioLuminariasSchema
+>;
 
-export interface IInformeDiarioLuminarias {
+export const InformeDiarioLuminariasSchema = z.object({
   // Generales
-  totalLuminarias?: number;
+  totalLuminarias: z.number().optional(),
 
   // Encendido / Apagado (de ultimoReportePeriodico.valores.turnOnOffStatus)
-  luminariasEncendidas?: number;
-  luminariasApagadas?: number;
-  sinDatoEncendido?: number; // Sin reporte periódico reciente
+  luminariasEncendidas: z.number().optional(),
+  luminariasApagadas: z.number().optional(),
+  sinDatoEncendido: z.number().optional(), // Sin reporte periódico reciente
 
   // Conectividad (fechaUltimaComunicacion dentro de las últimas 24h)
-  luminariasConectadas?: number;
-  luminariasDesconectadas?: number;
+  luminariasConectadas: z.number().optional(),
+  luminariasDesconectadas: z.number().optional(),
 
   // Estado operativo (campo `estado` de la luminaria)
-  luminariasOperativas?: number;
-  luminariasEnMantenimiento?: number;
-  sinEstado?: number; // Sin campo `estado` asignado
+  luminariasOperativas: z.number().optional(),
+  luminariasEnMantenimiento: z.number().optional(),
+  sinEstado: z.number().optional(), // Sin campo `estado` asignado
 
   // Consumo energético del día en kWh (reservado para implementación futura)
-  consumoTotal?: number;
+  consumoTotal: z.number().optional(),
 
   // Alertas (de ultimoReportePeriodico.valores.alarmas)
-  luminariasConAlarmas?: number;
-  tiposAlarmas?: Record<string, number>; // { 'Sobre voltaje': 2, 'Fallo LED': 1 }
+  luminariasConAlarmas: z.number().optional(),
+  tiposAlarmas: z.record(z.string(), z.number()).optional(), // { 'Sobre voltaje': 2, 'Fallo LED': 1 }
 
   // Cortes de energía (luminarias GPE con energiaExterna === false en último reporte)
-  luminariasConCortesEnergia?: number;
-}
+  luminariasConCortesEnergia: z.number().optional(),
+});
+export type IInformeDiarioLuminarias = z.infer<
+  typeof InformeDiarioLuminariasSchema
+>;
 
-export interface ITemperaturaHorariaVehiculo {
-  temperaturaPromedio?: number; // °C promedio de la hora
-  temperaturaMin?: number; // °C mínima de la hora
-  temperaturaMax?: number; // °C máxima de la hora
-  cantidadReportes?: number; // cantidad de reportes procesados
-}
+export const TemperaturaHorariaVehiculoSchema = z.object({
+  temperaturaPromedio: z.number().optional(), // °C promedio de la hora
+  temperaturaMin: z.number().optional(), // °C mínima de la hora
+  temperaturaMax: z.number().optional(), // °C máxima de la hora
+  cantidadReportes: z.number().optional(), // cantidad de reportes procesados
+});
+export type ITemperaturaHorariaVehiculo = z.infer<
+  typeof TemperaturaHorariaVehiculoSchema
+>;
 
-export interface ICombustibleHorarioVehiculo {
+export const CombustibleHorarioVehiculoSchema = z.object({
   // Total (suma de sensores conectados)
-  nivelPromedio?: number; // nivel promedio de la hora
-  nivelMin?: number; // nivel mínimo de la hora
-  nivelMax?: number; // nivel máximo de la hora
+  nivelPromedio: z.number().optional(), // nivel promedio de la hora
+  nivelMin: z.number().optional(), // nivel mínimo de la hora
+  nivelMax: z.number().optional(), // nivel máximo de la hora
   // Por sensor (1-4). Se omiten si el sensor no reportó en la hora.
-  nivelPromedio1?: number;
-  nivelMin1?: number;
-  nivelMax1?: number;
-  nivelPromedio2?: number;
-  nivelMin2?: number;
-  nivelMax2?: number;
-  nivelPromedio3?: number;
-  nivelMin3?: number;
-  nivelMax3?: number;
-  nivelPromedio4?: number;
-  nivelMin4?: number;
-  nivelMax4?: number;
-  cantidadReportes?: number; // cantidad de reportes procesados (del Total)
-}
+  nivelPromedio1: z.number().optional(),
+  nivelMin1: z.number().optional(),
+  nivelMax1: z.number().optional(),
+  nivelPromedio2: z.number().optional(),
+  nivelMin2: z.number().optional(),
+  nivelMax2: z.number().optional(),
+  nivelPromedio3: z.number().optional(),
+  nivelMin3: z.number().optional(),
+  nivelMax3: z.number().optional(),
+  nivelPromedio4: z.number().optional(),
+  nivelMin4: z.number().optional(),
+  nivelMax4: z.number().optional(),
+  cantidadReportes: z.number().optional(), // cantidad de reportes procesados (del Total)
+});
+export type ICombustibleHorarioVehiculo = z.infer<
+  typeof CombustibleHorarioVehiculoSchema
+>;
 
 /* ────────────────────────────────────────────────
  *  COMBUSTIBLE — CARGAS
  * ────────────────────────────────────────────────*/
 
-export interface IEventoCargaCombustible {
-  idActivo?: string;
-  nombreActivo?: string;
-  fecha?: string; // ISO timestamp del evento
-  litrosCargados?: number; // variacionCombustible (positivo)
-  nivelPostCarga?: number; // nivelPostVariacion
-  odometro?: number;
-  geojson?: { type: 'Point'; coordinates: [number, number] };
-  direccion?: string;
-  idSensor?: number;
-}
+const PuntoGeojsonSchema = z.object({
+  type: z.literal('Point'),
+  coordinates: PuntoCoord,
+});
 
-export interface IInformeCargasCombustible {
-  totalCargas?: number;
-  totalLitrosCargados?: number;
-  vehiculosConCarga?: number;
-  cargas?: IEventoCargaCombustible[];
-}
+export const EventoCargaCombustibleSchema = z.object({
+  idActivo: z.string().optional(),
+  nombreActivo: z.string().optional(),
+  fecha: z.string().optional(), // ISO timestamp del evento
+  litrosCargados: z.number().optional(), // variacionCombustible (positivo)
+  nivelPostCarga: z.number().optional(), // nivelPostVariacion
+  odometro: z.number().optional(),
+  geojson: PuntoGeojsonSchema.optional(),
+  direccion: z.string().optional(),
+  idSensor: z.number().optional(),
+});
+export type IEventoCargaCombustible = z.infer<
+  typeof EventoCargaCombustibleSchema
+>;
+
+export const InformeCargasCombustibleSchema = z.object({
+  totalCargas: z.number().optional(),
+  totalLitrosCargados: z.number().optional(),
+  vehiculosConCarga: z.number().optional(),
+  cargas: z.array(EventoCargaCombustibleSchema).optional(),
+});
+export type IInformeCargasCombustible = z.infer<
+  typeof InformeCargasCombustibleSchema
+>;
 
 /* ────────────────────────────────────────────────
  *  COMBUSTIBLE — EVENTOS SOSPECHOSOS (DESCARGAS)
  * ────────────────────────────────────────────────*/
 
-export interface IEventoDescargaCombustible {
-  idActivo?: string;
-  nombreActivo?: string;
-  fecha?: string;
-  litrosDescargados?: number; // |variacionCombustible|
-  nivelAntes?: number;
-  nivelDespues?: number; // nivelPostVariacion
-  odometro?: number;
-  geojson?: { type: 'Point'; coordinates: [number, number] };
-  direccion?: string;
-  idSensor?: number;
-}
+export const EventoDescargaCombustibleSchema = z.object({
+  idActivo: z.string().optional(),
+  nombreActivo: z.string().optional(),
+  fecha: z.string().optional(),
+  litrosDescargados: z.number().optional(), // |variacionCombustible|
+  nivelAntes: z.number().optional(),
+  nivelDespues: z.number().optional(), // nivelPostVariacion
+  odometro: z.number().optional(),
+  geojson: PuntoGeojsonSchema.optional(),
+  direccion: z.string().optional(),
+  idSensor: z.number().optional(),
+});
+export type IEventoDescargaCombustible = z.infer<
+  typeof EventoDescargaCombustibleSchema
+>;
 
-export interface IInformeEventosSospechosos {
-  totalEventos?: number;
-  totalLitrosDescargados?: number;
-  vehiculosAfectados?: number;
-  eventos?: IEventoDescargaCombustible[];
-}
+export const InformeEventosSospechososSchema = z.object({
+  totalEventos: z.number().optional(),
+  totalLitrosDescargados: z.number().optional(),
+  vehiculosAfectados: z.number().optional(),
+  eventos: z.array(EventoDescargaCombustibleSchema).optional(),
+});
+export type IInformeEventosSospechosos = z.infer<
+  typeof InformeEventosSospechososSchema
+>;
 
 /* ────────────────────────────────────────────────
  *  COMBUSTIBLE — MENSUAL DE FLOTA
  * ────────────────────────────────────────────────*/
 
-export interface IEstadisticaVehiculoCombustible {
-  idActivo?: string;
-  nombreActivo?: string;
-  kmRecorridos?: number;
-  litrosCargados?: number;
-  rendimientoL100km?: number; // L/100km (null si sin datos de odómetro)
-  cantidadCargas?: number;
-  cantidadEventosSospechosos?: number;
-}
+export const EstadisticaVehiculoCombustibleSchema = z.object({
+  idActivo: z.string().optional(),
+  nombreActivo: z.string().optional(),
+  kmRecorridos: z.number().optional(),
+  litrosCargados: z.number().optional(),
+  rendimientoL100km: z.number().optional(), // L/100km (null si sin datos de odómetro)
+  cantidadCargas: z.number().optional(),
+  cantidadEventosSospechosos: z.number().optional(),
+});
+export type IEstadisticaVehiculoCombustible = z.infer<
+  typeof EstadisticaVehiculoCombustibleSchema
+>;
 
-export interface IInformeMensualFlotaCombustible {
-  totalVehiculos?: number;
-  kmTotales?: number;
-  litrosTotales?: number;
-  rendimientoPromedio?: number;
-  cantidadCargas?: number;
-  cantidadEventosSospechosos?: number;
-  vehiculos?: IEstadisticaVehiculoCombustible[];
-}
+export const InformeMensualFlotaCombustibleSchema = z.object({
+  totalVehiculos: z.number().optional(),
+  kmTotales: z.number().optional(),
+  litrosTotales: z.number().optional(),
+  rendimientoPromedio: z.number().optional(),
+  cantidadCargas: z.number().optional(),
+  cantidadEventosSospechosos: z.number().optional(),
+  vehiculos: z.array(EstadisticaVehiculoCombustibleSchema).optional(),
+});
+export type IInformeMensualFlotaCombustible = z.infer<
+  typeof InformeMensualFlotaCombustibleSchema
+>;
 
-export interface IConsumoCombustibleVehiculos {
-  kmRecorridos?: number; //km (obtenidos del odómetro de los reportes)
-  consumoRuta?: number; // litros cada 100 km (ruta) — snapshot del vehículo individual
-  consumoCiudad?: number; // litros cada 100 km (ciudad) — snapshot del vehículo individual
-  consumoEstimado?: number; // litros (según km y promedio de consumoRuta/consumoCiudad)
-  consumoDeclarado?: number; // litros (según lo cargado en los servicios del vehículo)
-  consumoReal?: number; // litros (según caídas de nivel del sensor, de 'Combustible Horario Vehículos')
-  vehiculosConsiderados?: number; // Vehículos totales analizados (mínimamente tenían odómetro)
-  vehiculosConConsumo?: number; // Vehículos que tenían consumo promedio y valores de odómetro
-}
+export const ConsumoCombustibleVehiculosSchema = z.object({
+  kmRecorridos: z.number().optional(), //km (obtenidos del odómetro de los reportes)
+  consumoRuta: z.number().optional(), // litros cada 100 km (ruta) — snapshot del vehículo individual
+  consumoCiudad: z.number().optional(), // litros cada 100 km (ciudad) — snapshot del vehículo individual
+  consumoEstimado: z.number().optional(), // litros (según km y promedio de consumoRuta/consumoCiudad)
+  consumoDeclarado: z.number().optional(), // litros (según lo cargado en los servicios del vehículo)
+  consumoReal: z.number().optional(), // litros (según caídas de nivel del sensor, de 'Combustible Horario Vehículos')
+  vehiculosConsiderados: z.number().optional(), // Vehículos totales analizados (mínimamente tenían odómetro)
+  vehiculosConConsumo: z.number().optional(), // Vehículos que tenían consumo promedio y valores de odómetro
+});
+export type IConsumoCombustibleVehiculos = z.infer<
+  typeof ConsumoCombustibleVehiculosSchema
+>;
+
 /* ────────────────────────────────────────────────
  *  GASTOS DEL CLIENTE
  * ────────────────────────────────────────────────*/
 
 /** Cantidad de dispositivos de una categoría (sin costo). */
-export interface IDetalleGastoCategoria {
-  cantidadTotal?: number; // dispositivos totales del cliente (ej. 100)
-  cantidadFacturada?: number; // los considerados/activos en el período (ej. 10)
-}
+export const DetalleGastoCategoriaSchema = z.object({
+  cantidadTotal: z.number().optional(), // dispositivos totales del cliente (ej. 100)
+  cantidadFacturada: z.number().optional(), // los considerados/activos en el período (ej. 10)
+});
+export type IDetalleGastoCategoria = z.infer<
+  typeof DetalleGastoCategoriaSchema
+>;
 
 /** Cantidad de dispositivos facturados de una categoría para un hijo. */
-export interface IGastoHijoCategoria {
-  cantidad?: number; // dispositivos facturados del hijo
-}
+export const GastoHijoCategoriaSchema = z.object({
+  cantidad: z.number().optional(), // dispositivos facturados del hijo
+});
+export type IGastoHijoCategoria = z.infer<typeof GastoHijoCategoriaSchema>;
 
 /** Dispositivos que aportó un hijo directo en el período del resumen. */
-export interface IGastoHijoResumen {
-  idCliente?: string;
-  nombre?: string;
-  total?: number; // suma de cantidades facturadas de las 3 categorías
+export const GastoHijoResumenSchema = z.object({
+  idCliente: z.string().optional(),
+  nombre: z.string().optional(),
+  total: z.number().optional(), // suma de cantidades facturadas de las 3 categorías
   // Desglose por categoría (cantidad facturada)
-  trackers?: IGastoHijoCategoria;
-  alarmas?: IGastoHijoCategoria;
-  camaras?: IGastoHijoCategoria;
-}
+  trackers: GastoHijoCategoriaSchema.optional(),
+  alarmas: GastoHijoCategoriaSchema.optional(),
+  camaras: GastoHijoCategoriaSchema.optional(),
+});
+export type IGastoHijoResumen = z.infer<typeof GastoHijoResumenSchema>;
 
-export interface IResumenGastosCliente {
-  trackers?: IDetalleGastoCategoria;
-  alarmas?: IDetalleGastoCategoria;
-  camaras?: IDetalleGastoCategoria;
-  total?: number; // suma de cantidadFacturada de las 3 categorías (dispositivos)
+export const ResumenGastosClienteSchema = z.object({
+  trackers: DetalleGastoCategoriaSchema.optional(),
+  alarmas: DetalleGastoCategoriaSchema.optional(),
+  camaras: DetalleGastoCategoriaSchema.optional(),
+  total: z.number().optional(), // suma de cantidadFacturada de las 3 categorías (dispositivos)
   /** Desglose por hijo directo (no bonificado, no raíz independiente). */
-  hijos?: IGastoHijoResumen[];
-}
+  hijos: z.array(GastoHijoResumenSchema).optional(),
+});
+export type IResumenGastosCliente = z.infer<typeof ResumenGastosClienteSchema>;
 
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO DE RESUMEN
@@ -250,86 +321,123 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
   ancestros?: ICliente[];
 }
 
+// Campos comunes a todas las variantes (sin tipo/resumen, que discriminan)
+const ResumenDatosCamposSchema = z.object({
+  _id: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  fechaCreacion: z.string().optional(),
+
+  tipoEntidad: TipoEntidadResumenSchema.optional(),
+  agrupacion: AgrupacionResumenSchema.optional(),
+  agrupacionTiempo: AgrupacionTiempoSchema.optional(),
+  idsAsignados: z.array(z.string()).optional(),
+  periodoInicio: z.string().optional(),
+  periodoFin: z.string().optional(),
+  cerrado: z.boolean().optional(), //indica que el resumen ya no se va a actualizar más
+
+  //Populate
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+
+const VarianteConsumoMensualLuminarias = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Consumo Mensual Luminarias').optional(),
+  resumen: ConsumoMensualLuminariasSchema.optional(),
+});
+const VarianteEncendidoDiarioLuminarias = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Encendido Diario Luminarias').optional(),
+  resumen: EncendidoDiarioLuminariasSchema.optional(),
+});
+const VarianteInformeDiarioLuminarias = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Informe Diario Luminarias').optional(),
+  resumen: InformeDiarioLuminariasSchema.optional(),
+});
+const VarianteConsumoMensualCombustibleVehiculos =
+  ResumenDatosCamposSchema.extend({
+    tipo: z.literal('Consumo Mensual Combustible Vehículos').optional(),
+    resumen: ConsumoCombustibleVehiculosSchema.optional(),
+  });
+const VarianteTemperaturaHorariaVehiculos = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Temperatura Horaria Vehículos').optional(),
+  resumen: TemperaturaHorariaVehiculoSchema.optional(),
+});
+const VarianteCombustibleHorarioVehiculos = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Combustible Horario Vehículos').optional(),
+  resumen: CombustibleHorarioVehiculoSchema.optional(),
+});
+const VarianteInformeCargasCombustible = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Informe Cargas Combustible').optional(),
+  resumen: InformeCargasCombustibleSchema.optional(),
+});
+const VarianteInformeEventosSospechososCombustible =
+  ResumenDatosCamposSchema.extend({
+    tipo: z.literal('Informe Eventos Sospechosos Combustible').optional(),
+    resumen: InformeEventosSospechososSchema.optional(),
+  });
+const VarianteInformeMensualFlotaCombustible = ResumenDatosCamposSchema.extend(
+  {
+    tipo: z.literal('Informe Mensual Flota Combustible').optional(),
+    resumen: InformeMensualFlotaCombustibleSchema.optional(),
+  },
+);
+const VarianteGastosDelCliente = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Gastos del Cliente').optional(),
+  resumen: ResumenGastosClienteSchema.optional(),
+});
+
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO
  * ────────────────────────────────────────────────*/
 
-export type IResumenDatos =
-  | IResumenDatosBase<'Consumo Mensual Luminarias'>
-  | IResumenDatosBase<'Encendido Diario Luminarias'>
-  | IResumenDatosBase<'Informe Diario Luminarias'>
-  | IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>
-  | IResumenDatosBase<'Temperatura Horaria Vehículos'>
-  | IResumenDatosBase<'Combustible Horario Vehículos'>
-  | IResumenDatosBase<'Informe Cargas Combustible'>
-  | IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>
-  | IResumenDatosBase<'Informe Mensual Flota Combustible'>
-  | IResumenDatosBase<'Gastos del Cliente'>;
+export const ResumenDatosSchema = z.union([
+  VarianteConsumoMensualLuminarias,
+  VarianteEncendidoDiarioLuminarias,
+  VarianteInformeDiarioLuminarias,
+  VarianteConsumoMensualCombustibleVehiculos,
+  VarianteTemperaturaHorariaVehiculos,
+  VarianteCombustibleHorarioVehiculos,
+  VarianteInformeCargasCombustible,
+  VarianteInformeEventosSospechososCombustible,
+  VarianteInformeMensualFlotaCombustible,
+  VarianteGastosDelCliente,
+]);
+export type IResumenDatos = z.infer<typeof ResumenDatosSchema>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
  * ────────────────────────────────────────────────*/
 
-type OmitirCreate = '_id' | 'cliente' | 'ancestros';
+const camposOmitidos: { _id: true; cliente: true; ancestros: true } = {
+  _id: true,
+  cliente: true,
+  ancestros: true,
+};
 
-export type ICreateResumenDatos =
-  | Omit<Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>, OmitirCreate>
-  | Omit<
-      Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
-      OmitirCreate
-    >
-  | Omit<Partial<IResumenDatosBase<'Informe Diario Luminarias'>>, OmitirCreate>
-  | Omit<
-      Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
-      OmitirCreate
-    >
-  | Omit<
-      Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
-      OmitirCreate
-    >
-  | Omit<
-      Partial<IResumenDatosBase<'Combustible Horario Vehículos'>>,
-      OmitirCreate
-    >
-  | Omit<Partial<IResumenDatosBase<'Informe Cargas Combustible'>>, OmitirCreate>
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>>,
-      OmitirCreate
-    >
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Mensual Flota Combustible'>>,
-      OmitirCreate
-    >
-  | Omit<Partial<IResumenDatosBase<'Gastos del Cliente'>>, OmitirCreate>;
+export const CreateResumenDatosSchema = z.union([
+  VarianteConsumoMensualLuminarias.omit(camposOmitidos),
+  VarianteEncendidoDiarioLuminarias.omit(camposOmitidos),
+  VarianteInformeDiarioLuminarias.omit(camposOmitidos),
+  VarianteConsumoMensualCombustibleVehiculos.omit(camposOmitidos),
+  VarianteTemperaturaHorariaVehiculos.omit(camposOmitidos),
+  VarianteCombustibleHorarioVehiculos.omit(camposOmitidos),
+  VarianteInformeCargasCombustible.omit(camposOmitidos),
+  VarianteInformeEventosSospechososCombustible.omit(camposOmitidos),
+  VarianteInformeMensualFlotaCombustible.omit(camposOmitidos),
+  VarianteGastosDelCliente.omit(camposOmitidos),
+]);
+export type ICreateResumenDatos = z.infer<typeof CreateResumenDatosSchema>;
 
-type OmitirUpdate = '_id' | 'cliente' | 'ancestros';
-
-export type IUpdateResumenDatos =
-  | Omit<Partial<IResumenDatosBase<'Consumo Mensual Luminarias'>>, OmitirUpdate>
-  | Omit<
-      Partial<IResumenDatosBase<'Encendido Diario Luminarias'>>,
-      OmitirUpdate
-    >
-  | Omit<Partial<IResumenDatosBase<'Informe Diario Luminarias'>>, OmitirUpdate>
-  | Omit<
-      Partial<IResumenDatosBase<'Consumo Mensual Combustible Vehículos'>>,
-      OmitirUpdate
-    >
-  | Omit<
-      Partial<IResumenDatosBase<'Temperatura Horaria Vehículos'>>,
-      OmitirUpdate
-    >
-  | Omit<
-      Partial<IResumenDatosBase<'Combustible Horario Vehículos'>>,
-      OmitirUpdate
-    >
-  | Omit<Partial<IResumenDatosBase<'Informe Cargas Combustible'>>, OmitirUpdate>
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Eventos Sospechosos Combustible'>>,
-      OmitirUpdate
-    >
-  | Omit<
-      Partial<IResumenDatosBase<'Informe Mensual Flota Combustible'>>,
-      OmitirUpdate
-    >
-  | Omit<Partial<IResumenDatosBase<'Gastos del Cliente'>>, OmitirUpdate>;
+export const UpdateResumenDatosSchema = z.union([
+  VarianteConsumoMensualLuminarias.omit(camposOmitidos),
+  VarianteEncendidoDiarioLuminarias.omit(camposOmitidos),
+  VarianteInformeDiarioLuminarias.omit(camposOmitidos),
+  VarianteConsumoMensualCombustibleVehiculos.omit(camposOmitidos),
+  VarianteTemperaturaHorariaVehiculos.omit(camposOmitidos),
+  VarianteCombustibleHorarioVehiculos.omit(camposOmitidos),
+  VarianteInformeCargasCombustible.omit(camposOmitidos),
+  VarianteInformeEventosSospechososCombustible.omit(camposOmitidos),
+  VarianteInformeMensualFlotaCombustible.omit(camposOmitidos),
+  VarianteGastosDelCliente.omit(camposOmitidos),
+]);
+export type IUpdateResumenDatos = z.infer<typeof UpdateResumenDatosSchema>;

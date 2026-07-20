@@ -1,14 +1,16 @@
-import { DeviceInfo } from "./uplink";
+import { z } from "zod";
+import { DeviceInfoSchema } from "./uplink";
 
-export interface IStatus {
-  deduplicationId?: string;
-  time?: string;
-  deviceInfo?: DeviceInfo;
-  margin?: number;
-  externalPowerSource?: boolean;
-  batteryLevelUnavailable?: boolean;
-  batteryLevel?: number;
-}
+export const StatusSchema = z.object({
+  deduplicationId: z.string().optional(),
+  time: z.string().optional(),
+  deviceInfo: DeviceInfoSchema.optional(),
+  margin: z.number().optional(),
+  externalPowerSource: z.boolean().optional(),
+  batteryLevelUnavailable: z.boolean().optional(),
+  batteryLevel: z.number().optional(),
+});
+export type IStatus = z.infer<typeof StatusSchema>;
 
 export const EXAMPLE_STATUS: IStatus = {
   deduplicationId: "7cf33400-9c76-4963-b6d5-cc61075ba585",

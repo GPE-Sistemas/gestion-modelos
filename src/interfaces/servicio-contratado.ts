@@ -1,24 +1,32 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export interface IServicioContratado {
-  _id?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  nombre?: string;
-  icono?: string;
-  costo?: number;
-  global?: boolean;
+export const ServicioContratadoSchema = z.object({
+  _id: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  nombre: z.string().optional(),
+  icono: z.string().optional(),
+  costo: z.number().optional(),
+  global: z.boolean().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type IServicioContratado = z.infer<typeof ServicioContratadoSchema>;
 
-type OmitirCreate = '_id' | 'cliente';
+export const CreateServicioContratadoSchema = ServicioContratadoSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type ICreateServicioContratado = z.infer<
+  typeof CreateServicioContratadoSchema
+>;
 
-export interface ICreateServicioContratado
-  extends Omit<Partial<IServicioContratado>, OmitirCreate> {}
-
-type OmitirUpdate = '_id' | 'cliente';
-
-export interface IUpdateServicioContratado
-  extends Omit<Partial<IServicioContratado>, OmitirUpdate> {}
+export const UpdateServicioContratadoSchema = ServicioContratadoSchema.omit({
+  _id: true,
+  cliente: true,
+});
+export type IUpdateServicioContratado = z.infer<
+  typeof UpdateServicioContratadoSchema
+>;

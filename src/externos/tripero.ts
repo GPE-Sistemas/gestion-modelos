@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 /**
  * Interfaces para Tripero - Sistema de detección de viajes
  */
@@ -5,120 +7,132 @@
 /**
  * Viaje actual en progreso
  */
-export interface ICurrentTrip {
-  tripId: string;
-  startTime: string;
-  duration: number;
-  distance: number;
-  avgSpeed: number;
-  maxSpeed: number;
-  odometerAtStart: number;
-  startLat?: number;
-  startLon?: number;
-}
+export const CurrentTripSchema = z.object({
+  tripId: z.string(),
+  startTime: z.string(),
+  duration: z.number(),
+  distance: z.number(),
+  avgSpeed: z.number(),
+  maxSpeed: z.number(),
+  odometerAtStart: z.number(),
+  startLat: z.number().optional(),
+  startLon: z.number().optional(),
+});
+export type ICurrentTrip = z.infer<typeof CurrentTripSchema>;
 
 /**
  * Estado completo del tracker
  */
-export interface ITrackerStatus {
-  trackerId: string;
-  deviceId: string;
-  odometer: {
-    total: number;
-    totalKm: number;
-    currentTrip?: number;
-    currentTripKm?: number;
-  };
-  currentState: {
-    state: 'STOPPED' | 'IDLE' | 'MOVING' | 'UNKNOWN' | 'OFFLINE';
-    since: string;
-    duration: number;
-  };
-  lastPosition?: {
-    timestamp: string;
-    latitude: number;
-    longitude: number;
-    speed: number;
-    ignition: boolean;
-    heading: number;
-    altitude: number;
-    age: number;
-  };
-  currentTrip?: ICurrentTrip;
-  statistics: {
-    totalTrips: number;
-    totalDrivingTime: number;
-    totalDrivingHours: number;
-    totalIdleTime: number;
-    totalIdleHours: number;
-    totalStops: number;
-    firstSeen: string;
-    lastSeen: string;
-    daysActive: number;
-  };
-  health: {
-    status: 'online' | 'offline' | 'stale';
-    lastSeenAgo: number;
-  };
-  powerDiagnostic?: {
-    powerType: 'permanent' | 'switched' | 'unknown';
-    overnightGapCount: number;
-    lastOvernightGapAt?: string;
-    hasPowerIssue: boolean;
-    recommendation?: string;
-  };
-}
+export const TrackerStatusSchema = z.object({
+  trackerId: z.string(),
+  deviceId: z.string(),
+  odometer: z.object({
+    total: z.number(),
+    totalKm: z.number(),
+    currentTrip: z.number().optional(),
+    currentTripKm: z.number().optional(),
+  }),
+  currentState: z.object({
+    state: z.enum(['STOPPED', 'IDLE', 'MOVING', 'UNKNOWN', 'OFFLINE']),
+    since: z.string(),
+    duration: z.number(),
+  }),
+  lastPosition: z
+    .object({
+      timestamp: z.string(),
+      latitude: z.number(),
+      longitude: z.number(),
+      speed: z.number(),
+      ignition: z.boolean(),
+      heading: z.number(),
+      altitude: z.number(),
+      age: z.number(),
+    })
+    .optional(),
+  currentTrip: CurrentTripSchema.optional(),
+  statistics: z.object({
+    totalTrips: z.number(),
+    totalDrivingTime: z.number(),
+    totalDrivingHours: z.number(),
+    totalIdleTime: z.number(),
+    totalIdleHours: z.number(),
+    totalStops: z.number(),
+    firstSeen: z.string(),
+    lastSeen: z.string(),
+    daysActive: z.number(),
+  }),
+  health: z.object({
+    status: z.enum(['online', 'offline', 'stale']),
+    lastSeenAgo: z.number(),
+  }),
+  powerDiagnostic: z
+    .object({
+      powerType: z.enum(['permanent', 'switched', 'unknown']),
+      overnightGapCount: z.number(),
+      lastOvernightGapAt: z.string().optional(),
+      hasPowerIssue: z.boolean(),
+      recommendation: z.string().optional(),
+    })
+    .optional(),
+});
+export type ITrackerStatus = z.infer<typeof TrackerStatusSchema>;
 
 /**
  * Respuesta del endpoint /tripero/status/:id
  */
-export interface ITrackerStatusResponse {
-  success: boolean;
-  data: ITrackerStatus;
-}
+export const TrackerStatusResponseSchema = z.object({
+  success: z.boolean(),
+  data: TrackerStatusSchema,
+});
+export type ITrackerStatusResponse = z.infer<
+  typeof TrackerStatusResponseSchema
+>;
 
-export interface Trip {
-  deviceId?: number;
-  deviceName?: string;
-  maxSpeed?: number;
-  averageSpeed?: number;
-  distance?: number;
-  spentFuel?: number;
-  duration?: number;
-  startTime?: string;
-  startAddress?: string;
-  startLat?: number;
-  startLon?: number;
-  endTime?: string;
-  endAddress?: string;
-  endLat?: number;
-  endLon?: number;
-  driverUniqueId?: number;
-  driverName?: string;
-}
+export const TripSchema = z.object({
+  deviceId: z.number().optional(),
+  deviceName: z.string().optional(),
+  maxSpeed: z.number().optional(),
+  averageSpeed: z.number().optional(),
+  distance: z.number().optional(),
+  spentFuel: z.number().optional(),
+  duration: z.number().optional(),
+  startTime: z.string().optional(),
+  startAddress: z.string().optional(),
+  startLat: z.number().optional(),
+  startLon: z.number().optional(),
+  endTime: z.string().optional(),
+  endAddress: z.string().optional(),
+  endLat: z.number().optional(),
+  endLon: z.number().optional(),
+  driverUniqueId: z.number().optional(),
+  driverName: z.string().optional(),
+});
+export type Trip = z.infer<typeof TripSchema>;
 
-export interface Stop {
-  deviceId?: number;
-  deviceName?: string;
-  distance?: number;
-  averageSpeed?: number;
-  maxSpeed?: number;
-  spentFuel?: number;
-  startOdometer?: number;
-  endOdometer?: number;
-  startTime?: string;
-  endTime?: string;
-  positionId?: number;
-  latitude?: number;
-  longitude?: number;
-  address?: string;
-  duration?: number;
-  engineHours?: number;
-}
+export const StopSchema = z.object({
+  deviceId: z.number().optional(),
+  deviceName: z.string().optional(),
+  distance: z.number().optional(),
+  averageSpeed: z.number().optional(),
+  maxSpeed: z.number().optional(),
+  spentFuel: z.number().optional(),
+  startOdometer: z.number().optional(),
+  endOdometer: z.number().optional(),
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
+  positionId: z.number().optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  address: z.string().optional(),
+  duration: z.number().optional(),
+  engineHours: z.number().optional(),
+});
+export type Stop = z.infer<typeof StopSchema>;
 
-export interface IQueryTripero {
-  idVehiculo: string;
-  from: string;
-  to: string;
-  limit?: number;
-}
+export const QueryTriperoSchema = z.object({
+  idVehiculo: z.string(),
+  from: z.string(),
+  to: z.string(),
+  limit: z.number().optional(),
+});
+export type IQueryTripero = z.infer<typeof QueryTriperoSchema>;

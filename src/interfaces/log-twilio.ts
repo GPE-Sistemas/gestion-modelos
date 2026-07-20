@@ -1,51 +1,65 @@
-import { ICliente } from './cliente';
+import { z } from 'zod';
+import { ClienteSchema } from './cliente';
 
-export type TwilioMessageStatus =
-  | 'queued'
-  | 'sending'
-  | 'sent'
-  | 'failed'
-  | 'delivered'
-  | 'undelivered'
-  | 'receiving'
-  | 'received'
-  | 'accepted'
-  | 'scheduled'
-  | 'read'
-  | 'partially_delivered'
-  | 'canceled';
+export const TwilioMessageStatusSchema = z.enum([
+  'queued',
+  'sending',
+  'sent',
+  'failed',
+  'delivered',
+  'undelivered',
+  'receiving',
+  'received',
+  'accepted',
+  'scheduled',
+  'read',
+  'partially_delivered',
+  'canceled',
+]);
+export type TwilioMessageStatus = z.infer<typeof TwilioMessageStatusSchema>;
 
-export type TwilioMessageDirection =
-  | 'inbound'
-  | 'outbound-api'
-  | 'outbound-call'
-  | 'outbound-reply';
+export const TwilioMessageDirectionSchema = z.enum([
+  'inbound',
+  'outbound-api',
+  'outbound-call',
+  'outbound-reply',
+]);
+export type TwilioMessageDirection = z.infer<
+  typeof TwilioMessageDirectionSchema
+>;
 
-export interface ILogTwilio {
-  _id: string;
-  fechaCreacion?: string;
-  idCliente?: string;
-  idsAncestros?: string[];
-  phone?: string;
-  sid?: string;
-  body?: string;
-  direction?: TwilioMessageDirection;
-  status?: TwilioMessageStatus;
-  error?: boolean;
+export const LogTwilioSchema = z.object({
+  _id: z.string(),
+  fechaCreacion: z.string().optional(),
+  idCliente: z.string().optional(),
+  idsAncestros: z.array(z.string()).optional(),
+  phone: z.string().optional(),
+  sid: z.string().optional(),
+  body: z.string().optional(),
+  direction: TwilioMessageDirectionSchema.optional(),
+  status: TwilioMessageStatusSchema.optional(),
+  error: z.boolean().optional(),
   /// Solo en error
-  errorCode?: string;
-  errorMessage?: string;
+  errorCode: z.string().optional(),
+  errorMessage: z.string().optional(),
   // Populate
-  cliente?: ICliente;
-  ancestros?: ICliente[];
-}
+  cliente: ClienteSchema.optional(),
+  ancestros: z.array(ClienteSchema).optional(),
+});
+export type ILogTwilio = z.infer<typeof LogTwilioSchema>;
 
 ////// CREATE
-type OmitirCreate = '_id' | 'fechaCreacion' | 'cliente';
-export interface ICreateLogTwilio
-  extends Omit<Partial<ILogTwilio>, OmitirCreate> {}
+export const CreateLogTwilioSchema = LogTwilioSchema.omit({
+  _id: true,
+  fechaCreacion: true,
+  cliente: true,
+});
+export type ICreateLogTwilio = z.infer<typeof CreateLogTwilioSchema>;
 
 ////// UPDATE
-type OmitirUpdate = '_id' | 'fechaCreacion' | 'cliente';
-export interface IUpdateLogTwilio
-  extends Omit<Partial<ILogTwilio>, OmitirUpdate> {}
+export const UpdateLogTwilioSchema = LogTwilioSchema.omit({
+  _id: true,
+  fechaCreacion: true,
+  cliente: true,
+});
+export type IUpdateLogTwilio = z.infer<typeof UpdateLogTwilioSchema>;
