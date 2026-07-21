@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ActivoSchema } from './activo';
+import { CategoriaEventoSchema } from './categoria-evento';
 import { ClienteSchema } from './cliente';
 import { DispositivoAlarmaSchema } from './dispositivo-alarma';
 import { LuminariaSchema } from './luminaria';
@@ -46,12 +47,15 @@ export const NotaSchema = z.object({
   //Para contactos
   inhabilitadoDesde: z.string().optional(), //Durante el período inhabilitado, no se mostrará el conatcto en el tratamiento de los eventos
   inhabilitadoHasta: z.string().optional(),
+  // Categoría de evento a la que aplica esta nota/contacto. Sin valor = aplica a todos los eventos
+  idCategoriaEvento: z.string().optional(),
   // Populate
   cliente: ClienteSchema.optional(),
   ancestros: z.array(ClienteSchema).optional(),
   activo: ActivoSchema.optional(),
   alarma: DispositivoAlarmaSchema.optional(),
   luminaria: LuminariaSchema.optional(),
+  categoriaEvento: CategoriaEventoSchema.optional(),
 });
 export type INota = z.infer<typeof NotaSchema>;
 
@@ -73,5 +77,6 @@ export const NotaCacheSchema = NotaSchema.omit({
   activo: true,
   alarma: true,
   luminaria: true,
+  categoriaEvento: true,
 });
 export type INotaCache = z.infer<typeof NotaCacheSchema>;
