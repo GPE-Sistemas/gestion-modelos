@@ -52,6 +52,18 @@ export const ControlInactividadSchema = z.object({
 });
 export type IControlInactividad = z.infer<typeof ControlInactividadSchema>;
 
+/** Control de actividad excesiva de operadores (banner informativo de descanso
+ *  en gestion-web-cliente): al superar un tiempo de uso continuo se sugiere tomar un descanso. Aplica a
+ *  usuarios con rol Operador. */
+export const ControlActividadSchema = z.object({
+  /** Minutos de uso hasta mostrar el banner de actividad excesiva */
+  limTiempoActividad: z.number().optional(),
+  /** Minutos que dura el descanso sugerido (fijo) una vez que el operador
+   *  acepta el banner; al terminar se resetea el contador de uso */
+  limTiempoDescanso: z.number().optional(),
+});
+export type IControlActividad = z.infer<typeof ControlActividadSchema>;
+
 // Informes
 // Configuración para envío de informes por mail
 export const ConfigInformesSchema = z.object({
@@ -311,6 +323,7 @@ export const ConfigClienteSchema = z.object({
   integracionSoflex: IntegracionSoflexSchema.optional(),
   verTrafico: z.boolean().optional(),
   controlInactividad: ControlInactividadSchema.optional(),
+  controlActividad: ControlActividadSchema.optional(),
 });
 export type IConfigCliente = z.infer<typeof ConfigClienteSchema>;
 

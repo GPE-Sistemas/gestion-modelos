@@ -49,7 +49,7 @@ export * from './ubicacion';
 export * from './visita-ubicacion';
 export * from './usuario';
 export * from './login-evento';
-export * from './inactividad-usuario';
+export * from './actividad-usuario';
 export * from './permiso';
 export * from './destinatario-asistencia';
 export * from './emergencias';
