@@ -6,10 +6,10 @@ import { UsuarioSchema } from './usuario';
  * Tipo de registro de actividad de usuario:
  * - `Inactividad`: el operador no confirmó el cartel de actividad a tiempo
  *   (intervalo `inicio`→`fin`; sin `fin` = intervalo abierto).
- * - `Exceso`: el uso continuo superó el límite y se mostró el banner de
- *   descanso (registro puntual; `fin` = momento de detección del exceso).
+ * - `Actividad`: el uso continuo superó el límite y se mostró el banner de
+ *   descanso (registro puntual; `fin` = momento del aviso de descanso).
  */
-export const TipoActividadUsuarioSchema = z.enum(['Inactividad', 'Exceso']);
+export const TipoActividadUsuarioSchema = z.enum(['Inactividad', 'Actividad']);
 export type TipoActividadUsuario = z.infer<typeof TipoActividadUsuarioSchema>;
 
 /**
@@ -25,7 +25,7 @@ export type TipoActividadUsuario = z.infer<typeof TipoActividadUsuarioSchema>;
  */
 export const ActividadUsuarioSchema = z.object({
   _id: z.string().optional(),
-  // Discrimina inactividad vs exceso de actividad.
+  // Discrimina inactividad vs periodo de actividad.
   tipo: TipoActividadUsuarioSchema.optional(),
   // Vínculo con el usuario.
   idUsuario: z.string().optional(),
@@ -36,10 +36,10 @@ export const ActividadUsuarioSchema = z.object({
   // Cadena de clientes ancestros del idCliente, para roll-up por subárbol.
   idsAncestros: z.array(z.string()).optional(),
   // Inactividad: momento en que venció el cartel sin confirmación.
-  // Exceso: comienzo del ciclo de uso. Ancla del índice TTL.
+  // Actividad: comienzo del ciclo de uso. Ancla del índice TTL.
   inicio: z.string().optional(),
   // Inactividad: momento en que volvió a confirmar (ausente = intervalo
-  // abierto). Exceso: momento en que se detectó el exceso. La duración es
+  // abierto). Actividad: momento del aviso de descanso. La duración es
   // `fin - inicio`.
   fin: z.string().optional(),
   // Populate / Virtual
