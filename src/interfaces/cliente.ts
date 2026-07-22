@@ -52,11 +52,11 @@ export const ControlInactividadSchema = z.object({
 });
 export type IControlInactividad = z.infer<typeof ControlInactividadSchema>;
 
-/** Control de actividad excesiva de operadores (banner informativo de descanso
- *  en gestion-web-cliente): al superar un tiempo de uso continuo se sugiere tomar un descanso. Aplica a
- *  usuarios con rol Operador. */
+/** Control de periodo de actividad de operadores (banner informativo de
+ *  descanso en gestion-web-cliente): al superar un tiempo de uso continuo se
+ *  sugiere tomar un descanso. Aplica a usuarios con rol Operador. */
 export const ControlActividadSchema = z.object({
-  /** Minutos de uso hasta mostrar el banner de actividad excesiva */
+  /** Minutos de uso hasta mostrar el banner de periodo de actividad */
   limTiempoActividad: z.number().optional(),
   /** Minutos que dura el descanso sugerido (fijo) una vez que el operador
    *  acepta el banner; al terminar se resetea el contador de uso */

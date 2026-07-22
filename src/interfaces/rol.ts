@@ -97,8 +97,8 @@ export const AccionesRolSchema = z.enum([
   'Administración - Eliminar listado categorias',
   // Inactividad de usuarios
   'Administración - Ver inactividad usuarios',
-  // Actividad excesiva de usuarios
-  'Administración - Ver actividad excesiva usuarios',
+  // Periodo de actividad de usuarios
+  'Administración - Ver periodo actividad usuarios',
   // *******************************************
   // CONFIGURACIONES
   // *******************************************
