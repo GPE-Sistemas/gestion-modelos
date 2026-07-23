@@ -27,6 +27,17 @@ export const InformacionContactoSchema = z.object({
 });
 export type IInformacionContacto = z.infer<typeof InformacionContactoSchema>;
 
+// Respuesta del endpoint dedicado que expone los códigos de seguridad de un
+// contacto (palabraSeguridadNormal/palabraSeguridadEmergencia) — estos 2 campos
+// se ocultan del resto de las respuestas de Nota (ver StripCodigosSeguridadInterceptor).
+export const CodigosSeguridadContactoSchema = z.object({
+  palabraSeguridadNormal: z.string().optional(),
+  palabraSeguridadEmergencia: z.string().optional(),
+});
+export type ICodigosSeguridadContacto = z.infer<
+  typeof CodigosSeguridadContactoSchema
+>;
+
 // IInformacion era IInformacionNota & IInformacionContacto (intersección de objetos)
 export const InformacionSchema = InformacionNotaSchema.extend(
   InformacionContactoSchema.shape,
