@@ -54,11 +54,7 @@ export const CodigoTipoSensorSchema = z.enum([
 ]);
 export type CodigoTipoSensor = z.infer<typeof CodigoTipoSensorSchema>;
 
-export const ModoSensorSchema = z.enum([
-  'Seguidor',
-  'Demorado',
-  'Instantaneo',
-]);
+export const ModoSensorSchema = z.enum(['Seguidor', 'Demorado', 'Instantaneo']);
 export type ModoSensor = z.infer<typeof ModoSensorSchema>;
 
 export const OperadorSchema = z.enum([
@@ -218,6 +214,13 @@ export const DispositivoAlarmaSchema = z.object({
   fechaCreacion: z.string().optional(),
   fechaAlta: z.string().optional(),
   fechaUltimaComunicacion: z.string().optional(),
+  // Doble canal (primario/secundario). `reportaDoble` se autodetecta en el gateway
+  // cuando un mismo evento llega por ambos puertos dentro de la ventana de gracia.
+  // `fechaUltimoReporteDoble` marca la última confirmación (para envejecer el flag).
+  // `forzarUnCanal` = escotilla manual: no esperar el 2do canal aunque sea dual.
+  reportaDoble: z.boolean().optional(),
+  fechaUltimoReporteDoble: z.string().optional(),
+  forzarUnCanal: z.boolean().optional(),
   idComunicador: z.string().optional(),
   idUnicoComunicador: z.string().optional(),
   passwordComunicador: z.string().optional(),
@@ -280,6 +283,10 @@ export interface IDispositivoAlarma {
   fechaCreacion?: string;
   fechaAlta?: string;
   fechaUltimaComunicacion?: string;
+  // Doble canal (primario/secundario) — ver schema.
+  reportaDoble?: boolean;
+  fechaUltimoReporteDoble?: string;
+  forzarUnCanal?: boolean;
   idComunicador?: string;
   idUnicoComunicador?: string;
   passwordComunicador?: string;
@@ -918,9 +925,7 @@ export type EstadoSensorHikvision = z.infer<typeof EstadoSensorHikvisionSchema>;
 export const CargaZonaHikvisionSchema = z.literal('normal');
 export type CargaZonaHikvision = z.infer<typeof CargaZonaHikvisionSchema>;
 
-export const TipoDetectorHikvisionSchema = z.literal(
-  'passiveInfraredDetector',
-);
+export const TipoDetectorHikvisionSchema = z.literal('passiveInfraredDetector');
 export type TipoDetectorHikvision = z.infer<typeof TipoDetectorHikvisionSchema>;
 
 export const TipoZonaHikvisionSchema = z.literal('Instant');
