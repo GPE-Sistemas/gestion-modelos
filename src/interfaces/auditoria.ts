@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { ClienteSchema } from './cliente';
 import { UsuarioSchema } from './usuario';
 
-export const AccionAuditoriaSchema = z.enum(['Crear', 'Editar', 'Eliminar']);
+export const AccionAuditoriaSchema = z.enum(['Crear', 'Editar', 'Eliminar', 'Ver']);
 export type AccionAuditoria = z.infer<typeof AccionAuditoriaSchema>;
 
 export const AuditoriaSchema = z.object({

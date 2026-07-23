@@ -1,6 +1,6 @@
 {
   "name": "gestion-modelos",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Modelos para el sistema de gestión. Schemas Zod + tipos TypeScript inferidos.",
   "author": "GPE Sistemas",
   "license": "Private",
