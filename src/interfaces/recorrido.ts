@@ -48,6 +48,106 @@ export type IFranjaHoraria = z.infer<typeof FranjaHorariaSchema>;
 export const CategoriaRecorridoSchema = z.enum(['Colectivo', 'Vehiculo']);
 export type ICategoriaRecorrido = z.infer<typeof CategoriaRecorridoSchema>;
 
+/**
+ * Configuración de medición de cumplimiento del recorrido (real vs deseado).
+ * Sólo aplica a recorridos de categoría 'Vehiculo'.
+ *
+ * La medición es por cobertura de tramos ("buckets") sobre el `geojson`: cada
+ * reporte del vehículo se proyecta sobre la traza y marca el bucket en el que
+ * cae, siempre que esté a menos de `toleranciaMetros` de la línea. El
+ * porcentaje es `bucketsCubiertos / cantidadBuckets`.
+ */
+export const ConfigCumplimientoRecorridoSchema = z.object({
+  /**
+   * Habilita la medición. Si está en false no se calcula nada (no hay costo en
+   * el camino del reporte).
+   */
+  activo: z.boolean().optional(),
+  /**
+   * Distancia perpendicular máxima a la traza para considerar que el punto está
+   * sobre el recorrido. Sugerido 30-40 m urbano, 80-120 m ruta (se mide sobre
+   * la coordenada snappeada del reporte). Si no está, se usa el default del
+   * cliente.
+   */
+  toleranciaMetros: z.number().optional(),
+  /**
+   * Exige cubrir la traza. Es el criterio principal.
+   */
+  porCobertura: z.boolean().optional(),
+  /**
+   * Exige hacerlo en el tiempo esperado (`duracion` del recorrido, en minutos).
+   */
+  porTiempo: z.boolean().optional(),
+  /**
+   * Margen sobre `duracion` para aprobar el cumplimiento temporal. Default 20.
+   */
+  toleranciaTiempoPorcentaje: z.number().optional(),
+  /**
+   * Porcentaje de cobertura mínimo para cerrar la sesión como 'Completado'.
+   * Default 100 (hay que llegar al último bucket).
+   */
+  minimoPorcentaje: z.number().optional(),
+  /**
+   * El recorrido vuelve al punto de partida. El porcentaje se mide por vuelta:
+   * al pasar por el cierre se persiste la vuelta y se reinicia la cobertura.
+   */
+  esCiclico: z.boolean().optional(),
+  /**
+   * Exige avanzar en el sentido en el que está dibujada la traza. Un punto que
+   * retrocede más de `ventanaRetrocesoBuckets` no marca cobertura.
+   * Default true.
+   */
+  respetarOrden: z.boolean().optional(),
+  /**
+   * Tolerancia de retroceso (en buckets) para absorber jitter de GPS y
+   * maniobras sin habilitar recorrer la traza al revés. Default 2.
+   */
+  ventanaRetrocesoBuckets: z.number().optional(),
+  /**
+   * La sesión sólo arranca si el primer punto on-route está cerca del comienzo
+   * de la traza. Evita penalizar el trayecto desde la base. Default true.
+   */
+  inicioEstricto: z.boolean().optional(),
+  /**
+   * Minutos sin reportes on-route tras los cuales se cierra la sesión.
+   * Default 30.
+   */
+  timeoutMinutos: z.number().optional(),
+  /**
+   * Exige cubrir la traza en los dos sentidos (recorridos de ida y vuelta por
+   * la misma calle). Previsto, todavía no implementado.
+   */
+  requiereAmbosSentidos: z.boolean().optional(),
+});
+export type IConfigCumplimientoRecorrido = z.infer<
+  typeof ConfigCumplimientoRecorridoSchema
+>;
+
+/**
+ * Preproceso de la geometría, calculado por el backend al crear/editar el
+ * recorrido. No lo manda el frontend.
+ */
+export const GeometriaRecorridoSchema = z.object({
+  /** Largo total de la traza en metros. */
+  longitudMetros: z.number().optional(),
+  /**
+   * Largo de cada bucket, relativo al largo total y topeado por la precisión
+   * del GPS: `clamp(longitudMetros / 100, 15, 200)`.
+   */
+  largoBucketMetros: z.number().optional(),
+  /** Cantidad de buckets: `ceil(longitudMetros / largoBucketMetros)`. */
+  cantidadBuckets: z.number().optional(),
+  /**
+   * Hash de la geometría + `largoBucketMetros`. Versiona la traza: si cambia
+   * mientras hay sesiones abiertas, esas sesiones se abortan porque los
+   * índices de bucket dejan de ser comparables.
+   */
+  hash: z.string().optional(),
+  /** Primer punto ≈ último punto (detectado al guardar). */
+  cerrado: z.boolean().optional(),
+});
+export type IGeometriaRecorrido = z.infer<typeof GeometriaRecorridoSchema>;
+
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
@@ -69,6 +169,9 @@ export const RecorridoSchema = z.object({
   color: z.string().optional(),
   duracion: z.number().optional(),
   idsUbicaciones: z.array(z.string()).optional(),
+  // Cumplimiento (categoría 'Vehiculo')
+  cumplimiento: ConfigCumplimientoRecorridoSchema.optional(),
+  geometria: GeometriaRecorridoSchema.optional(),
   // Populate
   cliente: ClienteSchema.optional(),
   ancestros: z.array(ClienteSchema).optional(),
@@ -100,6 +203,9 @@ export interface IRecorrido {
   color?: string;
   duracion?: number;
   idsUbicaciones?: string[];
+  // Cumplimiento (categoría 'Vehiculo')
+  cumplimiento?: IConfigCumplimientoRecorrido;
+  geometria?: IGeometriaRecorrido;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
@@ -116,6 +222,8 @@ export const CreateRecorridoSchema = RecorridoSchema.omit({
   recorrido: true,
   recorridoOl: true,
   ubicaciones: true,
+  // Lo calcula api-datos a partir del geojson.
+  geometria: true,
 }).extend({
   recorridoOl: z.array(CoordenadaOLSchema).optional(),
 });
@@ -126,7 +234,8 @@ type OmitirCreate =
   | 'grupo'
   | 'recorrido'
   | 'recorridoOl'
-  | 'ubicaciones';
+  | 'ubicaciones'
+  | 'geometria';
 
 export interface ICreateRecorrido
   extends Omit<Partial<IRecorrido>, OmitirCreate> {
@@ -140,6 +249,8 @@ export const UpdateRecorridoSchema = RecorridoSchema.omit({
   recorrido: true,
   recorridoOl: true,
   ubicaciones: true,
+  // Lo recalcula api-datos cuando cambia el geojson.
+  geometria: true,
 }).extend({
   recorridoOl: z.array(CoordenadaOLSchema).optional(),
 });
@@ -150,7 +261,8 @@ type OmitirUpdate =
   | 'grupo'
   | 'recorrido'
   | 'recorridoOl'
-  | 'ubicaciones';
+  | 'ubicaciones'
+  | 'geometria';
 
 export interface IUpdateRecorrido
   extends Omit<Partial<IRecorrido>, OmitirUpdate> {

@@ -11,6 +11,7 @@ export * from './config-evento-usuario';
 export * from './config-marker';
 export * from './config-reenvios';
 export * from './cronograma';
+export * from './cumplimiento-recorrido';
 export * from './despacho';
 export * from './dispositivo-alarma';
 export * from './dispositivo-lorawan';
