@@ -24,6 +24,14 @@ export const InformacionContactoSchema = z.object({
   palabraSeguridadEmergencia: z.string().optional(),
   numeroUsuarioAlarma: z.number().optional(),
   particion: z.number(),
+
+  // Derivados: indican si el contacto tiene configurado cada código, sin
+  // exponer el valor. Los setea StripCodigosSeguridadInterceptor al reemplazar
+  // los 2 campos de arriba en cualquier respuesta que no sea la ruta dedicada
+  // (GET /notas/:id/codigos-seguridad). No tienen efecto si se envían en un
+  // create/update.
+  tieneCodigoSeguridadNormal: z.boolean().optional(),
+  tieneCodigoSeguridadEmergencia: z.boolean().optional(),
 });
 export type IInformacionContacto = z.infer<typeof InformacionContactoSchema>;
 
