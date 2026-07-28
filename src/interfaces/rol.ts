@@ -34,11 +34,6 @@ export const AccionesRolSchema = z.enum([
   'Administración - Crear usuarios',
   'Administración - Editar usuarios',
   'Administración - Eliminar usuarios',
-  // Técnicos
-  'Administración - Ver técnicos',
-  'Administración - Crear técnicos',
-  'Administración - Editar técnicos',
-  'Administración - Eliminar técnicos',
   // Dispositivos Lorawan
   'Administración - Ver dispositivos Lorawan',
   'Administración - Crear dispositivos Lorawan',
@@ -154,6 +149,12 @@ export const AccionesRolSchema = z.enum([
   // *******************************************
   // MODULO SERVICIO TECNICO
   // *******************************************
+  // Técnicos
+  'Servicio Técnico - Ver técnicos',
+  'Servicio Técnico - Crear técnicos',
+  'Servicio Técnico - Editar técnicos',
+  'Servicio Técnico - Eliminar técnicos',
+  // Solicitudes
   'Servicio Técnico - Ver solicitudes',
   'Servicio Técnico - Crear solicitudes',
   'Servicio Técnico - Editar solicitudes',

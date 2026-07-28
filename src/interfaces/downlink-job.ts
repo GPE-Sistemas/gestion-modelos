@@ -45,6 +45,18 @@ export const IntentoDownlinkSchema = z.object({
 });
 export type IIntentoDownlink = z.infer<typeof IntentoDownlinkSchema>;
 
+// Mapa de eco por SET confirmado. Lo emite api-gestion para el auto-GET
+// coalescido: liga cada SET del grupo a su contribución en el byte selector del
+// GET y a los puertos de uplink-eco que provoca. Permite al secuenciador
+// recortar el GET solo a los SET que fallaron el ACK (OR de selectorBits) y
+// recomputar los ecos esperados.
+export const MapaEcoSchema = z.object({
+  puertoSet: z.number(), // puerto del SET que este eco confirma
+  selectorBits: z.number(), // bits en el selector del GET para pedir su eco
+  ecos: z.array(z.number()), // puertos de uplink-eco que devuelve
+});
+export type IMapaEco = z.infer<typeof MapaEcoSchema>;
+
 // Get encadenado tras un SET que no autoreporta su cambio. El processor lee este
 // campo y, tras enviar el set, encola un nuevo job (origen='AutoGet') con el
 // delay indicado.
@@ -52,6 +64,7 @@ export const ProximoGetDownlinkJobSchema = z.object({
   puerto: z.number(),
   payload: z.string(),
   delaySegundos: z.number(),
+  mapaEcos: z.array(MapaEcoSchema).optional(),
 });
 export type IProximoGetDownlinkJob = z.infer<
   typeof ProximoGetDownlinkJobSchema
@@ -128,3 +141,70 @@ export const UpdateDownlinkJobSchema = DownlinkJobSchema.omit({
   idsAncestros: true,
 }).partial();
 export type IUpdateDownlinkJob = z.infer<typeof UpdateDownlinkJobSchema>;
+
+
+// DTO de Request individual de un downlink que se va a encolar en el secuenciador.
+// Lleva el dispositivo populado (al menos los campos necesarios para el
+// throttling y el envío) además del payload final ya armado.
+export const DownlinkRequestSchema = z.object({
+  dispositivo: DispositivoLorawanSchema,
+  puerto: z.number(),
+  payload: z.string(),
+  nombre: z.string(),
+  descripcion: z.string().optional(),
+  origen: OrigenDownlinkJobSchema,
+  // En comandos manuales, el objetivo indica si el comando se envió a nivel de
+  // luminaria, grupo de luminarias, puesta o grupo de puestas.
+  objetivo: ObjetivoComandoSchema.optional(),
+  idEjecucion: z.string().optional(),
+  // Identidad de la config deseada que originó este downlink (solo reconciliación).
+  idConfigDeseada: z.string().optional(),
+  // Hash estable del contenido de la config deseada. Dos batches del mismo device
+  // con hash DISTINTO ⇒ la deseada cambió ⇒ el plan viejo se reemplaza.
+  configHash: z.string().optional(),
+  // claveDedup ('<deveui>:<puerto>' por defecto). Con supersede activo, el job
+  // viejo con la misma clave se cancela.
+  claveDedup: z.string().optional(),
+  // Prioridad BullMQ (1 = más alta). Manual pisa reconciliación.
+  prioridad: z.number().optional(),
+  // Delay en segundos. Útil para encadenar gets tras un set.
+  delaySegundos: z.number().optional(),
+  // Get encadenado tras este set (ACTIS).
+  proximoGet: ProximoGetDownlinkJobSchema.optional(),
+  // idUsuario que originó el downlink (null para acciones del sistema).
+  idUsuario: z.string().nullable().optional(),
+  // Datos extra que se propagan al IComando (ej: aspecto de la config deseada).
+  datosExtra: z.record(z.string(), z.any()).optional(),
+  // Política de expiresAt/flushQueue. Si no se setea, el processor decide según origen.
+  expiresAtMin: z.number().optional(),
+  flushQueue: z.boolean().optional(),
+  confirmed: z.boolean().optional(),
+
+  // --- Feature "aplicar config real por ACK" ---
+  // El device manda un uplink de confirmación por sí mismo (algunos GPE). Determina
+  // el mapeo ACK→estado en lora-luminarias: true ⇒ ACK marca 'Recibido' y el uplink
+  // posterior 'Ejecutado'/'No Ejecutado' (comportamiento clásico). false ⇒ ACK true
+  // marca 'Ejecutado' directo y escribe configPatch; ACK false marca 'No Recibido'.
+  autoRespondeUplink: z.boolean().optional(),
+  // Fragmento de config real que produce este SET. Se aplica (deep-merge) sobre
+  // dispositivo.config en el ACK true cuando autoRespondeUplink=false, sin esperar
+  // el uplink. Es el resultado ya mergeado (real+deseada) que calcula el builder.
+  configPatch: z.record(z.string(), z.any()).optional(),
+});
+export type DownlinkRequest = z.infer<typeof DownlinkRequestSchema>;
+
+// supersede: si ya hay un job activo con la misma claveDedup, se cancela y se
+//   reemplaza por el nuevo.
+// enqueue: se encola normalmente sin cancelar el job activo.
+export const EstrategiaConflictoSchema = z.enum(['supersede', 'enqueue']);
+export type EstrategiaConflicto = z.infer<typeof EstrategiaConflictoSchema>;
+
+// Batch de varios DownlinkRequest. Se encola como un grupo identificado por
+// idEjecucion (autogenerado si no viene).
+export const BatchRequestSchema = z.object({
+  origen: OrigenDownlinkJobSchema,
+  idEjecucion: z.string().optional(),
+  items: z.array(DownlinkRequestSchema),
+  estrategiaConflicto: EstrategiaConflictoSchema.optional(),
+});
+export type BatchRequest = z.infer<typeof BatchRequestSchema>;
