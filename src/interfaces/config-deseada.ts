@@ -107,6 +107,7 @@ export interface IConfigDeseadaBase<T extends keyof MapaConfigDeseada> {
   ultimaReconciliacion?: string; // ISO timestamp del último set disparado
   reintentosReconciliacion?: number; // counter para back-off
   bloqueadoHasta?: string; // ISO. Si > now no se reintenta (circuit breaker)
+  divergenteDesde?: string; // ISO. Instante de la PRIMERA detección 'No coincide' (se limpia al converger). Mide el tiempo-a-convergencia.
 
   // Virtuals
   dispositivo?: IDispositivoLorawan;

@@ -29,6 +29,9 @@ export const TipoResumenDatosSchema = z.enum([
   'Informe Eventos Sospechosos Combustible',
   'Informe Mensual Flota Combustible',
   'Gastos del Cliente',
+  // ── Downlinks: métricas de sistema (bolsa de samples) + detalle por luminaria ──
+  'Downlinks Métricas Sistema',
+  'Downlinks Luminaria',
 ]);
 export type TipoResumenDatos = z.infer<typeof TipoResumenDatosSchema>;
 
@@ -280,6 +283,63 @@ export const ResumenGastosClienteSchema = z.object({
 export type IResumenGastosCliente = z.infer<typeof ResumenGastosClienteSchema>;
 
 /* ────────────────────────────────────────────────
+ *  DOWNLINKS — métricas por franja de tiempo
+ *  'Downlinks Métricas Sistema': bolsa de samples que ESPEJA las métricas que
+ *  emite el servicio en vivo (mismos nombres/labels que MetricasEstado). Cada
+ *  resumen es una franja horaria (agrupacion='Cliente'); sumando los samples de
+ *  varias franjas se reconstruye el mismo `estado` que muestra el vivo → la UI
+ *  usa las MISMAS secciones para cualquier período. El vivo es la instancia
+ *  actual/no-cerrada de esta misma métrica.
+ *  'Downlinks Luminaria': detalle por dispositivo (agrupacion='Individual').
+ * ────────────────────────────────────────────────*/
+
+// Un sample = valor de una métrica con sus labels (espejo de un sample de
+// MetricasEstado.metricas[nombre].samples). Los labels replican los del vivo
+// (p.ej. downlinks_sent_total{origen,tipo,objetivo}, downlinks_rate_limited_total
+// {scope:'gw:<eui>'}) → el histórico conserva el mismo detalle fino.
+export const MetricaSampleResumenSchema = z.object({
+  metrica: z.string(), // nombre de la métrica (downlinks_sent_total, seq_*, ...)
+  labels: z.record(z.string(), z.string()).optional(),
+  valor: z.number(),
+});
+export type IMetricaSampleResumen = z.infer<typeof MetricaSampleResumenSchema>;
+
+export const ResumenDownlinksSistemaSchema = z.object({
+  // Deltas de la franja, con labels (mismos nombres que el vivo).
+  samples: z.array(MetricaSampleResumenSchema).optional(),
+  // Cola BullMQ (gauge): snapshot agregado de la franja (no es contador).
+  colaProfundidadMax: z.number().optional(),
+  colaProfundidadProm: z.number().optional(),
+});
+export type IResumenDownlinksSistema = z.infer<
+  typeof ResumenDownlinksSistemaSchema
+>;
+
+// Por luminaria (info-detalle): forense por aspecto/puerto y convergencia.
+export const ResumenDownlinksLuminariaSchema = z.object({
+  porPuerto: z
+    .array(
+      z.object({
+        puerto: z.number(),
+        enviados: z.number().optional(),
+        ackFalse: z.number().optional(),
+        ecoTimeout: z.number().optional(),
+      }),
+    )
+    .optional(),
+  ackTrue: z.number().optional(),
+  ackFalse: z.number().optional(),
+  confirmadoPorUplink: z.number().optional(),
+  forzados: z.number().optional(),
+  reconciliaciones: z.number().optional(), // ciclos que actuaron sobre esta luminaria
+  convergenciaSeg: z.number().optional(), // tiempo divergencia→Coincide en la franja
+  cambiosDeseada: z.number().optional(), // ediciones de la config deseada (blanco móvil)
+});
+export type IResumenDownlinksLuminaria = z.infer<
+  typeof ResumenDownlinksLuminariaSchema
+>;
+
+/* ────────────────────────────────────────────────
  *  MAPA DE TIPO DE RESUMEN
  * ────────────────────────────────────────────────*/
 
@@ -294,6 +354,8 @@ export type MapaResumenDatos = {
   'Informe Eventos Sospechosos Combustible': IInformeEventosSospechosos;
   'Informe Mensual Flota Combustible': IInformeMensualFlotaCombustible;
   'Gastos del Cliente': IResumenGastosCliente;
+  'Downlinks Métricas Sistema': IResumenDownlinksSistema;
+  'Downlinks Luminaria': IResumenDownlinksLuminaria;
 };
 
 /* ────────────────────────────────────────────────
@@ -385,6 +447,14 @@ const VarianteGastosDelCliente = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Gastos del Cliente').optional(),
   resumen: ResumenGastosClienteSchema.optional(),
 });
+const VarianteDownlinksSistema = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Downlinks Métricas Sistema').optional(),
+  resumen: ResumenDownlinksSistemaSchema.optional(),
+});
+const VarianteDownlinksLuminaria = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Downlinks Luminaria').optional(),
+  resumen: ResumenDownlinksLuminariaSchema.optional(),
+});
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO
@@ -401,6 +471,8 @@ export const ResumenDatosSchema = z.union([
   VarianteInformeEventosSospechososCombustible,
   VarianteInformeMensualFlotaCombustible,
   VarianteGastosDelCliente,
+  VarianteDownlinksSistema,
+  VarianteDownlinksLuminaria,
 ]);
 export type IResumenDatos = z.infer<typeof ResumenDatosSchema>;
 
@@ -425,6 +497,8 @@ export const CreateResumenDatosSchema = z.union([
   VarianteInformeEventosSospechososCombustible.omit(camposOmitidos),
   VarianteInformeMensualFlotaCombustible.omit(camposOmitidos),
   VarianteGastosDelCliente.omit(camposOmitidos),
+  VarianteDownlinksSistema.omit(camposOmitidos),
+  VarianteDownlinksLuminaria.omit(camposOmitidos),
 ]);
 export type ICreateResumenDatos = z.infer<typeof CreateResumenDatosSchema>;
 
@@ -439,5 +513,7 @@ export const UpdateResumenDatosSchema = z.union([
   VarianteInformeEventosSospechososCombustible.omit(camposOmitidos),
   VarianteInformeMensualFlotaCombustible.omit(camposOmitidos),
   VarianteGastosDelCliente.omit(camposOmitidos),
+  VarianteDownlinksSistema.omit(camposOmitidos),
+  VarianteDownlinksLuminaria.omit(camposOmitidos),
 ]);
 export type IUpdateResumenDatos = z.infer<typeof UpdateResumenDatosSchema>;
