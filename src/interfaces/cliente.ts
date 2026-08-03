@@ -313,6 +313,13 @@ export const ConfigClienteSchema = z.object({
   idsClientesQuePuedenAtenderEventos: z.array(z.string()).optional(),
   idsClientesQuePuedenAtenderEventosTecnicos: z.array(z.string()).optional(),
   configHorarioAtencion: ConfigHorarioSchema.optional(),
+  /** Zona horaria del cliente como nombre IANA (ej. 'America/Argentina/Buenos_Aires',
+   *  'America/Montevideo', 'America/Mexico_City'). También se acepta un offset
+   *  numérico en horas ('-3', '-6') para casos sin nombre.
+   *
+   *  Hoy la usan las fechas de los Excel de exportación (gestion-datos-go).
+   *  Ausente = default del backend, UTC-3 (Argentina). */
+  zonaHoraria: z.string().optional(),
   /** Si es true, los operadores de este cliente pueden sumarse a atender
    *  eventos que ya están siendo atendidos por otro operador.
    *  Default false: solo un operador atiende a la vez (lock). */
