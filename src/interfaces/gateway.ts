@@ -32,6 +32,14 @@ export const GatewaySchema = z.object({
   estadoSalud: z.enum(['ok', 'warning', 'error']).optional(),
   /** Fecha de última actualización de estadísticas */
   estadisticasActualizadas: z.string().optional(),
+
+  // Snapshot de ENVÍO DE STATS de la última franja de 10 min (cron). Solo los
+  // dos crudos; ratio/estado/histórico se derivan/sacan de los IResumenDatos
+  // ('Gateway Stats'). INDEPENDIENTE de estadoSalud/ToA.
+  /** stats recibidos en la última franja de 10 min */
+  statsRecibidos: z.number().optional(),
+  /** stats esperados = (rangoMinutos*60) / statsInterval — ej. 600/30 = 20 */
+  statsEsperados: z.number().optional(),
 });
 export type IGateway = z.infer<typeof GatewaySchema>;
 
