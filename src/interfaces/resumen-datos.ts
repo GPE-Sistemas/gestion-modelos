@@ -8,6 +8,7 @@ export const AgrupacionTiempoSchema = z.enum([
   'Mensual',
   'Anual',
   'Horario',
+  'Rango', // franja de duración arbitraria; ver `rangoMinutos`
 ]);
 export type AgrupacionTiempo = z.infer<typeof AgrupacionTiempoSchema>;
 
@@ -29,9 +30,11 @@ export const TipoResumenDatosSchema = z.enum([
   'Informe Eventos Sospechosos Combustible',
   'Informe Mensual Flota Combustible',
   'Gastos del Cliente',
-  // ── Downlinks: métricas de sistema (bolsa de samples) + detalle por luminaria ──
+  //Downlinks: métricas de sistema (bolsa de samples) + detalle por luminaria ──
   'Downlinks Métricas Sistema',
   'Downlinks Luminaria',
+  //Gateways: degradación de envío de stats (recibidos vs esperados) ──
+  'Gateway Stats',
 ]);
 export type TipoResumenDatos = z.infer<typeof TipoResumenDatosSchema>;
 
@@ -40,6 +43,7 @@ export const TipoEntidadResumenSchema = z.enum([
   'Puesta',
   'Vehículo',
   'Alarma',
+  'Gateway',
 ]);
 export type TipoEntidadResumen = z.infer<typeof TipoEntidadResumenSchema>;
 
@@ -340,6 +344,31 @@ export type IResumenDownlinksLuminaria = z.infer<
 >;
 
 /* ────────────────────────────────────────────────
+ *  GATEWAY STATS — degradación de envío de stats por franja
+ *  Cada gateway ChirpStack emite un `stats` cada `statsInterval` (default 30s),
+ *  aunque no haya tráfico → heartbeat. En una franja de 10 min se espera
+ *  `esperados = 600 / statsInterval`. `ratio = recibidos / esperados`.
+ * ────────────────────────────────────────────────*/
+
+export const EstadoSaludStatsSchema = z.enum([
+  'ok', // ratio >= 0.9
+  'degradado', // 0.5 <= ratio < 0.9
+  'critico', // 0 < ratio < 0.5
+  'sin_stats', // recibidos == 0 (gateway sin reportar en la franja)
+]);
+export type EstadoSaludStats = z.infer<typeof EstadoSaludStatsSchema>;
+
+export const ResumenGatewayStatsSchema = z.object({
+  statsRecibidos: z.number(), // stats recibidos en la franja
+  statsEsperados: z.number(), // (rangoMinutos*60) / statsIntervalSeg — ej. 600/30 = 20
+  ratioStats: z.number(), // recibidos / esperados, 0..1
+  estadoSaludStats: EstadoSaludStatsSchema,
+  statsIntervalSeg: z.number(), // intervalo usado para el cálculo
+  intervalInferido: z.boolean().optional(), // true si no vino de ChirpStack
+});
+export type IResumenGatewayStats = z.infer<typeof ResumenGatewayStatsSchema>;
+
+/* ────────────────────────────────────────────────
  *  MAPA DE TIPO DE RESUMEN
  * ────────────────────────────────────────────────*/
 
@@ -356,6 +385,7 @@ export type MapaResumenDatos = {
   'Gastos del Cliente': IResumenGastosCliente;
   'Downlinks Métricas Sistema': IResumenDownlinksSistema;
   'Downlinks Luminaria': IResumenDownlinksLuminaria;
+  'Gateway Stats': IResumenGatewayStats;
 };
 
 /* ────────────────────────────────────────────────
@@ -373,6 +403,7 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
   resumen?: MapaResumenDatos[T];
   agrupacion?: AgrupacionResumen;
   agrupacionTiempo?: AgrupacionTiempo;
+  rangoMinutos?: number; //Duración del rango en minutos cuando agrupacionTiempo='Rango' (ej. 10).
   idsAsignados?: string[];
   periodoInicio?: string;
   periodoFin?: string;
@@ -393,6 +424,8 @@ const ResumenDatosCamposSchema = z.object({
   tipoEntidad: TipoEntidadResumenSchema.optional(),
   agrupacion: AgrupacionResumenSchema.optional(),
   agrupacionTiempo: AgrupacionTiempoSchema.optional(),
+
+  rangoMinutos: z.number().optional(),
   idsAsignados: z.array(z.string()).optional(),
   periodoInicio: z.string().optional(),
   periodoFin: z.string().optional(),
@@ -437,12 +470,10 @@ const VarianteInformeEventosSospechososCombustible =
     tipo: z.literal('Informe Eventos Sospechosos Combustible').optional(),
     resumen: InformeEventosSospechososSchema.optional(),
   });
-const VarianteInformeMensualFlotaCombustible = ResumenDatosCamposSchema.extend(
-  {
-    tipo: z.literal('Informe Mensual Flota Combustible').optional(),
-    resumen: InformeMensualFlotaCombustibleSchema.optional(),
-  },
-);
+const VarianteInformeMensualFlotaCombustible = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Informe Mensual Flota Combustible').optional(),
+  resumen: InformeMensualFlotaCombustibleSchema.optional(),
+});
 const VarianteGastosDelCliente = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Gastos del Cliente').optional(),
   resumen: ResumenGastosClienteSchema.optional(),
@@ -454,6 +485,10 @@ const VarianteDownlinksSistema = ResumenDatosCamposSchema.extend({
 const VarianteDownlinksLuminaria = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Downlinks Luminaria').optional(),
   resumen: ResumenDownlinksLuminariaSchema.optional(),
+});
+const VarianteGatewayStats = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Gateway Stats').optional(),
+  resumen: ResumenGatewayStatsSchema.optional(),
 });
 
 /* ────────────────────────────────────────────────
@@ -473,6 +508,7 @@ export const ResumenDatosSchema = z.union([
   VarianteGastosDelCliente,
   VarianteDownlinksSistema,
   VarianteDownlinksLuminaria,
+  VarianteGatewayStats,
 ]);
 export type IResumenDatos = z.infer<typeof ResumenDatosSchema>;
 
@@ -499,6 +535,7 @@ export const CreateResumenDatosSchema = z.union([
   VarianteGastosDelCliente.omit(camposOmitidos),
   VarianteDownlinksSistema.omit(camposOmitidos),
   VarianteDownlinksLuminaria.omit(camposOmitidos),
+  VarianteGatewayStats.omit(camposOmitidos),
 ]);
 export type ICreateResumenDatos = z.infer<typeof CreateResumenDatosSchema>;
 
@@ -515,5 +552,6 @@ export const UpdateResumenDatosSchema = z.union([
   VarianteGastosDelCliente.omit(camposOmitidos),
   VarianteDownlinksSistema.omit(camposOmitidos),
   VarianteDownlinksLuminaria.omit(camposOmitidos),
+  VarianteGatewayStats.omit(camposOmitidos),
 ]);
 export type IUpdateResumenDatos = z.infer<typeof UpdateResumenDatosSchema>;
