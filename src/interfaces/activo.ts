@@ -137,6 +137,9 @@ export const ActivoSchema = z.object({
   configHorariosAtencion: z.array(ConfigHorarioSchema).optional(),
   configHorariosAtencionTecnica: z.array(ConfigHorarioSchema).optional(),
   modoDesactivado: z.custom<IModoDesactivado>().optional(),
+  // Resultado del último alta/actualización del activo en Soflex (integración
+  // externa): true si quedó creado/actualizado, false si no se pudo enviar.
+  sincronizadoSoflex: z.boolean().optional(),
 
   estadoCuenta: z.custom<estadoCuenta>().optional(),
   // Populate
@@ -172,6 +175,9 @@ export interface IActivo {
   configHorariosAtencion?: IConfigHorario[];
   configHorariosAtencionTecnica?: IConfigHorario[];
   modoDesactivado?: IModoDesactivado;
+  // Resultado del último alta/actualización del activo en Soflex (integración
+  // externa): true si quedó creado/actualizado, false si no se pudo enviar.
+  sincronizadoSoflex?: boolean;
 
   estadoCuenta?: estadoCuenta;
   // Populate
