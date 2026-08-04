@@ -85,11 +85,19 @@ TipoVehiculoSchema.options; // ['Auto', 'Camion', ...]
 
 ```bash
 npm run build
-npm run gen:json-schema            # dist/json-schema/<Name>.json + index.json
-npm run gen:json-schema -- --only=Activo --verbose
+npm run gen:json-schema            # dist/json-schema/index.json
+npm run gen:json-schema -- --verbose
 ```
 
-Usa `z.toJSONSchema(schema, { target: 'openapi-3.0' })` nativo de Zod v4, sin librerías extra. Para Swagger en las APIs NestJS se puede usar `nestjs-zod` (`createZodDto(CreateActivoSchema)`).
+Usa `z.toJSONSchema(registry)` nativo de Zod v4, sin librerías extra: **todos los schemas exportados se registran y se emiten en UNA sola llamada**, así cada uno aparece una vez en `$defs` y el resto lo referencia con `$ref`.
+
+Antes se llamaba `z.toJSONSchema` una vez por schema, y como cada llamada inlinea su grafo completo el bundle pesaba 12,8 MB con `ClienteSchema` duplicado 181 veces. Hoy son **0,99 MB y 3 apariciones** (las 3 legítimas: `Cliente`/`CreateCliente`/`UpdateCliente`). Los schemas de `src/` no cambiaron, así que los tipos TS inferidos tampoco.
+
+El script verifica sus propias invariantes y **falla la generación** si algún schema registrado no llegó al bundle o si queda algún `$ref` colgante. La salida reporta cuántas propiedades quedan como `{}` por los `z.custom` (los cortes de ciclo que existen por TS7056): hoy **329 de 9.295, un 3,5 %**.
+
+No hay flag para generar un bundle parcial: un subconjunto con `$ref` compartidos no resuelve. Para inspeccionar un schema suelto, generar el bundle completo y buscar su clave en `$defs`.
+
+Para Swagger en las APIs NestJS se puede usar `nestjs-zod` (`createZodDto(CreateActivoSchema)`).
 
 ## Pasaje a producción (migración Zod)
 
