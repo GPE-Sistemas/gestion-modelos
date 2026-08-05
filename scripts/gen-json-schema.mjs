@@ -7,9 +7,11 @@
 // POR QUÉ UN REGISTRY Y UNA SOLA LLAMADA (cambio 2026-08-04): antes se llamaba
 // z.toJSONSchema una vez POR SCHEMA, y cada llamada inlinea su grafo completo.
 // Resultado: ClienteSchema aparecía inlineado 181 veces y el bundle pesaba
-// 3,84 MB. Con el registry cada schema se emite una vez en $defs y el resto lo
-// referencia con $ref: 0,52 MB, 7,4x menos. Esto NO toca src/ — los schemas y
-// los tipos TS inferidos quedan exactamente igual.
+// 12.883.468 bytes. Con el registry cada schema se emite una vez en $defs y el
+// resto lo referencia con $ref: 1.035.978 bytes, 12,4x menos. Esto NO toca
+// src/ — los schemas y los tipos TS inferidos quedan exactamente igual.
+// (Los números "0,52 MB / 7,4x" que decía este comentario eran de una corrida
+// intermedia; corregidos el 2026-08-05 volviendo a medir.)
 //
 // Zod es el single source of truth: los tipos TS se infieren de los schemas y
 // este bundle es la forma neutra que consumen los generadores de otros
@@ -68,7 +70,9 @@ function isZodSchema(value) {
 const TO_JSON_SCHEMA_OPTS = {
   // unrepresentable: 'any' → los z.custom (los cortes de ciclo de populate,
   // que existen por TS7056 en la emisión de declarations de TS) salen como {}
-  // en vez de hacer fallar la generación. Hoy son 93 de 5.324 propiedades.
+  // en vez de hacer fallar la generación. Hoy son 322 de 9.299 propiedades
+  // (eran 329 antes de que las 3 entidades del spike de la etapa 1 llevaran su
+  // `.meta()` al lado del {}).
   unrepresentable: "any",
   // Los $ref apuntan a $defs, que es donde reubicamos los schemas abajo.
   uri: (id) => `#/$defs/${id}`,

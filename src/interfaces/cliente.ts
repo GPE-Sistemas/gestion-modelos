@@ -362,7 +362,7 @@ export const ClienteSchema = z.object({
   get ancestros() {
     return z.array(ClienteSchema).optional();
   },
-});
+}).meta({ 'x-collection': 'clientes' });
 export type ICliente = z.infer<typeof ClienteSchema>;
 
 export const CreateClienteSchema = ClienteSchema.omit({

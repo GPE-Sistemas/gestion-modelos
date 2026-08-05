@@ -33,7 +33,7 @@ export const GrupoSchema = z.object({
   cliente: ClienteSchema.optional(),
   ancestros: z.array(ClienteSchema).optional(),
   perfilConfigs: z.array(z.custom<IConfigPerfil>()).optional(),
-});
+}).meta({ 'x-collection': 'grupos' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del
