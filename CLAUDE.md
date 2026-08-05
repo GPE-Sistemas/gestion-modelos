@@ -51,8 +51,22 @@ tracker: z.custom<ITracker>().optional(),
 
 Los populates entre entidades forman ciclos (activo → tracker → activo). Un
 schema real en esa posición hace explotar el emisor de declaraciones de
-TypeScript, acá y en cada consumidor. Hay **116 `z.custom`** en el repo y
+TypeScript, acá y en cada consumidor. Hay **92 `z.custom<T>()`** en el repo
+(116 era el conteo de líneas que mencionan `z.custom`, comentarios incluidos) y
 ninguno es un descuido.
+
+**Medido el 2026-08-05** (spike de la etapa 1 del roadmap, sobre `activo.ts` y
+`recorrido.ts`): con getters y schemas reales en esos 9 populates, `tsc` tira
+TS7056 en **`asignacion.ts`, `certificado-entidad.ts`, `nota.ts` y
+`recordatorio.ts`** — o sea **no en el archivo que tocás, sino en los que
+EMBEBEN esa entidad** (son 14 los que embeben `ActivoSchema`/`RecorridoSchema`
+por valor). Y la salida de emergencia no sirve: anotar
+`export const XSchema: z.ZodType<IX>` achica el `.d.ts` pero **`z.ZodType` no
+tiene `.omit()`**, que es lo que esos 4 archivos usan para sus `Create*` /
+`Update*`.
+
+Corolario práctico: **si necesitás que algo sepa a dónde apunta un populate, no
+cambies el tipo — anotalo** (`.meta()`, §5).
 
 La variante permitida para ciclos es el **getter**, y tiene su propia trampa:
 
@@ -137,12 +151,31 @@ Lo que viene y conviene no contradecir:
   ocurre **acá**, una sola vez; los consumidores hacen `go get`. Si alguna vez
   ves un `generate.sh` que clona este repo dentro de una API, es la deuda que
   estamos pagando — no el patrón a copiar.
-- Los schemas van a ganar metadata de persistencia vía `.meta({ bson:
-  'objectId' })`. Es **aditiva**: los consumidores TS ignoran las claves
-  desconocidas.
-- Reducir los 329 `{}` que dejan los `z.custom` (3,5 % de las propiedades) es
-  trabajo en curso, de a poco y midiendo. No es una limpieza para hacer de un
-  saque.
+- Los schemas ganan metadata de persistencia vía `.meta()`. Es **aditiva**: los
+  consumidores TS ignoran las claves desconocidas y los tipos inferidos no
+  cambian. **Ya está aplicada en `proveedor.ts`, `recorrido.ts` y `activo.ts`**
+  (spike de la etapa 1, 2026-08-05); la convención está documentada arriba de
+  `ProveedorSchema` y es la que hay que copiar al anotar el resto:
+
+  | Clave | Dónde | Qué declara |
+  |---|---|---|
+  | `x-collection` | schema | colección Mongo |
+  | `x-bson` | propiedad | `objectId` / `date` / `mixed` |
+  | `x-ref` | propiedad | `@Prop({ref})`: populate del path del id en su lugar |
+  | `x-populate` | propiedad | `schema.virtual()`: `{ref, localField, foreignField, justOne}` |
+  | `x-setter` | propiedad | `uppercase` / `lowercase` |
+  | `x-computed` | propiedad | getter del `toJSON`, no es campo ni populate |
+
+  **`x-bson: 'mixed'` no es opcional donde corresponde.** Un
+  `@Prop({type: Object})` del legacy es Mixed y **Mongoose no castea adentro**;
+  si el emisor desciende igual, inventa casteos que divergen. Sin esa clave, el
+  spike generaba 28 casteos falsos en 3 entidades.
+- Reducir los `{}` que dejan los `z.custom` (322 de 9.299, 3,5 %) es trabajo en
+  curso, de a poco y midiendo. No es una limpieza para hacer de un saque — y
+  **el camino no es reemplazarlos** (§2): es anotarlos.
+- `scripts/spike-emisor-meta-go.mjs` es el emisor del spike: lee el bundle y
+  arma el `meta.go` de una entidad para diffearlo contra el real. Es
+  desechable, no es el generador de la etapa 2 (ese vive en `go/`).
 
 **El límite del repo, para que no se vuelva un depósito**: acá va la forma del
 dato y su persistencia, no el comportamiento de cada API. **Si dos APIs pueden

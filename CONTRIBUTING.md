@@ -76,7 +76,11 @@ tracker: z.custom<ITracker>().optional(),
 
 **No.** Son cortes de ciclo por **TS7056**: un schema real ahí arrastra el
 grafo completo y revienta la emisión de declarations, acá y en cada consumidor
-NestJS. Hay 116 y ninguno es un descuido.
+NestJS. Hay 92 y ninguno es un descuido.
+
+Se probó (2026-08-05, spike de la etapa 1) y **TS7056 vuelve**: no en el archivo
+que tocás, sino en los que embeben esa entidad (`nota.ts`, `asignacion.ts`,
+`certificado-entidad.ts`, `recordatorio.ts`). Detalle en `CLAUDE.md` §2.
 
 La alternativa válida para ciclos es el getter:
 
@@ -89,6 +93,11 @@ get tracker() {
 Y su trampa: **nunca spreadear un objeto que contenga getters** (`{...Base}`)
 — los evalúa eager y rompe el ciclo **en runtime**, no en compilación. El build
 pasa y explota en producción.
+
+**Si lo que querés es que el bundle sepa a dónde apunta el populate** (para que
+las APIs Go lo lean), no toques el tipo: agregale `.meta({ 'x-populate': {...} })`.
+Es aditivo y no cambia la inferencia. La tabla de claves está en `CLAUDE.md` §5 y
+el ejemplo vivo arriba de `ProveedorSchema`.
 
 ---
 

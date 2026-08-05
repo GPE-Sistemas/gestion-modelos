@@ -55,7 +55,7 @@ export type ICategoriaActivo = z.infer<typeof CategoriaActivoSchema>;
 // declarations (TS7056) acá y en los consumidores NestJS.
 export const VehiculoSchema = z.object({
   tipo: TipoVehiculoSchema.optional(),
-  patente: z.string().optional(),
+  patente: z.string().optional().meta({ 'x-setter': 'uppercase' }),
   estado: EstadoVehiculoSchema.optional(),
   modelo: z.string().optional(),
   marca: z.string().optional(),
@@ -64,17 +64,47 @@ export const VehiculoSchema = z.object({
   consumoCiudad: z.number().optional(), // litros cada 100 km
   capacidadCombustible: z.number().optional(), // litros
   //
-  idChofer: z.string().optional(),
-  idRecorrido: z.string().optional(),
-  idsRecorridos: z.array(z.string()).optional(),
+  idChofer: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+  idRecorrido: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'RecorridoSchema' }),
+  idsRecorridos: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'RecorridoSchema' }),
   dentroDelRecorrido: z.boolean().optional(), // Para seguir el estado de los eventos
   ignicion: z.boolean().optional(),
   //
   idExterno: z.string().optional(),
   // Populate
-  chofer: z.custom<IUsuario>().optional(),
-  recorrido: z.custom<IRecorrido>().optional(),
-  recorridos: z.array(z.custom<IRecorrido>()).optional(),
+  chofer: z.custom<IUsuario>().optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idChofer',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  recorrido: z.custom<IRecorrido>().optional().meta({
+    'x-populate': {
+      ref: 'RecorridoSchema',
+      localField: 'idRecorrido',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  recorridos: z.array(z.custom<IRecorrido>()).optional().meta({
+    'x-populate': {
+      ref: 'RecorridoSchema',
+      localField: 'idsRecorridos',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 });
 
 /**
@@ -118,12 +148,24 @@ export interface IVehiculoCache extends Omit<
 export const ActivoSchema = z.object({
   _id: z.string().optional(),
   //
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idGrupo: z.string().optional(),
-  idTracker: z.string().optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idGrupo: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'GrupoSchema' }),
+  idTracker: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'TrackerSchema' }),
   ///alta de activo
-  fechaAlta: z.string().optional(),
+  fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
   imagenes: z.array(z.string()).optional(),
   // es la imagen en la posición 0 de imagenes, pero reducida para usarla en el mapa
   imagenMiniatura: z.string().optional(),
@@ -131,11 +173,26 @@ export const ActivoSchema = z.object({
   categoria: CategoriaActivoSchema.optional(),
   funcion: FuncionActivoSchema.optional(),
   vehiculo: VehiculoSchema.optional(),
-  idsClientesQuePuedenAtender: z.array(z.string()).optional(),
-  idsClientesQuePuedenAtenderEventosTecnicos: z.array(z.string()).optional(),
+  // Llevan @Prop({ref: Cliente}) en el legacy, así que Mongoose los popula EN
+  // SU LUGAR igual que idCliente.
+  idsClientesQuePuedenAtender: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsClientesQuePuedenAtenderEventosTecnicos: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   puedeSolicitarServicioTecnico: z.boolean().optional(),
-  configHorariosAtencion: z.array(ConfigHorarioSchema).optional(),
-  configHorariosAtencionTecnica: z.array(ConfigHorarioSchema).optional(),
+  // @Prop({type: [Object]}): Mixed, sin casteo adentro.
+  configHorariosAtencion: z
+    .array(ConfigHorarioSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
+  configHorariosAtencionTecnica: z
+    .array(ConfigHorarioSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
   modoDesactivado: z.custom<IModoDesactivado>().optional(),
   // Resultado del último alta/actualización del activo en Soflex (integración
   // externa): true si quedó creado/actualizado, false si no se pudo enviar.
@@ -143,11 +200,39 @@ export const ActivoSchema = z.object({
 
   estadoCuenta: z.custom<estadoCuenta>().optional(),
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  tracker: z.custom<ITracker>().optional(),
-  grupo: z.custom<IGrupo>().optional(),
-});
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  tracker: z.custom<ITracker>().optional().meta({
+    'x-populate': {
+      ref: 'TrackerSchema',
+      localField: 'idTracker',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  grupo: z.custom<IGrupo>().optional().meta({
+    'x-populate': {
+      ref: 'GrupoSchema',
+      localField: 'idGrupo',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'activos' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del

@@ -16,13 +16,15 @@ export const TipoParadaSchema = z.enum(['refugio', 'parada']);
 export type ITipoParada = z.infer<typeof TipoParadaSchema>;
 
 export const ParadaSchema = z.object({
-  _id: z.string().optional(),
+  // Subdocumento CON _id (el único del legacy): el front filtra recorridos por
+  // {paradas._id}, así que ese path necesita el casteo a ObjectId.
+  _id: z.string().optional().meta({ 'x-bson': 'objectId' }),
   /**
    * @deprecated Se usa ubicacionOl.
    */
-  ubicacion: CoordenadasSchema.optional(),
+  ubicacion: CoordenadasSchema.optional().meta({ 'x-bson': 'mixed' }),
   ubicacionOl: CoordenadaOLSchema.optional(),
-  geojson: GeoJSONPointSchema.optional(),
+  geojson: GeoJSONPointSchema.optional().meta({ 'x-bson': 'mixed' }),
   nombre: z.string().optional(),
   direccion: z.string().optional(),
   destino: z.string().optional(),
@@ -150,36 +152,95 @@ export type IGeometriaRecorrido = z.infer<typeof GeometriaRecorridoSchema>;
 
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
-// declarations (TS7056) acá y en los consumidores NestJS.
+// declarations (TS7056) acá y en los consumidores NestJS. Medido en el spike de
+// la etapa 1 (2026-08-05): con schemas reales acá, TS7056 revienta en los
+// archivos que EMBEBEN esta entidad, no acá.
+//
+// La metadata de persistencia va por `.meta()` justamente por eso: es aditiva y
+// no toca la inferencia. Convención documentada en proveedor.ts.
 export const RecorridoSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   //
   categoria: CategoriaRecorridoSchema.optional(),
   idExterno: z.string().optional(),
-  idGrupo: z.string().optional(),
+  idGrupo: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'GrupoSchema' }),
   nombreFlota: z.string().optional(),
   nombre: z.string().optional(),
-  geojson: GeoJSONLineStringSchema.optional(),
+  geojson: GeoJSONLineStringSchema.optional().meta({ 'x-bson': 'mixed' }),
   paradas: z.array(ParadaSchema).optional(),
-  franjaHoraria: z.array(FranjaHorariaSchema).optional(),
+  franjaHoraria: z
+    .array(FranjaHorariaSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
   destino: z.string().optional(),
   por: z.string().optional(),
   color: z.string().optional(),
   duracion: z.number().optional(),
-  idsUbicaciones: z.array(z.string()).optional(),
+  idsUbicaciones: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'UbicacionSchema' }),
   // Cumplimiento (categoría 'Vehiculo')
-  cumplimiento: ConfigCumplimientoRecorridoSchema.optional(),
-  geometria: GeometriaRecorridoSchema.optional(),
+  cumplimiento: ConfigCumplimientoRecorridoSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
+  geometria: GeometriaRecorridoSchema.optional().meta({ 'x-bson': 'mixed' }),
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  grupo: z.custom<IGrupo>().optional(),
-  recorrido: z.array(CoordenadasSchema).optional(),
-  recorridoOl: z.array(CoordenadaOLSchema).optional(),
-  ubicaciones: z.array(z.custom<IUbicacion>()).optional(),
-});
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  grupo: z.custom<IGrupo>().optional().meta({
+    'x-populate': {
+      ref: 'GrupoSchema',
+      localField: 'idGrupo',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  // Getters computados del toJSON legacy (geojson → {lat,lng}[] y proj4
+  // EPSG:3857): no son campos del schema ni populates, y por eso no van en
+  // Fields ni llevan casteo. Ver recorridos/tojson.go en gestion-datos-go.
+  recorrido: z
+    .array(CoordenadasSchema)
+    .optional()
+    .meta({ 'x-computed': true }),
+  recorridoOl: z
+    .array(CoordenadaOLSchema)
+    .optional()
+    .meta({ 'x-computed': true }),
+  ubicaciones: z.array(z.custom<IUbicacion>()).optional().meta({
+    'x-populate': {
+      ref: 'UbicacionSchema',
+      localField: 'idsUbicaciones',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+}).meta({ 'x-collection': 'recorridos' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del
