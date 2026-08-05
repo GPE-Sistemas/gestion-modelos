@@ -84,7 +84,7 @@ export const TrackerSchema = z.object({
   activo: z.custom<IActivo>().optional(),
   modelo: ModeloDispositivoSchema.optional(),
   serviciosContratados: z.array(ServicioContratadoSchema).optional(),
-});
+}).meta({ 'x-collection': 'trackers' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del

@@ -100,7 +100,7 @@ export const UsuarioSchema = z.object({
   // Permisos del usuario. Ya no es un array embebido: es un virtual poblado
   // desde la colección Permiso por match de nombreUsuario (Permiso.nombreUsuario === Usuario.usuario).
   permisos: z.array(z.custom<IPermiso>()).optional(),
-});
+}).meta({ 'x-collection': 'usuarios' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del

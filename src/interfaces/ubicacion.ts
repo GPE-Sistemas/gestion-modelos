@@ -202,7 +202,7 @@ export const UbicacionSchema = z.union([
   VarianteUbicacionDestinoEmergencia,
   VarianteUbicacionVehiculos,
   VarianteUbicacionLuminarias,
-]);
+]).meta({ 'x-collection': 'ubicacions' });
 
 /**
  * Tipo hand-written (misma forma que el schema): los tipos de entidad del
