@@ -25,9 +25,10 @@ export const GrupoSchema = z.object({
   idsPerfilConfig: z.array(z.string()).optional(),
   prioridad: z.number().optional(),
 
-  // Integracion Soflex
+  // Integracion Soflex (los 3 campos van juntos: sin los 3 no hay sync ni reenvío)
   fleetId: z.string().optional(),
   parentFleetId: z.string().optional(),
+  fleetName: z.string().optional(),
 
   // Populate
   cliente: ClienteSchema.optional(),
@@ -49,9 +50,10 @@ export interface IGrupo {
   idsPerfilConfig?: string[];
   prioridad?: number;
 
-  // Integracion Soflex
+  // Integracion Soflex (los 3 campos van juntos: sin los 3 no hay sync ni reenvío)
   fleetId?: string;
   parentFleetId?: string;
+  fleetName?: string;
 
   // Populate
   cliente?: ICliente;

@@ -35,10 +35,10 @@ export const CredencialesAlarmaSchema = z.object({
 export type ICredencialesAlarma = z.infer<typeof CredencialesAlarmaSchema>;
 
 export const IntegracionSoflexSchema = z.object({
-  // Hace que se creen los trackers en Soflex (se llaman fleet)
+  // Habilita el módulo Soflex para el cliente. El fleet (fleetId /
+  // parentFleetId / fleetName) vive únicamente en el grupo categoría Flota
+  // (ver GrupoSchema): acá no se configura más.
   activo: z.boolean().optional(),
-  fleetId: z.string().optional(),
-  parentFleetId: z.string().optional(),
 });
 export type IIntegracionSoflex = z.infer<typeof IntegracionSoflexSchema>;
 
