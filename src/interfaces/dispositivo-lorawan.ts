@@ -508,35 +508,40 @@ export interface IDispositivoLorawanBase<
   modeloDispositivo?: IModeloDispositivo;
 }
 
+// SPIKE etapa 1 + tarea 3 (2026-08-06): metadata de persistencia por
+// `.meta()`. Convención documentada arriba de ProveedorSchema
+// (src/interfaces/proveedor.ts) — copiada acá, no reinventada.
+//
 // Campos comunes a todas las variantes (sin tipo/config, que discriminan)
 const DispositivoLorawanCamposSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idModeloDispositivo: z.string().optional(),
-  fechaCreacion: z.string().optional(),
+  idCliente: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idModeloDispositivo: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
   // Campos comunes
-  fechaUltimaComunicacion: z.string().optional(),
-  ultimoReporte: z.custom<IReporteGenerico>().optional(),
+  fechaUltimaComunicacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  // @Prop({type: Object}) en el legacy: Mixed pese al tipo TS estructurado.
+  ultimoReporte: z.custom<IReporteGenerico>().optional().meta({ 'x-bson': 'mixed' }),
   margin: z.number().optional(), //Es la señal del dispositivo, expresada en dB
   tiempoLimiteComunicacion: z.number().optional(), // Tiempo máximo sin reportar (en horas) antes de generar evento "Sin comunicación".
 
-  ubicacion: GeoJSONPointSchema.optional(), // GeoJSON de la ubicacion del dispositivo
-  ultimoComando: z.custom<IComando>().optional(), //Último downlink enviado a este dispositivo
-  paquetes: PaquetesDispositivoLorawanSchema.optional(), //Información para calcular la pérdida de paquetes
-  ultimoGateway: UltimoGatewaySchema.optional(), //Gateway con mejor señal en el último uplink capturado
-  consultaConfig: ConsultaConfigDispositivoSchema.optional(), //Rastreo del cron de consulta de configuración inicial (bootstrap de config).
+  ubicacion: GeoJSONPointSchema.optional().meta({ 'x-bson': 'mixed' }), // GeoJSON de la ubicacion del dispositivo
+  ultimoComando: z.custom<IComando>().optional().meta({ 'x-bson': 'mixed' }), //Último downlink enviado a este dispositivo
+  paquetes: PaquetesDispositivoLorawanSchema.optional().meta({ 'x-bson': 'mixed' }), //Información para calcular la pérdida de paquetes
+  ultimoGateway: UltimoGatewaySchema.optional().meta({ 'x-bson': 'mixed' }), //Gateway con mejor señal en el último uplink capturado
+  consultaConfig: ConsultaConfigDispositivoSchema.optional().meta({ 'x-bson': 'mixed' }), //Rastreo del cron de consulta de configuración inicial (bootstrap de config).
 
   // Datos para el lora server
-  deveui: z.string().optional(),
+  deveui: z.string().optional().meta({ 'x-setter': 'uppercase' }),
   joineui: z.string().optional(),
   description: z.string().optional(),
   name: z.string().optional(),
-  tags: z.record(z.string(), z.string()).optional(),
+  tags: z.record(z.string(), z.string()).optional().meta({ 'x-bson': 'mixed' }),
   applicationId: z.string().optional(),
   deviceProfileId: z.string().optional(),
-  variables: z.record(z.string(), z.string()).optional(),
+  variables: z.record(z.string(), z.string()).optional().meta({ 'x-bson': 'mixed' }),
   isDisabled: z.boolean().optional(),
   skipFcntCheck: z.boolean().optional(),
 
@@ -551,34 +556,43 @@ const DispositivoLorawanCamposSchema = z.object({
   nwkskey: z.string().optional(), //Con esta se completa fNwkSIntKey, nwkSEncKey y sNwkSIntKey para activationKeys
 
   //Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  modeloDispositivo: ModeloDispositivoSchema.optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idCliente', foreignField: '_id', justOne: true },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idsAncestros', foreignField: '_id', justOne: false },
+  }),
+  modeloDispositivo: ModeloDispositivoSchema.optional().meta({
+    'x-populate': { ref: 'ModeloDispositivoSchema', localField: 'idModeloDispositivo', foreignField: '_id', justOne: true },
+  }),
 });
 
 const VarianteDispositivoLorawanGPE = DispositivoLorawanCamposSchema.extend({
   tipo: z.literal('Luminaria GPE').optional(),
-  config: DispositivoLuminariaGPESchema.optional(),
+  // config es @Prop({type: Object, default: {}}) en el legacy: Mixed.
+  config: DispositivoLuminariaGPESchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteDispositivoLorawanWellness =
   DispositivoLorawanCamposSchema.extend({
     tipo: z.literal('Luminaria Wellness').optional(),
-    config: DispositivoLuminariaWellnessSchema.optional(),
+    config: DispositivoLuminariaWellnessSchema.optional().meta({ 'x-bson': 'mixed' }),
   });
 const VarianteDispositivoLorawanACTIS = DispositivoLorawanCamposSchema.extend({
   tipo: z.literal('Luminaria ACTIS FING').optional(),
-  config: DispositivoLuminariaACTISSchema.optional(),
+  config: DispositivoLuminariaACTISSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
  * ────────────────────────────────────────────────*/
 
-export const DispositivoLorawanSchema = z.union([
-  VarianteDispositivoLorawanGPE,
-  VarianteDispositivoLorawanWellness,
-  VarianteDispositivoLorawanACTIS,
-]);
+export const DispositivoLorawanSchema = z
+  .union([
+    VarianteDispositivoLorawanGPE,
+    VarianteDispositivoLorawanWellness,
+    VarianteDispositivoLorawanACTIS,
+  ])
+  .meta({ 'x-collection': 'dispositivolorawans' });
 
 /**
  * Tipo hand-written (misma forma que el schema): los tipos de entidad del

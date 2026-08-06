@@ -673,49 +673,85 @@ export type IEventoGenericoCache = Omit<
 
 // Populates intra-SCC como z.custom (import type-only) — ver comentario en
 // DetallesTecnicosSchema. Sin getters, el objeto es spreadeable.
+//
+// SPIKE etapa 1 + tarea 3 (2026-08-06): metadata de persistencia por
+// `.meta()`. Convención documentada arriba de ProveedorSchema
+// (src/interfaces/proveedor.ts) — copiada acá, no reinventada. Al ser un
+// objeto plano spreadeado en cada variante (varianteEvento), la MISMA
+// instancia de cada campo (con su `.meta()`) termina en las 17 variantes.
 const camposComunesEvento = {
   _id: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  expireAt: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  expireAt: z.string().optional().meta({ 'x-bson': 'date' }),
+  idCliente: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   filtrador: CategoriaSchema.optional(), // Para las vistas de atender
   notificar: z.boolean().optional(),
   atender: z.boolean().optional(),
   /** Derivado en backend (hooks): atender===true && estado en estados activos. */
   requiereAtencion: z.boolean().optional(),
   noDerivar: z.boolean().optional(),
-  posponerHasta: z.string().optional(),
+  posponerHasta: z.string().optional().meta({ 'x-bson': 'date' }),
   categoria: z.string().optional(), // Nombre de la categoria del tipo de evento
   prioridad: z.number().optional(),
   repetido: z.number().optional(),
-  fechaUltimoRepetido: z.string().optional(),
+  fechaUltimoRepetido: z.string().optional().meta({ 'x-bson': 'date' }),
   tiempoRespuesta: z.number().optional(),
-  idEntidad: z.string().optional(), // Lo que generó el evento
-  idReporte: z.string().optional(), // En caso de ser un evento generado por un reporte automático
-  idConfigEventoUsuario: z.string().optional(),
-  detallesTecnicos: DetallesTecnicosSchema.optional(),
-  detallesEmergencias: DetallesEmergenciasSchema.optional(),
-  idsClientesQuePuedenAtender: z.array(z.string()).optional(),
-  configHorariosAtencion: z.array(ConfigHorarioSchema).optional(),
-  idsClientesAtendiendo: z.array(z.string()).optional(),
-  idsUsuariosAtendiendo: z.array(z.string()).optional(),
+  // @Prop({type: ObjectId}) SIN ref: el populate corre por los virtuals con
+  // nombre propio (tracker/alarma/luminaria/...), no en este path.
+  idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }), // Lo que generó el evento
+  idReporte: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ReporteGenericoSchema' }), // En caso de ser un evento generado por un reporte automático
+  idConfigEventoUsuario: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ConfigEventoUsuarioSchema' }),
+  // @Prop({type: Object}) en el legacy: Mixed.
+  detallesTecnicos: DetallesTecnicosSchema.optional().meta({ 'x-bson': 'mixed' }),
+  detallesEmergencias: DetallesEmergenciasSchema.optional().meta({ 'x-bson': 'mixed' }),
+  idsClientesQuePuedenAtender: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  // @Prop({type: [Object]}) en el legacy: array real de Mixed.
+  configHorariosAtencion: z.array(ConfigHorarioSchema).optional().meta({ 'x-bson': 'mixed' }),
+  idsClientesAtendiendo: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsUsuariosAtendiendo: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
   // Populates fuera del SCC (directas)
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  botonBluetooth: BotonBluetoothSchema.optional(),
-  sirena: SirenaSchema.optional(),
-  gateway: GatewaySchema.optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idCliente', foreignField: '_id', justOne: true },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idsAncestros', foreignField: '_id', justOne: false },
+  }),
+  botonBluetooth: BotonBluetoothSchema.optional().meta({
+    'x-populate': { ref: 'BotonBluetoothSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
+  sirena: SirenaSchema.optional().meta({
+    'x-populate': { ref: 'SirenaSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
+  gateway: GatewaySchema.optional().meta({
+    'x-populate': { ref: 'GatewaySchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
   // Populates intra-SCC → z.custom
-  usuariosAtendiendo: z.array(z.custom<IUsuario>()).optional(),
-  tracker: z.custom<ITracker>().optional(),
-  alarma: z.custom<IDispositivoAlarma>().optional(),
-  luminaria: z.custom<ILuminaria>().optional(),
-  usuario: z.custom<IUsuario>().optional(),
-  activo: z.custom<IActivo>().optional(),
-  configEventoUsuario: z.custom<IConfigEventoUsuario>().optional(),
+  usuariosAtendiendo: z.array(z.custom<IUsuario>()).optional().meta({
+    'x-populate': { ref: 'UsuarioSchema', localField: 'idsUsuariosAtendiendo', foreignField: '_id', justOne: false },
+  }),
+  tracker: z.custom<ITracker>().optional().meta({
+    'x-populate': { ref: 'TrackerSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
+  alarma: z.custom<IDispositivoAlarma>().optional().meta({
+    'x-populate': { ref: 'DispositivoAlarmaSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
+  luminaria: z.custom<ILuminaria>().optional().meta({
+    'x-populate': { ref: 'LuminariaSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
+  usuario: z.custom<IUsuario>().optional().meta({
+    'x-populate': { ref: 'UsuarioSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
+  activo: z.custom<IActivo>().optional().meta({
+    'x-populate': { ref: 'ActivoSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
+  configEventoUsuario: z.custom<IConfigEventoUsuario>().optional().meta({
+    'x-populate': { ref: 'ConfigEventoUsuarioSchema', localField: 'idConfigEventoUsuario', foreignField: '_id', justOne: true },
+  }),
   // Tipo legacy con discriminante opcional → z.custom conserva compatibilidad
-  reporte: z.custom<IReporteGenerico>().optional(),
+  reporte: z.custom<IReporteGenerico>().optional().meta({
+    'x-populate': { ref: 'ReporteGenericoSchema', localField: 'idReporte', foreignField: '_id', justOne: true },
+  }),
 };
 
 const varianteEvento = <
@@ -775,7 +811,7 @@ export const EventoGenericoSchema: z.ZodType<IEventoGenerico> =
   vEvtTecGateway,
   vEvtEmergenciaMedica,
   vEvtEmergenciaBomberos,
-]);
+]).meta({ 'x-collection': 'eventogenericos' });
 
 // Mismo set que el type OmitirCreate de arriba (sirena NO se omite, igual que el original)
 const omitirCreateUpdateEvento = {

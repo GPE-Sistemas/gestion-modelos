@@ -78,6 +78,9 @@ export const CondicionNotificacionSchema = z.object({
         .optional(),
       ubicacion: z
         .object({
+          // Dentro de `condicion`, que es Mixed: Mongoose NO castea este path
+          // (meta.go lo dice explícito), así que NO lleva x-bson pese a ser
+          // un id de Mongo en la práctica — sería un casteo inventado.
           idUbicacion: z.string(),
           dentro: z.boolean().optional(),
           fuera: z.boolean().optional(),
@@ -85,8 +88,17 @@ export const CondicionNotificacionSchema = z.object({
            * Comprueba que el activo esté asignado a una emergencia medica para generar el evento
            */
           soloEnEmergencias: z.boolean().optional(),
-          // Virtual
-          ubicacion: z.custom<IUbicacion>().optional(),
+          // Virtual. Path anidado: el motor de populate actual (populate.go)
+          // no traversa dot-paths, así que hoy no resuelve, pero se declara
+          // para no perder el contrato del legacy (meta.go lo documenta igual).
+          ubicacion: z.custom<IUbicacion>().optional().meta({
+            'x-populate': {
+              ref: 'UbicacionSchema',
+              localField: 'condicion.activo.ubicacion.idUbicacion',
+              foreignField: '_id',
+              justOne: true,
+            },
+          }),
         })
         .optional(),
       detenido: z
@@ -347,14 +359,14 @@ export type Dia = z.infer<typeof DiaSchema>;
 
 export const ConfigEventoUsuarioSchema = z.object({
   _id: z.string().optional(),
-  fechaCreacion: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
   // Para eventos de una sola vez, al cumplirse se desactiva
   activa: z.boolean().optional(),
   // Agrupaciones temporales
   frecuencia: FrecuenciaSchema.optional(),
   // Fechas de vigencia para generar los eventos
-  validaDesde: z.string().optional(),
-  validaHasta: z.string().optional(),
+  validaDesde: z.string().optional().meta({ 'x-bson': 'date' }),
+  validaHasta: z.string().optional().meta({ 'x-bson': 'date' }),
   // Frecuencia de generacion de eventos
   generarSoloUnaVez: z.boolean().optional(),
   // Si pasa el periodo y sigue activa se genera el evento
@@ -380,37 +392,147 @@ export const ConfigEventoUsuarioSchema = z.object({
   // Tipo de dispositivo
   tipoEntidad: TipoEntidadSchema.optional(),
   // Configuracion de la condicion para enviar la notificacion
-  condicion: CondicionNotificacionSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro
+  // (por eso condicion.activo.ubicacion.idUbicacion no se cast-ea tampoco).
+  condicion: CondicionNotificacionSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
   // Agrupacion para buscar las entidades
   agrupacion: AgrupacionSchema.optional(),
   // Sobre que entidades se reciben las notificaciones
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idGrupo: z.string().optional(),
-  idEntidad: z.string().optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idGrupo: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'GrupoSchema' }),
+  // Polimórfico (Activo/Luminaria/Alarma/Tracker según tipoEntidad): sin
+  // `ref` en el @Prop, así que Mongoose no lo popula en su lugar. Los
+  // populates salen de los virtuals de abajo (activo/luminaria/alarma/tracker).
+  idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }),
   // Los usuarios que van a recibir las notificaciones
-  idsUsuarios: z.array(z.string()).optional(),
+  idsUsuarios: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
   // Los clientes que pueden atender el evento
-  idsClientesQuePuedenAtender: z.array(z.string()).optional(),
-  configHorariosAtencion: z.array(ConfigHorarioSchema).optional(),
-  idCategoriaEvento: z.string().optional(),
+  idsClientesQuePuedenAtender: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  // @Prop({type: [Object]}): Mixed, sin casteo adentro.
+  configHorariosAtencion: z
+    .array(ConfigHorarioSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
+  idCategoriaEvento: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'CategoriaEventoSchema' }),
   codigoReportado: z.string().optional(),
-  idListadoCategoria: z.string().optional(),
-  configZona: ConfigZonaSchema.optional(),
+  idListadoCategoria: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ListadoCategoriaSchema' }),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  configZona: ConfigZonaSchema.optional().meta({ 'x-bson': 'mixed' }),
 
   // Virtual
-  usuarios: z.array(z.custom<IUsuario>()).optional(),
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  grupo: z.custom<IGrupo>().optional(),
-  activo: z.custom<IActivo>().optional(),
-  luminaria: z.custom<ILuminaria>().optional(),
-  alarma: z.custom<IDispositivoAlarma>().optional(),
-  clientesQuePuedenAtender: z.array(ClienteSchema).optional(),
-  categoriaEvento: CategoriaEventoSchema.optional(),
-  tracker: z.custom<ITracker>().optional(),
-  listadoCategoria: ListadoCategoriaSchema.optional(),
-});
+  usuarios: z.array(z.custom<IUsuario>()).optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idsUsuarios',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  grupo: z.custom<IGrupo>().optional().meta({
+    'x-populate': {
+      ref: 'GrupoSchema',
+      localField: 'idGrupo',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  activo: z.custom<IActivo>().optional().meta({
+    'x-populate': {
+      ref: 'ActivoSchema',
+      localField: 'idEntidad',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  luminaria: z.custom<ILuminaria>().optional().meta({
+    'x-populate': {
+      ref: 'LuminariaSchema',
+      localField: 'idEntidad',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  alarma: z.custom<IDispositivoAlarma>().optional().meta({
+    'x-populate': {
+      ref: 'DispositivoAlarmaSchema',
+      localField: 'idEntidad',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  clientesQuePuedenAtender: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsClientesQuePuedenAtender',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  categoriaEvento: CategoriaEventoSchema.optional().meta({
+    'x-populate': {
+      ref: 'CategoriaEventoSchema',
+      localField: 'idCategoriaEvento',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  tracker: z.custom<ITracker>().optional().meta({
+    'x-populate': {
+      ref: 'TrackerSchema',
+      localField: 'idEntidad',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  listadoCategoria: ListadoCategoriaSchema.optional().meta({
+    'x-populate': {
+      ref: 'ListadoCategoriaSchema',
+      localField: 'idListadoCategoria',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'configeventousuarios' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del

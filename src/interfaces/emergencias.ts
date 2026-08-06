@@ -80,9 +80,18 @@ export type IEmergenciaBomberos = z.infer<typeof EmergenciaBomberosSchema>;
 export const EmergenciaSchema = z.object({
   //IDS
   _id: z.string().optional(),
-  idDestinatarioAsistencia: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idDestinatarioAsistencia: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'DestinatarioAsistenciaSchema' }),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
 
   //DATOS GENERALES DE LA EMERGENCIA
   tipo: TipoEmergenciaSchema.optional(),
@@ -95,15 +104,21 @@ export const EmergenciaSchema = z.object({
   codigo: z.number().optional(), // Código único del caso de emergencia médica es incremental
   solicitante: z.string().optional(), // Nombre del solicitante de la emergencia
   telefono: z.string().optional(), // Teléfono de contacto del solicitante
-  archivosAdjuntos: z.array(ArchivosAdjuntosSchema).optional(),
+  // @Prop({type: [Array]}) en el legacy: Mongoose castea el elemento a
+  // SchemaArray de SchemaMixed (verificado contra mongoose 8.13.2), o sea
+  // Mixed igual que [Object] pese a no usar esa sintaxis.
+  archivosAdjuntos: z
+    .array(ArchivosAdjuntosSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
   observaciones: z.string().optional(), // Notas adicionales sobre el auxilio
 
   //FECHAS RELEVANTES DE LA EMERGENCIA
-  fechaCreacion: z.string().optional(),
-  fechaPrimeraAsignacion: z.string().optional(),
-  fechaSalida: z.string().optional(), //La ambulancia puede salir del centro o salir desde otro lugar (este dato debe analizarse junto con el campo salioDelCentro)
-  fechaLlegadaDestino: z.string().optional(),
-  fechaFinalizacion: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaPrimeraAsignacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaSalida: z.string().optional().meta({ 'x-bson': 'date' }), //La ambulancia puede salir del centro o salir desde otro lugar (este dato debe analizarse junto con el campo salioDelCentro)
+  fechaLlegadaDestino: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaFinalizacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
   //SITUACIÓN DE LA EMERGENCIA
   //Si no es ninguna de estas, es una llamada común que no requiere seguimiento ni auxilio, ni tampoco es una emergencia ya atendida en el hospital.
@@ -114,27 +129,70 @@ export const EmergenciaSchema = z.object({
 
   //DATOS DE UBICACIÓN
   direccion: z.string().optional(), //Esta es la dirección que el solicitante indica para la emergencia. No tiene nada que ver con las direcciones que puede haber en los seguimientos
-  ubicacionDestino: GeoJSONPointSchema.optional(), //geojson del lugar de la emergencia
-  idUbicacion: z.string().optional(), //Cuando se crea una emergencia, se genera la entidad IUbicacion para la ubicacion, para luego ejecutar una lógica de negocio junto con la configEventoUsuario.
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  ubicacionDestino: GeoJSONPointSchema.optional().meta({
+    'x-bson': 'mixed',
+  }), //geojson del lugar de la emergencia
+  idUbicacion: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'UbicacionSchema' }), //Cuando se crea una emergencia, se genera la entidad IUbicacion para la ubicacion, para luego ejecutar una lógica de negocio junto con la configEventoUsuario.
 
   //SEGUIMIENTO DE LA EMERGENCIA
   asignada: z.boolean().optional(), //Indica si a la emergencia se le asignó alguna clase de personal para el seguimiento (vehículos, médicos, choferes, etc)
-  ultimaActualizacion: z.string().optional(),
-  ultimoEventoEmergencia: z.custom<IEventoGenerico>().optional(), //Acá se carga el último evento para hacer el seguimiento del auxilio
+  ultimaActualizacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  ultimoEventoEmergencia: z
+    .custom<IEventoGenerico>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), //Acá se carga el último evento para hacer el seguimiento del auxilio
   salioDelCentro: z.boolean().optional(), //En caso de que sea un auxilio, se indica si el móvil asignado salió del centro o no para ir al destino.
   centroEnTransito: z.boolean().optional(), //Indica si la ambulancia pasó por un centro en el camino (sirve para diferenciar el caso en el que la ambulancia sale de un centro o pasa por uno. Esto sirve para determinar el campo salioDelCentro)
   cantidadReasignaciones: z.number().optional(), //Cuenta la cantidad de reasignaciones que tuvo la emergencia
 
   //DATOS ESPECÍFICOS DE CADA TIPO DE EMERGENCIA
-  emergenciaMedica: EmergenciaMedicaSchema.optional(),
-  emergenciaBomberos: EmergenciaBomberosSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  emergenciaMedica: EmergenciaMedicaSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
+  emergenciaBomberos: EmergenciaBomberosSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 
   //Populate
-  destinatarioAsistencia: z.custom<IDestinatarioAsistencia>().optional(), // Información del paciente
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  ubicacion: z.custom<IUbicacion>().optional(),
-});
+  destinatarioAsistencia: z.custom<IDestinatarioAsistencia>().optional().meta({
+    'x-populate': {
+      ref: 'DestinatarioAsistenciaSchema',
+      localField: 'idDestinatarioAsistencia',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }), // Información del paciente
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  ubicacion: z.custom<IUbicacion>().optional().meta({
+    'x-populate': {
+      ref: 'UbicacionSchema',
+      localField: 'idUbicacion',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'emergencias' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del
