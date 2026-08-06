@@ -49,13 +49,13 @@ export const ConfigMarkerSchema = z
       .array(z.string())
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }), // IdsAncestros del cliente que lo creó
-    // @Prop({type: [ObjectId]}): array pese al nombre singular — fiel al
-    // legacy (docs/MIGRACION.md). Si tiene idUsuario, solo lo pueden usar
-    // esos usuarios.
-    idUsuario: z
-      .array(z.string())
-      .optional()
-      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    // Sin `.meta()`: el legacy declara `@Prop({type: [ObjectId]})` (array) y
+    // zod acá lo tiene como escalar desde antes de esta tarea. Alinearlos
+    // rompe consumidores (gestion-api-gestion/src/entidades/config-marker/
+    // service.ts:55 asigna un string; :157 compara con `===` contra un
+    // string) — ver docs/MIGRACION.md §7 y ConfigMarker en `sinAnotar`
+    // (gestion-datos-go/test/drift/anotaciones_test.go).
+    idUsuario: z.string().optional(), // Si tiene idUsuario, solo lo puede usar ese usuario
 
     // Sobre que aplica este marker
     //
