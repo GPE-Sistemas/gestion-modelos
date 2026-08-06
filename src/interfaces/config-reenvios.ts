@@ -53,28 +53,81 @@ export const OpcionesReenvioSchema = z.object({
 });
 export type IOpcionesReenvio = z.infer<typeof OpcionesReenvioSchema>;
 
-export const ConfigReenvioSchema = z.object({
-  _id: z.string().optional(),
-  activo: z.boolean().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  fechaCreacion: z.string().optional(),
-  // Configuracion
-  agrupacionReenvio: AgrupacionReenvioSchema.optional(),
-  idClienteReenvio: z.string().optional(),
-  idEntidadReenvio: z.string().optional(),
-  opcionesReenvio: OpcionesReenvioSchema.optional(),
-  reenviarHijos: z.boolean().optional(), /// solo para trackers o alarmas de clientes hijos del cliente reenvio -- tambien se reenvian los propios
-  periodoInicio: z.string().optional(), // Fecha desde la cual se comenzará a reenviar la data (si no se especifica, se asume que es desde la fecha de creación del reenvío)
-  periodoFin: z.string().optional(), // Fecha hasta la cual se reenviará la data (si no se especifica, se asume que es indefinido)
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const ConfigReenvioSchema = z
+  .object({
+    _id: z.string().optional(),
+    activo: z.boolean().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    // Configuracion
+    agrupacionReenvio: AgrupacionReenvioSchema.optional(),
+    idClienteReenvio: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    // Polimórfico (tracker o dispositivoAlarma según agrupacionReenvio): sin
+    // ref fijo en el legacy (@Prop sin `ref`), por eso sin x-ref acá tampoco.
+    idEntidadReenvio: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    opcionesReenvio: OpcionesReenvioSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    reenviarHijos: z.boolean().optional(), /// solo para trackers o alarmas de clientes hijos del cliente reenvio -- tambien se reenvian los propios
+    periodoInicio: z.string().optional().meta({ 'x-bson': 'date' }), // Fecha desde la cual se comenzará a reenviar la data (si no se especifica, se asume que es desde la fecha de creación del reenvío)
+    periodoFin: z.string().optional().meta({ 'x-bson': 'date' }), // Fecha hasta la cual se reenviará la data (si no se especifica, se asume que es indefinido)
 
-  // Virtual
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  clienteReenvio: ClienteSchema.optional(),
-  dispositivoAlarma: DispositivoAlarmaSchema.optional(),
-  tracker: TrackerSchema.optional(),
-});
+    // Virtual
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    clienteReenvio: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idClienteReenvio',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    dispositivoAlarma: DispositivoAlarmaSchema.optional().meta({
+      'x-populate': {
+        ref: 'DispositivoAlarmaSchema',
+        localField: 'idEntidadReenvio',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    tracker: TrackerSchema.optional().meta({
+      'x-populate': {
+        ref: 'TrackerSchema',
+        localField: 'idEntidadReenvio',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'configreenvios' });
 export type IConfigReenvio = z.infer<typeof ConfigReenvioSchema>;
 
 export const CreateConfigReenvioSchema = ConfigReenvioSchema.omit({

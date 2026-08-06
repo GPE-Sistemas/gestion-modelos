@@ -39,16 +39,32 @@ export type IObjetivoComando = z.infer<typeof ObjetivoComandoSchema>;
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
+//
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const ComandoSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idUsuario: z.string().optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idUsuario: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
   nombre: z.string().optional(),
   descripcion: z.string().optional(),
-  fechaCreacion: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
   payload: z.string().optional(),
-  datosExtra: z.record(z.string(), z.any()).optional(),
+  // Mixed: metadata arbitraria — feature aplicar-config-por-ACK del legacy
+  // (configPatch/autoRespondeUplink/confirmadoPor).
+  datosExtra: z.record(z.string(), z.any()).optional().meta({
+    'x-bson': 'mixed',
+  }),
   // Tracker
   idTracker: z.string().optional(),
   respuesta: z.string().optional(),
@@ -57,20 +73,58 @@ export const ComandoSchema = z.object({
   deveui: z.string().optional(),
   puerto: z.number().optional(),
   //
-  fechaActualizacion: z.string().optional(),
-  estado: EstadoComandoSchema.optional(), // Default: Enviado
+  fechaActualizacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  // @Prop({type: Object, default: 'Enviado'}) en el legacy: Mixed, Mongoose
+  // no castea adentro pese a que zod lo tipa como enum.
+  estado: EstadoComandoSchema.optional().meta({ 'x-bson': 'mixed' }), // Default: Enviado
   fallos: z.number().optional(),
   fCnt: z.string().optional(),
   idChirpstack: z.string().optional(),
-  objetivo: ObjetivoComandoSchema.optional(), // Procedencia: desde qué nivel/entidad se originó (luminaria/grupo/puesta/punto-alim)
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  objetivo: ObjetivoComandoSchema.optional().meta({ 'x-bson': 'mixed' }), // Procedencia: desde qué nivel/entidad se originó (luminaria/grupo/puesta/punto-alim)
 
   // Virtuals
-  tracker: z.custom<ITracker>().optional(),
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  usuario: z.custom<IUsuario>().optional(),
-  dispositivo: z.custom<IDispositivoLorawan>().optional(),
-});
+  tracker: z.custom<ITracker>().optional().meta({
+    'x-populate': {
+      ref: 'TrackerSchema',
+      localField: 'idTracker',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  usuario: z.custom<IUsuario>().optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idUsuario',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  dispositivo: z.custom<IDispositivoLorawan>().optional().meta({
+    'x-populate': {
+      ref: 'DispositivoLorawanSchema',
+      localField: 'deveui',
+      foreignField: 'deveui',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'comandos' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del
