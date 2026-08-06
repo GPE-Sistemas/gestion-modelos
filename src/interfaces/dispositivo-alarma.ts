@@ -222,7 +222,13 @@ export const DispositivoAlarmaSchema = z.object({
   // `fechaUltimoReporteDoble` marca la última confirmación (para envejecer el flag).
   // `forzarUnCanal` = escotilla manual: no esperar el 2do canal aunque sea dual.
   reportaDoble: z.boolean().optional(),
-  fechaUltimoReporteDoble: z.string().optional().meta({ 'x-bson': 'date' }),
+  // SIN x-bson pese al nombre "fecha*": es Go-nativo (no tiene @Prop en el
+  // schema Mongoose legacy) y gestion-api-alarmas lo escribe como string ISO
+  // (new Date().toISOString()), no como BSON Date. Anotarlo 'date' migraría
+  // el tipo BSON en el próximo write sin que nadie lo decida — el mecanismo
+  // de docs/MIGRACION.md item 12 (valores.timestamp). Decisión pendiente,
+  // ver §7 item 23.
+  fechaUltimoReporteDoble: z.string().optional(),
   forzarUnCanal: z.boolean().optional(),
   idComunicador: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
   idUnicoComunicador: z.string().optional(),
@@ -245,7 +251,11 @@ export const DispositivoAlarmaSchema = z.object({
   // @Prop({type: Object}) en el legacy: escalar Mixed pese al tipo TS array.
   camarasPorZona: z.array(CamaraAlarmaSchema).optional().meta({ 'x-bson': 'mixed' }),
   idsCamaras: z.array(z.string()).optional(),
-  armado: z.array(z.boolean()).optional(),
+  // @Prop() armado?: boolean[] sin `type` explícito: @nestjs/mongoose refleja
+  // Array y lo resuelve a Mixed (sin caster propio), no a [Boolean]. Medido en
+  // prod: hay documentos con `armado` array Y documentos con `armado` boolean
+  // escalar (heterogéneo de verdad) — ver docs/MIGRACION.md §7 item 23.
+  armado: z.array(z.boolean()).optional().meta({ 'x-bson': 'mixed' }),
   armadoPor: z.array(z.union([z.string(), z.null()])).optional(),
   // UNICOM: estado de armado con semántica propia (total/perimetral/selectivo).
   // Additive — NO reemplaza `armado`/`TiposDeArmado` (uso productivo de otras alarmas).
