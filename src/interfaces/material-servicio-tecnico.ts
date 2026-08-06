@@ -33,29 +33,85 @@ export const EstadoPedidoMaterialSchema = z.enum([
 ]);
 export type EstadoPedidoMaterial = z.infer<typeof EstadoPedidoMaterialSchema>;
 
-export const MaterialServicioTecnicoSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idEventoGenerico: z.string().optional(), //Ausente cuando el material es stock asignado a la caja del técnico (tipo 'asignado').
-  idUsuario: z.string().optional(), //quien registró/solicitó el material, o a quien está asignado el stock
-  tipo: TipoMaterialServicioTecnicoSchema.optional(),
-  descripcion: z.string().optional(),
-  cantidad: z.number().optional(),
-  imagenes: z.array(z.string()).optional(),
-  estado: EstadoPedidoMaterialSchema.optional(),
-  idEntidad: z.string().optional(), //Entidad del sistema referenciada por este material (opcional).
-  tipoEntidad: z.custom<IEntidades>().optional(),
-  /** Reservado para stock futuro: vínculo a artículo de inventario. No usar aún. */
-  idArticulo: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  evento: z.custom<IEventoGenerico>().optional(),
-  usuario: UsuarioSchema.optional(),
-  dispositivoLorawan: z.custom<IDispositivoLorawan>().optional(), // populate de idEntidad cuando tipoEntidad === 'Dispositivo Lorawan'
-});
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts. Populates intra-SCC como z.custom
+// (import type-only): ver comentario de esa convención en activo.ts/recorrido.ts.
+export const MaterialServicioTecnicoSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idEventoGenerico: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'EventoGenericoSchema' }), //Ausente cuando el material es stock asignado a la caja del técnico (tipo 'asignado').
+    idUsuario: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }), //quien registró/solicitó el material, o a quien está asignado el stock
+    tipo: TipoMaterialServicioTecnicoSchema.optional(),
+    descripcion: z.string().optional(),
+    cantidad: z.number().optional(),
+    imagenes: z.array(z.string()).optional(),
+    estado: EstadoPedidoMaterialSchema.optional(),
+    // Entidad del sistema referenciada por este material (opcional). Sin
+    // x-ref propio: se popula bajo el nombre "dispositivoLorawan" (virtual
+    // con nombre distinto al path), no en el lugar de idEntidad.
+    idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    tipoEntidad: z.custom<IEntidades>().optional(),
+    /** Reservado para stock futuro: vínculo a artículo de inventario. No usar aún. */
+    idArticulo: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    evento: z.custom<IEventoGenerico>().optional().meta({
+      'x-populate': {
+        ref: 'EventoGenericoSchema',
+        localField: 'idEventoGenerico',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    usuario: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idUsuario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    // populate de idEntidad cuando tipoEntidad === 'Dispositivo Lorawan'
+    dispositivoLorawan: z.custom<IDispositivoLorawan>().optional().meta({
+      'x-populate': {
+        ref: 'DispositivoLorawanSchema',
+        localField: 'idEntidad',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'materialserviciotecnicos' });
 export type IMaterialServicioTecnico = z.infer<
   typeof MaterialServicioTecnicoSchema
 >;

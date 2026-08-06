@@ -3,21 +3,65 @@ import { ClienteSchema } from "./cliente";
 import { DispositivoLorawanSchema } from "./dispositivo-lorawan";
 import { LuminariaSchema } from "./luminaria";
 
-export const AlertaBotonBLESchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  fechaCreacion: z.string().optional(),
-  idDispositivoLorawan: z.string().optional(),
-  idLuminaria: z.string().optional(),
-  mac: z.string().optional(),
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const AlertaBotonBLESchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    idDispositivoLorawan: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'DispositivoLorawanSchema' }),
+    idLuminaria: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'LuminariaSchema' }),
+    mac: z.string().optional(),
 
-  //Populate
-  dispositivoLorawan: DispositivoLorawanSchema.optional(),
-  luminaria: LuminariaSchema.optional(),
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+    //Populate
+    dispositivoLorawan: DispositivoLorawanSchema.optional().meta({
+      'x-populate': {
+        ref: 'DispositivoLorawanSchema',
+        localField: 'idDispositivoLorawan',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    luminaria: LuminariaSchema.optional().meta({
+      'x-populate': {
+        ref: 'LuminariaSchema',
+        localField: 'idLuminaria',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'alertabotonbles' });
 export type IAlertaBotonBLE = z.infer<typeof AlertaBotonBLESchema>;
 
 export const CreateAlertaBotonBLESchema = AlertaBotonBLESchema.omit({
