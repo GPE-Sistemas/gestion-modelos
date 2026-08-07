@@ -34,7 +34,7 @@ export const TrackeoSchema = z.object({
   idParada: z
     .string()
     .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ParadaSchema' }),
+    .meta({ 'x-bson': 'objectId' }),
   indiceParada: z.number().optional(),
   fechaProximaParada: z.string().optional().meta({ 'x-bson': 'date' }),
   // Contraintuitivo pero fiel al legacy: @Prop({ref: Recorrido.name}) en
@@ -42,7 +42,7 @@ export const TrackeoSchema = z.object({
   idProximaParada: z
     .string()
     .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'RecorridoSchema' }),
+    .meta({ 'x-bson': 'objectId' }),
 
   // Populate
   cliente: ClienteSchema.optional().meta({
