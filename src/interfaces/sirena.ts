@@ -37,7 +37,9 @@ export const SirenaSchema = z
     idExterno: z.string().optional(), /// El _id que tiene la sirena en seguridad
     chipId: z.string().optional(), /// El chipId de la sirena en seguridad
     fechaSincronizacion: z.string().optional().meta({ 'x-bson': 'date' }),
-    ubicacion: GeoJSONPointSchema.optional(),
+    // @Prop({type: Object}) en el schema Mongoose legacy: adentro de un Mixed,
+    // Mongoose no declara NADA — no castea ni inicializa esos paths.
+    ubicacion: GeoJSONPointSchema.optional().meta({ 'x-bson': 'mixed' }),
     direccion: z.string().optional(),
     activa: z.boolean().optional(),
     estado: EstadoSirenaSchema.optional(),

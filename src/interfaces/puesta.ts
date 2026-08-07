@@ -28,7 +28,11 @@ export const PuestaSchema = z
     fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
     identificacion: z.string().optional(),
-    ubicacion: GeoJSONPointSchema.optional(), // fuente de verdad de la georreferencia, es la que adquieren las luminarias asignadas a esta puesta
+    // fuente de verdad de la georreferencia, es la que adquieren las
+    // luminarias asignadas a esta puesta. @Prop({type: Object}) en el schema
+    // Mongoose legacy: adentro de un Mixed, Mongoose no declara NADA — no
+    // castea ni inicializa esos paths.
+    ubicacion: GeoJSONPointSchema.optional().meta({ 'x-bson': 'mixed' }),
     direccion: z.string().optional(),
 
     idsGrupos: z

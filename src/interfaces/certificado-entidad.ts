@@ -27,7 +27,14 @@ export const CertificadoEntidadSchema = z
     fechaComienzo: z.string().optional().meta({ 'x-bson': 'date' }),
     fechaEmision: z.string().optional().meta({ 'x-bson': 'date' }),
     eventosRegistrados: z.array(z.custom<IEventoGenerico>()).optional(),
-    codigosEsperados: z.array(CodigoDispositivoSchema).optional(),
+    // @Prop({type: [Object]}) en el schema Mongoose legacy: adentro de un
+    // Mixed, Mongoose no declara NADA — no castea ni inicializa esos paths. La
+    // anotación se lo dice al chequeo de drift, que si no exigiría en el
+    // meta.go de gestion-datos-go casts que el legacy nunca tuvo.
+    codigosEsperados: z
+      .array(CodigoDispositivoSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
     // Populate
     tracker: TrackerSchema.optional().meta({
       'x-populate': {
@@ -59,6 +66,14 @@ export const CertificadoEntidadSchema = z
         localField: 'idCliente',
         foreignField: '_id',
         justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
       },
     }),
   })
