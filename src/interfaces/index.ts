@@ -20,6 +20,7 @@ export * from './downlink-job';
 export * from './envio-vehiculo';
 export * from './estado-entidad';
 export * from './excepcion';
+export * from './export-job';
 export * from './grupo';
 export * from './grupo-usuario';
 export * from './log-despacho';
