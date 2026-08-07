@@ -97,13 +97,15 @@ export type ICamaraAlarma = z.infer<typeof CamaraAlarmaSchema>;
 // `idUnicoComunicador` de IDispositivoAlarma (misma cuenta configurada en cada
 // equipo) — lo que los distingue es `protocolo`, no el id.
 export const ComunicadorAlarmaSchema = z.object({
-  protocolo: z.string().optional(), // literal libre (ej. 'garnet-titanium', 'lantrix'), matchea contra el servidor que lo recibe
   idComunicador: z.string().optional(), // FK a ModeloDispositivo (marca/modelo/tabla de códigos de ESTE comunicador)
   passwordComunicador: z.string().optional(),
-  nombre: z.string().optional(),
   ultimaConexion: UltimaConexionSchema.optional(),
   fechaUltimaComunicacion: z.string().optional(),
-  // Populate (paralelo al viejo `alarma.comunicador`, pero por ítem)
+  // Populate (paralelo al viejo `alarma.comunicador`, pero por ítem). El
+  // protocolo (qué servidor de gestion-api-alarmas lo recibe) vive en
+  // `modelo.protocolo`, no acá: es un atributo del MODELO de comunicador
+  // (todo "Garnet Titanium" habla el mismo protocolo), no de cada ítem —
+  // así no se puede elegir un modelo y un protocolo que no coincidan.
   modelo: ModeloDispositivoSchema.optional(),
 });
 export type IComunicadorAlarma = z.infer<typeof ComunicadorAlarmaSchema>;

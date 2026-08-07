@@ -23,6 +23,29 @@ export type FormatosMensajeComunicador = z.infer<
   typeof FormatosMensajeComunicadorSchema
 >;
 
+// Qué servidor de gestion-api-alarmas recibe los eventos de este modelo de
+// comunicador (8vo arg de `crearEvento`, literal fijo por servidor — ver
+// src/servidores/*.ts). Es un atributo del MODELO, no de cada ítem de
+// `comunicadores[]` en la alarma: todos los equipos "Garnet Titanium" hablan
+// el mismo protocolo, así que no tiene sentido elegirlo por separado en cada
+// alarma (y evita el error de elegir un modelo y un protocolo que no
+// coincidan). Solo hace falta cuando una alarma tiene 2+ comunicadores —
+// para desambiguar cuál actualizar —, así que es opcional.
+export const ProtocoloComunicadorSchema = z.enum([
+  'alarma-irix',
+  'avatis',
+  'dahua',
+  'garnet-titanium',
+  'hikvision',
+  'intelbras',
+  'kummert',
+  'lantrix',
+  'nanocom',
+  'netio',
+  'unicom',
+]);
+export type ProtocoloComunicador = z.infer<typeof ProtocoloComunicadorSchema>;
+
 export const NivelDimerizacionSchema = z.enum([
   'dim10',
   'dim20',
@@ -86,6 +109,8 @@ export const ModeloDispositivoSchema = z.object({
   marca: z.string().optional(),
   modelo: z.string().optional(),
   formatoMensaje: FormatosMensajeComunicadorSchema.optional(),
+  // Solo aplica a modelos tipo="Comunicador". Ver ProtocoloComunicadorSchema.
+  protocolo: ProtocoloComunicadorSchema.optional(),
   idCodigos: z
     .string()
     .optional()
