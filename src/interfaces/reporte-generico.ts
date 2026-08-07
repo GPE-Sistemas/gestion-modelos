@@ -39,6 +39,9 @@ export const TipoValoresReporteSchema = z.enum([
   'Luminaria Wellness',
   'Luminaria ACTIS FING Estado',
   'Luminaria ACTIS FING Energía',
+  'Luminaria CitiLight Estado',
+  'Luminaria CitiLight Energía',
+  'Luminaria CitiLight Alerta',
   'Tracker 4G',
   'Tracker 4G Combustible',
   'Tracker 4G Temperatura',
@@ -148,6 +151,67 @@ export const ReporteLuminariaACTISEnergiaSchema = z.object({
 });
 export type IReporteLuminariaACTISEnergia = z.infer<
   typeof ReporteLuminariaACTISEnergiaSchema
+>;
+
+// ===== CitiLight =====
+// El ILC tiene 4 uplinks. SOLO 3 son reportes (telemetría historizable):
+// Estado (Heartbeat), Energía, Alerta. El 4º, Notification (01/40), NO es reporte:
+// trae metadata de config/estado (RTC, firmware, multicast, scheduleConfigStatus,
+// systemConfigStatus) que se refleja en `dispositivo.config`, no se historiza.
+//
+// Estado (Heartbeat packet 05/1B): el heartbeat SOLO envía relé + dimming (+ reserved).
+// tiempoEncendida y esDeDia se calculan en backend.
+// `modo`: NO viene en el heartbeat. El decoder lo DENORMALIZA acá tomándolo del
+// scheduleConfigStatus del último Notification (dispositivo.config: astronómico/manual/
+// ninguno). Se guarda en el reporte para que el snapshot periódico sea consistente con
+// GPE/ACTIS y el cálculo de estado + dashboards lo lean igual que en los otros tipos.
+export const ReporteLuminariaCitiLightEstadoSchema = z.object({
+  turnOnOffStatus: z.boolean().optional(), // Relay Status (on/off)
+  estadoRele: z.boolean().optional(), // = Relay Status
+  dimmingValue: z.number().optional(), // % (Dimming Status)
+  modo: ModoLuminariaSchema.optional(), // denormalizado desde Notification (no del heartbeat)
+  tiempoEncendida: z.number().optional(), // En horas (acumulado en backend)
+  esDeDia: z.boolean().optional(), // calculado en backend (SunCalc)
+  fCnt: z.number().optional(),
+  alarmas: z.array(z.string()).optional(),
+});
+export type IReporteLuminariaCitiLightEstado = z.infer<
+  typeof ReporteLuminariaCitiLightEstadoSchema
+>;
+
+// Energía (Energy packet 01/60): corriente mA, voltaje V, PF, relé, dimming.
+export const ReporteLuminariaCitiLightEnergiaSchema = z.object({
+  corriente: z.number().optional(), // mA
+  voltaje: z.number().optional(), // V
+  potencia: z.number().optional(), // W (calculada)
+  factorPotencia: z.number().optional(),
+  energiaTotal: z.number().optional(), // kWh acumulado (integración temporal)
+  estadoRele: z.boolean().optional(),
+  turnOnOffStatus: z.boolean().optional(),
+  dimmingValue: z.number().optional(), // %
+  epochtime: z.number().optional(), // Unix epoch del dispositivo (segundos)
+  fCnt: z.number().optional(),
+  esDeDia: z.boolean().optional(),
+  alarmas: z.array(z.string()).optional(),
+});
+export type IReporteLuminariaCitiLightEnergia = z.infer<
+  typeof ReporteLuminariaCitiLightEnergiaSchema
+>;
+
+// Alerta (Alert packet 02/61): temperatura/lux + flags de falla (booleanos limpios).
+export const ReporteLuminariaCitiLightAlertaSchema = z.object({
+  temperatura: z.number().optional(), // °C
+  lux: z.number().optional(),
+  lowVoltage: z.boolean().optional(), // flag subtensión
+  highVoltage: z.boolean().optional(), // flag sobretensión
+  highCurrent: z.boolean().optional(), // flag sobrecorriente
+  lightFault: z.boolean().optional(), // flag falla de luminaria
+  epochtime: z.number().optional(), // Unix epoch del dispositivo (segundos)
+  fCnt: z.number().optional(),
+  alarmas: z.array(z.string()).optional(),
+});
+export type IReporteLuminariaCitiLightAlerta = z.infer<
+  typeof ReporteLuminariaCitiLightAlertaSchema
 >;
 
 export const ReporteTrackerSchema = z.object({
@@ -280,6 +344,9 @@ export type MapaValoresReporte = {
   'Luminaria Wellness': IReporteLuminariaWellness;
   'Luminaria ACTIS FING Estado': IReporteLuminariaACTISEstado;
   'Luminaria ACTIS FING Energía': IReporteLuminariaACTISEnergia;
+  'Luminaria CitiLight Estado': IReporteLuminariaCitiLightEstado;
+  'Luminaria CitiLight Energía': IReporteLuminariaCitiLightEnergia;
+  'Luminaria CitiLight Alerta': IReporteLuminariaCitiLightAlerta;
   'Tracker 4G': IReporteTracker4G;
   'Tracker T1000B': IReporteTrackerT1000B;
   'Tracker Qualcomm': IReporteTrackerQualcomm;
@@ -342,6 +409,9 @@ export type IReporteGenerico =
   | IReporteBase<'Luminaria Wellness'>
   | IReporteBase<'Luminaria ACTIS FING Estado'>
   | IReporteBase<'Luminaria ACTIS FING Energía'>
+  | IReporteBase<'Luminaria CitiLight Estado'>
+  | IReporteBase<'Luminaria CitiLight Energía'>
+  | IReporteBase<'Luminaria CitiLight Alerta'>
   | IReporteBase<'Tracker 4G'>
   | IReporteBase<'Tracker T1000B'>
   | IReporteBase<'Tracker Qualcomm'>
@@ -375,6 +445,9 @@ export type ICreateReporteGenerico =
   | Omit<IReporteBase<'Luminaria Wellness'>, Omitir>
   | Omit<IReporteBase<'Luminaria ACTIS FING Estado'>, Omitir>
   | Omit<IReporteBase<'Luminaria ACTIS FING Energía'>, Omitir>
+  | Omit<IReporteBase<'Luminaria CitiLight Estado'>, Omitir>
+  | Omit<IReporteBase<'Luminaria CitiLight Energía'>, Omitir>
+  | Omit<IReporteBase<'Luminaria CitiLight Alerta'>, Omitir>
   | Omit<IReporteBase<'Tracker 4G'>, Omitir>
   | Omit<IReporteBase<'Tracker T1000B'>, Omitir>
   | Omit<IReporteBase<'Tracker Qualcomm'>, Omitir>
@@ -400,6 +473,15 @@ export type IUpdateReporteGenerico =
     >)
   | ({ tipoReporte: 'Luminaria ACTIS FING Energía' } & Partial<
       Omit<IReporteBase<'Luminaria ACTIS FING Energía'>, Omitir | 'tipoReporte'>
+    >)
+  | ({ tipoReporte: 'Luminaria CitiLight Estado' } & Partial<
+      Omit<IReporteBase<'Luminaria CitiLight Estado'>, Omitir | 'tipoReporte'>
+    >)
+  | ({ tipoReporte: 'Luminaria CitiLight Energía' } & Partial<
+      Omit<IReporteBase<'Luminaria CitiLight Energía'>, Omitir | 'tipoReporte'>
+    >)
+  | ({ tipoReporte: 'Luminaria CitiLight Alerta' } & Partial<
+      Omit<IReporteBase<'Luminaria CitiLight Alerta'>, Omitir | 'tipoReporte'>
     >)
   | ({ tipoReporte: 'Tracker 4G' } & Partial<
       Omit<IReporteBase<'Tracker 4G'>, Omitir | 'tipoReporte'>
@@ -553,6 +635,9 @@ const vRepLumGPEEnergia = varianteReporte('Luminaria GPE Energía', ReporteLumin
 const vRepLumWellness = varianteReporte('Luminaria Wellness', ReporteLuminariaWellnessSchema);
 const vRepLumACTISEstado = varianteReporte('Luminaria ACTIS FING Estado', ReporteLuminariaACTISEstadoSchema);
 const vRepLumACTISEnergia = varianteReporte('Luminaria ACTIS FING Energía', ReporteLuminariaACTISEnergiaSchema);
+const vRepLumCitiLightEstado = varianteReporte('Luminaria CitiLight Estado', ReporteLuminariaCitiLightEstadoSchema);
+const vRepLumCitiLightEnergia = varianteReporte('Luminaria CitiLight Energía', ReporteLuminariaCitiLightEnergiaSchema);
+const vRepLumCitiLightAlerta = varianteReporte('Luminaria CitiLight Alerta', ReporteLuminariaCitiLightAlertaSchema);
 const vRepTracker4G = varianteReporte('Tracker 4G', ReporteTracker4GSchema);
 const vRepTrackerT1000B = varianteReporte('Tracker T1000B', ReporteTrackerT1000BSchema);
 const vRepTrackerQualcomm = varianteReporte('Tracker Qualcomm', ReporteTrackerQualcommSchema);
@@ -566,6 +651,9 @@ export const ReporteGenericoSchema = z.discriminatedUnion('tipoReporte', [
   vRepLumWellness,
   vRepLumACTISEstado,
   vRepLumACTISEnergia,
+  vRepLumCitiLightEstado,
+  vRepLumCitiLightEnergia,
+  vRepLumCitiLightAlerta,
   vRepTracker4G,
   vRepTrackerT1000B,
   vRepTrackerQualcomm,
@@ -595,6 +683,9 @@ export const CreateReporteGenericoSchema = z.discriminatedUnion('tipoReporte', [
   vRepLumWellness.omit(omitirCreateUpdateReporte),
   vRepLumACTISEstado.omit(omitirCreateUpdateReporte),
   vRepLumACTISEnergia.omit(omitirCreateUpdateReporte),
+  vRepLumCitiLightEstado.omit(omitirCreateUpdateReporte),
+  vRepLumCitiLightEnergia.omit(omitirCreateUpdateReporte),
+  vRepLumCitiLightAlerta.omit(omitirCreateUpdateReporte),
   vRepTracker4G.omit(omitirCreateUpdateReporte),
   vRepTrackerT1000B.omit(omitirCreateUpdateReporte),
   vRepTrackerQualcomm.omit(omitirCreateUpdateReporte),
@@ -610,6 +701,9 @@ export const UpdateReporteGenericoSchema = z.discriminatedUnion('tipoReporte', [
   vRepLumWellness.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria Wellness') }),
   vRepLumACTISEstado.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria ACTIS FING Estado') }),
   vRepLumACTISEnergia.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria ACTIS FING Energía') }),
+  vRepLumCitiLightEstado.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria CitiLight Estado') }),
+  vRepLumCitiLightEnergia.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria CitiLight Energía') }),
+  vRepLumCitiLightAlerta.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria CitiLight Alerta') }),
   vRepTracker4G.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Tracker 4G') }),
   vRepTrackerT1000B.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Tracker T1000B') }),
   vRepTrackerQualcomm.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Tracker Qualcomm') }),

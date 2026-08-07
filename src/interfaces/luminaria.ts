@@ -52,10 +52,18 @@ export type IEstadoLuminariaCalculado = z.infer<
 export type MapaValoresReportePeriodico = {
   'Luminaria GPE': IReporteBase<'Luminaria GPE Periódico'>;
   'Luminaria ACTIS FING': IReporteBase<'Luminaria ACTIS FING Estado'>;
+  'Luminaria CitiLight': IReporteBase<'Luminaria CitiLight Estado'>;
 };
 export type MapaValoresReporteEnergia = {
   'Luminaria GPE': IReporteBase<'Luminaria GPE Energía'>;
   'Luminaria ACTIS FING': IReporteBase<'Luminaria ACTIS FING Energía'>;
+  'Luminaria CitiLight': IReporteBase<'Luminaria CitiLight Energía'>;
+};
+// Solo CitiLight tiene reporte de alerta; GPE/ACTIS no lo emiten (undefined).
+export type MapaValoresReporteAlerta = {
+  'Luminaria GPE': undefined;
+  'Luminaria ACTIS FING': undefined;
+  'Luminaria CitiLight': IReporteBase<'Luminaria CitiLight Alerta'>;
 };
 
 export type TipoDispositivoLuminaria = keyof MapaValoresReportePeriodico;
@@ -76,6 +84,7 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   tipoDispositivo?: T; // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
   ultimoReportePeriodico?: MapaValoresReportePeriodico[T]; // Ultimo reporte periodico recibido
   ultimoReporteEnergia?: MapaValoresReporteEnergia[T]; // Ultimo reporte energia recibido
+  ultimoReporteAlerta?: MapaValoresReporteAlerta[T]; 
   fechaUltimaComunicacion?: string; // Fecha del ultima comunicacion recibida por el dispositivo
   idPerfilConfig?: string;
   tipoEnergizado?: ITipoEnergizado;
@@ -211,9 +220,28 @@ const VarianteLuminariaACTISFING = LuminariaCamposSchema.extend({
     .optional()
     .meta({ 'x-bson': 'mixed' }), // Ultimo reporte energia recibido
 });
+const VarianteLuminariaCitiLight = LuminariaCamposSchema.extend({
+  tipoDispositivo: z.literal('Luminaria CitiLight').optional(),
+  ultimoReportePeriodico: z
+    .custom<IReporteBase<'Luminaria CitiLight Estado'>>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte periodico recibido (Heartbeat)
+  ultimoReporteEnergia: z
+    .custom<IReporteBase<'Luminaria CitiLight Energía'>>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte energia recibido (Energy packet)
+  ultimoReporteAlerta: z
+    .custom<IReporteBase<'Luminaria CitiLight Alerta'>>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte de alerta recibido (Alert packet)
+});
 
 export const LuminariaSchema = z
-  .union([VarianteLuminariaGPE, VarianteLuminariaACTISFING])
+  .union([
+    VarianteLuminariaGPE,
+    VarianteLuminariaACTISFING,
+    VarianteLuminariaCitiLight,
+  ])
   .meta({ 'x-collection': 'luminarias' });
 
 /**
@@ -223,7 +251,8 @@ export const LuminariaSchema = z
  */
 export type ILuminaria =
   | ILuminariaGenerica<'Luminaria GPE'>
-  | ILuminariaGenerica<'Luminaria ACTIS FING'>;
+  | ILuminariaGenerica<'Luminaria ACTIS FING'>
+  | ILuminariaGenerica<'Luminaria CitiLight'>;
 
 ////// CREATE
 const camposOmitidos: {
@@ -253,6 +282,7 @@ const camposOmitidos: {
 export const CreateLuminariaSchema = z.union([
   VarianteLuminariaGPE.omit(camposOmitidos),
   VarianteLuminariaACTISFING.omit(camposOmitidos),
+  VarianteLuminariaCitiLight.omit(camposOmitidos),
 ]);
 
 type OmitirCreateUpdate =
@@ -269,16 +299,19 @@ type OmitirCreateUpdate =
 
 export type ICreateLuminaria =
   | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirCreateUpdate>
-  | Omit<ILuminariaGenerica<'Luminaria ACTIS FING'>, OmitirCreateUpdate>;
+  | Omit<ILuminariaGenerica<'Luminaria ACTIS FING'>, OmitirCreateUpdate>
+  | Omit<ILuminariaGenerica<'Luminaria CitiLight'>, OmitirCreateUpdate>;
 
 ////// UPDATE
 export const UpdateLuminariaSchema = z.union([
   VarianteLuminariaGPE.omit(camposOmitidos),
   VarianteLuminariaACTISFING.omit(camposOmitidos),
+  VarianteLuminariaCitiLight.omit(camposOmitidos),
 ]);
 export type IUpdateLuminaria =
   | Omit<ILuminariaGenerica<'Luminaria GPE'>, OmitirCreateUpdate>
-  | Omit<ILuminariaGenerica<'Luminaria ACTIS FING'>, OmitirCreateUpdate>;
+  | Omit<ILuminariaGenerica<'Luminaria ACTIS FING'>, OmitirCreateUpdate>
+  | Omit<ILuminariaGenerica<'Luminaria CitiLight'>, OmitirCreateUpdate>;
 
 /**
  * Representa la ubicación de una luminaria con corte de energía
