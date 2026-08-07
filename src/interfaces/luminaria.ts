@@ -224,13 +224,16 @@ const VarianteLuminariaCitiLight = LuminariaCamposSchema.extend({
   tipoDispositivo: z.literal('Luminaria CitiLight').optional(),
   ultimoReportePeriodico: z
     .custom<IReporteBase<'Luminaria CitiLight Estado'>>()
-    .optional(), // Ultimo reporte periodico recibido (Heartbeat)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte periodico recibido (Heartbeat)
   ultimoReporteEnergia: z
     .custom<IReporteBase<'Luminaria CitiLight Energía'>>()
-    .optional(), // Ultimo reporte energia recibido (Energy packet)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte energia recibido (Energy packet)
   ultimoReporteAlerta: z
     .custom<IReporteBase<'Luminaria CitiLight Alerta'>>()
-    .optional(), // Ultimo reporte de alerta recibido (Alert packet)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte de alerta recibido (Alert packet)
 });
 
 export const LuminariaSchema = z

@@ -173,7 +173,10 @@ const VarianteConfigPerfilLuminariaACTISDimming =
   });
 const VarianteConfigPerfilLuminariaCitiLight = ConfigPerfilCamposSchema.extend({
   tipoConfig: z.literal('Luminaria CitiLight').optional(),
-  valores: z.custom<IConfigPerfilLuminariaCitiLight>().optional(),
+  valores: z
+    .custom<IConfigPerfilLuminariaCitiLight>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
 });
 
 /* ────────────────────────────────────────────────

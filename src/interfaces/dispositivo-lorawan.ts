@@ -697,7 +697,9 @@ const VarianteDispositivoLorawanACTIS = DispositivoLorawanCamposSchema.extend({
 const VarianteDispositivoLorawanCitiLight =
   DispositivoLorawanCamposSchema.extend({
     tipo: z.literal('Luminaria CitiLight').optional(),
-    config: DispositivoLuminariaCitiLightSchema.optional(),
+    config: DispositivoLuminariaCitiLightSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
   });
 
 /* ────────────────────────────────────────────────
