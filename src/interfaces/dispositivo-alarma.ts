@@ -91,6 +91,25 @@ export const CamaraAlarmaSchema = z.object({
 });
 export type ICamaraAlarma = z.infer<typeof CamaraAlarmaSchema>;
 
+// Un comunicador físico de la alarma. Puede haber más de uno (protocolos/marcas
+// distintos, ej. principal Garnet + backup Lantrix) para que si uno se cae el
+// otro siga permitiendo que la alarma reporte. Todos comparten el mismo
+// `idUnicoComunicador` de IDispositivoAlarma (misma cuenta configurada en cada
+// equipo) — lo que los distingue es `protocolo`, no el id.
+export const ComunicadorAlarmaSchema = z.object({
+  idComunicador: z.string().optional(), // FK a ModeloDispositivo (marca/modelo/tabla de códigos de ESTE comunicador)
+  passwordComunicador: z.string().optional(),
+  ultimaConexion: UltimaConexionSchema.optional(),
+  fechaUltimaComunicacion: z.string().optional(),
+  // Populate (paralelo al viejo `alarma.comunicador`, pero por ítem). El
+  // protocolo (qué servidor de gestion-api-alarmas lo recibe) vive en
+  // `modelo.protocolo`, no acá: es un atributo del MODELO de comunicador
+  // (todo "Garnet Titanium" habla el mismo protocolo), no de cada ítem —
+  // así no se puede elegir un modelo y un protocolo que no coincidan.
+  modelo: ModeloDispositivoSchema.optional(),
+});
+export type IComunicadorAlarma = z.infer<typeof ComunicadorAlarmaSchema>;
+
 export const ModoDesactivadoSchema = z.object({
   dispositivoDesactivado: z.boolean().optional(),
   permanente: z.boolean().optional(),
@@ -216,7 +235,6 @@ export const DispositivoAlarmaSchema = z.object({
   //
   fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
   fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
-  fechaUltimaComunicacion: z.string().optional().meta({ 'x-bson': 'date' }),
   // Doble canal (primario/secundario). `reportaDoble` se autodetecta en el gateway
   // cuando un mismo evento llega por ambos puertos dentro de la ventana de gracia.
   // `fechaUltimoReporteDoble` marca la última confirmación (para envejecer el flag).
@@ -230,9 +248,12 @@ export const DispositivoAlarmaSchema = z.object({
   // ver §7 item 23.
   fechaUltimoReporteDoble: z.string().optional(),
   forzarUnCanal: z.boolean().optional(),
-  idComunicador: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
+  // Comunicador(es) físicos de la alarma — ver ComunicadorAlarmaSchema.
+  comunicadores: z
+    .array(ComunicadorAlarmaSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
   idUnicoComunicador: z.string().optional(),
-  passwordComunicador: z.string().optional(),
   idModelo: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
   idDomicilio: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'UbicacionSchema' }),
   idCliente: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
@@ -265,7 +286,6 @@ export const DispositivoAlarmaSchema = z.object({
   // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
   ultimoEstadoUnicom: UltimoEstadoUnicomSchema.optional().meta({ 'x-bson': 'mixed' }),
   imagenes: z.array(z.string()).optional(),
-  ultimaConexion: UltimaConexionSchema.optional().meta({ 'x-bson': 'mixed' }),
   modoDesactivado: ModoDesactivadoSchema.optional().meta({ 'x-bson': 'mixed' }),
   infoZonas: z.array(ParticionZonaSchema).optional().meta({ 'x-bson': 'mixed' }),
   controlHorario: ControlHorarioSchema.optional().meta({ 'x-bson': 'mixed' }),
@@ -295,9 +315,6 @@ export const DispositivoAlarmaSchema = z.object({
   ancestros: z.array(ClienteSchema).optional().meta({
     'x-populate': { ref: 'ClienteSchema', localField: 'idsAncestros', foreignField: '_id', justOne: false },
   }),
-  comunicador: ModeloDispositivoSchema.optional().meta({
-    'x-populate': { ref: 'ModeloDispositivoSchema', localField: 'idComunicador', foreignField: '_id', justOne: true },
-  }),
   camaras: z.array(CamaraSchema).optional().meta({
     'x-populate': { ref: 'CamaraSchema', localField: 'idsCamaras', foreignField: '_id', justOne: false },
   }),
@@ -314,14 +331,13 @@ export interface IDispositivoAlarma {
   //
   fechaCreacion?: string;
   fechaAlta?: string;
-  fechaUltimaComunicacion?: string;
   // Doble canal (primario/secundario) — ver schema.
   reportaDoble?: boolean;
   fechaUltimoReporteDoble?: string;
   forzarUnCanal?: boolean;
-  idComunicador?: string;
+  // Comunicador(es) físicos de la alarma — ver IComunicadorAlarma.
+  comunicadores?: IComunicadorAlarma[];
   idUnicoComunicador?: string;
-  passwordComunicador?: string;
   idModelo?: string;
   idDomicilio?: string;
   idCliente?: string;
@@ -346,7 +362,6 @@ export interface IDispositivoAlarma {
   // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
   ultimoEstadoUnicom?: IUltimoEstadoUnicom;
   imagenes?: string[];
-  ultimaConexion?: IUltimaConexion;
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
   controlHorario?: IControlHorario;
@@ -367,7 +382,6 @@ export interface IDispositivoAlarma {
   modelo?: IModeloDispositivo;
   cliente?: ICliente;
   ancestros?: ICliente[];
-  comunicador?: IModeloDispositivo;
   camaras?: ICamara[];
   serviciosContratados?: IServicioContratado[];
 }
@@ -377,7 +391,6 @@ type OmitirCreate =
   | 'cliente'
   | 'modelo'
   | 'domicilio'
-  | 'comunicador '
   | 'camaras'
   | 'serviciosContratados';
 
@@ -386,7 +399,6 @@ export const CreateDispositivoAlarmaSchema = DispositivoAlarmaSchema.omit({
   cliente: true,
   modelo: true,
   domicilio: true,
-  comunicador: true, // fix: el original tenía 'comunicador ' con espacio, que no omitía nada
   camaras: true,
   serviciosContratados: true,
 });
@@ -400,7 +412,6 @@ type OmitirUpdate =
   | 'cliente'
   | 'modelo'
   | 'domicilio'
-  | 'comunicador'
   | 'camaras'
   | 'serviciosContratados';
 
@@ -409,7 +420,6 @@ export const UpdateDispositivoAlarmaSchema = DispositivoAlarmaSchema.omit({
   cliente: true,
   modelo: true,
   domicilio: true,
-  comunicador: true,
   camaras: true,
   serviciosContratados: true,
 });
@@ -423,7 +433,6 @@ export const DispositivoAlarmaCacheSchema = DispositivoAlarmaSchema.omit({
   modelo: true,
   cliente: true,
   ancestros: true,
-  comunicador: true,
   camaras: true,
   serviciosContratados: true,
 });
@@ -433,7 +442,6 @@ export interface IDispositivoAlarmaCache extends Omit<
   | 'modelo'
   | 'cliente'
   | 'ancestros'
-  | 'comunicador'
   | 'camaras'
   | 'serviciosContratados'
 > {}
