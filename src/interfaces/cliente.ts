@@ -334,33 +334,63 @@ export const ConfigClienteSchema = z.object({
 });
 export type IConfigCliente = z.infer<typeof ConfigClienteSchema>;
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const ClienteSchema = z.object({
   _id: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idPadre: z.string().optional(),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idPadre: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   activo: z.boolean().optional(),
   nombre: z.string().optional(),
-  fechaCreacion: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
   nivel: z.number().optional(),
-  config: ConfigClienteSchema.optional(),
+  // @Prop({type: Object, default: {}}) en el legacy: Mixed, Mongoose no
+  // castea adentro.
+  config: ConfigClienteSchema.optional().meta({ 'x-bson': 'mixed' }),
   tipoCliente: TipoClienteSchema.optional(),
   estadoDeCuenta: EstadoCuentaSchema.optional(),
   numeroCliente: z.string().optional(),
   habilitado: z.boolean().optional(),
   apikeyBotonBLE: z.string().optional(),
+  // @Prop({type: Object}) en el legacy: Mixed.
   poligono: z
     .object({
       type: z.literal('MultiPolygon'),
       coordinates: z.array(z.array(z.array(PuntoCoord))),
     })
-    .optional(),
-  mapLayers: z.array(LayerMapaPersonalizadoSchema).optional(), //Capas de mapa personalizadas
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
+  // @Prop({type: [Object]}) en el legacy: array real de Mixed.
+  mapLayers: z
+    .array(LayerMapaPersonalizadoSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), //Capas de mapa personalizadas
   // Populate
   get padre() {
-    return ClienteSchema.optional();
+    return ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idPadre',
+        foreignField: '_id',
+        justOne: true,
+      },
+    });
   },
   get ancestros() {
-    return z.array(ClienteSchema).optional();
+    return z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    });
   },
 }).meta({ 'x-collection': 'clientes' });
 export type ICliente = z.infer<typeof ClienteSchema>;

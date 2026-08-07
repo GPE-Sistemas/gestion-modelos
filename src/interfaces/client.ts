@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const ClientSchema = z.object({
   _id: z.string().optional(),
   id: z.string().optional(),
@@ -8,7 +10,7 @@ export const ClientSchema = z.object({
   redirectUris: z.array(z.string()).optional(),
   accessTokenLifetime: z.number().optional(),
   refreshTokenLifetime: z.number().optional(),
-});
+}).meta({ 'x-collection': 'clients' });
 export type IClient = z.infer<typeof ClientSchema>;
 
 export const CreateClientSchema = ClientSchema.omit({ _id: true });
