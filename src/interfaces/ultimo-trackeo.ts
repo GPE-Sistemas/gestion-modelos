@@ -45,7 +45,7 @@ export const UltimoTrackeoSchema = z.object({
   idProximaParada: z
     .string()
     .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'RecorridoSchema' }),
+    .meta({ 'x-bson': 'objectId' }),
 
   // Populate
   cliente: ClienteSchema.optional().meta({
