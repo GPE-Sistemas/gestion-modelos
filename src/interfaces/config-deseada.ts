@@ -2,10 +2,12 @@ import { z } from 'zod';
 import { ClienteSchema, ICliente } from './cliente';
 import {
   DispositivoLuminariaACTISSchema,
+  DispositivoLuminariaCitiLightSchema,
   DispositivoLuminariaGPESchema,
   DispositivoLuminariaWellnessSchema,
   IDispositivoLorawan,
   IDispositivoLuminariaACTIS,
+  IDispositivoLuminariaCitiLight,
   IDispositivoLuminariaGPE,
   IDispositivoLuminariaWellness,
 } from './dispositivo-lorawan';
@@ -52,6 +54,28 @@ export type IConfigDeseadaLuminariaACTIS = Omit<
   'alarma' | 'reporteFechaHora' | 'versionFirmware' | 'versionModuloLoRa'
 >;
 
+// CitiLight: solo los aspectos configurables (systemConfig, astronomico,
+// scheduleManual, diasEspeciales, addon). Se excluye todo lo reflejado de uplinks.
+const camposNoConfigurablesCitiLight = {
+  versionFirmware: true,
+  rtcStatus: true,
+  multicastStatus: true,
+  scheduleConfigStatus: true,
+  systemConfigStatus: true,
+  alarma: true,
+} as const;
+export const ConfigDeseadaLuminariaCitiLightSchema =
+  DispositivoLuminariaCitiLightSchema.omit(camposNoConfigurablesCitiLight);
+export type IConfigDeseadaLuminariaCitiLight = Omit<
+  IDispositivoLuminariaCitiLight,
+  | 'versionFirmware'
+  | 'rtcStatus'
+  | 'multicastStatus'
+  | 'scheduleConfigStatus'
+  | 'systemConfigStatus'
+  | 'alarma'
+>;
+
 /* ────────────────────────────────────────────────
  *  MAPA TIPO → CONFIG DESEADA
  * ────────────────────────────────────────────────*/
@@ -60,6 +84,7 @@ export type MapaConfigDeseada = {
   'Luminaria GPE': IConfigDeseadaLuminariaGPE;
   'Luminaria Wellness': IConfigDeseadaLuminariaWellness;
   'Luminaria ACTIS FING': IConfigDeseadaLuminariaACTIS;
+  'Luminaria CitiLight': IConfigDeseadaLuminariaCitiLight;
 };
 
 /* ────────────────────────────────────────────────
@@ -194,6 +219,11 @@ const VarianteConfigDeseadaACTIS = ConfigDeseadaCamposSchema.extend({
   tipo: z.literal('Luminaria ACTIS FING').optional(),
   config: ConfigDeseadaLuminariaACTISSchema.optional(),
 });
+const VarianteConfigDeseadaCitiLight = ConfigDeseadaCamposSchema.extend({
+  // Discriminante
+  tipo: z.literal('Luminaria CitiLight').optional(),
+  config: ConfigDeseadaLuminariaCitiLightSchema.optional(),
+});
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
@@ -204,13 +234,15 @@ export const ConfigDeseadaSchema = z
     VarianteConfigDeseadaGPE,
     VarianteConfigDeseadaWellness,
     VarianteConfigDeseadaACTIS,
+    VarianteConfigDeseadaCitiLight,
   ])
   .meta({ 'x-collection': 'configdeseadas' });
 
 export type IConfigDeseada =
   | IConfigDeseadaBase<'Luminaria GPE'>
   | IConfigDeseadaBase<'Luminaria Wellness'>
-  | IConfigDeseadaBase<'Luminaria ACTIS FING'>;
+  | IConfigDeseadaBase<'Luminaria ACTIS FING'>
+  | IConfigDeseadaBase<'Luminaria CitiLight'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE - UNIONES DISCRIMINADAS
@@ -250,12 +282,14 @@ export const CreateConfigDispositivoSchema = z.union([
   VarianteConfigDeseadaGPE.omit(camposOmitidos),
   VarianteConfigDeseadaWellness.omit(camposOmitidos),
   VarianteConfigDeseadaACTIS.omit(camposOmitidos),
+  VarianteConfigDeseadaCitiLight.omit(camposOmitidos),
 ]);
 
 export type ICreateConfigDispositivo =
   | Omit<IConfigDeseadaBase<'Luminaria GPE'>, Omitir>
   | Omit<IConfigDeseadaBase<'Luminaria Wellness'>, Omitir>
-  | Omit<IConfigDeseadaBase<'Luminaria ACTIS FING'>, Omitir>;
+  | Omit<IConfigDeseadaBase<'Luminaria ACTIS FING'>, Omitir>
+  | Omit<IConfigDeseadaBase<'Luminaria CitiLight'>, Omitir>;
 
 /** Update: campos parciales pero `tipo` se mantiene para discriminar.
  *  TS valida que `config` corresponda al `tipo`.
@@ -270,6 +304,9 @@ export const UpdateConfigDispositivoSchema = z.union([
   VarianteConfigDeseadaACTIS.omit(camposOmitidos).extend({
     tipo: z.literal('Luminaria ACTIS FING'),
   }),
+  VarianteConfigDeseadaCitiLight.omit(camposOmitidos).extend({
+    tipo: z.literal('Luminaria CitiLight'),
+  }),
 ]);
 
 export type IUpdateConfigDispositivo =
@@ -281,4 +318,7 @@ export type IUpdateConfigDispositivo =
     >)
   | ({ tipo: 'Luminaria ACTIS FING' } & Partial<
       Omit<IConfigDeseadaBase<'Luminaria ACTIS FING'>, Omitir | 'tipo'>
+    >)
+  | ({ tipo: 'Luminaria CitiLight' } & Partial<
+      Omit<IConfigDeseadaBase<'Luminaria CitiLight'>, Omitir | 'tipo'>
     >);

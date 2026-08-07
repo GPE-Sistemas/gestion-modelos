@@ -16,6 +16,7 @@ export const TipoDispositivoLorawanSchema = z.enum([
   'Luminaria GPE',
   'Luminaria Wellness',
   'Luminaria ACTIS FING',
+  'Luminaria CitiLight',
 ]);
 export type TipoDispositivoLorawan = z.infer<
   typeof TipoDispositivoLorawanSchema
@@ -430,16 +431,127 @@ export interface IDispositivoLuminariaACTIS {
   };
 }
 
+// ────────────────────────────────────────────────
+//  CONFIG CitiLight ILC
+// ────────────────────────────────────────────────
+// CitiLight multiplexa TODO en un único FPort de transporte y discrimina por
+// (PacketID, NodeType) dentro de la trama binaria `5A|Len|PacketID|NodeType|Payload|CRC`.
+// La config real se estructura por "aspecto" (uno por par PacketID/NodeType), de
+// modo que diffConfigs/hashConfig del reconciliador operan por aspecto y cada diff
+// se traduce a UN downlink.
+//
+// Nota sobre "puerto lógico": NO es un FPort LoRaWAN real (CitiLight no usa FPort
+// por función, va todo en el mismo puerto de transporte). Es un identificador
+// interno nuestro para el pipeline (claveDedup/secuenciador/reconciliador). Se
+// calcula juntando los dos bytes del frame y pasándolos a decimal:
+//   puerto = PacketID*256 + NodeType   (reversible: PacketID=puerto div 256, NodeType=puerto mod 256)
+// → 289 Control (01/21), 801 System Config (03/21), 1313 Astronómico (05/21),
+//   1312 Time Sync (05/20), 3873 Addon (0F/21). El FPort real (único) recién se
+//   resuelve al enviar el downlink.
+// NOTA: Manual Schedule (02/21) y Días especiales (04/21) NO se incluyen por ahora:
+// mezclan lógica de encendido/apagado (nuestros "modos") con control de dimming
+// (perfiles de dimerizado); se abordarán con esos conceptos, no como config CitiLight.
+
+// Etapa de dimming del modo astronómico: duración + % de intensidad.
+export const EtapaDimmingCitiLightSchema = z.object({
+  tiempoSeg: z.number().optional(), // validez/duración de la etapa en segundos
+  porcentaje: z.number().optional(), // 0-100 (intensidad)
+});
+export type IEtapaDimmingCitiLight = z.infer<
+  typeof EtapaDimmingCitiLightSchema
+>;
+
+export const DispositivoLuminariaCitiLightSchema = z.object({
+  // ===== SYSTEM CONFIG (PacketID 03 / Node 21 → puerto lógico 801) =====
+  systemConfig: z
+    .object({
+      uploadInterval: z.number().optional(), // seg (cada cuánto se envía un heartbeat/reporte de estado)
+      lowVoltage: z.number().optional(), // V — umbral subtensión
+      highVoltage: z.number().optional(), // V — umbral sobretensión
+      alsLux: z.number().optional(), // lux — umbral ALS
+      highCurrent: z.number().optional(), // mA — umbral sobrecorriente
+      driverType: z.number().optional(),
+    })
+    .optional(),
+
+  // ===== ASTRONÓMICO (PacketID 05 / Node 21 → puerto lógico 1313) =====
+  astronomico: z
+    .object({
+      coordenadas: z
+        .object({
+          geojson: GeoJSONPointSchema.optional(), // lat/long (se inyecta desde luminaria.ubicacion)
+        })
+        .optional(),
+      offsetAtardecer: z.number().optional(), // minutos (con signo)
+      offsetAmanecer: z.number().optional(), // minutos (con signo)
+      etapasDimming: z.array(EtapaDimmingCitiLightSchema).optional(), // hasta 3
+    })
+    .optional(),
+
+  // ===== ADDON (PacketID 0F / Node 21 → puerto lógico 3873) =====
+  addon: z
+    .object({
+      retryCounter: z.number().optional(),
+      tiltSensor: z.boolean().optional(), // calibración tilt sensor
+      uplinkAck: z.boolean().optional(), // confirmed (false) / unconfirmed (true)
+      timezoneSignbit: z.number().optional(),
+      timezoneEpoch: z.number().optional(),
+    })
+    .optional(),
+
+  // ===== NO CONFIGURABLES (reflejados de uplinks; excluidos de la deseada) =====
+  versionFirmware: z.string().optional(), // Notification
+  rtcStatus: z.boolean().optional(), // Notification: false OK / true faulty
+  multicastStatus: z.string().optional(), // Notification: 'FF' sin config / '01' con config
+  scheduleConfigStatus: z.string().optional(), // Notification: '00' none / '01' astro / '10' manual
+  systemConfigStatus: z.string().optional(), // Notification: bits uplink/system config
+  alarma: z.string().optional(), // CSV de códigos de alarma activos
+});
+
+// Interface hand-written (no z.infer): config-perfil la usa dentro de z.custom<>
+// y el declaration emitter expande los aliases z.infer (TS7056).
+export interface IDispositivoLuminariaCitiLight {
+  systemConfig?: {
+    uploadInterval?: number;
+    lowVoltage?: number;
+    highVoltage?: number;
+    alsLux?: number;
+    highCurrent?: number;
+    driverType?: number;
+  };
+  astronomico?: {
+    coordenadas?: { geojson?: IGeoJSONPoint };
+    offsetAtardecer?: number;
+    offsetAmanecer?: number;
+    etapasDimming?: IEtapaDimmingCitiLight[];
+  };
+  addon?: {
+    retryCounter?: number;
+    tiltSensor?: boolean;
+    uplinkAck?: boolean;
+    timezoneSignbit?: number;
+    timezoneEpoch?: number;
+  };
+  versionFirmware?: string;
+  rtcStatus?: boolean;
+  multicastStatus?: string;
+  scheduleConfigStatus?: string;
+  systemConfigStatus?: string;
+  alarma?: string;
+}
+
 // Union type para config (retrocompatibilidad - ahora se usa MapaConfigDispositivo)
 export const DispositivoLuminariaConfigSchema = z.union([
   DispositivoLuminariaGPESchema,
   DispositivoLuminariaWellnessSchema,
   DispositivoLuminariaACTISSchema,
+  DispositivoLuminariaCitiLightSchema,
 ]);
 export type IDispositivoLuminariaConfig =
   | IDispositivoLuminariaGPE
   | IDispositivoLuminariaWellness
-  | IDispositivoLuminariaACTIS;
+  | IDispositivoLuminariaACTIS
+  | IDispositivoLuminariaCitiLight;
 
 /* ────────────────────────────────────────────────
  *  MAPA DE TIPO → CONFIG (TYPE-SAFE)
@@ -449,6 +561,7 @@ export type MapaConfigDispositivo = {
   'Luminaria GPE': IDispositivoLuminariaGPE;
   'Luminaria Wellness': IDispositivoLuminariaWellness;
   'Luminaria ACTIS FING': IDispositivoLuminariaACTIS;
+  'Luminaria CitiLight': IDispositivoLuminariaCitiLight;
 };
 
 /* ────────────────────────────────────────────────
@@ -581,6 +694,11 @@ const VarianteDispositivoLorawanACTIS = DispositivoLorawanCamposSchema.extend({
   tipo: z.literal('Luminaria ACTIS FING').optional(),
   config: DispositivoLuminariaACTISSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
+const VarianteDispositivoLorawanCitiLight =
+  DispositivoLorawanCamposSchema.extend({
+    tipo: z.literal('Luminaria CitiLight').optional(),
+    config: DispositivoLuminariaCitiLightSchema.optional(),
+  });
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
@@ -591,6 +709,7 @@ export const DispositivoLorawanSchema = z
     VarianteDispositivoLorawanGPE,
     VarianteDispositivoLorawanWellness,
     VarianteDispositivoLorawanACTIS,
+    VarianteDispositivoLorawanCitiLight,
   ])
   .meta({ 'x-collection': 'dispositivolorawans' });
 
@@ -601,7 +720,8 @@ export const DispositivoLorawanSchema = z
 export type IDispositivoLorawan =
   | IDispositivoLorawanBase<'Luminaria GPE'>
   | IDispositivoLorawanBase<'Luminaria Wellness'>
-  | IDispositivoLorawanBase<'Luminaria ACTIS FING'>;
+  | IDispositivoLorawanBase<'Luminaria ACTIS FING'>
+  | IDispositivoLorawanBase<'Luminaria CitiLight'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE - UNIONES DISCRIMINADAS
@@ -626,6 +746,7 @@ export const CreateDispositivoLorawanSchema = z.union([
   VarianteDispositivoLorawanGPE.omit(camposOmitidos),
   VarianteDispositivoLorawanWellness.omit(camposOmitidos),
   VarianteDispositivoLorawanACTIS.omit(camposOmitidos),
+  VarianteDispositivoLorawanCitiLight.omit(camposOmitidos),
 ]);
 
 type OmitirCreate = '_id' | 'cliente' | 'ancestros' | 'modeloDispositivo';
@@ -633,10 +754,8 @@ type OmitirCreate = '_id' | 'cliente' | 'ancestros' | 'modeloDispositivo';
 export type ICreateDispositivoLorawan =
   | Omit<Partial<IDispositivoLorawanBase<'Luminaria GPE'>>, OmitirCreate>
   | Omit<Partial<IDispositivoLorawanBase<'Luminaria Wellness'>>, OmitirCreate>
-  | Omit<
-      Partial<IDispositivoLorawanBase<'Luminaria ACTIS FING'>>,
-      OmitirCreate
-    >;
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria ACTIS FING'>>, OmitirCreate>
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria CitiLight'>>, OmitirCreate>;
 
 /** Update: permitimos campos parciales pero mantenemos `tipo` para que TS pueda discriminar.
  *  Cuando actualizás config, TypeScript valida que sea del tipo correcto según `tipo`.
@@ -645,6 +764,7 @@ export const UpdateDispositivoLorawanSchema = z.union([
   VarianteDispositivoLorawanGPE.omit(camposOmitidos),
   VarianteDispositivoLorawanWellness.omit(camposOmitidos),
   VarianteDispositivoLorawanACTIS.omit(camposOmitidos),
+  VarianteDispositivoLorawanCitiLight.omit(camposOmitidos),
 ]);
 
 type OmitirUpdate = '_id' | 'cliente' | 'ancestros' | 'modeloDispositivo';
@@ -652,7 +772,5 @@ type OmitirUpdate = '_id' | 'cliente' | 'ancestros' | 'modeloDispositivo';
 export type IUpdateDispositivoLorawan =
   | Omit<Partial<IDispositivoLorawanBase<'Luminaria GPE'>>, OmitirUpdate>
   | Omit<Partial<IDispositivoLorawanBase<'Luminaria Wellness'>>, OmitirUpdate>
-  | Omit<
-      Partial<IDispositivoLorawanBase<'Luminaria ACTIS FING'>>,
-      OmitirUpdate
-    >;
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria ACTIS FING'>>, OmitirUpdate>
+  | Omit<Partial<IDispositivoLorawanBase<'Luminaria CitiLight'>>, OmitirUpdate>;
