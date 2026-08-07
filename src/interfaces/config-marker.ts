@@ -68,7 +68,9 @@ export const ConfigMarkerSchema = z
     // un único `ref` de destino.
     idRef: z.string().meta({ 'x-bson': 'objectId' }),
 
-    vistas: z.array(VistaMarkerSchema).optional(),
+    // @Prop({type: [Object]}) en el schema Mongoose legacy: adentro de un
+    // Mixed, Mongoose no declara NADA — no castea ni inicializa esos paths.
+    vistas: z.array(VistaMarkerSchema).optional().meta({ 'x-bson': 'mixed' }),
 
     // Populate
     cliente: ClienteSchema.optional().meta({

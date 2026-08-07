@@ -272,8 +272,19 @@ export const DetallesTecnicosSchema = z.object({
   fechaDisponibleParaTratar: z.string().optional(),
   cambioEntidadPropuesto: CambioEntidadPropuestoSchema.optional(),
 
-  // Populate opcional
-  tecnico: z.custom<IUsuario>().optional(),
+  // Populate opcional. El `localField` va RELATIVO al sub-documento, igual que
+  // en VehiculoSchema (activo.ts): el path absoluto que resuelve el motor es
+  // `detallesTecnicos.idTecnicoAsignado`. `detallesTecnicos` es Mixed, pero un
+  // Mixed apaga el casteo, no los virtuals — el schema legacy los declara con
+  // schema.virtual() aparte del @Prop.
+  tecnico: z.custom<IUsuario>().optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idTecnicoAsignado',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
 });
 export type DetallesTecnicos = z.infer<typeof DetallesTecnicosSchema>;
 
@@ -292,17 +303,91 @@ export const DetallesEmergenciasSchema = z.object({
   idUsuarioResponsable: z.string().optional(),
   idMovilAsignado: z.string().optional(),
 
-  // Populate opcional
-  destinatarioAsistencia: z.custom<IDestinatarioAsistencia>().optional(),
-  emergencia: z.custom<IEmergencia>().optional(),
-  chofer: z.custom<IUsuario>().optional(),
-  centroDeAtencion: z.custom<IUbicacion>().optional(),
-  movilUsuario: z.custom<IUsuario>().optional(),
-  medicos: z.array(PersonalSaludSchema).optional(),
-  enfermeros: z.array(PersonalSaludSchema).optional(),
-  hospital: z.custom<IUbicacion>().optional(),
-  usuarioResponsable: z.custom<IUsuario>().optional(),
-  movilAsignado: z.custom<IActivo>().optional(),
+  // Populate opcional. Los 10 son schema.virtual() del schema legacy
+  // (entidades/eventoGenerico/schema.ts), declarados aparte de los @Prop:
+  // `detallesEmergencias` es Mixed, y un Mixed apaga el CASTEO de lo que tiene
+  // adentro, no los virtuals. El `localField` va RELATIVO al sub-documento,
+  // igual que en VehiculoSchema (activo.ts).
+  destinatarioAsistencia: z.custom<IDestinatarioAsistencia>().optional().meta({
+    'x-populate': {
+      ref: 'DestinatarioAsistenciaSchema',
+      localField: 'idDestinatarioAsistencia',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  emergencia: z.custom<IEmergencia>().optional().meta({
+    'x-populate': {
+      ref: 'EmergenciaSchema',
+      localField: 'idEmergencia',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  chofer: z.custom<IUsuario>().optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idChofer',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  centroDeAtencion: z.custom<IUbicacion>().optional().meta({
+    'x-populate': {
+      ref: 'UbicacionSchema',
+      localField: 'idCentroDeAtencion',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  movilUsuario: z.custom<IUsuario>().optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idMovilUsuario',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  medicos: z.array(PersonalSaludSchema).optional().meta({
+    'x-populate': {
+      ref: 'PersonalSaludSchema',
+      localField: 'idsMedicos',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  enfermeros: z.array(PersonalSaludSchema).optional().meta({
+    'x-populate': {
+      ref: 'PersonalSaludSchema',
+      localField: 'idsEnfermeros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  hospital: z.custom<IUbicacion>().optional().meta({
+    'x-populate': {
+      ref: 'UbicacionSchema',
+      localField: 'idHospital',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  usuarioResponsable: z.custom<IUsuario>().optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idUsuarioResponsable',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  movilAsignado: z.custom<IActivo>().optional().meta({
+    'x-populate': {
+      ref: 'ActivoSchema',
+      localField: 'idMovilAsignado',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
 });
 export type DetallesEmergencias = z.infer<typeof DetallesEmergenciasSchema>;
 
@@ -767,7 +852,10 @@ const varianteEvento = <
     ...camposComunesEvento,
     tipoEvento: z.literal(tipo),
     estado: estado.optional(),
-    valores: valores.optional(),
+    // @Prop({type: Object}) en el schema Mongoose legacy: adentro de un Mixed,
+    // Mongoose no declara NADA — no castea ni inicializa esos paths. Anotarlo
+    // acá, en la fábrica, cubre las 20 variantes de una sola vez.
+    valores: valores.optional().meta({ 'x-bson': 'mixed' }),
   });
 
 const vEvtColectivo = varianteEvento('Evento Colectivo', ValoresEventoTrackerSchema, EstadoEventoSchema);

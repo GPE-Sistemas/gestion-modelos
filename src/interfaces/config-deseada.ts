@@ -174,6 +174,11 @@ const ConfigDeseadaCamposSchema = z.object({
   ultimaReconciliacion: z.string().optional().meta({ 'x-bson': 'date' }), // ISO timestamp del último set disparado
   reintentosReconciliacion: z.number().optional(), // counter para back-off
   bloqueadoHasta: z.string().optional().meta({ 'x-bson': 'date' }), // ISO. Si > now no se reintenta (circuit breaker)
+  // Estaba en la interface IConfigDeseada de arriba pero NO en el schema zod:
+  // el meta.go lo tiene en Fields y lo castea a Date, así que Go lo persiste y
+  // lo filtra, pero el bundle no lo veía. Lo encontró el chequeo inverso
+  // meta→zod (2026-08-07).
+  divergenteDesde: z.string().optional().meta({ 'x-bson': 'date' }), // ISO. Instante de la PRIMERA detección 'No coincide' (se limpia al converger). Mide el tiempo-a-convergencia.
 
   // Virtuals
   // z.custom para no arrastrar el shape completo del dispositivo al
@@ -204,20 +209,24 @@ const ConfigDeseadaCamposSchema = z.object({
   }),
 });
 
+// `config` es @Prop({type: Object}) en el schema Mongoose legacy: adentro de un
+// Mixed, Mongoose no declara NADA — no castea ni inicializa esos paths. Va
+// anotado en las TRES variantes: el chequeo de drift hace la unión de las
+// properties de la unión y avisa si dos variantes discrepan en la anotación.
 const VarianteConfigDeseadaGPE = ConfigDeseadaCamposSchema.extend({
   // Discriminante
   tipo: z.literal('Luminaria GPE').optional(),
-  config: ConfigDeseadaLuminariaGPESchema.optional(),
+  config: ConfigDeseadaLuminariaGPESchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteConfigDeseadaWellness = ConfigDeseadaCamposSchema.extend({
   // Discriminante
   tipo: z.literal('Luminaria Wellness').optional(),
-  config: ConfigDeseadaLuminariaWellnessSchema.optional(),
+  config: ConfigDeseadaLuminariaWellnessSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteConfigDeseadaACTIS = ConfigDeseadaCamposSchema.extend({
   // Discriminante
   tipo: z.literal('Luminaria ACTIS FING').optional(),
-  config: ConfigDeseadaLuminariaACTISSchema.optional(),
+  config: ConfigDeseadaLuminariaACTISSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteConfigDeseadaCitiLight = ConfigDeseadaCamposSchema.extend({
   // Discriminante

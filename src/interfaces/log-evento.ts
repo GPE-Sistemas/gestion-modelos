@@ -64,6 +64,18 @@ export const LogEventoSchema = z
         justOne: true,
       },
     }),
+    // El virtual que el schema legacy declara DE VERDAD. Convive con
+    // `dispositivoLorawan` de arriba en vez de reemplazarlo: renombrar sería un
+    // cambio de contrato para los consumidores que ya lo piden con ese nombre,
+    // y este `dispositivo` es el que realmente resuelve un ?populate.
+    dispositivo: DispositivoLorawanSchema.optional().meta({
+      'x-populate': {
+        ref: 'DispositivoLorawanSchema',
+        localField: 'deveui',
+        foreignField: 'deveui',
+        justOne: true,
+      },
+    }),
   })
   .meta({ 'x-collection': 'logeventos' });
 export type ILogEvento = z.infer<typeof LogEventoSchema>;

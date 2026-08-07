@@ -321,6 +321,9 @@ export const DispositivoAlarmaSchema = z.object({
   serviciosContratados: z.array(ServicioContratadoSchema).optional().meta({
     'x-populate': { ref: 'ServicioContratadoSchema', localField: 'idServiciosContratados', foreignField: '_id', justOne: false },
   }),
+  clientesQuePuedenAtenderEventosTecnicos: z.array(ClienteSchema).optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idsClientesQuePuedenAtenderEventosTecnicos', foreignField: '_id', justOne: false },
+  }),
 }).meta({ 'x-collection': 'dispositivoalarmas' });
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del

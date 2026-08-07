@@ -464,59 +464,63 @@ const ResumenDatosCamposSchema = z.object({
   }),
 });
 
+// `resumen` es @Prop({type: Object}) en el schema Mongoose legacy: adentro de
+// un Mixed, Mongoose no declara NADA — no castea ni inicializa esos paths. Va
+// anotado en las 13 variantes: el chequeo de drift hace la unión de las
+// properties de la unión y avisa si dos variantes discrepan en la anotación.
 const VarianteConsumoMensualLuminarias = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Consumo Mensual Luminarias').optional(),
-  resumen: ConsumoMensualLuminariasSchema.optional(),
+  resumen: ConsumoMensualLuminariasSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteEncendidoDiarioLuminarias = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Encendido Diario Luminarias').optional(),
-  resumen: EncendidoDiarioLuminariasSchema.optional(),
+  resumen: EncendidoDiarioLuminariasSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteInformeDiarioLuminarias = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Informe Diario Luminarias').optional(),
-  resumen: InformeDiarioLuminariasSchema.optional(),
+  resumen: InformeDiarioLuminariasSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteConsumoMensualCombustibleVehiculos =
   ResumenDatosCamposSchema.extend({
     tipo: z.literal('Consumo Mensual Combustible Vehículos').optional(),
-    resumen: ConsumoCombustibleVehiculosSchema.optional(),
+    resumen: ConsumoCombustibleVehiculosSchema.optional().meta({ 'x-bson': 'mixed' }),
   });
 const VarianteTemperaturaHorariaVehiculos = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Temperatura Horaria Vehículos').optional(),
-  resumen: TemperaturaHorariaVehiculoSchema.optional(),
+  resumen: TemperaturaHorariaVehiculoSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteCombustibleHorarioVehiculos = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Combustible Horario Vehículos').optional(),
-  resumen: CombustibleHorarioVehiculoSchema.optional(),
+  resumen: CombustibleHorarioVehiculoSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteInformeCargasCombustible = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Informe Cargas Combustible').optional(),
-  resumen: InformeCargasCombustibleSchema.optional(),
+  resumen: InformeCargasCombustibleSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteInformeEventosSospechososCombustible =
   ResumenDatosCamposSchema.extend({
     tipo: z.literal('Informe Eventos Sospechosos Combustible').optional(),
-    resumen: InformeEventosSospechososSchema.optional(),
+    resumen: InformeEventosSospechososSchema.optional().meta({ 'x-bson': 'mixed' }),
   });
 const VarianteInformeMensualFlotaCombustible = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Informe Mensual Flota Combustible').optional(),
-  resumen: InformeMensualFlotaCombustibleSchema.optional(),
+  resumen: InformeMensualFlotaCombustibleSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteGastosDelCliente = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Gastos del Cliente').optional(),
-  resumen: ResumenGastosClienteSchema.optional(),
+  resumen: ResumenGastosClienteSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteDownlinksSistema = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Downlinks Métricas Sistema').optional(),
-  resumen: ResumenDownlinksSistemaSchema.optional(),
+  resumen: ResumenDownlinksSistemaSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteDownlinksLuminaria = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Downlinks Luminaria').optional(),
-  resumen: ResumenDownlinksLuminariaSchema.optional(),
+  resumen: ResumenDownlinksLuminariaSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 const VarianteGatewayStats = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Gateway Stats').optional(),
-  resumen: ResumenGatewayStatsSchema.optional(),
+  resumen: ResumenGatewayStatsSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 
 /* ────────────────────────────────────────────────

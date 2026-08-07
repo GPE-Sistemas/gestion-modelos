@@ -62,7 +62,12 @@ export const TemaSchema = z
     // @Prop() pelados en el legacy → String, sin cast.
     fechaInicio: z.string().optional(),
     fechaFin: z.string().optional(),
-    diasRecurrentes: RangoRecurrenteAnualSchema.optional(),
+    // @Prop({type: Object}) en el schema Mongoose legacy: adentro de un Mixed,
+    // Mongoose no declara NADA — no castea ni inicializa esos paths. Vale para
+    // este campo y para `payload` más abajo.
+    diasRecurrentes: RangoRecurrenteAnualSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
     prioridad: z.number().optional(), // 0-100
     global: z.boolean().optional(),
     idCliente: z
@@ -73,7 +78,7 @@ export const TemaSchema = z
       .array(z.string())
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-    payload: TemaPayloadSchema.optional(),
+    payload: TemaPayloadSchema.optional().meta({ 'x-bson': 'mixed' }),
     fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
     fechaActualizacion: z.string().optional().meta({ 'x-bson': 'date' }),
     // Populate

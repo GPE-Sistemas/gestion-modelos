@@ -44,8 +44,23 @@ export const CodigoDispositivoSchema = z.object({
   cierraCodigosEventos: z.array(z.string()).optional(), // Si se genera un evento con este codigo, se cierran los eventos con estos codigos del array
 
   flagsTrackers: z.array(FlagsTrackersSchema).optional(),
-  // Populate
-  categoriaEvento: CategoriaEventoSchema.optional(),
+  // Populate. `localField` RELATIVO al sub-documento: el path absoluto que
+  // resuelve el motor es `codigos.idCategoriaEvento`. `codigos` es Mixed, pero
+  // un Mixed apaga el CASTEO de lo de adentro, no los virtuals — el schema
+  // legacy declara este con schema.virtual(), aparte del @Prop.
+  //
+  // El `categoriaEvento` de CodigoDispositivoEntradaSchema (arriba) queda SIN
+  // anotar a propósito: el schema legacy declara los virtuals `cliente`,
+  // `ancestros` y `codigos.categoriaEvento`, y ninguno para `codigosEntrada`.
+  // Anotarlo afirmaría un populate que el legacy nunca tuvo.
+  categoriaEvento: CategoriaEventoSchema.optional().meta({
+    'x-populate': {
+      ref: 'CategoriaEventoSchema',
+      localField: 'idCategoriaEvento',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
 });
 export type ICodigoDispositivo = z.infer<typeof CodigoDispositivoSchema>;
 
