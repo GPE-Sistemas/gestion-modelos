@@ -37,7 +37,7 @@ export const UltimoTrackeoSchema = z.object({
   idParada: z
     .string()
     .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ParadaSchema' }),
+    .meta({ 'x-bson': 'objectId' }),
   indiceParada: z.number().optional(),
   fechaProximaParada: z.string().optional().meta({ 'x-bson': 'date' }),
   // Contraintuitivo pero fiel al legacy: @Prop({ref: Recorrido.name}) en
