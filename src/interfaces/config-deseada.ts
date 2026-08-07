@@ -231,7 +231,7 @@ const VarianteConfigDeseadaACTIS = ConfigDeseadaCamposSchema.extend({
 const VarianteConfigDeseadaCitiLight = ConfigDeseadaCamposSchema.extend({
   // Discriminante
   tipo: z.literal('Luminaria CitiLight').optional(),
-  config: ConfigDeseadaLuminariaCitiLightSchema.optional(),
+  config: ConfigDeseadaLuminariaCitiLightSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 
 /* ────────────────────────────────────────────────
