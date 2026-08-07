@@ -45,32 +45,86 @@ export type SubcategoriaRecordatorio = z.infer<
 //- La documentación de licencia/seguro es para choferes y conductores, se crean desde el listado de choferes/conductores en la acción documentos
 
 //💡💡💡 Creo que esto de los recordatorios debería ser mas genérico porque podría servir para otras entidades. Además, actualmente es confuso porque se mezclan recordatorios de mantenimiento con los de documentación. Podríamos agregar un campo "tipo" que indique si es un recordatorio de mantenimiento o de documentación, y así podríamos tener campos específicos para cada tipo sin que queden confusos.
-export const RecordatorioSchema = z.object({
-  _id: z.string().optional(),
-  categoria: CategoriaRecordatorioSchema.optional(),
-  subcategoria: SubcategoriaRecordatorioSchema.optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idUsuario: z.string().optional(),
-  tipo: z.array(TipoRecordatorioSchema).optional(),
-  notificado: z.boolean().optional(),
-  fechaLimite: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  kmLimite: z.number().optional(),
-  idActivo: z.string().optional(),
-  idDocumentacion: z.string().optional(),
-  detallesDelMantenimiento: z.string().optional(),
-  repetible: z.boolean().optional(),
-  frecuenciaKm: z.number().optional(),
-  frecuenciaDia: z.number().optional(),
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const RecordatorioSchema = z
+  .object({
+    _id: z.string().optional(),
+    categoria: CategoriaRecordatorioSchema.optional(),
+    subcategoria: SubcategoriaRecordatorioSchema.optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idUsuario: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    tipo: z.array(TipoRecordatorioSchema).optional(),
+    notificado: z.boolean().optional(),
+    fechaLimite: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    kmLimite: z.number().optional(),
+    idActivo: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ActivoSchema' }),
+    idDocumentacion: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'DocumentacionSchema' }),
+    detallesDelMantenimiento: z.string().optional(),
+    repetible: z.boolean().optional(),
+    frecuenciaKm: z.number().optional(),
+    frecuenciaDia: z.number().optional(),
 
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  usuario: UsuarioSchema.optional(),
-  activo: ActivoSchema.optional(),
-  documentacion: DocumentacionSchema.optional(),
-});
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    usuario: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idUsuario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    activo: ActivoSchema.optional().meta({
+      'x-populate': {
+        ref: 'ActivoSchema',
+        localField: 'idActivo',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    documentacion: DocumentacionSchema.optional().meta({
+      'x-populate': {
+        ref: 'DocumentacionSchema',
+        localField: 'idDocumentacion',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'recordatorios' });
 export type IRecordatorio = z.infer<typeof RecordatorioSchema>;
 
 export const CreateRecordatorioSchema = RecordatorioSchema.omit({

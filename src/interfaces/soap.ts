@@ -88,24 +88,54 @@ export const SoapBajaSchema = z.object({
 });
 export type ISoapBaja = z.infer<typeof SoapBajaSchema>;
 
-export const SoapSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  fechaCreacion: z.string().optional(),
+export const SoapSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
-  alta: SoapAltaSchema.optional(),
-  create: SoapCreateSchema.optional(),
-  altaChofer: SoapAltaChoferSchema.optional(),
-  obtenerChoferes: SoapObtenerChoferesSchema.optional(),
-  altaPorMinuta: SoapAltaPorMinutaSchema.optional(),
-  altaPorMinutaChofer: SoapAltaPorMinutaChoferSchema.optional(),
-  baja: SoapBajaSchema.optional(),
+    // Los siete son @Prop({type: Object}) en el legacy (soap/schema.ts): Mixed,
+    // pese a tener un schema tipado en zod cada uno.
+    alta: SoapAltaSchema.optional().meta({ 'x-bson': 'mixed' }),
+    create: SoapCreateSchema.optional().meta({ 'x-bson': 'mixed' }),
+    altaChofer: SoapAltaChoferSchema.optional().meta({ 'x-bson': 'mixed' }),
+    obtenerChoferes: SoapObtenerChoferesSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    altaPorMinuta: SoapAltaPorMinutaSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    altaPorMinutaChofer: SoapAltaPorMinutaChoferSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    baja: SoapBajaSchema.optional().meta({ 'x-bson': 'mixed' }),
 
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'soaps' });
 export type ISoap = z.infer<typeof SoapSchema>;
 
 export const CreateSoapSchema = SoapSchema.omit({

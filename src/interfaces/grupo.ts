@@ -15,14 +15,25 @@ export type CategoriaGrupo = z.infer<typeof CategoriaGrupoSchema>;
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const GrupoSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   nombre: z.string().optional(),
   color: z.string().optional(),
   categoria: CategoriaGrupoSchema.optional(),
-  idsPerfilConfig: z.array(z.string()).optional(),
+  idsPerfilConfig: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ConfigPerfilSchema' }),
   prioridad: z.number().optional(),
 
   // Integracion Soflex (los 3 campos van juntos: sin los 3 no hay sync ni reenvío)
@@ -31,9 +42,30 @@ export const GrupoSchema = z.object({
   fleetName: z.string().optional(),
 
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  perfilConfigs: z.array(z.custom<IConfigPerfil>()).optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  perfilConfigs: z.array(z.custom<IConfigPerfil>()).optional().meta({
+    'x-populate': {
+      ref: 'ConfigPerfilSchema',
+      localField: 'idsPerfilConfig',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 }).meta({ 'x-collection': 'grupos' });
 
 /**

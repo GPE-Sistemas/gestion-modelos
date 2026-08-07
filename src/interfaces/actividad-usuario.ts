@@ -23,29 +23,56 @@ export type TipoActividadUsuario = z.infer<typeof TipoActividadUsuarioSchema>;
  * `idCliente` del permiso activo); `idsAncestros` lo denormaliza api-datos
  * por hook a partir del `idCliente`. TTL 1 año sobre `inicio`.
  */
-export const ActividadUsuarioSchema = z.object({
-  _id: z.string().optional(),
-  // Discrimina inactividad vs periodo de actividad.
-  tipo: TipoActividadUsuarioSchema.optional(),
-  // Vínculo con el usuario.
-  idUsuario: z.string().optional(),
-  // Nombre de usuario denormalizado (lowercase), por si el usuario se borra.
-  usuario: z.string().optional(),
-  // Cliente del permiso activo al momento del evento.
-  idCliente: z.string().optional(),
-  // Cadena de clientes ancestros del idCliente, para roll-up por subárbol.
-  idsAncestros: z.array(z.string()).optional(),
-  // Inactividad: momento en que venció el cartel sin confirmación.
-  // Actividad: comienzo del ciclo de uso. Ancla del índice TTL.
-  inicio: z.string().optional(),
-  // Inactividad: momento en que volvió a confirmar (ausente = intervalo
-  // abierto). Actividad: momento del aviso de descanso. La duración es
-  // `fin - inicio`.
-  fin: z.string().optional(),
-  // Populate / Virtual
-  usuarioDoc: UsuarioSchema.optional(),
-  cliente: ClienteSchema.optional(),
-});
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const ActividadUsuarioSchema = z
+  .object({
+    _id: z.string().optional(),
+    // Discrimina inactividad vs periodo de actividad.
+    tipo: TipoActividadUsuarioSchema.optional(),
+    // Vínculo con el usuario.
+    idUsuario: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    // Nombre de usuario denormalizado (lowercase), por si el usuario se borra.
+    usuario: z.string().optional().meta({ 'x-setter': 'lowercase' }),
+    // Cliente del permiso activo al momento del evento.
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    // Cadena de clientes ancestros del idCliente, para roll-up por subárbol.
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    // Inactividad: momento en que venció el cartel sin confirmación.
+    // Actividad: comienzo del ciclo de uso. Ancla del índice TTL.
+    inicio: z.string().optional().meta({ 'x-bson': 'date' }),
+    // Inactividad: momento en que volvió a confirmar (ausente = intervalo
+    // abierto). Actividad: momento del aviso de descanso. La duración es
+    // `fin - inicio`.
+    fin: z.string().optional().meta({ 'x-bson': 'date' }),
+    // Populate / Virtual
+    usuarioDoc: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idUsuario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'actividadusuarios' });
 export type IActividadUsuario = z.infer<typeof ActividadUsuarioSchema>;
 
 export const CreateActividadUsuarioSchema = ActividadUsuarioSchema.omit({

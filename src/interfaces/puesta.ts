@@ -12,29 +12,82 @@ import type { ILuminaria } from './luminaria';
  * Es OPCIONAL en el sistema: solo se usa para clientes con
  * `cliente.config.moduloLuminarias.usaPuestas`. La luminaria adquiere la `ubicacion` desde su puesta.
  */
-export const PuestaSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  fechaCreacion: z.string().optional(),
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const PuestaSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
-  identificacion: z.string().optional(),
-  ubicacion: GeoJSONPointSchema.optional(), // fuente de verdad de la georreferencia, es la que adquieren las luminarias asignadas a esta puesta
-  direccion: z.string().optional(),
+    identificacion: z.string().optional(),
+    ubicacion: GeoJSONPointSchema.optional(), // fuente de verdad de la georreferencia, es la que adquieren las luminarias asignadas a esta puesta
+    direccion: z.string().optional(),
 
-  idsGrupos: z.array(z.string()).optional(),
-  idsPerfilConfig: z.array(z.string()).optional(), // Perfil(es) a nivel puesta
+    idsGrupos: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'GrupoSchema' }),
+    idsPerfilConfig: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ConfigPerfilSchema' }), // Perfil(es) a nivel puesta
 
-  // Virtuals
-  // Populates intra-SCC como z.custom (import type-only): un schema real acá
-  // arrastra el shape completo del ciclo y revienta la serialización de
-  // declarations (TS7056) acá y en los consumidores NestJS.
-  luminarias: z.array(z.custom<ILuminaria>()).optional(), // luminaria.idPuesta == puesta._id
-  grupos: z.array(z.custom<IGrupo>()).optional(),
-  perfilConfigs: z.array(z.custom<IConfigPerfil>()).optional(),
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+    // Virtuals
+    // Populates intra-SCC como z.custom (import type-only): un schema real acá
+    // arrastra el shape completo del ciclo y revienta la serialización de
+    // declarations (TS7056) acá y en los consumidores NestJS.
+    // luminaria.idPuesta == puesta._id: membresía inversa (localField "_id",
+    // foreignField "idPuesta"), no un @Prop({ref}) de este lado.
+    luminarias: z.array(z.custom<ILuminaria>()).optional().meta({
+      'x-populate': {
+        ref: 'LuminariaSchema',
+        localField: '_id',
+        foreignField: 'idPuesta',
+        justOne: false,
+      },
+    }),
+    grupos: z.array(z.custom<IGrupo>()).optional().meta({
+      'x-populate': {
+        ref: 'GrupoSchema',
+        localField: 'idsGrupos',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    perfilConfigs: z.array(z.custom<IConfigPerfil>()).optional().meta({
+      'x-populate': {
+        ref: 'ConfigPerfilSchema',
+        localField: 'idsPerfilConfig',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'puestas' });
 
 /**
  * Interface hand-written (misma forma que z.infer<typeof PuestaSchema>).

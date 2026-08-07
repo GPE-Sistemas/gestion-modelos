@@ -19,30 +19,66 @@ export const ConfigCronogramaSchema = z.object({
 });
 export type ConfigCronograma = z.infer<typeof ConfigCronogramaSchema>;
 
-export const CronogramaSchema = z.object({
-  _id: z.string().optional(),
-  //
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idUbicacion: z.string().optional(),
-  //
-  fechaCreacion: z.string().optional(),
-  automatico: z.boolean().optional(),
-  dias: z.array(DiaSchema).optional(),
-  nombre: z.string().optional(),
-  descripcion: z.string().optional(),
-  tipo: TipoDeCronogramaSchema.optional(),
-  periodos: z.array(PeriodoSchema).optional(),
-  //
-  configuracion: ConfigCronogramaSchema.optional(), // Colores, el nombre de de lo que se está mostrando, etc
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  // Populate hacia una union discriminada (IUbicacion): z.custom con el tipo
-  // hand-written, NO UbicacionSchema. z.infer del schema union rompe el
-  // narrowing por categoria al asignar un doc Mongoose en consumidores.
-  ubicacion: z.custom<IUbicacion>().optional(),
-});
+export const CronogramaSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idUbicacion: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UbicacionSchema' }),
+    //
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    automatico: z.boolean().optional(),
+    dias: z.array(DiaSchema).optional(),
+    nombre: z.string().optional(),
+    descripcion: z.string().optional(),
+    tipo: TipoDeCronogramaSchema.optional(),
+    // @Prop({type: [Object]}) en el legacy: Mixed, sin casteo adentro.
+    periodos: z.array(PeriodoSchema).optional().meta({ 'x-bson': 'mixed' }),
+    //
+    // @Prop({type: Object}) en el legacy: Mixed.
+    configuracion: ConfigCronogramaSchema.optional().meta({
+      'x-bson': 'mixed',
+    }), // Colores, el nombre de de lo que se está mostrando, etc
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    // Populate hacia una union discriminada (IUbicacion): z.custom con el tipo
+    // hand-written, NO UbicacionSchema. z.infer del schema union rompe el
+    // narrowing por categoria al asignar un doc Mongoose en consumidores.
+    ubicacion: z.custom<IUbicacion>().optional().meta({
+      'x-populate': {
+        ref: 'UbicacionSchema',
+        localField: 'idUbicacion',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'cronogramas' });
 export type ICronograma = z.infer<typeof CronogramaSchema>;
 
 export const CreateCronogramaSchema = CronogramaSchema.omit({

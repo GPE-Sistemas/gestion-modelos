@@ -39,28 +39,69 @@ export const CredencialesDahuaSchema = z.object({
 });
 export type ICredencialesDahua = z.infer<typeof CredencialesDahuaSchema>;
 
-export const CamaraSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  fechaCreacion: z.string().optional(),
-  identificacion: z.string().optional(),
-  canales: z.array(CanalesCamaraSchema).optional(),
-  idModeloDispositivo: z.string().optional(),
-  tipo: TipoCamaraSchema.optional(),
-  numeroSerie: z.string().optional(),
-  host: z.string().optional(),
-  puertoRTSP: z.number().optional(),
-  puertoHTTP: z.number().optional(),
-  usuario: z.string().optional(),
-  password: z.string().optional(),
-  claveDeEncriptacion: z.string().optional(),
-  credencialesDahua: CredencialesDahuaSchema.optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  modeloDispositivo: ModeloDispositivoSchema.optional(),
-});
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const CamaraSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    identificacion: z.string().optional(),
+    // @Prop({type: [Object]}) en el legacy: cada elemento es Mixed, Mongoose
+    // no castea adentro.
+    canales: z.array(CanalesCamaraSchema).optional().meta({
+      'x-bson': 'mixed',
+    }),
+    idModeloDispositivo: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
+    tipo: TipoCamaraSchema.optional(),
+    numeroSerie: z.string().optional(),
+    host: z.string().optional(),
+    puertoRTSP: z.number().optional(),
+    puertoHTTP: z.number().optional(),
+    usuario: z.string().optional(),
+    password: z.string().optional(),
+    claveDeEncriptacion: z.string().optional(),
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    credencialesDahua: CredencialesDahuaSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    modeloDispositivo: ModeloDispositivoSchema.optional().meta({
+      'x-populate': {
+        ref: 'ModeloDispositivoSchema',
+        localField: 'idModeloDispositivo',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'camaras' });
 export type ICamara = z.infer<typeof CamaraSchema>;
 
 export const CreateCamaraSchema = CamaraSchema.omit({

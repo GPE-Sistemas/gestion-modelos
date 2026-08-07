@@ -414,26 +414,54 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
   ancestros?: ICliente[];
 }
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts. `x-collection` va en el z.union() de
+// ResumenDatosSchema más abajo (una sola colección para las 13 variantes).
 // Campos comunes a todas las variantes (sin tipo/resumen, que discriminan)
 const ResumenDatosCamposSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  fechaCreacion: z.string().optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
   tipoEntidad: TipoEntidadResumenSchema.optional(),
   agrupacion: AgrupacionResumenSchema.optional(),
   agrupacionTiempo: AgrupacionTiempoSchema.optional(),
 
   rangoMinutos: z.number().optional(),
-  idsAsignados: z.array(z.string()).optional(),
-  periodoInicio: z.string().optional(),
-  periodoFin: z.string().optional(),
+  // Cast a ObjectId pero sin virtual propio: el meta.go no tiene un populate
+  // para este path (a diferencia de idCliente/idsAncestros).
+  idsAsignados: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId' }),
+  periodoInicio: z.string().optional().meta({ 'x-bson': 'date' }),
+  periodoFin: z.string().optional().meta({ 'x-bson': 'date' }),
   cerrado: z.boolean().optional(), //indica que el resumen ya no se va a actualizar más
 
   //Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 });
 
 const VarianteConsumoMensualLuminarias = ResumenDatosCamposSchema.extend({
@@ -495,21 +523,23 @@ const VarianteGatewayStats = ResumenDatosCamposSchema.extend({
  *  TIPO DISCRIMINADO
  * ────────────────────────────────────────────────*/
 
-export const ResumenDatosSchema = z.union([
-  VarianteConsumoMensualLuminarias,
-  VarianteEncendidoDiarioLuminarias,
-  VarianteInformeDiarioLuminarias,
-  VarianteConsumoMensualCombustibleVehiculos,
-  VarianteTemperaturaHorariaVehiculos,
-  VarianteCombustibleHorarioVehiculos,
-  VarianteInformeCargasCombustible,
-  VarianteInformeEventosSospechososCombustible,
-  VarianteInformeMensualFlotaCombustible,
-  VarianteGastosDelCliente,
-  VarianteDownlinksSistema,
-  VarianteDownlinksLuminaria,
-  VarianteGatewayStats,
-]);
+export const ResumenDatosSchema = z
+  .union([
+    VarianteConsumoMensualLuminarias,
+    VarianteEncendidoDiarioLuminarias,
+    VarianteInformeDiarioLuminarias,
+    VarianteConsumoMensualCombustibleVehiculos,
+    VarianteTemperaturaHorariaVehiculos,
+    VarianteCombustibleHorarioVehiculos,
+    VarianteInformeCargasCombustible,
+    VarianteInformeEventosSospechososCombustible,
+    VarianteInformeMensualFlotaCombustible,
+    VarianteGastosDelCliente,
+    VarianteDownlinksSistema,
+    VarianteDownlinksLuminaria,
+    VarianteGatewayStats,
+  ])
+  .meta({ 'x-collection': 'resumendatos' });
 export type IResumenDatos = z.infer<typeof ResumenDatosSchema>;
 
 /* ────────────────────────────────────────────────

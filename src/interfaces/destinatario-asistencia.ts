@@ -12,29 +12,54 @@ export type IInfoAdicional = z.infer<typeof InfoAdicionalSchema>;
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
-export const DestinatarioAsistenciaSchema = z.object({
-  _id: z.string().optional(), // ID único del destinatario
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+export const DestinatarioAsistenciaSchema = z
+  .object({
+    _id: z.string().optional(), // ID único del destinatario
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
 
-  fechaCreacion: z.string().optional(),
-  nombre: z.string().optional(),
-  tipoEmergencia: z.custom<TipoEmergencia>().optional(),
-  apellido: z.string().optional(),
-  sexo: z.enum(["M", "F", "X"]).optional(),
-  dni: z.string().optional(),
-  edad: z.number().optional(),
-  obraSocial: z.string().optional(),
-  infoAdicional: InfoAdicionalSchema.optional(), // Información adicional del destinatario
-  telefono: z.string().optional(), // Teléfono del destinatario
-  email: z.string().optional(), // Correo electrónico del destinatario
-  telefonoAlternativo: z.string().optional(),
-  ubicacion: DireccionV2Schema.optional(), // Ubicación del destinatario
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    nombre: z.string().optional(),
+    tipoEmergencia: z.custom<TipoEmergencia>().optional(),
+    apellido: z.string().optional(),
+    sexo: z.enum(["M", "F", "X"]).optional(),
+    dni: z.string().optional(),
+    edad: z.number().optional(),
+    obraSocial: z.string().optional(),
+    // @Prop({type: Object, default: {}}) en el legacy: Mixed.
+    infoAdicional: InfoAdicionalSchema.optional().meta({ 'x-bson': 'mixed' }), // Información adicional del destinatario
+    telefono: z.string().optional(), // Teléfono del destinatario
+    email: z.string().optional(), // Correo electrónico del destinatario
+    telefonoAlternativo: z.string().optional(),
+    // @Prop({type: Object, default: {}, required: true}) en el legacy: Mixed
+    // pese a tener un schema DireccionV2 tipado en zod.
+    ubicacion: DireccionV2Schema.optional().meta({ 'x-bson': 'mixed' }), // Ubicación del destinatario
 
-  //Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+    //Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'destinatarioasistencias' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del

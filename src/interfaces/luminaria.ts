@@ -107,47 +107,74 @@ export interface ILuminariaGenerica<T extends TipoDispositivoLuminaria> {
   } | null;
 }
 
+// SPIKE etapa 1 + tarea 3 (2026-08-06): metadata de persistencia por
+// `.meta()`. Convención documentada arriba de ProveedorSchema
+// (src/interfaces/proveedor.ts) — copiada acá, no reinventada.
+//
 // Campos comunes a las dos variantes (sin tipoDispositivo/ultimoReporte*, que discriminan)
 const LuminariaCamposSchema = z.object({
   _id: z.string().optional(),
-  fechaCreacion: z.string().optional(), // Default: Date.now
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  deveui: z.string().optional(), // Deveui del dispositivo lorawan
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }), // Default: Date.now
+  idCliente: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  deveui: z.string().optional().meta({ 'x-setter': 'uppercase' }), // Deveui del dispositivo lorawan
   identificacion: z.string().optional(),
-  ubicacion: GeoJSONPointSchema.optional(), // GeoJSON de la ubicacion de la luminaria (si hay idPuesta, se coloca la de la puesta)
+  // @Prop({type: Object}) en el legacy: Mixed.
+  ubicacion: GeoJSONPointSchema.optional().meta({ 'x-bson': 'mixed' }), // GeoJSON de la ubicacion de la luminaria (si hay idPuesta, se coloca la de la puesta)
   direccion: z.string().optional(), // Direccion de la luminaria
-  idModeloDispositivo: z.string().optional(), // ID del modelo de dispositivo
-  idPuesta: z.string().optional(), // (opcional, solo clientes con moduloLuminarias.usaPuestas)
-  idsGrupos: z.array(z.string()).optional(),
+  idModeloDispositivo: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }), // ID del modelo de dispositivo
+  idPuesta: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'PuestaSchema' }), // (opcional, solo clientes con moduloLuminarias.usaPuestas)
+  idsGrupos: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'GrupoSchema' }),
   tiempoEncendida: z.number().optional(), // En horas
-  fechaUltimaComunicacion: z.string().optional(), // Fecha del ultima comunicacion recibida por el dispositivo
-  idPerfilConfig: z.string().optional(),
+  fechaUltimaComunicacion: z.string().optional().meta({ 'x-bson': 'date' }), // Fecha del ultima comunicacion recibida por el dispositivo
+  idPerfilConfig: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ConfigPerfilSchema' }),
   tipoEnergizado: TipoEnergizadoSchema.optional(),
   estadoOperativo: EstadoOperativoLuminariaSchema.optional(), // Condición administrativa (Operativa/Mantenimiento)
-  estado: EstadoLuminariaCalculadoSchema.optional(), // Estado calculado de funcionamiento (6 estados). Escrito por backend (uplinks + cron); persiste hasta el próximo cambio.
+  // @Prop({type: Object}) en el legacy: Mixed.
+  estado: EstadoLuminariaCalculadoSchema.optional().meta({ 'x-bson': 'mixed' }), // Estado calculado de funcionamiento (6 estados). Escrito por backend (uplinks + cron); persiste hasta el próximo cambio.
 
   // Habilitación de Servicio Técnico
   puedeSolicitarServicioTecnico: z.boolean().optional(), // Si esta luminaria puede recibir servicio técnico
-  idsClientesQuePuedenAtenderEventosTecnicos: z.array(z.string()).optional(), // Clientes habilitados a atender el ST de esta luminaria
-  configHorariosAtencionTecnica: z.array(ConfigHorarioSchema).optional(), // Clientes que atienden + ventanas horarias
+  idsClientesQuePuedenAtenderEventosTecnicos: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }), // Clientes habilitados a atender el ST de esta luminaria
+  // @Prop({type: [Object]}) en el legacy: array real (se inicializa a []) de Mixed.
+  configHorariosAtencionTecnica: z.array(ConfigHorarioSchema).optional().meta({ 'x-bson': 'mixed' }), // Clientes que atienden + ventanas horarias
 
   // Virtuals
   // Populates intra-SCC como z.custom (import type-only): un schema real acá
   // arrastra el shape completo del ciclo y revienta la serialización de
   // declarations (TS7056) acá y en los consumidores NestJS.
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  clientesQuePuedenAtenderEventosTecnicos: z.array(ClienteSchema).optional(), // populate de idsClientesQuePuedenAtenderEventosTecnicos
-  dispositivo: z.custom<IDispositivoLorawan>().optional(),
-  modeloDispositivo: ModeloDispositivoSchema.optional(),
-  grupos: z.array(z.custom<IGrupo>()).optional(),
-  perfilConfig: z.custom<IConfigPerfil>().optional(),
-  puesta: z.custom<IPuesta>().optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idCliente', foreignField: '_id', justOne: true },
+  }),
+  // sic legacy: ancestros con justOne TRUE (schema.ts) — devuelve un solo
+  // cliente aunque el localField sea array.
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idsAncestros', foreignField: '_id', justOne: true },
+  }),
+  clientesQuePuedenAtenderEventosTecnicos: z.array(ClienteSchema).optional().meta({
+    'x-populate': { ref: 'ClienteSchema', localField: 'idsClientesQuePuedenAtenderEventosTecnicos', foreignField: '_id', justOne: false },
+  }), // populate de idsClientesQuePuedenAtenderEventosTecnicos
+  dispositivo: z.custom<IDispositivoLorawan>().optional().meta({
+    'x-populate': { ref: 'DispositivoLorawanSchema', localField: 'deveui', foreignField: 'deveui', justOne: true },
+  }),
+  modeloDispositivo: ModeloDispositivoSchema.optional().meta({
+    'x-populate': { ref: 'ModeloDispositivoSchema', localField: 'idModeloDispositivo', foreignField: '_id', justOne: true },
+  }),
+  grupos: z.array(z.custom<IGrupo>()).optional().meta({
+    'x-populate': { ref: 'GrupoSchema', localField: 'idsGrupos', foreignField: '_id', justOne: false },
+  }),
+  perfilConfig: z.custom<IConfigPerfil>().optional().meta({
+    'x-populate': { ref: 'ConfigPerfilSchema', localField: 'idPerfilConfig', foreignField: '_id', justOne: true },
+  }),
+  puesta: z.custom<IPuesta>().optional().meta({
+    'x-populate': { ref: 'PuestaSchema', localField: 'idPuesta', foreignField: '_id', justOne: true },
+  }),
 
   // Computado (no persistido): perfil efectivo resuelto por jerarquía
   // (luminaria > grupo por prioridad > puesta > grupo de puestas). Solo se
-  // completa cuando la query pide `incluirPerfilEfectivo`.
+  // completa cuando la query pide `incluirPerfilEfectivo`. Hallazgo tarea 2
+  // bis (docs/MIGRACION.md §7 item 20): sin `x-computed` sync.py no puede
+  // distinguirlo de un campo real.
   perfilEfectivo: z
     .object({
       get nivel() {
@@ -157,32 +184,37 @@ const LuminariaCamposSchema = z.object({
       nombre: z.string().nullable().optional(),
     })
     .nullable()
-    .optional(),
+    .optional()
+    .meta({ 'x-computed': true }),
 });
 
 const VarianteLuminariaGPE = LuminariaCamposSchema.extend({
   tipoDispositivo: z.literal('Luminaria GPE').optional(), // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
+  // @Prop({type: Object}) en el legacy: Mixed.
   ultimoReportePeriodico: z
     .custom<IReporteBase<'Luminaria GPE Periódico'>>()
-    .optional(), // Ultimo reporte periodico recibido
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte periodico recibido
   ultimoReporteEnergia: z
     .custom<IReporteBase<'Luminaria GPE Energía'>>()
-    .optional(), // Ultimo reporte energia recibido
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte energia recibido
 });
 const VarianteLuminariaACTISFING = LuminariaCamposSchema.extend({
   tipoDispositivo: z.literal('Luminaria ACTIS FING').optional(), // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
   ultimoReportePeriodico: z
     .custom<IReporteBase<'Luminaria ACTIS FING Estado'>>()
-    .optional(), // Ultimo reporte periodico recibido
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte periodico recibido
   ultimoReporteEnergia: z
     .custom<IReporteBase<'Luminaria ACTIS FING Energía'>>()
-    .optional(), // Ultimo reporte energia recibido
+    .optional()
+    .meta({ 'x-bson': 'mixed' }), // Ultimo reporte energia recibido
 });
 
-export const LuminariaSchema = z.union([
-  VarianteLuminariaGPE,
-  VarianteLuminariaACTISFING,
-]);
+export const LuminariaSchema = z
+  .union([VarianteLuminariaGPE, VarianteLuminariaACTISFING])
+  .meta({ 'x-collection': 'luminarias' });
 
 /**
  * Tipo legacy hand-written (NO z.infer): el ciclo luminaria ↔ puesta ↔

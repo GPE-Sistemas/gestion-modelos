@@ -50,11 +50,23 @@ export type IMotivoCierreCumplimiento = z.infer<
  */
 export const CumplimientoRecorridoSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   //
-  idActivo: z.string().optional(),
-  idRecorrido: z.string().optional(),
+  idActivo: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ActivoSchema' }),
+  idRecorrido: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'RecorridoSchema' }),
   /**
    * Hash de la geometría contra la que se midió. Snapshot: si el recorrido se
    * edita después, este documento sigue siendo interpretable.
@@ -64,8 +76,8 @@ export const CumplimientoRecorridoSchema = z.object({
   numeroVuelta: z.number().optional(),
   //
   /** Primer reporte on-route que arrancó la medición. */
-  fechaInicio: z.string().optional(),
-  fechaFin: z.string().optional(),
+  fechaInicio: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaFin: z.string().optional().meta({ 'x-bson': 'date' }),
   duracionMinutos: z.number().optional(),
   //
   /** Cobertura lograda, 0..100. */
@@ -110,11 +122,39 @@ export const CumplimientoRecorridoSchema = z.object({
   estado: EstadoCumplimientoRecorridoSchema.optional(),
   motivoCierre: MotivoCierreCumplimientoSchema.optional(),
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  activo: ActivoSchema.optional(),
-  recorrido: RecorridoSchema.optional(),
-});
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  activo: ActivoSchema.optional().meta({
+    'x-populate': {
+      ref: 'ActivoSchema',
+      localField: 'idActivo',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  recorrido: RecorridoSchema.optional().meta({
+    'x-populate': {
+      ref: 'RecorridoSchema',
+      localField: 'idRecorrido',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'cumplimientorecorridos' });
 export type ICumplimientoRecorrido = z.infer<
   typeof CumplimientoRecorridoSchema
 >;

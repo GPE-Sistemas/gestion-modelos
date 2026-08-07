@@ -76,6 +76,8 @@ export const DetallesLuminariasSchema = z.object({
 });
 export type IDetallesLuminarias = z.infer<typeof DetallesLuminariasSchema>;
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const ModeloDispositivoSchema = z.object({
   _id: z.string().optional(),
 
@@ -84,18 +86,49 @@ export const ModeloDispositivoSchema = z.object({
   marca: z.string().optional(),
   modelo: z.string().optional(),
   formatoMensaje: FormatosMensajeComunicadorSchema.optional(),
-  idCodigos: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCodigos: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'CodigosDispositivoSchema' }),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
 
   //Datos técnicos para luminarias
-  luminarias: DetallesLuminariasSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  luminarias: DetallesLuminariasSchema.optional().meta({ 'x-bson': 'mixed' }),
   global: z.boolean().optional(),
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  codigos: CodigosDispositivoSchema.optional(),
-});
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  codigos: CodigosDispositivoSchema.optional().meta({
+    'x-populate': {
+      ref: 'CodigosDispositivoSchema',
+      localField: 'idCodigos',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'modelodispositivos' });
 export type IModeloDispositivo = z.infer<typeof ModeloDispositivoSchema>;
 
 export const CreateModeloDispositivoSchema = ModeloDispositivoSchema.omit({

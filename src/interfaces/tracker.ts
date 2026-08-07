@@ -44,46 +44,114 @@ export type ITelefono = z.infer<typeof TelefonoSchema>;
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const TrackerSchema = z.object({
   _id: z.string().optional(),
   //
-  fechaCreacion: z.string().optional(),
-  fechaAlta: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
   imagenes: z.array(z.string()).optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idsClientesQuePuedenAtenderEventos: z.array(z.string()).optional(),
-  idsClientesQuePuedenAtenderEventosTecnicos: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsClientesQuePuedenAtenderEventos: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsClientesQuePuedenAtenderEventosTecnicos: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   puedeSolicitarServicioTecnico: z.boolean().optional(),
-  configHorariosAtencion: z.array(ConfigHorarioSchema).optional(),
-  configHorariosAtencionTecnica: z.array(ConfigHorarioSchema).optional(),
-  idModelo: z.string().optional(),
+  // @Prop({type: [Object]}) en el legacy: array real de Mixed.
+  configHorariosAtencion: z
+    .array(ConfigHorarioSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
+  configHorariosAtencionTecnica: z
+    .array(ConfigHorarioSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
+  idModelo: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
   nombre: z.string().optional(),
   identificacion: z.string().optional(),
+  // @Prop() string plano: el populate por "activo" castea hex → OID
+  // (CLAUDE.md §7 de gestion-datos-go). Sin x-ref: no tiene virtual con su
+  // propio nombre, solo el virtual "activo" (localField distinto).
   asignadoA: z.string().optional(),
   tipo: TipoTrackerSchema.optional(),
   /**
    * Id del tracker fisico
    */
   uniqueId: z.string().optional(),
-  qualcomm: QualcommDeviceSchema.optional(),
-  t1000b: T100bDeviceSchema.optional(),
-  telefono: TelefonoSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  qualcomm: QualcommDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
+  t1000b: T100bDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
+  telefono: TelefonoSchema.optional().meta({ 'x-bson': 'mixed' }),
   estadoCuenta: z.custom<estadoCuenta>().optional(),
   numeroAbonado: z.string().optional(),
-  sim1: z.custom<ISim>().optional(),
-  sim2: z.custom<ISim>().optional(),
+  sim1: z.custom<ISim>().optional().meta({ 'x-bson': 'mixed' }),
+  sim2: z.custom<ISim>().optional().meta({ 'x-bson': 'mixed' }),
   frecReporte: z.number().optional(),
   // Activa/desactiva remotamente el tracking GPS (solo aplica a tipo='Telefono').
+  // Post-cutover (comentado/PAUSADO en el legacy archivado); sin @Prop ahí,
+  // por eso sin x-bson: el meta lo castea Bool igual (drift 2026-08-04).
   trackingActivo: z.boolean().optional(),
   //
-  idServiciosContratados: z.array(z.string()).optional(),
+  idServiciosContratados: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ServicioContratadoSchema' }),
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  activo: z.custom<IActivo>().optional(),
-  modelo: ModeloDispositivoSchema.optional(),
-  serviciosContratados: z.array(ServicioContratadoSchema).optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  activo: z.custom<IActivo>().optional().meta({
+    'x-populate': {
+      ref: 'ActivoSchema',
+      localField: 'asignadoA',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  modelo: ModeloDispositivoSchema.optional().meta({
+    'x-populate': {
+      ref: 'ModeloDispositivoSchema',
+      localField: 'idModelo',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  serviciosContratados: z.array(ServicioContratadoSchema).optional().meta({
+    'x-populate': {
+      ref: 'ServicioContratadoSchema',
+      localField: 'idServiciosContratados',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 }).meta({ 'x-collection': 'trackers' });
 
 /**

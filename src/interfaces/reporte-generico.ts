@@ -431,24 +431,100 @@ export type IUpdateReporteGenerico =
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
+//
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts. `idEntidad`/`idsAsignados` SON ObjectId
+// (a diferencia de `UltimoReporteGenerico`, donde son string plano) pero sin
+// `x-ref`: no tienen virtual con su propio nombre — se populan bajo otro
+// nombre (dispositivoLora/tracker desde idEntidad; grupos/activo/recorrido/
+// usuario/luminaria desde idsAsignados), igual que en evento-generico.ts.
 const camposComunesReporte = {
   _id: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  expireAt: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idEntidad: z.string().optional(),
-  idsAsignados: z.array(z.string()).optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  expireAt: z.string().optional().meta({ 'x-bson': 'date' }),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }),
+  idsAsignados: z.array(z.string()).optional().meta({ 'x-bson': 'objectId' }),
   tipoEntidad: TipoEntidadReporteSchema.optional(),
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  dispositivoLora: z.custom<IDispositivoLorawan>().optional(),
-  tracker: z.custom<ITracker>().optional(),
-  grupos: z.array(z.custom<IGrupo>()).optional(),
-  activo: z.custom<IActivo>().optional(),
-  recorrido: z.custom<IRecorrido>().optional(),
-  usuario: z.custom<IUsuario>().optional(),
-  luminaria: z.custom<ILuminaria>().optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  dispositivoLora: z.custom<IDispositivoLorawan>().optional().meta({
+    'x-populate': {
+      ref: 'DispositivoLorawanSchema',
+      localField: 'idEntidad',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  tracker: z.custom<ITracker>().optional().meta({
+    'x-populate': {
+      ref: 'TrackerSchema',
+      localField: 'idEntidad',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  grupos: z.array(z.custom<IGrupo>()).optional().meta({
+    'x-populate': {
+      ref: 'GrupoSchema',
+      localField: 'idsAsignados',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  activo: z.custom<IActivo>().optional().meta({
+    'x-populate': {
+      ref: 'ActivoSchema',
+      localField: 'idsAsignados',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  recorrido: z.custom<IRecorrido>().optional().meta({
+    'x-populate': {
+      ref: 'RecorridoSchema',
+      localField: 'idsAsignados',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  usuario: z.custom<IUsuario>().optional().meta({
+    'x-populate': {
+      ref: 'UsuarioSchema',
+      localField: 'idsAsignados',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  luminaria: z.custom<ILuminaria>().optional().meta({
+    'x-populate': {
+      ref: 'LuminariaSchema',
+      localField: 'idsAsignados',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 };
 
 const varianteReporte = <T extends TipoValoresReporte, V extends z.ZodRawShape>(
@@ -458,7 +534,18 @@ const varianteReporte = <T extends TipoValoresReporte, V extends z.ZodRawShape>(
   z.object({
     ...camposComunesReporte,
     tipoReporte: z.literal(tipo),
-    valores: valores.extend({ timestamp: z.string().optional() }).optional(),
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    // OJO — `valores.timestamp` es un STRING en BSON, NO una fecha
+    // (CLAUDE.md §3 de gestion-datos-go, el bug silencioso más caro del
+    // repo): NUNCA anotar `timestamp` con `x-bson: 'date'`. Un bound Date
+    // contra un valor string no matchea nunca (type bracketing de Mongo) y
+    // los exports de reportes devuelven vacío sin ningún error. Lo fija
+    // `TestCastStringTypeStaysString` (gestion-datos-go,
+    // internal/db/query/cast_test.go:73).
+    valores: valores
+      .extend({ timestamp: z.string().optional() })
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
   });
 
 const vRepLumGPE = varianteReporte('Luminaria GPE Periódico', ReporteLuminariaGPESchema);
@@ -485,7 +572,7 @@ export const ReporteGenericoSchema = z.discriminatedUnion('tipoReporte', [
   vRepTrackerCombustible,
   vRepTrackerTemperatura,
   vRepTrackerTelefono,
-]);
+]).meta({ 'x-collection': 'reportegenericos' });
 
 // Mismo set que el type Omitir de arriba
 const omitirCreateUpdateReporte = {

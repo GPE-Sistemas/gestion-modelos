@@ -52,30 +52,87 @@ export const InformacionSchema = InformacionNotaSchema.extend(
 );
 export type IInformacion = z.infer<typeof InformacionSchema>;
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const NotaSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idAsignado: z.string().optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  // Polimórfico (Activo/Alarma/Luminaria según no hay un tipo dedicado en
+  // Nota, se resuelve por los 3 virtuals activo/alarma/luminaria): sin ref
+  // fijo en el legacy (@Prop sin `ref`), por eso sin x-ref acá tampoco.
+  idAsignado: z.string().optional().meta({ 'x-bson': 'objectId' }),
   permanente: z.boolean().optional(),
-  vigenciaDesde: z.string().optional(),
-  vigenciaHasta: z.string().optional(),
+  vigenciaDesde: z.string().optional().meta({ 'x-bson': 'date' }),
+  vigenciaHasta: z.string().optional().meta({ 'x-bson': 'date' }),
   tipo: TipoNotaSchema.optional(),
-  informacion: InformacionSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  informacion: InformacionSchema.optional().meta({ 'x-bson': 'mixed' }),
   orden: z.number().optional(),
   //Para contactos
-  inhabilitadoDesde: z.string().optional(), //Durante el período inhabilitado, no se mostrará el conatcto en el tratamiento de los eventos
-  inhabilitadoHasta: z.string().optional(),
+  inhabilitadoDesde: z.string().optional().meta({ 'x-bson': 'date' }), //Durante el período inhabilitado, no se mostrará el conatcto en el tratamiento de los eventos
+  inhabilitadoHasta: z.string().optional().meta({ 'x-bson': 'date' }),
   // Categoría de evento a la que aplica esta nota/contacto. Sin valor = aplica a todos los eventos
-  idCategoriaEvento: z.string().optional(),
+  idCategoriaEvento: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'CategoriaEventoSchema' }),
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  activo: ActivoSchema.optional(),
-  alarma: DispositivoAlarmaSchema.optional(),
-  luminaria: LuminariaSchema.optional(),
-  categoriaEvento: CategoriaEventoSchema.optional(),
-});
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  activo: ActivoSchema.optional().meta({
+    'x-populate': {
+      ref: 'ActivoSchema',
+      localField: 'idAsignado',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  alarma: DispositivoAlarmaSchema.optional().meta({
+    'x-populate': {
+      ref: 'DispositivoAlarmaSchema',
+      localField: 'idAsignado',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  luminaria: LuminariaSchema.optional().meta({
+    'x-populate': {
+      ref: 'LuminariaSchema',
+      localField: 'idAsignado',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  categoriaEvento: CategoriaEventoSchema.optional().meta({
+    'x-populate': {
+      ref: 'CategoriaEventoSchema',
+      localField: 'idCategoriaEvento',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'notas' });
 export type INota = z.infer<typeof NotaSchema>;
 
 export const CreateNotaSchema = NotaSchema.omit({

@@ -50,26 +50,51 @@ export const TemaPayloadSchema = z.object({
 });
 export type ITemaPayload = z.infer<typeof TemaPayloadSchema>;
 
-export const TemaSchema = z.object({
-  _id: z.string().optional(),
-  //
-  nombre: z.string().optional(),
-  descripcion: z.string().optional(),
-  activa: z.boolean().optional(),
-  fechaInicio: z.string().optional(),
-  fechaFin: z.string().optional(),
-  diasRecurrentes: RangoRecurrenteAnualSchema.optional(),
-  prioridad: z.number().optional(), // 0-100
-  global: z.boolean().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  payload: TemaPayloadSchema.optional(),
-  fechaCreacion: z.string().optional(),
-  fechaActualizacion: z.string().optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const TemaSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    nombre: z.string().optional(),
+    descripcion: z.string().optional(),
+    activa: z.boolean().optional(),
+    // @Prop() pelados en el legacy → String, sin cast.
+    fechaInicio: z.string().optional(),
+    fechaFin: z.string().optional(),
+    diasRecurrentes: RangoRecurrenteAnualSchema.optional(),
+    prioridad: z.number().optional(), // 0-100
+    global: z.boolean().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    payload: TemaPayloadSchema.optional(),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaActualizacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'temas' });
 export type ITema = z.infer<typeof TemaSchema>;
 
 export const CreateTemaSchema = TemaSchema.omit({

@@ -30,31 +30,73 @@ export const VistaMarkerSchema = z.object({
 });
 export type IVistaMarker = z.infer<typeof VistaMarkerSchema>;
 
-export const ConfigMarkerSchema = z.object({
-  _id: z.string().optional(),
-  //
-  fechaCreacion: z.string().optional(),
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const ConfigMarkerSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
-  // Define quien puede usar este marker
-  //
-  global: z.boolean().optional(), // Si es global, puede ser usado por cualquiera
-  idCliente: z.string().optional(), // IdCliente que lo creó
-  idsAncestros: z.array(z.string()).optional(), // IdsAncestros del cliente que lo creó
-  idUsuario: z.string().optional(), // Si tiene idUsuario, solo lo puede usar ese usuario
+    // Define quien puede usar este marker
+    //
+    global: z.boolean().optional(), // Si es global, puede ser usado por cualquiera
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }), // IdCliente que lo creó
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }), // IdsAncestros del cliente que lo creó
+    // Sin `.meta()`: el legacy declara `@Prop({type: [ObjectId]})` (array) y
+    // zod acá lo tiene como escalar desde antes de esta tarea. Alinearlos
+    // rompe consumidores (gestion-api-gestion/src/entidades/config-marker/
+    // service.ts:55 asigna un string; :157 compara con `===` contra un
+    // string) — ver docs/MIGRACION.md §7 y ConfigMarker en `sinAnotar`
+    // (gestion-datos-go/test/drift/anotaciones_test.go).
+    idUsuario: z.string().optional(), // Si tiene idUsuario, solo lo puede usar ese usuario
 
-  // Sobre que aplica este marker
-  //
-  idClienteVer: z.string().optional(), // idCliente del grupo o activo a ver; o repetido el idRef si scope es cliente ya que idRef es idCliente
-  scope: z.enum(['cliente', 'grupo', 'activo']),
-  idRef: z.string(), // idCliente, idGrupo o idActivo
+    // Sobre que aplica este marker
+    //
+    idClienteVer: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }), // idCliente del grupo o activo a ver; o repetido el idRef si scope es cliente ya que idRef es idCliente
+    scope: z.enum(['cliente', 'grupo', 'activo']),
+    // idCliente, idGrupo o idActivo (polimórfico según `scope`): ObjectId sin
+    // un único `ref` de destino.
+    idRef: z.string().meta({ 'x-bson': 'objectId' }),
 
-  vistas: z.array(VistaMarkerSchema).optional(),
+    vistas: z.array(VistaMarkerSchema).optional(),
 
-  // Populate
-  cliente: ClienteSchema.optional(),
-  clienteVer: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    clienteVer: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idClienteVer',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'configmarkers' });
 export type IConfigMarker = z.infer<typeof ConfigMarkerSchema>;
 
 // El original era Omit<Partial<IConfigMarker>, Omitir>: acá el Partial NO era
