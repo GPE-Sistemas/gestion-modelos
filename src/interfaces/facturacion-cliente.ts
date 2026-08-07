@@ -4,21 +4,43 @@ import { ClienteSchema, TipoClienteSchema } from './cliente';
 export const MonedaFacturacionSchema = z.enum(['ARS', 'USD']);
 export type MonedaFacturacion = z.infer<typeof MonedaFacturacionSchema>;
 
-export const FacturacionClienteSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  activa: z.boolean().optional(),
-  /**
-   * Si true, el cliente no se cobra: su costo se descuenta del cliente
-   * facturable padre (línea de bonificación). Si false/undefined y el
-   * cliente no es nivel 1, se considera raíz independiente de facturación.
-   */
-  bonificado: z.boolean().optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+export const FacturacionClienteSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    activa: z.boolean().optional(),
+    /**
+     * Si true, el cliente no se cobra: su costo se descuenta del cliente
+     * facturable padre (línea de bonificación). Si false/undefined y el
+     * cliente no es nivel 1, se considera raíz independiente de facturación.
+     */
+    bonificado: z.boolean().optional(),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'facturacionclientes' });
 export type IFacturacionCliente = z.infer<typeof FacturacionClienteSchema>;
 
 export const CreateFacturacionClienteSchema = FacturacionClienteSchema.omit({

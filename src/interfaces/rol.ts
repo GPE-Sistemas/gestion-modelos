@@ -383,22 +383,44 @@ export const FuncionesRolSchema = z.enum([
 ]);
 export type FuncionesRol = z.infer<typeof FuncionesRolSchema>;
 
-export const RolSchema = z.object({
-  _id: z.string().optional(),
-  //
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  default: z.boolean().optional(),
-  global: z.boolean().optional(),
+export const RolSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    default: z.boolean().optional(),
+    global: z.boolean().optional(),
 
-  nombre: z.string().optional(),
-  acciones: z.array(AccionesRolSchema).optional(),
-  funciones: z.array(FuncionesRolSchema).optional(),
+    nombre: z.string().optional(),
+    acciones: z.array(AccionesRolSchema).optional(),
+    funciones: z.array(FuncionesRolSchema).optional(),
 
-  //Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+    //Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'rols' });
 export type IRol = z.infer<typeof RolSchema>;
 
 export const CreateRolSchema = RolSchema.omit({ _id: true, cliente: true });

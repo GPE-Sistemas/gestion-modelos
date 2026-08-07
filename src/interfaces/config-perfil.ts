@@ -85,54 +85,90 @@ export interface IConfigPerfilBase<T extends keyof MapaConfigPerfil> {
 // Campos comunes a todas las variantes (sin tipoConfig/valores, que discriminan)
 const ConfigPerfilCamposSchema = z.object({
   _id: z.string().optional(),
-  fechaCreacion: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
   nombre: z.string().optional(),
   global: z.boolean().optional(), // Si es global, puede ser usado por cualquier cliente.
 
   // Tenant
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
 
   // Tipo y datos
   tipoEntidad: TipoEntidadConfigPerfilSchema.optional(),
 
   // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 });
 
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
+// valores es @Prop({type: Object}) en el legacy (config-perfil/schema.ts): Mixed,
+// Mongoose no castea adentro. Igual en las cuatro variantes.
 const VarianteConfigPerfilLuminariaGPE = ConfigPerfilCamposSchema.extend({
   tipoConfig: z.literal('Luminaria GPE').optional(),
-  valores: z.custom<IConfigPerfilLuminariaGPE>().optional(),
+  valores: z
+    .custom<IConfigPerfilLuminariaGPE>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
 });
 const VarianteConfigPerfilLuminariaWellness = ConfigPerfilCamposSchema.extend({
   tipoConfig: z.literal('Luminaria Wellness').optional(),
-  valores: z.custom<IConfigPerfilLuminariaWellness>().optional(),
+  valores: z
+    .custom<IConfigPerfilLuminariaWellness>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
 });
 const VarianteConfigPerfilLuminariaACTISGeneral =
   ConfigPerfilCamposSchema.extend({
     tipoConfig: z.literal('Luminaria ACTIS FING General').optional(),
-    valores: z.custom<IConfigPerfilLuminariaACTISGeneral>().optional(),
+    valores: z
+      .custom<IConfigPerfilLuminariaACTISGeneral>()
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
   });
 const VarianteConfigPerfilLuminariaACTISDimming =
   ConfigPerfilCamposSchema.extend({
     tipoConfig: z.literal('Luminaria ACTIS FING Dimming').optional(),
-    valores: z.custom<IConfigPerfilLuminariaACTISDimming>().optional(),
+    valores: z
+      .custom<IConfigPerfilLuminariaACTISDimming>()
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
   });
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
  * ────────────────────────────────────────────────*/
 
-export const ConfigPerfilSchema = z.union([
-  VarianteConfigPerfilLuminariaGPE,
-  VarianteConfigPerfilLuminariaWellness,
-  VarianteConfigPerfilLuminariaACTISGeneral,
-  VarianteConfigPerfilLuminariaACTISDimming,
-]);
+export const ConfigPerfilSchema = z
+  .union([
+    VarianteConfigPerfilLuminariaGPE,
+    VarianteConfigPerfilLuminariaWellness,
+    VarianteConfigPerfilLuminariaACTISGeneral,
+    VarianteConfigPerfilLuminariaACTISDimming,
+  ])
+  .meta({ 'x-collection': 'configperfils' });
 
 export type IConfigPerfil =
   | IConfigPerfilBase<'Luminaria GPE'>

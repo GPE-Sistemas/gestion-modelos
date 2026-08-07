@@ -44,20 +44,43 @@ export interface ILogBase<T extends keyof MapaValoresLog> {
   ancestros?: ICliente[];
 }
 
-export const LogGenericoSchema = z.object({
-  _id: z.string(),
-  fechaCreacion: z.string().optional(),
-  idCliente: z.string().optional(),
-  expireAt: z.string().optional(),
-  //
-  idsAncestros: z.array(z.string()).optional(),
-  tipoEntidad: TipoEntidadLogSchema.optional(),
-  tipoReporte: TipoLogsSchema.optional(),
-  valores: LogMensajeSchema.optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+export const LogGenericoSchema = z
+  .object({
+    _id: z.string(),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    expireAt: z.string().optional().meta({ 'x-bson': 'date' }),
+    //
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    tipoEntidad: TipoEntidadLogSchema.optional(),
+    tipoReporte: TipoLogsSchema.optional(),
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    valores: LogMensajeSchema.optional().meta({ 'x-bson': 'mixed' }),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'loggenericos' });
 export type ILogGenerico = z.infer<typeof LogGenericoSchema>;
 
 ////// CREATE

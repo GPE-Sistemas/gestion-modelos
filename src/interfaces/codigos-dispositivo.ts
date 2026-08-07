@@ -69,20 +69,48 @@ export const TipoDispositivoSchema = z.enum([
 ]);
 export type TipoDispositivo = z.infer<typeof TipoDispositivoSchema>;
 
-export const CodigosDispositivoSchema = z.object({
-  _id: z.string().optional(),
-  //
-  nombre: z.string().optional(),
-  tipo: TipoDispositivoSchema.optional(),
-  codigos: z.array(CodigoDispositivoSchema).optional(),
-  codigosEntrada: z.array(CodigoDispositivoEntradaSchema).optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  global: z.boolean().optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+export const CodigosDispositivoSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    nombre: z.string().optional(),
+    tipo: TipoDispositivoSchema.optional(),
+    // @Prop({type: [Object]}) en el legacy: Mixed, sin casteo adentro (igual
+    // codigosEntrada).
+    codigos: z.array(CodigoDispositivoSchema).optional().meta({
+      'x-bson': 'mixed',
+    }),
+    codigosEntrada: z.array(CodigoDispositivoEntradaSchema).optional().meta({
+      'x-bson': 'mixed',
+    }),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    global: z.boolean().optional(),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'codigosdispositivos' });
 export type ICodigosDispositivo = z.infer<typeof CodigosDispositivoSchema>;
 
 export const CodigosDispositivoCacheSchema = CodigosDispositivoSchema.omit({
