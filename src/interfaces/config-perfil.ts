@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { ClienteSchema, ICliente } from './cliente';
 import type {
   IDispositivoLuminariaACTIS,
+  IDispositivoLuminariaCitiLight,
   IDispositivoLuminariaGPE,
   IDispositivoLuminariaWellness,
   IPerfilesDimmingACTIS,
@@ -48,6 +49,19 @@ export type IConfigPerfilLuminariaACTISGeneral = Omit<
 };
 
 export type IConfigPerfilLuminariaACTISDimming = IPerfilesDimmingACTIS;
+
+// CitiLight: un solo tipoConfig que agrupa todos los aspectos configurables
+// (systemConfig, astronomico, scheduleManual, diasEspeciales, addon). El HW no
+// separa General/Dimming como ACTIS. Mismo subset que la config deseada.
+export type IConfigPerfilLuminariaCitiLight = Omit<
+  IDispositivoLuminariaCitiLight,
+  | 'versionFirmware'
+  | 'rtcStatus'
+  | 'multicastStatus'
+  | 'scheduleConfigStatus'
+  | 'systemConfigStatus'
+  | 'alarma'
+>;
 /* ────────────────────────────────────────────────
  *  MAPA TIPO → CONFIG DESEADA
  * ────────────────────────────────────────────────*/
@@ -57,6 +71,7 @@ export type MapaConfigPerfil = {
   'Luminaria Wellness': IConfigPerfilLuminariaWellness;
   'Luminaria ACTIS FING General': IConfigPerfilLuminariaACTISGeneral;
   'Luminaria ACTIS FING Dimming': IConfigPerfilLuminariaACTISDimming;
+  'Luminaria CitiLight': IConfigPerfilLuminariaCitiLight;
 };
 /* ────────────────────────────────────────────────
  *  BASE CONFIG PERFIL (GENÉRICO)
@@ -156,6 +171,10 @@ const VarianteConfigPerfilLuminariaACTISDimming =
       .optional()
       .meta({ 'x-bson': 'mixed' }),
   });
+const VarianteConfigPerfilLuminariaCitiLight = ConfigPerfilCamposSchema.extend({
+  tipoConfig: z.literal('Luminaria CitiLight').optional(),
+  valores: z.custom<IConfigPerfilLuminariaCitiLight>().optional(),
+});
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
@@ -167,6 +186,7 @@ export const ConfigPerfilSchema = z
     VarianteConfigPerfilLuminariaWellness,
     VarianteConfigPerfilLuminariaACTISGeneral,
     VarianteConfigPerfilLuminariaACTISDimming,
+    VarianteConfigPerfilLuminariaCitiLight,
   ])
   .meta({ 'x-collection': 'configperfils' });
 
@@ -174,7 +194,8 @@ export type IConfigPerfil =
   | IConfigPerfilBase<'Luminaria GPE'>
   | IConfigPerfilBase<'Luminaria Wellness'>
   | IConfigPerfilBase<'Luminaria ACTIS FING General'>
-  | IConfigPerfilBase<'Luminaria ACTIS FING Dimming'>;
+  | IConfigPerfilBase<'Luminaria ACTIS FING Dimming'>
+  | IConfigPerfilBase<'Luminaria CitiLight'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE - UNIONES DISCRIMINADAS
@@ -202,12 +223,14 @@ export const CreateConfigPerfilSchema = z.union([
   VarianteConfigPerfilLuminariaWellness.omit(camposOmitidos),
   VarianteConfigPerfilLuminariaACTISGeneral.omit(camposOmitidos),
   VarianteConfigPerfilLuminariaACTISDimming.omit(camposOmitidos),
+  VarianteConfigPerfilLuminariaCitiLight.omit(camposOmitidos),
 ]);
 export type ICreateConfigPerfil =
   | Omit<IConfigPerfilBase<'Luminaria GPE'>, Omitir>
   | Omit<IConfigPerfilBase<'Luminaria Wellness'>, Omitir>
   | Omit<IConfigPerfilBase<'Luminaria ACTIS FING General'>, Omitir>
-  | Omit<IConfigPerfilBase<'Luminaria ACTIS FING Dimming'>, Omitir>;
+  | Omit<IConfigPerfilBase<'Luminaria ACTIS FING Dimming'>, Omitir>
+  | Omit<IConfigPerfilBase<'Luminaria CitiLight'>, Omitir>;
 
 /** Update: campos parciales pero `tipoConfig` se mantiene para discriminar.
  *  TS valida que `valores` corresponda al `tipoConfig`.
@@ -223,6 +246,9 @@ export const UpdateConfigPerfilSchema = z.union([
     tipoConfig: true,
   }),
   VarianteConfigPerfilLuminariaACTISDimming.omit(camposOmitidos).required({
+    tipoConfig: true,
+  }),
+  VarianteConfigPerfilLuminariaCitiLight.omit(camposOmitidos).required({
     tipoConfig: true,
   }),
 ]);
@@ -244,4 +270,7 @@ export type IUpdateConfigPerfil =
         IConfigPerfilBase<'Luminaria ACTIS FING Dimming'>,
         Omitir | 'tipoConfig'
       >
+    >)
+  | ({ tipoConfig: 'Luminaria CitiLight' } & Partial<
+      Omit<IConfigPerfilBase<'Luminaria CitiLight'>, Omitir | 'tipoConfig'>
     >);
