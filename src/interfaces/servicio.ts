@@ -31,31 +31,85 @@ export const SubcategoriaServicioSchema = z.enum([
 ]);
 export type SubcategoriaServicio = z.infer<typeof SubcategoriaServicioSchema>;
 
-export const ServicioSchema = z.object({
-  _id: z.string().optional(),
-  tipo: TipoServicioSchema.optional(),
-  categoria: CategoriaServicioSchema.optional(),
-  subcategoria: SubcategoriaServicioSchema.optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idActivo: z.string().optional(),
-  fechaRealizacion: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  nombreChofer: z.string().optional(),
-  detalles: z.string().optional(),
-  kmDelMantenimiento: z.number().optional(),
-  costo: z.number().optional(),
-  litrosCargados: z.number().optional(),
-  idProveedor: z.string().optional(),
-  fotos: z.array(z.string()).optional(),
-  idUsuario: z.string().optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  proveedor: ProveedorSchema.optional(),
-  activo: ActivoSchema.optional(),
-  usuario: UsuarioSchema.optional(),
-});
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const ServicioSchema = z
+  .object({
+    _id: z.string().optional(),
+    tipo: TipoServicioSchema.optional(),
+    categoria: CategoriaServicioSchema.optional(),
+    subcategoria: SubcategoriaServicioSchema.optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idActivo: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ActivoSchema' }),
+    fechaRealizacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    nombreChofer: z.string().optional(),
+    detalles: z.string().optional(),
+    kmDelMantenimiento: z.number().optional(),
+    costo: z.number().optional(),
+    litrosCargados: z.number().optional(),
+    idProveedor: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ProveedorSchema' }),
+    fotos: z.array(z.string()).optional(),
+    // @Prop() pelado (String en Mongoose, NO ObjectId — docs/MIGRACION.md):
+    // sin x-bson. El virtual "usuario" igual popula matcheando contra
+    // usuarios._id.
+    idUsuario: z.string().optional(),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    proveedor: ProveedorSchema.optional().meta({
+      'x-populate': {
+        ref: 'ProveedorSchema',
+        localField: 'idProveedor',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    activo: ActivoSchema.optional().meta({
+      'x-populate': {
+        ref: 'ActivoSchema',
+        localField: 'idActivo',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    usuario: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idUsuario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'servicios' });
 export type IServicio = z.infer<typeof ServicioSchema>;
 
 export const CreateServicioSchema = ServicioSchema.omit({

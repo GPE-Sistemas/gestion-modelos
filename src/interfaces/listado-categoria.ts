@@ -23,19 +23,41 @@ export const TipoListadoCategoriaSchema = z.enum([
 ]);
 export type ITipoListadoCategoria = z.infer<typeof TipoListadoCategoriaSchema>;
 
-export const ListadoCategoriaSchema = z.object({
-  _id: z.string().optional(),
-  //
-  nombre: z.string().optional(),
-  categoria: TipoListadoCategoriaSchema.optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  default: z.boolean().optional(),
-  global: z.boolean().optional(),
-  //Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+export const ListadoCategoriaSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    nombre: z.string().optional(),
+    categoria: TipoListadoCategoriaSchema.optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    default: z.boolean().optional(),
+    global: z.boolean().optional(),
+    //Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'listadocategorias' });
 export type IListadoCategoria = z.infer<typeof ListadoCategoriaSchema>;
 
 export const CreateListadoCategoriaSchema = ListadoCategoriaSchema.omit({

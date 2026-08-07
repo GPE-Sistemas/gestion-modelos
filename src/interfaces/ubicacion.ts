@@ -140,53 +140,96 @@ export interface IUbicacionBase<T extends keyof MapaValoresUbicacion> {
 }
 
 // Campos comunes a todas las variantes (sin categoria/valores, que discriminan)
+//
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 const UbicacionCamposSchema = z.object({
   _id: z.string().optional(),
   //
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   identificacion: z.string().optional(),
-  fechaCreacion: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
   direccion: z.string().optional(),
-  geojson: GeoJSONSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  geojson: GeoJSONSchema.optional().meta({ 'x-bson': 'mixed' }),
   fotos: z.array(z.string()).optional(),
   color: z.string().optional(),
   // Virtuals
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 });
 
+// `valores` es @Prop({type: Object}) en el legacy (Mixed) para las OCHO
+// categorías: Mongoose no castea adentro pese a que algunas variantes (Centro
+// de Atención, Hospital) tengan forma tipada acá.
 const VarianteUbicacionTerminal = UbicacionCamposSchema.extend({
   categoria: z.literal('Terminal').optional(),
-  valores: ValoresUbicacionTerminalSchema.optional(),
+  valores: ValoresUbicacionTerminalSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 const VarianteUbicacionDomicilio = UbicacionCamposSchema.extend({
   categoria: z.literal('Domicilio').optional(),
-  valores: ValoresUbicacionDomicilioSchema.optional(),
+  valores: ValoresUbicacionDomicilioSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 const VarianteUbicacionActivos = UbicacionCamposSchema.extend({
   categoria: z.literal('Activos').optional(),
-  valores: ValoresUbicacionActivosSchema.optional(),
+  valores: ValoresUbicacionActivosSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 const VarianteUbicacionCentroAtencion = UbicacionCamposSchema.extend({
   categoria: z.literal('Centro de Atención').optional(),
-  valores: ValoresUbicacionCentroAtencionSchema.optional(),
+  valores: ValoresUbicacionCentroAtencionSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 const VarianteUbicacionHospital = UbicacionCamposSchema.extend({
   categoria: z.literal('Hospital').optional(),
-  valores: ValoresUbicacionHospitalSchema.optional(),
+  valores: ValoresUbicacionHospitalSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 const VarianteUbicacionDestinoEmergencia = UbicacionCamposSchema.extend({
   categoria: z.literal('Destino Emergencia').optional(),
-  valores: ValoresUbicacionDestinoEmergenciaSchema.optional(),
+  valores: ValoresUbicacionDestinoEmergenciaSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 const VarianteUbicacionVehiculos = UbicacionCamposSchema.extend({
   categoria: z.literal('Vehiculos').optional(),
-  valores: ValoresUbicacionVehiculosSchema.optional(),
+  valores: ValoresUbicacionVehiculosSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 const VarianteUbicacionLuminarias = UbicacionCamposSchema.extend({
   categoria: z.literal('Luminarias').optional(),
-  valores: ValoresUbicacionLuminariasSchema.optional(),
+  valores: ValoresUbicacionLuminariasSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 });
 
 /* ────────────────────────────────────────────────

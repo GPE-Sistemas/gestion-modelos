@@ -5,8 +5,11 @@ import { GrupoSchema } from './grupo';
 import { ParadaSchema, RecorridoSchema } from './recorrido';
 
 // Metadata de persistencia por `.meta()` — convención documentada arriba de
-// `ProveedorSchema` en proveedor.ts.
-export const TrackeoSchema = z.object({
+// `ProveedorSchema` en proveedor.ts. Mismo shape que TrackeoSchema (ver
+// trackeo.ts), salvo que acá NO existe el populate/virtual "ancestros": el
+// legacy (ultimo-trackeo/schema.ts) nunca lo declaró, así que el meta.go de
+// ultimotrackeos no tiene esa clave en Virtuals — fiel al legacy, no un error.
+export const UltimoTrackeoSchema = z.object({
   _id: z.string().optional(),
   //
   idCliente: z
@@ -53,14 +56,6 @@ export const TrackeoSchema = z.object({
       justOne: true,
     },
   }),
-  ancestros: z.array(ClienteSchema).optional().meta({
-    'x-populate': {
-      ref: 'ClienteSchema',
-      localField: 'idsAncestros',
-      foreignField: '_id',
-      justOne: false,
-    },
-  }),
   // Rareza del schema legacy: grupo matchea idGrupo contra traccar.uniqueId
   // del grupo, no contra su _id.
   grupo: GrupoSchema.optional().meta({
@@ -105,10 +100,10 @@ export const TrackeoSchema = z.object({
       justOne: true,
     },
   }),
-}).meta({ 'x-collection': 'trackeos' });
-export type ITrackeo = z.infer<typeof TrackeoSchema>;
+}).meta({ 'x-collection': 'ultimotrackeos' });
+export type IUltimoTrackeo = z.infer<typeof UltimoTrackeoSchema>;
 
-export const CreateTrackeoSchema = TrackeoSchema.omit({
+export const CreateUltimoTrackeoSchema = UltimoTrackeoSchema.omit({
   _id: true,
   cliente: true,
   grupo: true,
@@ -117,9 +112,9 @@ export const CreateTrackeoSchema = TrackeoSchema.omit({
   parada: true,
   proximaParada: true,
 });
-export type ICreateTrackeo = z.infer<typeof CreateTrackeoSchema>;
+export type ICreateUltimoTrackeo = z.infer<typeof CreateUltimoTrackeoSchema>;
 
-export const UpdateTrackeoSchema = TrackeoSchema.omit({
+export const UpdateUltimoTrackeoSchema = UltimoTrackeoSchema.omit({
   _id: true,
   cliente: true,
   grupo: true,
@@ -128,4 +123,4 @@ export const UpdateTrackeoSchema = TrackeoSchema.omit({
   parada: true,
   proximaParada: true,
 });
-export type IUpdateTrackeo = z.infer<typeof UpdateTrackeoSchema>;
+export type IUpdateUltimoTrackeo = z.infer<typeof UpdateUltimoTrackeoSchema>;

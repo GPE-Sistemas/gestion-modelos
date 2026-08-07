@@ -25,26 +25,55 @@ export type PlataformaLogin = z.infer<typeof PlataformaLoginSchema>;
  *
  * La colección tiene un índice TTL sobre `fecha` (retención 1 año).
  */
-export const LoginEventoSchema = z.object({
-  _id: z.string().optional(),
-  // Vínculo con el usuario que inició sesión.
-  idUsuario: z.string().optional(),
-  // Nombre de usuario denormalizado (lowercase), por si el usuario se borra.
-  usuario: z.string().optional(),
-  // Cliente del usuario al momento del login (puede no tener).
-  idCliente: z.string().optional(),
-  // Cadena de clientes ancestros del idCliente, para roll-up por subárbol.
-  idsAncestros: z.array(z.string()).optional(),
-  // Momento del login. Ancla del índice TTL.
-  fecha: z.string().optional(),
-  metodo: MetodoLoginSchema.optional(),
-  plataforma: PlataformaLoginSchema.optional(),
-  // User-Agent crudo (best-effort), por si luego se quiere afinar plataforma.
-  userAgent: z.string().optional(),
-  // Populate / Virtual
-  usuarioDoc: UsuarioSchema.optional(),
-  cliente: ClienteSchema.optional(),
-});
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const LoginEventoSchema = z
+  .object({
+    _id: z.string().optional(),
+    // Vínculo con el usuario que inició sesión.
+    idUsuario: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    // Nombre de usuario denormalizado (lowercase), por si el usuario se borra.
+    // Setter lowercase del @Prop legacy: corre TAMBIÉN en el cast de las
+    // queries, así que sin esto un filtro por "JUAN" no matchea "juan".
+    usuario: z.string().optional().meta({ 'x-setter': 'lowercase' }),
+    // Cliente del usuario al momento del login (puede no tener).
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    // Cadena de clientes ancestros del idCliente, para roll-up por subárbol.
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    // Momento del login. Ancla del índice TTL.
+    fecha: z.string().optional().meta({ 'x-bson': 'date' }),
+    metodo: MetodoLoginSchema.optional(),
+    plataforma: PlataformaLoginSchema.optional(),
+    // User-Agent crudo (best-effort), por si luego se quiere afinar plataforma.
+    userAgent: z.string().optional(),
+    // Populate / Virtual
+    usuarioDoc: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idUsuario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'logineventos' });
 export type ILoginEvento = z.infer<typeof LoginEventoSchema>;
 
 export const CreateLoginEventoSchema = LoginEventoSchema.omit({

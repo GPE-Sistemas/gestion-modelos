@@ -3,28 +3,68 @@ import { ClienteSchema } from './cliente';
 import { DispositivoAlarmaSchema } from './dispositivo-alarma';
 import { TrackerSchema } from './tracker';
 
-export const LogReenvioSchema = z.object({
-  _id: z.string().optional(),
-  expireAt: z.string().optional(),
-  //
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  fecha: z.string().optional(),
-  idEntidad: z.string().optional(),
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const LogReenvioSchema = z
+  .object({
+    _id: z.string().optional(),
+    expireAt: z.string().optional().meta({ 'x-bson': 'date' }),
+    //
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    fecha: z.string().optional().meta({ 'x-bson': 'date' }),
+    // Sin x-ref propio: se popula bajo los nombres "dispositivoAlarma"/
+    // "tracker" (virtuals con nombre distinto al path).
+    idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }),
 
-  protocolo: z.enum(['UDP', 'TCP']).optional(),
-  host: z.string().optional(),
-  puerto: z.number().optional(),
-  body: z.string().optional(),
-  ack: z.boolean().optional(),
-  error: z.string().optional(),
+    protocolo: z.enum(['UDP', 'TCP']).optional(),
+    host: z.string().optional(),
+    puerto: z.number().optional(),
+    body: z.string().optional(),
+    ack: z.boolean().optional(),
+    error: z.string().optional(),
 
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  dispositivoAlarma: DispositivoAlarmaSchema.optional(),
-  tracker: TrackerSchema.optional(),
-});
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    dispositivoAlarma: DispositivoAlarmaSchema.optional().meta({
+      'x-populate': {
+        ref: 'DispositivoAlarmaSchema',
+        localField: 'idEntidad',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    tracker: TrackerSchema.optional().meta({
+      'x-populate': {
+        ref: 'TrackerSchema',
+        localField: 'idEntidad',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'logreenvios' });
 export type ILogReenvio = z.infer<typeof LogReenvioSchema>;
 
 export const CreateLogReenvioSchema = LogReenvioSchema.omit({

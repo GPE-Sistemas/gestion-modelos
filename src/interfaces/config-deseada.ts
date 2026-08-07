@@ -115,32 +115,68 @@ export interface IConfigDeseadaBase<T extends keyof MapaConfigDeseada> {
   ancestros?: ICliente[];
 }
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts. `x-collection` va en el z.union() de
+// ConfigDeseadaSchema más abajo (una sola colección para las 3 variantes).
 const ConfigDeseadaCamposSchema = z.object({
   // Info autogenerada
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
 
   // Info de carga
-  fechaCreacion: z.string().optional(), // Default: Date.now
-  fechaActualizacion: z.string().optional(), // Última vez que cambió el contenido de la configuración deseada
-  fechaAplicacion: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }), // Default: Date.now
+  fechaActualizacion: z.string().optional().meta({ 'x-bson': 'date' }), // Última vez que cambió el contenido de la configuración deseada
+  fechaAplicacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  // String plano (unique sparse — ver comentario de configdeseadas/meta.go
+  // en gestion-datos-go): sin x-bson. Se popula bajo el nombre "dispositivo"
+  // (virtual con nombre distinto al path) matcheando contra
+  // dispositivolorawans._id.
   idEntidad: z.string().optional(),
   estado: EstadoSchema.optional(),
 
   // Reconciliación (escritos por el cron reconciliador)
-  diffs: z.array(DiffConfigSchema).optional(), // campos en discrepancia tras la última comparación
-  ultimaComparacion: z.string().optional(), // ISO timestamp de la última comparación realizada por el reconciliador
-  ultimaReconciliacion: z.string().optional(), // ISO timestamp del último set disparado
+  // @Prop({type:[Object], default: undefined}): Mixed, Mongoose no lo
+  // materializa como [] (exento en arraysQueNoSonArrays del drift test).
+  diffs: z.array(DiffConfigSchema).optional().meta({ 'x-bson': 'mixed' }), // campos en discrepancia tras la última comparación
+  ultimaComparacion: z.string().optional().meta({ 'x-bson': 'date' }), // ISO timestamp de la última comparación realizada por el reconciliador
+  ultimaReconciliacion: z.string().optional().meta({ 'x-bson': 'date' }), // ISO timestamp del último set disparado
   reintentosReconciliacion: z.number().optional(), // counter para back-off
-  bloqueadoHasta: z.string().optional(), // ISO. Si > now no se reintenta (circuit breaker)
+  bloqueadoHasta: z.string().optional().meta({ 'x-bson': 'date' }), // ISO. Si > now no se reintenta (circuit breaker)
 
   // Virtuals
   // z.custom para no arrastrar el shape completo del dispositivo al
   // declaration emit (TS7056 en ConfigDeseadaSchema).
-  dispositivo: z.custom<IDispositivoLorawan>().optional(),
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
+  dispositivo: z.custom<IDispositivoLorawan>().optional().meta({
+    'x-populate': {
+      ref: 'DispositivoLorawanSchema',
+      localField: 'idEntidad',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
 });
 
 const VarianteConfigDeseadaGPE = ConfigDeseadaCamposSchema.extend({
@@ -163,11 +199,13 @@ const VarianteConfigDeseadaACTIS = ConfigDeseadaCamposSchema.extend({
  *  TIPO DISCRIMINADO (TYPE-SAFE) - READ
  * ────────────────────────────────────────────────*/
 
-export const ConfigDeseadaSchema = z.union([
-  VarianteConfigDeseadaGPE,
-  VarianteConfigDeseadaWellness,
-  VarianteConfigDeseadaACTIS,
-]);
+export const ConfigDeseadaSchema = z
+  .union([
+    VarianteConfigDeseadaGPE,
+    VarianteConfigDeseadaWellness,
+    VarianteConfigDeseadaACTIS,
+  ])
+  .meta({ 'x-collection': 'configdeseadas' });
 
 export type IConfigDeseada =
   | IConfigDeseadaBase<'Luminaria GPE'>

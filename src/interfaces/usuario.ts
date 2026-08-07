@@ -69,6 +69,8 @@ export type IConfigUsuario = z.infer<typeof ConfigUsuarioSchema>;
 // Populates intra-SCC como z.custom (import type-only): un schema real acá
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const UsuarioSchema = z.object({
   _id: z.string().optional(),
   identificacionInterna: z.string().optional(),
@@ -78,28 +80,63 @@ export const UsuarioSchema = z.object({
    * campo. No usar para agrupar/scopear por cliente: los auto-registrados lo
    * tienen vacío.
    */
-  idCliente: z.string().optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   /** @deprecated Deriva de {@link idCliente} (deprecado). Usar el permiso. */
-  idsAncestros: z.array(z.string()).optional(),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   //
   idExterno: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  usuario: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  // @Prop({lowercase: true, ...}): el setter de Mongoose corre en save y en
+  // updates ($set) — gana sobre cualquier cast de tipo, igual que en el resto
+  // del repo.
+  usuario: z.string().optional().meta({ 'x-setter': 'lowercase' }),
   hash: z.string().optional(),
-  datosPersonales: DatosPersonalesSchema.optional(),
-  config: ConfigUsuarioSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  datosPersonales: DatosPersonalesSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
+  config: ConfigUsuarioSchema.optional().meta({ 'x-bson': 'mixed' }),
   // Estadísticas de uso (actividad). Se actualizan en cada login exitoso
   // (grant password o Google / auto-registro), NO en los refresh de token.
   // Detalle temporal (DAU/WAU/MAU, series) vive en la colección LoginEvento.
-  ultimoLogin: z.string().optional(),
-  primerLogin: z.string().optional(),
+  ultimoLogin: z.string().optional().meta({ 'x-bson': 'date' }),
+  primerLogin: z.string().optional().meta({ 'x-bson': 'date' }),
   cantidadLogins: z.number().optional(),
   // Populate / Virtual
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
   // Permisos del usuario. Ya no es un array embebido: es un virtual poblado
   // desde la colección Permiso por match de nombreUsuario (Permiso.nombreUsuario === Usuario.usuario).
-  permisos: z.array(z.custom<IPermiso>()).optional(),
+  // ref por string literal (`ref: 'Permiso'`) en el legacy, para evitar el
+  // import circular Usuario <-> Permiso — igual que en usuarios/meta.go.
+  permisos: z.array(z.custom<IPermiso>()).optional().meta({
+    'x-populate': {
+      ref: 'PermisoSchema',
+      localField: 'usuario',
+      foreignField: 'nombreUsuario',
+      justOne: false,
+    },
+  }),
 }).meta({ 'x-collection': 'usuarios' });
 
 /**

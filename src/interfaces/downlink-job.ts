@@ -70,17 +70,28 @@ export type IProximoGetDownlinkJob = z.infer<
   typeof ProximoGetDownlinkJobSchema
 >;
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const DownlinkJobSchema = z.object({
   _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
+  idCliente: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  idsAncestros: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
 
-  idDispositivoLorawan: z.string(),
-  deveui: z.string(),
+  idDispositivoLorawan: z
+    .string()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'DispositivoLorawanSchema' }),
+  deveui: z.string().meta({ 'x-setter': 'uppercase' }),
   tipoDispositivo: TipoDispositivoLorawanSchema.optional(),
 
   origen: OrigenDownlinkJobSchema,
-  objetivo: ObjetivoComandoSchema.optional(), // Procedencia: desde qué nivel/entidad se originó (se propaga al IComando)
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  objetivo: ObjetivoComandoSchema.optional().meta({ 'x-bson': 'mixed' }), // Procedencia: desde qué nivel/entidad se originó (se propaga al IComando)
   idEjecucion: z.string().optional(), // batch id (uuid) — agrupa todos los jobs de una acción
   idJobBull: z.string().optional(), // BullMQ job id
   indicePaso: z.number().optional(), //posición de este downlink dentro del plan ordenado del dispositivo
@@ -99,25 +110,56 @@ export const DownlinkJobSchema = z.object({
   estado: EstadoDownlinkJobSchema,
   intentos: z.number(),
   ultimoError: z.string().optional(),
-  intentosLog: z.array(IntentoDownlinkSchema).optional(), // historial append-only por intento de transporte
-  idComando: z.string().optional(), // se llena al crear el IComando real en BD
+  // @Prop({type: [Object]}) en el legacy: Mixed, sin casteo adentro.
+  intentosLog: z.array(IntentoDownlinkSchema).optional().meta({
+    'x-bson': 'mixed',
+  }), // historial append-only por intento de transporte
+  // Sin ref en el legacy (@Prop sin `ref`), por eso sin x-ref acá.
+  idComando: z.string().optional().meta({ 'x-bson': 'objectId' }), // se llena al crear el IComando real en BD
 
   // Auto-get encadenado (ACTIS)
-  proximoGet: ProximoGetDownlinkJobSchema.optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  proximoGet: ProximoGetDownlinkJobSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
 
-  datosExtra: z.record(z.string(), z.any()).optional(),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  datosExtra: z.record(z.string(), z.any()).optional().meta({
+    'x-bson': 'mixed',
+  }),
 
   //Fechas
-  fechaCreacion: z.string().optional(),
-  fechaProgramada: z.string().optional(), // cuando se encola en BullMQ con delay
-  fechaEnviado: z.string().optional(),
-  fechaConfirmado: z.string().optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaProgramada: z.string().optional().meta({ 'x-bson': 'date' }), // cuando se encola en BullMQ con delay
+  fechaEnviado: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaConfirmado: z.string().optional().meta({ 'x-bson': 'date' }),
 
   //Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  dispositivo: DispositivoLorawanSchema.optional(),
-});
+  cliente: ClienteSchema.optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idCliente',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  ancestros: z.array(ClienteSchema).optional().meta({
+    'x-populate': {
+      ref: 'ClienteSchema',
+      localField: 'idsAncestros',
+      foreignField: '_id',
+      justOne: false,
+    },
+  }),
+  dispositivo: DispositivoLorawanSchema.optional().meta({
+    'x-populate': {
+      ref: 'DispositivoLorawanSchema',
+      localField: 'idDispositivoLorawan',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+}).meta({ 'x-collection': 'downlinkjobs' });
 export type IDownlinkJob = z.infer<typeof DownlinkJobSchema>;
 
 // El original era Omit<Partial<IDownlinkJob>, OmitirCreate> re-declarando como

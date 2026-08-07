@@ -1,18 +1,40 @@
 import { z } from 'zod';
 import { ClienteSchema } from './cliente';
 
-export const ServicioContratadoSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  nombre: z.string().optional(),
-  icono: z.string().optional(),
-  costo: z.number().optional(),
-  global: z.boolean().optional(),
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-});
+export const ServicioContratadoSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    nombre: z.string().optional(),
+    icono: z.string().optional(),
+    costo: z.number().optional(),
+    global: z.boolean().optional(),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'serviciocontratados' });
 export type IServicioContratado = z.infer<typeof ServicioContratadoSchema>;
 
 export const CreateServicioContratadoSchema = ServicioContratadoSchema.omit({

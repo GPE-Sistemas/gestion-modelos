@@ -13,24 +13,70 @@ export type estadoCuenta = z.infer<typeof EstadoCuentaEntidadSchema>;
 // arrastra el shape completo del ciclo tracker↔activo↔usuario↔permiso↔alarma
 // y revienta la serialización de declarations (TS7056) en este paquete y en
 // los consumidores NestJS (compilan este fuente con declaration: true).
-export const EstadoEntidadSchema = z.object({
-  _id: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  estado: EstadoCuentaEntidadSchema.optional(),
-  idEntidad: z.string().optional(), /// POR DISPOSITIVO
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idUsuario: z.string().optional(),
-  nota: z.string().optional(),
-  motivos: z.array(z.string()).optional(),
-  vigencia: z.string().optional(), // Desde cuando se aplica el estado
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  usuario: z.custom<IUsuario>().optional(),
-  alarma: z.custom<IDispositivoAlarma>().optional(),
-  tracker: z.custom<ITracker>().optional(),
-});
+export const EstadoEntidadSchema = z
+  .object({
+    _id: z.string().optional(),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    estado: EstadoCuentaEntidadSchema.optional(),
+    idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }), /// POR DISPOSITIVO
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idUsuario: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    nota: z.string().optional(),
+    motivos: z.array(z.string()).optional(),
+    vigencia: z.string().optional().meta({ 'x-bson': 'date' }), // Desde cuando se aplica el estado
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    usuario: z.custom<IUsuario>().optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idUsuario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    alarma: z.custom<IDispositivoAlarma>().optional().meta({
+      'x-populate': {
+        ref: 'DispositivoAlarmaSchema',
+        localField: 'idEntidad',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    tracker: z.custom<ITracker>().optional().meta({
+      'x-populate': {
+        ref: 'TrackerSchema',
+        localField: 'idEntidad',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'estadoentidads' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del

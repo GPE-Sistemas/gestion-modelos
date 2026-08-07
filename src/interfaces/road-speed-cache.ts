@@ -11,17 +11,20 @@ export const SpeedLimitResultSchema = z.object({
 });
 export type ISpeedLimitResult = z.infer<typeof SpeedLimitResultSchema>;
 
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
 export const RoadSpeedCacheSchema = z.object({
   _id: z.string().optional(),
-  fechaCreacion: z.string().optional(),
-  geojson: GeoJSONPointSchema.optional(),
+  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+  geojson: GeoJSONPointSchema.optional().meta({ 'x-bson': 'mixed' }),
   geohash: z.string().optional(),
   maxspeed: z.number().optional(), // km/h ya normalizado
   unidad: z.string().optional(), // 'km/h' | 'mph' (unidad original de la fuente)
   desconocido: z.boolean().optional(), // true si no se pudo determinar ningún límite usable
   confianza: z.string().optional(), // 'explicito' | 'inferido' (informativo, no configurable)
   fuente: z.string().optional(), // 'tomtom' | 'osm' | 'fallback'
-});
+}).meta({ 'x-collection': 'roadspeedcaches' });
 export type IRoadSpeedCache = z.infer<typeof RoadSpeedCacheSchema>;
 
 export const CreateRoadSpeedCacheSchema = RoadSpeedCacheSchema.omit({

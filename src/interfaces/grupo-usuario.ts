@@ -2,21 +2,65 @@ import { z } from 'zod';
 import { ClienteSchema } from './cliente';
 import { UsuarioSchema } from './usuario';
 
-export const GrupoUsuarioSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  nombre: z.string().optional(),
-  idAdmin: z.string().optional(),
-  idsMiembros: z.array(z.string()).optional(),
-  fechaCreacion: z.string().optional(),
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const GrupoUsuarioSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    nombre: z.string().optional(),
+    idAdmin: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    idsMiembros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
 
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  admin: UsuarioSchema.optional(),
-  miembros: z.array(UsuarioSchema).optional(),
-});
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    admin: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idAdmin',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    miembros: z.array(UsuarioSchema).optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idsMiembros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'grupousuarios' });
 export type IGrupoUsuario = z.infer<typeof GrupoUsuarioSchema>;
 
 export const CreateGrupoUsuarioSchema = GrupoUsuarioSchema.omit({
@@ -46,24 +90,78 @@ export type EstadoSolicitudGrupoUsuario = z.infer<
   typeof EstadoSolicitudGrupoUsuarioSchema
 >;
 
-export const SolicitudGrupoUsuarioSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z.string().optional(),
-  idsAncestros: z.array(z.string()).optional(),
-  idGrupoUsuario: z.string().optional(),
-  idRemitente: z.string().optional(),
-  idDestinatario: z.string().optional(),
-  estado: EstadoSolicitudGrupoUsuarioSchema.optional(),
-  fechaCreacion: z.string().optional(),
-  fechaRespuesta: z.string().optional(),
+// Metadata de persistencia por `.meta()` — convención documentada arriba de
+// `ProveedorSchema` en proveedor.ts.
+export const SolicitudGrupoUsuarioSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idGrupoUsuario: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'GrupoUsuarioSchema' }),
+    idRemitente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    idDestinatario: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    estado: EstadoSolicitudGrupoUsuarioSchema.optional(),
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaRespuesta: z.string().optional().meta({ 'x-bson': 'date' }),
 
-  // Populate
-  cliente: ClienteSchema.optional(),
-  ancestros: z.array(ClienteSchema).optional(),
-  grupoUsuario: GrupoUsuarioSchema.optional(),
-  remitente: UsuarioSchema.optional(),
-  destinatario: UsuarioSchema.optional(),
-});
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z.array(ClienteSchema).optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
+    grupoUsuario: GrupoUsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'GrupoUsuarioSchema',
+        localField: 'idGrupoUsuario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    remitente: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idRemitente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    destinatario: UsuarioSchema.optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idDestinatario',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'solicitudgrupousuarios' });
 export type ISolicitudGrupoUsuario = z.infer<
   typeof SolicitudGrupoUsuarioSchema
 >;
