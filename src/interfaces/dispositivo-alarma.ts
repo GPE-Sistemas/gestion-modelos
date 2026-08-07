@@ -249,7 +249,10 @@ export const DispositivoAlarmaSchema = z.object({
   fechaUltimoReporteDoble: z.string().optional(),
   forzarUnCanal: z.boolean().optional(),
   // Comunicador(es) físicos de la alarma — ver ComunicadorAlarmaSchema.
-  comunicadores: z.array(ComunicadorAlarmaSchema).optional(),
+  comunicadores: z
+    .array(ComunicadorAlarmaSchema)
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
   idUnicoComunicador: z.string().optional(),
   idModelo: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
   idDomicilio: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'UbicacionSchema' }),
