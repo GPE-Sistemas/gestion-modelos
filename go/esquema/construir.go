@@ -33,7 +33,10 @@ func (b *bundleJSON) metadataDe(nombre string, def *nodoJSON) *Metadata {
 		if ft, hay := castDe(nodo); hay {
 			m.FieldTypes[path] = ft
 		}
-		b.recorrerAnidados(m, path, nodo, nil)
+		if v, hay := b.virtualDe(path, "", nodo); hay {
+			m.Virtuals[path] = v
+		}
+		b.recorrerAnidados(m, path, nodo, nil, false)
 	}
 	slices.Sort(m.Fields)
 	slices.Sort(m.ArrayFields)
@@ -49,18 +52,19 @@ func (b *bundleJSON) metadataDe(nombre string, def *nodoJSON) *Metadata {
 //   - a otra ENTIDAD (x-collection): eso es un populate, y sus campos
 //     pertenecen al inventario de la otra entidad;
 //   - dentro de un x-populate o un x-computed: son un virtual y un getter, no
-//     tienen hijos persistidos;
-//   - dentro de un x-bson: 'mixed' (@Prop({type: Object})): Mongoose no declara
-//     NADA adentro de un Mixed, así que no castea esos paths. Bajar igual
-//     inventaría casteos que el legacy nunca tuvo — medido en el spike de la
-//     etapa 1: 28 casteos falsos en 3 entidades.
+//     tienen hijos persistidos.
+//
+// `dentroDeMixed` viaja por la recursión: un x-bson: 'mixed'
+// (@Prop({type: Object})) apaga el CASTEO de lo que tiene adentro —Mongoose no
+// declara NADA bajo un Mixed, así que castear ahí inventaría casteos que el
+// legacy nunca tuvo (medido en el spike de la etapa 1: 28 casteos falsos en 3
+// entidades)— pero NO apaga los Virtuals: un schema.virtual() se declara
+// APARTE del @Prop y existe igual aunque el @Prop sea Mixed. Por eso el
+// recorrido sigue bajando bajo un Mixed; lo que se apaga es solo `castDe`.
 //
 // `visitados` corta los ciclos entre schemas que se referencian a sí mismos.
-func (b *bundleJSON) recorrerAnidados(m *Metadata, prefijo string, nodo *nodoJSON, visitados []string) {
+func (b *bundleJSON) recorrerAnidados(m *Metadata, prefijo string, nodo *nodoJSON, visitados []string, dentroDeMixed bool) {
 	if nodo.esPopulate() || nodo.esComputed() {
-		return
-	}
-	if bsonDe(nodo) == "mixed" {
 		return
 	}
 	destino, esEntidad := b.resolver(nodo)
@@ -73,15 +77,25 @@ func (b *bundleJSON) recorrerAnidados(m *Metadata, prefijo string, nodo *nodoJSO
 		}
 		visitados = append(visitados, ref)
 	}
+	dentroDeMixed = dentroDeMixed || bsonDe(nodo) == "mixed"
 	for hijo, hijoNodo := range b.propiedades(destino) {
 		path := prefijo + "." + hijo
 		if hijoNodo.esComputed() {
 			continue
 		}
-		if ft, hay := castDe(hijoNodo); hay {
-			m.FieldTypes[path] = ft
+		// Un Mixed apaga el CASTEO de lo que tiene adentro (Mongoose no
+		// declara ningún path bajo un @Prop({type: Object})) pero NO los
+		// virtuals: un schema.virtual('detallesEmergencias.hospital', {...}) se
+		// declara aparte del @Prop. El legacy tiene 11 así.
+		if !dentroDeMixed {
+			if ft, hay := castDe(hijoNodo); hay {
+				m.FieldTypes[path] = ft
+			}
 		}
-		b.recorrerAnidados(m, path, hijoNodo, visitados)
+		if v, hay := b.virtualDe(path, prefijo+".", hijoNodo); hay {
+			m.Virtuals[path] = v
+		}
+		b.recorrerAnidados(m, path, hijoNodo, visitados, dentroDeMixed)
 	}
 }
 
@@ -139,4 +153,94 @@ func castDe(n *nodoJSON) (FieldType, bool) {
 		return Bool, true
 	}
 	return "", false
+}
+
+// virtualDe arma el Virtual de una prop, si la prop declara uno.
+//
+// Son DOS formas distintas y las dos son populates reales:
+//
+//   - x-populate: un schema.virtual() declarado. Popula bajo el nombre de la
+//     prop, y trae su propio localField.
+//   - x-ref: un @Prop({ref}). Mongoose popula el path del id EN SU LUGAR, así
+//     que el localField ES el path mismo.
+//
+// `prefijoAbsoluto` es lo que hay que anteponerle al localField de un
+// x-populate anidado: en zod va RELATIVO al sub-documento (`idChofer` dentro de
+// VehiculoSchema) y el motor resuelve los populates contra la raíz del
+// documento (`vehiculo.idChofer`).
+//
+// Desvío del brief: la convención real del repo para un populate en un array
+// es `z.array(X).meta({...})` — la anotación cuelga del nodo ARRAY, no de sus
+// items (confirmado en 429 props del bundle: idsAncestros, ancestros, etc.).
+// `nodo.anotado()` devuelve siempre los items para un array, así que un
+// `n := nodo.anotado()` se queda sin la anotación en TODOS esos casos. Por eso
+// populateDe/refEntidadDe miran primero el nodo mismo y recién si no hay nada
+// ahí caen a los items, igual que ya hace `anotacion()` para x-bson/x-setter.
+func (b *bundleJSON) virtualDe(path, prefijoAbsoluto string, nodo *nodoJSON) (Virtual, bool) {
+	esArray := nodo.esArray()
+
+	if p := populateDe(nodo); p != nil {
+		local := p.LocalField
+		if prefijoAbsoluto != "" && !contienePunto(local) {
+			local = prefijoAbsoluto + local
+		}
+		return Virtual{
+			Ref:          b.coleccionDeSchema(p.Ref),
+			LocalField:   local,
+			ForeignField: p.ForeignField,
+			JustOne:      p.JustOne,
+		}, true
+	}
+	if ref := refEntidadDe(nodo); ref != "" {
+		return Virtual{
+			Ref:          b.coleccionDeSchema(ref),
+			LocalField:   path, // con x-ref el populate reemplaza el path del id
+			ForeignField: "_id",
+			JustOne:      !esArray,
+		}, true
+	}
+	return Virtual{}, false
+}
+
+// populateDe devuelve la anotación x-populate del nodo o de sus items.
+func populateDe(n *nodoJSON) *populateJSON {
+	if n.Populate != nil {
+		return n.Populate
+	}
+	if n.esArray() {
+		return n.Items.Populate
+	}
+	return nil
+}
+
+// refEntidadDe devuelve la anotación x-ref del nodo o de sus items.
+func refEntidadDe(n *nodoJSON) string {
+	if n.RefEntidad != "" {
+		return n.RefEntidad
+	}
+	if n.esArray() {
+		return n.Items.RefEntidad
+	}
+	return ""
+}
+
+// coleccionDeSchema traduce el nombre de un schema ("ClienteSchema") al de su
+// colección ("clientes"). Las anotaciones de zod referencian schemas porque es
+// lo que existe en TypeScript; los consumidores necesitan la colección.
+// Devuelve "" si el schema no existe o no es una entidad — que es un bundle
+// roto, y lo caza el chequeo diferencial de la tarea 9.
+func (b *bundleJSON) coleccionDeSchema(schema string) string {
+	if d := b.Defs[schema]; d != nil {
+		return d.Collection
+	}
+	return ""
+}
+
+func contienePunto(s string) bool {
+	for i := range s {
+		if s[i] == '.' {
+			return true
+		}
+	}
+	return false
 }

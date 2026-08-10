@@ -133,3 +133,79 @@ func TestFieldTypesCasteaElIDDeUnSubdocumentoConID(t *testing.T) {
 		t.Errorf("FieldTypes[\"paradas.tiempoParada\"] = %v; esperaba number", real)
 	}
 }
+
+func TestVirtualsTraduceElRefDeSchemaAColeccion(t *testing.T) {
+	m, _ := cargarParaTest(t).PorColeccion("activos")
+
+	// schema.virtual('cliente', {ref: 'Cliente', localField: 'idCliente'})
+	v, ok := m.Virtuals["cliente"]
+	if !ok {
+		t.Fatal("Virtuals no tiene `cliente`")
+	}
+	// El x-populate de zod dice 'ClienteSchema'; el consumidor necesita el
+	// nombre de la COLECCIÓN.
+	if v.Ref != "clientes" {
+		t.Errorf("Virtuals[cliente].Ref = %q; esperaba clientes", v.Ref)
+	}
+	if v.LocalField != "idCliente" || v.ForeignField != "_id" || !v.JustOne {
+		t.Errorf("Virtuals[cliente] = %+v", v)
+	}
+}
+
+func TestVirtualsDeUnXRefPopulaElPathEnSuLugar(t *testing.T) {
+	m, _ := cargarParaTest(t).PorColeccion("activos")
+
+	// Un @Prop({ref}) hace que Mongoose popule el path del id EN SU LUGAR:
+	// el virtual se llama igual que el path y su localField es él mismo.
+	v, ok := m.Virtuals["idCliente"]
+	if !ok {
+		t.Fatal("Virtuals no tiene `idCliente` (el populate por @Prop({ref}))")
+	}
+	if v.LocalField != "idCliente" {
+		t.Errorf("Virtuals[idCliente].LocalField = %q; con x-ref es el path mismo", v.LocalField)
+	}
+	if v.Ref != "clientes" || !v.JustOne {
+		t.Errorf("Virtuals[idCliente] = %+v", v)
+	}
+
+	// Y en su versión array, justOne tiene que ser false.
+	if v := m.Virtuals["idsAncestros"]; v.JustOne {
+		t.Errorf("Virtuals[idsAncestros].JustOne = true; es un array")
+	}
+}
+
+func TestVirtualsAnidadosLlevanElLocalFieldAbsoluto(t *testing.T) {
+	m, _ := cargarParaTest(t).PorColeccion("activos")
+
+	// En zod el localField va RELATIVO al sub-documento (`idChofer` en
+	// VehiculoSchema); el motor resuelve los populates contra la raíz del
+	// documento, así que necesita el path absoluto.
+	v, ok := m.Virtuals["vehiculo.chofer"]
+	if !ok {
+		t.Fatal("Virtuals no tiene `vehiculo.chofer`")
+	}
+	if v.LocalField != "vehiculo.idChofer" {
+		t.Errorf("Virtuals[vehiculo.chofer].LocalField = %q; esperaba vehiculo.idChofer", v.LocalField)
+	}
+	if v.Ref != "usuarios" {
+		t.Errorf("Virtuals[vehiculo.chofer].Ref = %q; esperaba usuarios", v.Ref)
+	}
+}
+
+func TestVirtualsBajaDentroDeUnMixedPorqueUnMixedNoApagaLosVirtuals(t *testing.T) {
+	m, _ := cargarParaTest(t).PorColeccion("eventogenericos")
+
+	// `detallesEmergencias` es Mixed: no se castea nada de adentro (tarea 4),
+	// pero los schema.virtual() se declaran APARTE del @Prop y sí existen.
+	v, ok := m.Virtuals["detallesEmergencias.hospital"]
+	if !ok {
+		t.Fatal("Virtuals no tiene `detallesEmergencias.hospital`")
+	}
+	if v.LocalField != "detallesEmergencias.idHospital" {
+		t.Errorf("LocalField = %q; esperaba detallesEmergencias.idHospital", v.LocalField)
+	}
+	// Y el casteo sigue apagado ahí adentro.
+	if ft, hay := m.FieldTypes["detallesEmergencias.idHospital"]; hay {
+		t.Errorf("FieldTypes tiene detallesEmergencias.idHospital = %v, y está en un Mixed", ft)
+	}
+}
