@@ -6,8 +6,8 @@ import {
   ICliente,
   IConfigHorario,
 } from './cliente';
-import type { ISim } from './dispositivo-alarma';
 import type { estadoCuenta } from './estado-entidad';
+import { ISim, SimSchema } from './sim';
 import {
   IModeloDispositivo,
   ModeloDispositivoSchema,
@@ -46,113 +46,146 @@ export type ITelefono = z.infer<typeof TelefonoSchema>;
 // declarations (TS7056) acá y en los consumidores NestJS.
 // Metadata de persistencia por `.meta()` — convención documentada arriba de
 // `ProveedorSchema` en proveedor.ts.
-export const TrackerSchema = z.object({
-  _id: z.string().optional(),
-  //
-  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
-  fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
-  imagenes: z.array(z.string()).optional(),
-  idCliente: z
-    .string()
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  idsAncestros: z
-    .array(z.string())
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  idsClientesQuePuedenAtenderEventos: z
-    .array(z.string())
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  idsClientesQuePuedenAtenderEventosTecnicos: z
-    .array(z.string())
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  puedeSolicitarServicioTecnico: z.boolean().optional(),
-  // @Prop({type: [Object]}) en el legacy: array real de Mixed.
-  configHorariosAtencion: z
-    .array(ConfigHorarioSchema)
-    .optional()
-    .meta({ 'x-bson': 'mixed' }),
-  configHorariosAtencionTecnica: z
-    .array(ConfigHorarioSchema)
-    .optional()
-    .meta({ 'x-bson': 'mixed' }),
-  idModelo: z
-    .string()
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
-  nombre: z.string().optional(),
-  identificacion: z.string().optional(),
-  // @Prop() string plano: el populate por "activo" castea hex → OID
-  // (CLAUDE.md §7 de gestion-datos-go). Sin x-ref: no tiene virtual con su
-  // propio nombre, solo el virtual "activo" (localField distinto).
-  asignadoA: z.string().optional(),
-  tipo: TipoTrackerSchema.optional(),
-  /**
-   * Id del tracker fisico
-   */
-  uniqueId: z.string().optional(),
-  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
-  qualcomm: QualcommDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
-  t1000b: T100bDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
-  telefono: TelefonoSchema.optional().meta({ 'x-bson': 'mixed' }),
-  estadoCuenta: z.custom<estadoCuenta>().optional(),
-  numeroAbonado: z.string().optional(),
-  sim1: z.custom<ISim>().optional().meta({ 'x-bson': 'mixed' }),
-  sim2: z.custom<ISim>().optional().meta({ 'x-bson': 'mixed' }),
-  frecReporte: z.number().optional(),
-  // Activa/desactiva remotamente el tracking GPS (solo aplica a tipo='Telefono').
-  // Post-cutover (comentado/PAUSADO en el legacy archivado); sin @Prop ahí,
-  // por eso sin x-bson: el meta lo castea Bool igual (drift 2026-08-04).
-  trackingActivo: z.boolean().optional(),
-  //
-  idServiciosContratados: z
-    .array(z.string())
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ServicioContratadoSchema' }),
-  // Populate
-  cliente: ClienteSchema.optional().meta({
-    'x-populate': {
-      ref: 'ClienteSchema',
-      localField: 'idCliente',
-      foreignField: '_id',
-      justOne: true,
-    },
-  }),
-  ancestros: z.array(ClienteSchema).optional().meta({
-    'x-populate': {
-      ref: 'ClienteSchema',
-      localField: 'idsAncestros',
-      foreignField: '_id',
-      justOne: false,
-    },
-  }),
-  activo: z.custom<IActivo>().optional().meta({
-    'x-populate': {
-      ref: 'ActivoSchema',
-      localField: 'asignadoA',
-      foreignField: '_id',
-      justOne: true,
-    },
-  }),
-  modelo: ModeloDispositivoSchema.optional().meta({
-    'x-populate': {
-      ref: 'ModeloDispositivoSchema',
-      localField: 'idModelo',
-      foreignField: '_id',
-      justOne: true,
-    },
-  }),
-  serviciosContratados: z.array(ServicioContratadoSchema).optional().meta({
-    'x-populate': {
-      ref: 'ServicioContratadoSchema',
-      localField: 'idServiciosContratados',
-      foreignField: '_id',
-      justOne: false,
-    },
-  }),
-}).meta({ 'x-collection': 'trackers' });
+export const TrackerSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
+    imagenes: z.array(z.string()).optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsClientesQuePuedenAtenderEventos: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsClientesQuePuedenAtenderEventosTecnicos: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    puedeSolicitarServicioTecnico: z.boolean().optional(),
+    // @Prop({type: [Object]}) en el legacy: array real de Mixed.
+    configHorariosAtencion: z
+      .array(ConfigHorarioSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
+    configHorariosAtencionTecnica: z
+      .array(ConfigHorarioSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
+    idModelo: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
+    nombre: z.string().optional(),
+    identificacion: z.string().optional(),
+    // @Prop() string plano: el populate por "activo" castea hex → OID
+    // (CLAUDE.md §7 de gestion-datos-go). Sin x-ref: no tiene virtual con su
+    // propio nombre, solo el virtual "activo" (localField distinto).
+    asignadoA: z.string().optional(),
+    tipo: TipoTrackerSchema.optional(),
+    /**
+     * Id del tracker fisico
+     */
+    uniqueId: z.string().optional(),
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    qualcomm: QualcommDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
+    t1000b: T100bDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
+    telefono: TelefonoSchema.optional().meta({ 'x-bson': 'mixed' }),
+    estadoCuenta: z.custom<estadoCuenta>().optional(),
+    numeroAbonado: z.string().optional(),
+    idSim1: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
+    idSim2: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
+    frecReporte: z.number().optional(),
+    // Activa/desactiva remotamente el tracking GPS (solo aplica a tipo='Telefono').
+    // Post-cutover (comentado/PAUSADO en el legacy archivado); sin @Prop ahí,
+    // por eso sin x-bson: el meta lo castea Bool igual (drift 2026-08-04).
+    trackingActivo: z.boolean().optional(),
+    //
+    idServiciosContratados: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ServicioContratadoSchema' }),
+    // Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsAncestros',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    activo: z
+      .custom<IActivo>()
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ActivoSchema',
+          localField: 'asignadoA',
+          foreignField: '_id',
+          justOne: true,
+        },
+      }),
+    modelo: ModeloDispositivoSchema.optional().meta({
+      'x-populate': {
+        ref: 'ModeloDispositivoSchema',
+        localField: 'idModelo',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    serviciosContratados: z
+      .array(ServicioContratadoSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ServicioContratadoSchema',
+          localField: 'idServiciosContratados',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    sim1: SimSchema.optional().meta({
+      'x-populate': {
+        ref: 'SimSchema',
+        localField: 'idSim1',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    sim2: SimSchema.optional().meta({
+      'x-populate': {
+        ref: 'SimSchema',
+        localField: 'idSim2',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'trackers' });
 
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del
@@ -185,8 +218,8 @@ export interface ITracker {
   telefono?: ITelefono;
   estadoCuenta?: estadoCuenta;
   numeroAbonado?: string;
-  sim1?: ISim;
-  sim2?: ISim;
+  idSim1?: string;
+  idSim2?: string;
   frecReporte?: number;
   // Activa/desactiva remotamente el tracking GPS (solo aplica a tipo='Telefono').
   trackingActivo?: boolean;
@@ -198,6 +231,8 @@ export interface ITracker {
   activo?: IActivo;
   modelo?: IModeloDispositivo;
   serviciosContratados?: IServicioContratado[];
+  sim1?: ISim;
+  sim2?: ISim;
 }
 
 type OmitirCreate =
@@ -205,7 +240,9 @@ type OmitirCreate =
   | 'cliente'
   | 'activo'
   | 'modelo'
-  | 'serviciosContratados';
+  | 'serviciosContratados'
+  | 'sim1'
+  | 'sim2';
 
 export const CreateTrackerSchema = TrackerSchema.omit({
   _id: true,
@@ -213,6 +250,8 @@ export const CreateTrackerSchema = TrackerSchema.omit({
   activo: true,
   modelo: true,
   serviciosContratados: true,
+  sim1: true,
+  sim2: true,
 });
 export interface ICreateTracker extends Omit<Partial<ITracker>, OmitirCreate> {}
 
@@ -221,7 +260,9 @@ type OmitirUpdate =
   | 'cliente'
   | 'activo'
   | 'modelo'
-  | 'serviciosContratados';
+  | 'serviciosContratados'
+  | 'sim1'
+  | 'sim2';
 
 export const UpdateTrackerSchema = TrackerSchema.omit({
   _id: true,
@@ -229,6 +270,8 @@ export const UpdateTrackerSchema = TrackerSchema.omit({
   activo: true,
   modelo: true,
   serviciosContratados: true,
+  sim1: true,
+  sim2: true,
 });
 export interface IUpdateTracker extends Omit<Partial<ITracker>, OmitirUpdate> {}
 
@@ -238,8 +281,16 @@ export const TrackerCacheSchema = TrackerSchema.omit({
   activo: true,
   modelo: true,
   serviciosContratados: true,
+  sim1: true,
+  sim2: true,
 });
 export interface ITrackerCache extends Omit<
   ITracker,
-  'cliente' | 'ancestros' | 'activo' | 'modelo' | 'serviciosContratados'
+  | 'cliente'
+  | 'ancestros'
+  | 'activo'
+  | 'modelo'
+  | 'serviciosContratados'
+  | 'sim1'
+  | 'sim2'
 > {}

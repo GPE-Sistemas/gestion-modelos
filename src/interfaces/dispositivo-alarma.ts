@@ -19,6 +19,7 @@ import {
   ServicioContratadoSchema,
 } from './servicio-contratado';
 import type { IUbicacion } from './ubicacion';
+import type { ISim } from './sim';
 
 /// Lepra ( interfaces para las respuestas de HSI )
 export const TipoEmergenciaAlarmaSchema = z.enum([
@@ -57,24 +58,16 @@ export type CodigoTipoSensor = z.infer<typeof CodigoTipoSensorSchema>;
 export const ModoSensorSchema = z.enum(['Seguidor', 'Demorado', 'Instantaneo']);
 export type ModoSensor = z.infer<typeof ModoSensorSchema>;
 
-export const OperadorSchema = z.enum([
-  'Personal',
-  'Claro',
-  'Movistar',
-  'Tuenti',
-  'Otro',
-]);
-export type Operador = z.infer<typeof OperadorSchema>;
-
-export const SimSchema = z.object({
-  iccid: z.string().optional(),
-  numero: z.string().optional(),
-  operador: OperadorSchema.optional(),
-  apn: z.string().optional(),
-  usuario: z.string().optional(),
-  password: z.string().optional(),
-});
-export type ISim = z.infer<typeof SimSchema>;
+// SIM (entidad) + OperadorSchema viven ahora en ./sim. Se reexportan acá para
+// no romper a los consumidores que importaban `ISim`/`SimSchema`/`OperadorSchema`
+// desde 'dispositivo-alarma' (antes eran el sub-objeto embebido, hoy la entidad).
+export {
+  OperadorSchema,
+  SimSchema,
+  CreateSimSchema,
+  UpdateSimSchema,
+} from './sim';
+export type { Operador, ISim, ICreateSim, IUpdateSim } from './sim';
 
 export const UltimaConexionSchema = z.object({
   lastIp: z.string().optional(),
@@ -260,9 +253,8 @@ export const DispositivoAlarmaSchema = z.object({
   idsAncestros: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   nombre: z.string().optional(),
   numeroAbonado: z.string().optional().meta({ 'x-setter': 'uppercase' }),
-  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
-  sim1: SimSchema.optional().meta({ 'x-bson': 'mixed' }),
-  sim2: SimSchema.optional().meta({ 'x-bson': 'mixed' }),
+  idSim1: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
+  idSim2: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
   idsClientesQuePuedenAtender: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   idsClientesQuePuedenAtenderEventosTecnicos: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
   puedeSolicitarServicioTecnico: z.boolean().optional(),
@@ -324,6 +316,12 @@ export const DispositivoAlarmaSchema = z.object({
   clientesQuePuedenAtenderEventosTecnicos: z.array(ClienteSchema).optional().meta({
     'x-populate': { ref: 'ClienteSchema', localField: 'idsClientesQuePuedenAtenderEventosTecnicos', foreignField: '_id', justOne: false },
   }),
+  sim1: z.custom<ISim>().optional().meta({
+    'x-populate': { ref: 'SimSchema', localField: 'idSim1', foreignField: '_id', justOne: true },
+  }),
+  sim2: z.custom<ISim>().optional().meta({
+    'x-populate': { ref: 'SimSchema', localField: 'idSim2', foreignField: '_id', justOne: true },
+  }),
 }).meta({ 'x-collection': 'dispositivoalarmas' });
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del
@@ -347,8 +345,8 @@ export interface IDispositivoAlarma {
   idsAncestros?: string[];
   nombre?: string;
   numeroAbonado?: string;
-  sim1?: ISim;
-  sim2?: ISim;
+  idSim1?: string;
+  idSim2?: string;
   idsClientesQuePuedenAtender?: string[];
   idsClientesQuePuedenAtenderEventosTecnicos?: string[];
   puedeSolicitarServicioTecnico?: boolean;
@@ -387,6 +385,8 @@ export interface IDispositivoAlarma {
   ancestros?: ICliente[];
   camaras?: ICamara[];
   serviciosContratados?: IServicioContratado[];
+  sim1?: ISim;
+  sim2?: ISim;
 }
 
 type OmitirCreate =
@@ -395,7 +395,9 @@ type OmitirCreate =
   | 'modelo'
   | 'domicilio'
   | 'camaras'
-  | 'serviciosContratados';
+  | 'serviciosContratados'
+  | 'sim1'
+  | 'sim2';
 
 export const CreateDispositivoAlarmaSchema = DispositivoAlarmaSchema.omit({
   _id: true,
@@ -404,6 +406,8 @@ export const CreateDispositivoAlarmaSchema = DispositivoAlarmaSchema.omit({
   domicilio: true,
   camaras: true,
   serviciosContratados: true,
+  sim1: true,
+  sim2: true,
 });
 export interface ICreateDispositivoAlarma extends Omit<
   Partial<IDispositivoAlarma>,
@@ -416,7 +420,9 @@ type OmitirUpdate =
   | 'modelo'
   | 'domicilio'
   | 'camaras'
-  | 'serviciosContratados';
+  | 'serviciosContratados'
+  | 'sim1'
+  | 'sim2';
 
 export const UpdateDispositivoAlarmaSchema = DispositivoAlarmaSchema.omit({
   _id: true,
@@ -425,6 +431,8 @@ export const UpdateDispositivoAlarmaSchema = DispositivoAlarmaSchema.omit({
   domicilio: true,
   camaras: true,
   serviciosContratados: true,
+  sim1: true,
+  sim2: true,
 });
 export interface IUpdateDispositivoAlarma extends Omit<
   Partial<IDispositivoAlarma>,
@@ -438,6 +446,8 @@ export const DispositivoAlarmaCacheSchema = DispositivoAlarmaSchema.omit({
   ancestros: true,
   camaras: true,
   serviciosContratados: true,
+  sim1: true,
+  sim2: true,
 });
 export interface IDispositivoAlarmaCache extends Omit<
   IDispositivoAlarma,
@@ -447,6 +457,8 @@ export interface IDispositivoAlarmaCache extends Omit<
   | 'ancestros'
   | 'camaras'
   | 'serviciosContratados'
+  | 'sim1'
+  | 'sim2'
 > {}
 ///////
 /////// Cosas de las apis de garnet dahua y eso
