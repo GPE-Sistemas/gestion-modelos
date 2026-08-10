@@ -147,7 +147,7 @@ diseño está en `gestion-datos-go`, en
 Lo que viene y conviene no contradecir:
 
 - **El módulo Go ya existe: `go/`.** Module path
-  `github.com/GPE-Sistemas/gestion-modelos/go`, y `go/esquema` expone la
+  `github.com/GPE-Sistemas/gestion-modelos/go/v2`, y `go/esquema` expone la
   metadata de persistencia derivada de las anotaciones `.meta()`
   (`Collection`, `Fields`, `FieldTypes`, `ArrayFields`, `SubSchemas`,
   `Virtuals`). La generación ocurre **acá**, una sola vez; los consumidores
@@ -176,9 +176,23 @@ Lo que viene y conviene no contradecir:
     campo no determinista del bundle, y sin sacarlo el chequeo de
     sincronización daría rojo en todos los PR.
 
-  Los tags del módulo Go llevan prefijo (`go/v1.0.0`) porque el módulo vive en
-  un subdirectorio, y son **independientes** de la versión de npm: un cambio
-  que no toca schemas no necesita tag de Go, y al revés.
+  **Versionado: npm y Go llevan el MISMO número**, no dos historias
+  independientes — son los mismos modelos, así que la versión tiene que
+  contar la misma historia (decidido el 2026-08-10). Dos reglas de Go son el
+  costo de esa decisión, y no hay que confundirlas:
+
+  - El tag lleva el **prefijo obligatorio** porque el módulo vive en un
+    subdirectorio: `2.2.0` se tagea `go/v2.2.0`, nunca `v2.2.0` a secas —
+    Go solo reconoce tags con ese prefijo para un módulo en subdirectorio.
+  - El **module path lleva el sufijo del major** (`go/v2`, no `go`) porque
+    Go exige eso para cualquier major ≥ 2: sin el sufijo, Go ignora un tag
+    `go/v2.x.y`. Si esto sube a 3.x, el path pasa a `go/v3` y hay que tocar
+    el import en cada consumidor (`gestion-datos-go` incluido) — no es
+    automático.
+
+  Un release que solo cambia `src/` sin tocar `go/esquema` igual sube el
+  número de Go (y viceversa): lo que se sincroniza es el número, no el
+  contenido de cada lado.
 - Los schemas ganan metadata de persistencia vía `.meta()`. Es **aditiva**: los
   consumidores TS ignoran las claves desconocidas y los tipos inferidos no
   cambian. **Ya está aplicada en `proveedor.ts`, `recorrido.ts` y `activo.ts`**
