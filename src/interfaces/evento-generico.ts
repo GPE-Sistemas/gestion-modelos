@@ -512,6 +512,11 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   detallesEmergencias?: DetallesEmergencias;
   // Permisos y atención
   idsClientesQuePuedenAtender?: string[];
+  /** Derivado en backend (hooks): qué clientes ven el evento en la vista de
+   *  atención. Si `idsClientesQuePuedenAtender` tiene algo, son esos; si no,
+   *  `idCliente` + `idsAncestros`. Existe para que el scope del listado vivo
+   *  sea una igualdad indexable en vez de un $or de 3 ramas. */
+  idsClientesQueVen?: string[];
   configHorariosAtencion?: IConfigHorario[];
   idsClientesAtendiendo?: string[];
   idsUsuariosAtendiendo?: string[];
@@ -565,6 +570,7 @@ type OmitirCreate =
   | '_id'
   | 'idsAncestros'
   | 'requiereAtencion'
+  | 'idsClientesQueVen'
   | 'cliente'
   | 'ancestros'
   | 'usuariosAtendiendo'
@@ -791,6 +797,10 @@ const camposComunesEvento = {
   detallesTecnicos: DetallesTecnicosSchema.optional().meta({ 'x-bson': 'mixed' }),
   detallesEmergencias: DetallesEmergenciasSchema.optional().meta({ 'x-bson': 'mixed' }),
   idsClientesQuePuedenAtender: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+  /** Derivado en backend (hooks): idsClientesQuePuedenAtender si tiene algo,
+   *  si no idCliente + idsAncestros. Sin `x-ref`: nadie lo popula, existe solo
+   *  para que el scope del listado vivo entre por un índice. */
+  idsClientesQueVen: z.array(z.string()).optional().meta({ 'x-bson': 'objectId' }),
   // @Prop({type: [Object]}) en el legacy: array real de Mixed.
   configHorariosAtencion: z.array(ConfigHorarioSchema).optional().meta({ 'x-bson': 'mixed' }),
   idsClientesAtendiendo: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
@@ -906,6 +916,7 @@ const omitirCreateUpdateEvento = {
   _id: true,
   idsAncestros: true,
   requiereAtencion: true,
+  idsClientesQueVen: true,
   cliente: true,
   ancestros: true,
   usuariosAtendiendo: true,
