@@ -198,7 +198,9 @@ const LuminariaCamposSchema = z.object({
 });
 
 const VarianteLuminariaGPE = LuminariaCamposSchema.extend({
-  tipoDispositivo: z.literal('Luminaria GPE').optional(), // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
+  // Discriminante del z.union(): sin @Prop en el legacy (schema.ts), cero
+  // ocurrencias de `tipoDispositivo` — nunca se persistió.
+  tipoDispositivo: z.literal('Luminaria GPE').optional().meta({ 'x-computed': true }), // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
   // @Prop({type: Object}) en el legacy: Mixed.
   ultimoReportePeriodico: z
     .custom<IReporteBase<'Luminaria GPE Periódico'>>()
@@ -210,7 +212,9 @@ const VarianteLuminariaGPE = LuminariaCamposSchema.extend({
     .meta({ 'x-bson': 'mixed' }), // Ultimo reporte energia recibido
 });
 const VarianteLuminariaACTISFING = LuminariaCamposSchema.extend({
-  tipoDispositivo: z.literal('Luminaria ACTIS FING').optional(), // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
+  // Discriminante del z.union(): sin @Prop en el legacy (schema.ts), cero
+  // ocurrencias de `tipoDispositivo` — nunca se persistió.
+  tipoDispositivo: z.literal('Luminaria ACTIS FING').optional().meta({ 'x-computed': true }), // Tipo de dispositivo (Luminaria GPE, Luminaria ACTIS FING, etc)
   ultimoReportePeriodico: z
     .custom<IReporteBase<'Luminaria ACTIS FING Estado'>>()
     .optional()
@@ -221,7 +225,9 @@ const VarianteLuminariaACTISFING = LuminariaCamposSchema.extend({
     .meta({ 'x-bson': 'mixed' }), // Ultimo reporte energia recibido
 });
 const VarianteLuminariaCitiLight = LuminariaCamposSchema.extend({
-  tipoDispositivo: z.literal('Luminaria CitiLight').optional(),
+  // Discriminante del z.union(): sin @Prop en el legacy (schema.ts), cero
+  // ocurrencias de `tipoDispositivo` — nunca se persistió.
+  tipoDispositivo: z.literal('Luminaria CitiLight').optional().meta({ 'x-computed': true }),
   ultimoReportePeriodico: z
     .custom<IReporteBase<'Luminaria CitiLight Estado'>>()
     .optional()

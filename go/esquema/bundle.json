@@ -1947,7 +1947,55 @@
      "x-bson": "mixed",
      "type": "array",
      "items": {
-      "$ref": "#/$defs/CodigoDispositivoSchema"
+      "type": "object",
+      "properties": {
+       "codigo": {
+        "type": "string"
+       },
+       "descripcion": {
+        "type": "string"
+       },
+       "idCategoriaEvento": {
+        "type": "string"
+       },
+       "mostrarZona": {
+        "type": "boolean"
+       },
+       "mostrarUsuario": {
+        "type": "boolean"
+       },
+       "armado": {
+        "type": "boolean"
+       },
+       "desarmado": {
+        "type": "boolean"
+       },
+       "detonacion": {
+        "type": "boolean"
+       },
+       "test": {
+        "type": "boolean"
+       },
+       "notificar": {
+        "type": "boolean"
+       },
+       "minutosEsperaAutomatica": {
+        "type": "number"
+       },
+       "cierraCodigosEventos": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "flagsTrackers": {
+        "type": "array",
+        "items": {
+         "$ref": "#/$defs/FlagsTrackersSchema"
+        }
+       }
+      },
+      "additionalProperties": false
      }
     },
     "tracker": {
@@ -6659,7 +6707,55 @@
      "x-bson": "mixed",
      "type": "array",
      "items": {
-      "$ref": "#/$defs/CodigoDispositivoSchema"
+      "type": "object",
+      "properties": {
+       "codigo": {
+        "type": "string"
+       },
+       "descripcion": {
+        "type": "string"
+       },
+       "idCategoriaEvento": {
+        "type": "string"
+       },
+       "mostrarZona": {
+        "type": "boolean"
+       },
+       "mostrarUsuario": {
+        "type": "boolean"
+       },
+       "armado": {
+        "type": "boolean"
+       },
+       "desarmado": {
+        "type": "boolean"
+       },
+       "detonacion": {
+        "type": "boolean"
+       },
+       "test": {
+        "type": "boolean"
+       },
+       "notificar": {
+        "type": "boolean"
+       },
+       "minutosEsperaAutomatica": {
+        "type": "number"
+       },
+       "cierraCodigosEventos": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "flagsTrackers": {
+        "type": "array",
+        "items": {
+         "$ref": "#/$defs/FlagsTrackersSchema"
+        }
+       }
+      },
+      "additionalProperties": false
      }
     },
     "ancestros": {
@@ -11966,12 +12062,6 @@
      "additionalProperties": {}
     },
     "dispositivoLorawan": {
-     "x-populate": {
-      "ref": "DispositivoLorawanSchema",
-      "localField": "deveui",
-      "foreignField": "deveui",
-      "justOne": true
-     },
      "$ref": "#/$defs/DispositivoLorawanSchema"
     },
     "dispositivo": {
@@ -12415,6 +12505,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria GPE"
       },
@@ -12554,6 +12645,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria ACTIS FING"
       },
@@ -12693,6 +12785,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria CitiLight"
       },
@@ -27971,12 +28064,6 @@
      "additionalProperties": {}
     },
     "dispositivoLorawan": {
-     "x-populate": {
-      "ref": "DispositivoLorawanSchema",
-      "localField": "deveui",
-      "foreignField": "deveui",
-      "justOne": true
-     },
      "$ref": "#/$defs/DispositivoLorawanSchema"
     },
     "dispositivo": {
@@ -28730,6 +28817,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria GPE"
       },
@@ -28948,6 +29036,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria ACTIS FING"
       },
@@ -29166,6 +29255,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria CitiLight"
       },
@@ -42714,7 +42804,55 @@
      "x-bson": "mixed",
      "type": "array",
      "items": {
-      "$ref": "#/$defs/CodigoDispositivoSchema"
+      "type": "object",
+      "properties": {
+       "codigo": {
+        "type": "string"
+       },
+       "descripcion": {
+        "type": "string"
+       },
+       "idCategoriaEvento": {
+        "type": "string"
+       },
+       "mostrarZona": {
+        "type": "boolean"
+       },
+       "mostrarUsuario": {
+        "type": "boolean"
+       },
+       "armado": {
+        "type": "boolean"
+       },
+       "desarmado": {
+        "type": "boolean"
+       },
+       "detonacion": {
+        "type": "boolean"
+       },
+       "test": {
+        "type": "boolean"
+       },
+       "notificar": {
+        "type": "boolean"
+       },
+       "minutosEsperaAutomatica": {
+        "type": "number"
+       },
+       "cierraCodigosEventos": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "flagsTrackers": {
+        "type": "array",
+        "items": {
+         "$ref": "#/$defs/FlagsTrackersSchema"
+        }
+       }
+      },
+      "additionalProperties": false
      }
     },
     "ancestros": {
@@ -48057,12 +48195,6 @@
      "additionalProperties": {}
     },
     "dispositivoLorawan": {
-     "x-populate": {
-      "ref": "DispositivoLorawanSchema",
-      "localField": "deveui",
-      "foreignField": "deveui",
-      "justOne": true
-     },
      "$ref": "#/$defs/DispositivoLorawanSchema"
     },
     "dispositivo": {
@@ -48463,6 +48595,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria GPE"
       },
@@ -48602,6 +48735,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria ACTIS FING"
       },
@@ -48741,6 +48875,7 @@
        ]
       },
       "tipoDispositivo": {
+       "x-computed": true,
        "type": "string",
        "const": "Luminaria CitiLight"
       },

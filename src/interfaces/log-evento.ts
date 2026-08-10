@@ -53,17 +53,15 @@ export const LogEventoSchema = z
       'x-bson': 'mixed',
     }), // Contexto adicional del log
 
-    // Populate. sic legacy: el virtual real se llama "dispositivo" (localField
-    // deveui, foreignField deveui); getById pide "dispositivoLorawan" → bug de
-    // strictPopulate documentado en el meta.go de logEventoMqtts.
-    dispositivoLorawan: DispositivoLorawanSchema.optional().meta({
-      'x-populate': {
-        ref: 'DispositivoLorawanSchema',
-        localField: 'deveui',
-        foreignField: 'deveui',
-        justOne: true,
-      },
-    }),
+    // NO es un populate real: sin @Prop y sin schema.virtual() en el legacy
+    // (schema.ts). service.ts:75 hace populate([{ path: 'dispositivoLorawan' }])
+    // en el getById, y Mongoose lo rechaza con strictPopulate → 500 SIEMPRE.
+    // Documentado en el meta.go de logEventoMqtts. Se deja la propiedad (el
+    // shape sigue siendo útil para tipar) pero SIN `x-populate`: anotarlo como
+    // populate haría que el generador cree un virtual que funciona de verdad,
+    // divergiendo del 500 que el legacy siempre devolvió. El virtual real es
+    // "dispositivo", abajo.
+    dispositivoLorawan: DispositivoLorawanSchema.optional(),
     // El virtual que el schema legacy declara DE VERDAD. Convive con
     // `dispositivoLorawan` de arriba en vez de reemplazarlo: renombrar sería un
     // cambio de contrato para los consumidores que ya lo piden con ese nombre,
