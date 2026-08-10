@@ -82,3 +82,54 @@ func TestArrayFieldsSonLosArraysTopLevelPersistidos(t *testing.T) {
 		t.Error("ArrayFields incluye `vehiculo`, que es un objeto")
 	}
 }
+
+func TestFieldTypesCasteaLosTiposDeLaAnotacion(t *testing.T) {
+	m, _ := cargarParaTest(t).PorColeccion("activos")
+
+	casos := map[string]FieldType{
+		"idCliente":                     ObjectID,
+		"idsAncestros":                  ObjectIDArray,
+		"fechaAlta":                     Date,
+		"puedeSolicitarServicioTecnico": Bool,
+		// El setter gana sobre el tipo: Mongoose lo aplica también al castear.
+		"vehiculo.patente": Uppercase,
+		// Dot-paths del sub-schema Vehiculo.
+		"vehiculo.idChofer":             ObjectID,
+		"vehiculo.idsRecorridos":        ObjectIDArray,
+		"vehiculo.dentroDelRecorrido":   Bool,
+		"vehiculo.capacidadCombustible": Number,
+	}
+	for path, esperado := range casos {
+		if real, ok := m.FieldTypes[path]; !ok {
+			t.Errorf("FieldTypes no tiene %q (esperaba %v)", path, esperado)
+		} else if real != esperado {
+			t.Errorf("FieldTypes[%q] = %v; esperaba %v", path, real, esperado)
+		}
+	}
+}
+
+func TestFieldTypesNoBajaDentroDeUnMixed(t *testing.T) {
+	m, _ := cargarParaTest(t).PorColeccion("temas")
+
+	// `payload` es @Prop({type: Object}) en el legacy: adentro de un Mixed
+	// Mongoose no declara nada, así que no castea esos paths. Si el emisor
+	// bajara igual, inventaría casteos que el legacy nunca tuvo.
+	for path := range m.FieldTypes {
+		if len(path) > len("payload.") && path[:len("payload.")] == "payload." {
+			t.Errorf("FieldTypes tiene %q, que está adentro de un Mixed", path)
+		}
+	}
+}
+
+func TestFieldTypesCasteaElIDDeUnSubdocumentoConID(t *testing.T) {
+	m, _ := cargarParaTest(t).PorColeccion("recorridos")
+
+	// `paradas` es el único sub-documento CON _id del legacy: el front filtra
+	// recorridos por {paradas._id}, así que ese path necesita el casteo.
+	if real, ok := m.FieldTypes["paradas._id"]; !ok || real != ObjectID {
+		t.Errorf("FieldTypes[\"paradas._id\"] = %v, %v; esperaba objectId, true", real, ok)
+	}
+	if real := m.FieldTypes["paradas.tiempoParada"]; real != Number {
+		t.Errorf("FieldTypes[\"paradas.tiempoParada\"] = %v; esperaba number", real)
+	}
+}
