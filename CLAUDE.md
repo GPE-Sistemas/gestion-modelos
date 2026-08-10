@@ -171,10 +171,10 @@ Lo que viene y conviene no contradecir:
   - **`go/esquema/bundle.json` es una copia commiteada** de
     `dist/json-schema/index.json`, porque `dist/` está gitignored y `go:embed`
     solo incluye archivos del árbol. Si tocás un schema, regenerá con
-    `npm run gen:bundle-go` — el workflow `bundle-go` lo verifica y falla si
-    queda diff. Ese script **saca el `x-generated-at`** al copiar: es el único
-    campo no determinista del bundle, y sin sacarlo el chequeo de
-    sincronización daría rojo en todos los PR.
+    `npm run gen:bundle-go` — **los pasos completos están en §5 bis, y saltearlos
+    ya rompió un filtro en producción**. Ese script **saca el `x-generated-at`**
+    al copiar: es el único campo no determinista del bundle, y sin sacarlo el
+    chequeo de sincronización daría rojo en todos los PR.
 
   **Versionado: npm y Go llevan el MISMO número**, no dos historias
   independientes — son los mismos modelos, así que la versión tiene que
@@ -224,6 +224,62 @@ dato y su persistencia, no el comportamiento de cada API. **Si dos APIs pueden
 discrepar legítimamente sobre algo, ese algo no va acá.** Que `idCliente` sea
 ObjectId es cierto para todas y va; que un endpoint devuelva `null` en vez de
 404 es decisión de ese servicio.
+
+---
+
+## 5 bis. Agregar o cambiar un campo: los pasos, completos
+
+Desde 2026-08-10 estos schemas no describen solo tipos de TypeScript: **generan
+la metadata de persistencia de `gestion-datos-go`** (qué campos acepta un write,
+qué se castea en un filtro, qué arrays se inicializan, qué populates existen).
+Tocar un schema y no propagarlo ya no es "quedó desactualizado el bundle": es
+metadata faltante en un servicio en producción.
+
+Y lo que falta **no da error**. Un campo sin su cast hace que el filtro no
+matchee: `200` con lista vacía, sin log, sin excepción.
+
+### La secuencia
+
+1. **Anotá el schema zod** con la clave que corresponda (tabla de §5).
+2. **Regenerá el bundle del módulo Go y commitealo:**
+   ```
+   npm run build && npm run gen:json-schema && npm run gen:bundle-go
+   ```
+   `go/esquema/bundle.json` es una **copia commiteada**, porque `dist/` está en
+   `.gitignore` y `go:embed` solo incluye archivos del árbol. Si no lo
+   regenerás, el módulo sirve el schema viejo.
+3. **Tageá el módulo**: `go/vX.Y.Z`, con el prefijo obligatorio (el módulo vive
+   en un subdirectorio) y el mismo número que el `package.json`.
+4. **Bumpeá el consumidor**: en `gestion-datos-go`, `go.mod` a esa versión y
+   `make sync-campos`. Sin eso el campo no llega, por más que esté acá.
+
+Los pasos 3 y 4 no los hace nadie automáticamente. Si tu cambio no es urgente,
+al menos dejá hecho el 2 y avisá: el paso 2 es el que evita que el bundle mienta.
+
+### Ya pasó, y así se ve
+
+`773554a` agregó `idsClientesQueVen` al `EventoGenericoSchema` y no hizo el paso
+2. El bundle quedó sin el campo, y el `meta.go` generado desde ese bundle se
+quedaba sin el cast a `ObjectId`:
+
+```
+GET /eventos-genericos?idsClientesQueVen=<hex>   → 200, lista vacía
+```
+
+El filtro llegaba como string contra ObjectIds guardados. Ese campo es
+justamente el control de visibilidad por cliente. Se arregló en `d36b504` +
+`go/v2.2.1`.
+
+**No fue un descuido de quien lo escribió**: la instrucción estaba enterrada en
+§5 como contexto de roadmap, no como paso obligatorio. Por eso ahora tiene
+sección propia.
+
+### El chequeo automático existe pero hoy no corre
+
+El workflow `bundle-go` regenera y falla si el bundle commiteado quedó
+desincronizado. **Nunca se ejecutó**: GitHub Actions está deshabilitado a nivel
+repositorio (`actions.enabled = false`) acá y en `gestion-datos-go`. Mientras
+siga así, el paso 2 depende de que te acuerdes.
 
 ---
 
