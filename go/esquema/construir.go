@@ -36,11 +36,39 @@ func (b *bundleJSON) metadataDe(nombre string, def *nodoJSON) *Metadata {
 		if v, hay := b.virtualDe(path, "", nodo); hay {
 			m.Virtuals[path] = v
 		}
+		if b.esSubSchemaReal(nodo) {
+			m.SubSchemas = append(m.SubSchemas, path)
+		}
 		b.recorrerAnidados(m, path, nodo, nil, false)
 	}
 	slices.Sort(m.Fields)
 	slices.Sort(m.ArrayFields)
+	slices.Sort(m.SubSchemas)
 	return m
+}
+
+// esSubSchemaReal dice si una prop es un sub-documento con schema propio
+// (@Schema({_id:false}) con clase, o un array de esos) y no un
+// @Prop({type: Object}).
+//
+// La distinción importa en los UPDATES: el objeto de un sub-schema real se
+// aplana a dot-paths para no pisar el resto del subdocumento
+// (gestion-datos-go, MIGRACION.md §7 item 18), mientras que un Mixed se
+// reemplaza entero, que es lo que se quiere de un blob.
+//
+// El criterio es estructural: apunta a un schema con properties, ese schema NO
+// es otra entidad (eso sería un populate) y no está anotado `mixed`. Medido el
+// 2026-08-07 sobre los 81 schemas: da exactamente activos.vehiculo y
+// recorridos.paradas, que son los dos que declaran los meta.go a mano.
+func (b *bundleJSON) esSubSchemaReal(nodo *nodoJSON) bool {
+	if nodo.esPopulate() || nodo.esComputed() || bsonDe(nodo) == "mixed" {
+		return false
+	}
+	destino, esEntidad := b.resolver(nodo)
+	if destino == nil || esEntidad {
+		return false
+	}
+	return len(b.propiedades(destino)) > 0
 }
 
 // recorrerAnidados baja al sub-documento de una prop y agrega los casteos de

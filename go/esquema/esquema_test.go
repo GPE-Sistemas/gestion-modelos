@@ -192,6 +192,38 @@ func TestVirtualsAnidadosLlevanElLocalFieldAbsoluto(t *testing.T) {
 	}
 }
 
+func TestSubSchemasSonSoloLosSubDocumentosReales(t *testing.T) {
+	r := cargarParaTest(t)
+
+	activos, _ := r.PorColeccion("activos")
+	if got := activos.SubSchemas; len(got) != 1 || got[0] != "vehiculo" {
+		t.Errorf("activos.SubSchemas = %v; esperaba [vehiculo]", got)
+	}
+	recorridos, _ := r.PorColeccion("recorridos")
+	if got := recorridos.SubSchemas; len(got) != 1 || got[0] != "paradas" {
+		t.Errorf("recorridos.SubSchemas = %v; esperaba [paradas]", got)
+	}
+
+	// Un @Prop({type: Object}) NO es un sub-schema: en un update se reemplaza
+	// entero, que es lo que se quiere de un blob. Solo un sub-schema real se
+	// aplana a dot-paths para no pisar el resto del subdocumento.
+	temas, _ := r.PorColeccion("temas")
+	if len(temas.SubSchemas) != 0 {
+		t.Errorf("temas.SubSchemas = %v; `payload` es Mixed, no un sub-schema", temas.SubSchemas)
+	}
+
+	// Y en TODO el bundle no puede haber más de esos dos: si aparece un
+	// tercero, el motor de gestion-datos-go va a empezar a aplanar un objeto
+	// que hoy reemplaza entero, que es un cambio de comportamiento de escritura.
+	var total int
+	for _, m := range r.Todas() {
+		total += len(m.SubSchemas)
+	}
+	if total != 2 {
+		t.Errorf("hay %d SubSchemas en todo el bundle; esperaba 2 (activos.vehiculo y recorridos.paradas)", total)
+	}
+}
+
 func TestVirtualsBajaDentroDeUnMixedPorqueUnMixedNoApagaLosVirtuals(t *testing.T) {
 	m, _ := cargarParaTest(t).PorColeccion("eventogenericos")
 
