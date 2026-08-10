@@ -122,3 +122,16 @@ Pasos para promover la migración:
    `seguridad-boton-web` (alias `modelos-gestion`). Ver `CONSUMIDORES.md`.
 
 Estado de verificación y lista completa de consumidores: **`CONSUMIDORES.md`**.
+
+### El módulo Go
+
+`go/` es un módulo Go aparte (`github.com/GPE-Sistemas/gestion-modelos/go`) que
+expone la metadata de persistencia derivada de las anotaciones `.meta()`.
+
+Si tocaste un schema en `src/`, regenerá su bundle antes de commitear:
+
+    npm run build && npm run gen:json-schema && npm run gen:bundle-go
+
+El workflow `bundle-go` lo verifica y falla si queda diff. Los tags del módulo
+Go llevan prefijo (`go/v1.0.0`) y son **independientes** de la versión de npm:
+un cambio que no toca schemas no necesita tag de Go, y al revés.
