@@ -21916,6 +21916,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -22157,6 +22164,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
@@ -22408,6 +22422,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -22649,6 +22670,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
@@ -22900,6 +22928,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -23141,6 +23176,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
@@ -23392,6 +23434,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -23633,6 +23682,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
@@ -23884,6 +23940,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -24125,6 +24188,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
@@ -24376,6 +24446,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -24617,6 +24694,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
@@ -24868,6 +24952,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -25109,6 +25200,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
@@ -25360,6 +25458,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -25606,6 +25711,13 @@
         "type": "string"
        }
       },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
       "configHorariosAtencion": {
        "x-bson": "mixed",
        "type": "array",
@@ -25847,6 +25959,13 @@
       "idsClientesQuePuedenAtender": {
        "x-bson": "objectId",
        "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
        "type": "array",
        "items": {
         "type": "string"
