@@ -15,6 +15,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
+    "gen:bundle-go": "node scripts/sync-bundle-go.mjs",
     "gen:json-schema": "node scripts/gen-json-schema.mjs",
     "prepare": "npm run build"
   },

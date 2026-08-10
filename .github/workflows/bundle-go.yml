@@ -1,0 +1,46 @@
+# El bundle que embebe el módulo Go (go/esquema/bundle.json) es una COPIA
+# commiteada de dist/json-schema/index.json, porque dist/ está gitignored y
+# go:embed solo ve archivos del árbol.
+#
+# Una copia sin chequeo se desincroniza en el primer merge que nadie regenere, y
+# el módulo Go serviría metadata vieja sin que nada avise. Este workflow
+# regenera y falla si queda diff.
+name: bundle-go
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  bundle-sincronizado:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run gen:json-schema
+      - run: npm run gen:bundle-go
+      - name: El bundle commiteado tiene que coincidir con el generado
+        run: |
+          if ! git diff --quiet go/esquema/bundle.json; then
+            echo "::error::go/esquema/bundle.json está desincronizado con src/."
+            echo "Correr: npm run build && npm run gen:json-schema && npm run gen:bundle-go"
+            git diff --stat go/esquema/bundle.json
+            exit 1
+          fi
+
+  tests-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+      - run: go test ./...
+        working-directory: go
+        env:
+          TZ: UTC

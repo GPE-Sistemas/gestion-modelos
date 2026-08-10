@@ -31,8 +31,18 @@ export const CertificadoEntidadSchema = z
     // Mixed, Mongoose no declara NADA — no castea ni inicializa esos paths. La
     // anotación se lo dice al chequeo de drift, que si no exigiría en el
     // meta.go de gestion-datos-go casts que el legacy nunca tuvo.
+    //
+    // `.omit({ categoriaEvento: true })`: CodigoDispositivoSchema (tipo
+    // compartido, codigos-dispositivo.ts) hornea `categoriaEvento` con
+    // `x-populate` — correcto para el OTRO uso del tipo
+    // (CodigosDispositivo.codigos, cuyo meta.go declara el virtual
+    // `codigos.categoriaEvento`), pero falso acá: el schema legacy de
+    // certificadoEntidad (schema.ts) declara solo 5 virtuals — cliente,
+    // ancestros, activo, alarma, tracker — y NUNCA populó ese path anidado
+    // bajo `codigosEsperados`. Sin el omit, el chequeo de drift heredaría una
+    // anotación que no le corresponde a este embebedor.
     codigosEsperados: z
-      .array(CodigoDispositivoSchema)
+      .array(CodigoDispositivoSchema.omit({ categoriaEvento: true }))
       .optional()
       .meta({ 'x-bson': 'mixed' }),
     // Populate

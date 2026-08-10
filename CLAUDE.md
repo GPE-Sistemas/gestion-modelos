@@ -146,11 +146,39 @@ diseño está en `gestion-datos-go`, en
 
 Lo que viene y conviene no contradecir:
 
-- `gestion-modelos` va a publicar un **módulo Go** (`go/esquema` con el bundle
-  embebido y las tablas de metadata, `go/modelos` con structs). La generación
-  ocurre **acá**, una sola vez; los consumidores hacen `go get`. Si alguna vez
-  ves un `generate.sh` que clona este repo dentro de una API, es la deuda que
-  estamos pagando — no el patrón a copiar.
+- **El módulo Go ya existe: `go/`.** Module path
+  `github.com/GPE-Sistemas/gestion-modelos/go`, y `go/esquema` expone la
+  metadata de persistencia derivada de las anotaciones `.meta()`
+  (`Collection`, `Fields`, `FieldTypes`, `ArrayFields`, `SubSchemas`,
+  `Virtuals`). La generación ocurre **acá**, una sola vez; los consumidores
+  hacen `go get`. Si alguna vez ves un `generate.sh` que clona este repo
+  dentro de una API, es la deuda que estamos pagando — no el patrón a copiar.
+
+  Tres cosas del módulo que **no** hay que "completar" pensando que faltan:
+
+  - **No hay `go/modelos` con structs, y es a propósito** (decidido el
+    2026-08-07). Los motores que lo consumen trabajan con documentos dinámicos
+    (`map[string]any` / `bson.M`): `gestion-datos-go` no tiene un solo struct
+    de dominio. El único consumidor futuro de structs es
+    `gestion-trackers-go`, y antes de migrarlo hay que **medir su drift**
+    (nadie verificó nunca que sus tipos a mano coincidan con estos schemas).
+    Generar structs hoy repetiría el `tools/genmodelos` borrado el 2026-08-04:
+    18,7 MB que nadie importaba.
+  - **No valida bodies, y es a propósito.** `gestion-datos-go` replica el
+    strict mode de Mongoose, que **descarta** las claves desconocidas en
+    silencio. Validar con las reglas de zod empezaría a **rechazar** bodies que
+    el legacy aceptaba: es un cambio de contrato, no una mejora interna.
+  - **`go/esquema/bundle.json` es una copia commiteada** de
+    `dist/json-schema/index.json`, porque `dist/` está gitignored y `go:embed`
+    solo incluye archivos del árbol. Si tocás un schema, regenerá con
+    `npm run gen:bundle-go` — el workflow `bundle-go` lo verifica y falla si
+    queda diff. Ese script **saca el `x-generated-at`** al copiar: es el único
+    campo no determinista del bundle, y sin sacarlo el chequeo de
+    sincronización daría rojo en todos los PR.
+
+  Los tags del módulo Go llevan prefijo (`go/v1.0.0`) porque el módulo vive en
+  un subdirectorio, y son **independientes** de la versión de npm: un cambio
+  que no toca schemas no necesita tag de Go, y al revés.
 - Los schemas ganan metadata de persistencia vía `.meta()`. Es **aditiva**: los
   consumidores TS ignoran las claves desconocidas y los tipos inferidos no
   cambian. **Ya está aplicada en `proveedor.ts`, `recorrido.ts` y `activo.ts`**
@@ -164,7 +192,7 @@ Lo que viene y conviene no contradecir:
   | `x-ref` | propiedad | `@Prop({ref})`: populate del path del id en su lugar |
   | `x-populate` | propiedad | `schema.virtual()`: `{ref, localField, foreignField, justOne}` |
   | `x-setter` | propiedad | `uppercase` / `lowercase` |
-  | `x-computed` | propiedad | getter del `toJSON`, no es campo ni populate |
+  | `x-computed` | propiedad | existe en el tipo TS pero NO es un path persistido ni un populate: getter del `toJSON`, discriminante de una unión, o shape heredado del legacy sin `@Prop` ni `schema.virtual()`. Ejemplos: `Luminaria.perfilEfectivo` (getter), `Luminaria.tipoDispositivo` (discriminante del union), `LogEvento.dispositivoLorawan` (prop del tipo TS que el legacy nunca persistió ni populó — el populate real es `dispositivo`) |
 
   **`x-bson: 'mixed'` no es opcional donde corresponde.** Un
   `@Prop({type: Object})` del legacy es Mixed y **Mongoose no castea adentro**;
