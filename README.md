@@ -125,13 +125,27 @@ Estado de verificación y lista completa de consumidores: **`CONSUMIDORES.md`**.
 
 ### El módulo Go
 
-`go/` es un módulo Go aparte (`github.com/GPE-Sistemas/gestion-modelos/go`) que
-expone la metadata de persistencia derivada de las anotaciones `.meta()`.
+`go/` es un módulo Go aparte (`github.com/GPE-Sistemas/gestion-modelos/go/v2`)
+que expone la metadata de persistencia derivada de las anotaciones `.meta()`.
 
 Si tocaste un schema en `src/`, regenerá su bundle antes de commitear:
 
     npm run build && npm run gen:json-schema && npm run gen:bundle-go
 
-El workflow `bundle-go` lo verifica y falla si queda diff. Los tags del módulo
-Go llevan prefijo (`go/v1.0.0`) y son **independientes** de la versión de npm:
-un cambio que no toca schemas no necesita tag de Go, y al revés.
+El workflow `bundle-go` lo verifica y falla si queda diff.
+
+**Versionado: npm y Go llevan el MISMO número**, porque son los mismos
+modelos — la decisión es que la versión cuente una sola historia, no dos. Dos
+reglas de Go son el costo de eso:
+
+- El módulo vive en un subdirectorio, así que el tag lleva el prefijo
+  obligatorio: la versión `2.2.0` se tagea `go/v2.2.0` (no `v2.2.0` a secas).
+- Un módulo de major 2 o más tiene que llevar el sufijo del major en el
+  *module path* — por eso `go/v2`, no `go`. Es la otra regla de Go, separada
+  del prefijo del subdirectorio. Si el día de mañana esto pasa a 3.x, hay que
+  renombrar el path a `go/v3` y actualizar los imports de todos los
+  consumidores (`gestion-datos-go` incluido).
+
+Un cambio de npm que no toca `go/esquema` igual sube el número de Go (aunque
+el contenido del módulo no cambie) y viceversa: el número es compartido, no el
+contenido.
