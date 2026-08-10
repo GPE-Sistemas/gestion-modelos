@@ -2,7 +2,6 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "x-source": "gestion-modelos",
  "x-generator": "z.toJSONSchema(registry)",
- "x-generated-at": "2026-08-07T19:45:26.844Z",
  "$defs": {
   "AccessoryInfoItemSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",

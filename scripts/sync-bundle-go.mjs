@@ -27,6 +27,14 @@ try {
 }
 
 const bundle = JSON.parse(crudo);
+
+// x-generated-at es el único campo no determinista del bundle: cambia en cada
+// regeneración aunque no cambien los schemas. Sacarlo acá permite que el
+// workflow bundle-go.yml detecte diferencias reales (cambios en src/)
+// sin falsos positivos por timestamps. El lado TypeScript lo mantiene intacto
+// en dist/json-schema/index.json porque puede necesitarlo.
+delete bundle['x-generated-at'];
+
 const defs = bundle.$defs ?? {};
 const entidades = Object.values(defs).filter((d) => d['x-collection']).length;
 if (entidades < 80) {
