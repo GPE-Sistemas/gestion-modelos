@@ -51,6 +51,16 @@ func TestFieldsTraeLosPathsTopLevelSinID(t *testing.T) {
 	if slices.Contains(m.Fields, "_id") {
 		t.Error("Fields incluye _id y no debería")
 	}
+	// Los virtuals declarados (x-populate) NO son paths del documento: el
+	// strict mode que replica el motor los descartaría de un body, y el
+	// activos/meta.go escrito a mano no los declara. La aserción NEGATIVA es
+	// tan necesaria como la positiva: sin ella, un Fields que incluye los
+	// cuatro virtuals pasa el test igual.
+	for _, virtual := range []string{"cliente", "ancestros", "grupo", "tracker"} {
+		if slices.Contains(m.Fields, virtual) {
+			t.Errorf("Fields incluye el virtual %q: es un x-populate, no un path del documento", virtual)
+		}
+	}
 	if !slices.IsSorted(m.Fields) {
 		t.Error("Fields tiene que venir ordenado para que el diff contra el meta sea estable")
 	}

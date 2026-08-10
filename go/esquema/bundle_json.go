@@ -123,11 +123,10 @@ func (n *nodoJSON) esPopulate() bool {
 	return n.esArray() && (n.Items.Populate != nil || n.Items.RefEntidad != "")
 }
 
-// esVirtual dice si la prop es un schema.virtual() (x-populate): a diferencia
-// de un @Prop({ref}) (x-ref), un virtual NO es un path real del documento —
-// Mongoose nunca lo inicializa porque nunca lo persiste. Un x-ref sí es un
-// path real (un array de ObjectId, por ejemplo): populate solo reemplaza sus
-// elementos, no cambia que el path exista y Mongoose lo inicialice.
+// esVirtual dice si la prop es un virtual declarado (x-populate): un nombre que
+// existe en el toJSON pero NO es un path del documento. Distinto de esPopulate,
+// que además incluye los x-ref — esos SÍ son paths del documento (guardan los
+// ObjectIds) y por eso van a Fields y se inicializan a [] si son array.
 func (n *nodoJSON) esVirtual() bool {
 	if n.Populate != nil {
 		return true
