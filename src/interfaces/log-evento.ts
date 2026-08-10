@@ -61,7 +61,14 @@ export const LogEventoSchema = z
     // populate haría que el generador cree un virtual que funciona de verdad,
     // divergiendo del 500 que el legacy siempre devolvió. El virtual real es
     // "dispositivo", abajo.
-    dispositivoLorawan: DispositivoLorawanSchema.optional(),
+    // Fix round 2: sin ninguna anotación, tampoco es un virtual — el generador
+    // la trata como campo persistido y la mete en `Fields`, que el legacy
+    // tampoco tiene (ni @Prop ni schema.virtual()). `x-computed` es la clave
+    // correcta para "existe en el tipo TS pero no es ni campo ni populate", el
+    // mismo motivo por el que la lleva `Luminaria.tipoDispositivo`.
+    dispositivoLorawan: DispositivoLorawanSchema.optional().meta({
+      'x-computed': true,
+    }),
     // El virtual que el schema legacy declara DE VERDAD. Convive con
     // `dispositivoLorawan` de arriba en vez de reemplazarlo: renombrar sería un
     // cambio de contrato para los consumidores que ya lo piden con ese nombre,

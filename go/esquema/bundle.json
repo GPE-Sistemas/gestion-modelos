@@ -12062,6 +12062,7 @@
      "additionalProperties": {}
     },
     "dispositivoLorawan": {
+     "x-computed": true,
      "$ref": "#/$defs/DispositivoLorawanSchema"
     },
     "dispositivo": {
@@ -28064,6 +28065,7 @@
      "additionalProperties": {}
     },
     "dispositivoLorawan": {
+     "x-computed": true,
      "$ref": "#/$defs/DispositivoLorawanSchema"
     },
     "dispositivo": {
@@ -48195,6 +48197,7 @@
      "additionalProperties": {}
     },
     "dispositivoLorawan": {
+     "x-computed": true,
      "$ref": "#/$defs/DispositivoLorawanSchema"
     },
     "dispositivo": {

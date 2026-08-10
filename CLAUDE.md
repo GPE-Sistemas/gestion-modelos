@@ -192,7 +192,7 @@ Lo que viene y conviene no contradecir:
   | `x-ref` | propiedad | `@Prop({ref})`: populate del path del id en su lugar |
   | `x-populate` | propiedad | `schema.virtual()`: `{ref, localField, foreignField, justOne}` |
   | `x-setter` | propiedad | `uppercase` / `lowercase` |
-  | `x-computed` | propiedad | getter del `toJSON`, no es campo ni populate |
+  | `x-computed` | propiedad | existe en el tipo TS pero NO es un path persistido ni un populate: getter del `toJSON`, discriminante de una unión, o shape heredado del legacy sin `@Prop` ni `schema.virtual()`. Ejemplos: `Luminaria.perfilEfectivo` (getter), `Luminaria.tipoDispositivo` (discriminante del union), `LogEvento.dispositivoLorawan` (prop del tipo TS que el legacy nunca persistió ni populó — el populate real es `dispositivo`) |
 
   **`x-bson: 'mixed'` no es opcional donde corresponde.** Un
   `@Prop({type: Object})` del legacy es Mixed y **Mongoose no castea adentro**;
