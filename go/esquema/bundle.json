@@ -8110,13 +8110,13 @@
      "x-setter": "uppercase",
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "idsClientesQuePuedenAtender": {
      "x-bson": "objectId",
@@ -15804,6 +15804,44 @@
    },
    "additionalProperties": false
   },
+  "CreateSimSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateSimSchema",
+   "type": "object",
+   "properties": {
+    "iccid": {
+     "type": "string"
+    },
+    "imsi": {
+     "type": "string"
+    },
+    "numero": {
+     "type": "string"
+    },
+    "operador": {
+     "$ref": "#/$defs/OperadorSchema"
+    },
+    "apn": {
+     "type": "string"
+    },
+    "usuario": {
+     "type": "string"
+    },
+    "password": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "fechaUltimoReporte": {
+     "x-bson": "date",
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "CreateSirenaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/CreateSirenaSchema",
@@ -16331,11 +16369,13 @@
     "numeroAbonado": {
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "frecReporte": {
      "type": "number"
@@ -18640,13 +18680,13 @@
      "x-setter": "uppercase",
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "idsClientesQuePuedenAtender": {
      "x-bson": "objectId",
@@ -18858,13 +18898,13 @@
      "x-setter": "uppercase",
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "idsClientesQuePuedenAtender": {
      "x-bson": "objectId",
@@ -19068,6 +19108,22 @@
      "type": "array",
      "items": {
       "$ref": "#/$defs/ClienteSchema"
+     }
+    },
+    "sim1": {
+     "x-populate": {
+      "ref": "SimSchema",
+      "localField": "idSim1",
+      "foreignField": "_id",
+      "justOne": true
+     }
+    },
+    "sim2": {
+     "x-populate": {
+      "ref": "SimSchema",
+      "localField": "idSim2",
+      "foreignField": "_id",
+      "justOne": true
      }
     }
    },
@@ -37765,7 +37821,14 @@
    "$id": "#/$defs/SimSchema",
    "type": "object",
    "properties": {
+    "_id": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
     "iccid": {
+     "type": "string"
+    },
+    "imsi": {
      "type": "string"
     },
     "numero": {
@@ -37782,9 +37845,19 @@
     },
     "password": {
      "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "fechaUltimoReporte": {
+     "x-bson": "date",
+     "type": "string"
     }
    },
-   "additionalProperties": false
+   "additionalProperties": false,
+   "x-collection": "sims"
   },
   "SirenaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -40329,11 +40402,13 @@
     "numeroAbonado": {
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "frecReporte": {
      "type": "number"
@@ -40456,11 +40531,13 @@
     "numeroAbonado": {
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "frecReporte": {
      "type": "number"
@@ -40525,6 +40602,24 @@
      "items": {
       "$ref": "#/$defs/ServicioContratadoSchema"
      }
+    },
+    "sim1": {
+     "x-populate": {
+      "ref": "SimSchema",
+      "localField": "idSim1",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/SimSchema"
+    },
+    "sim2": {
+     "x-populate": {
+      "ref": "SimSchema",
+      "localField": "idSim2",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/SimSchema"
     }
    },
    "additionalProperties": false,
@@ -44370,13 +44465,13 @@
      "x-setter": "uppercase",
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/SimSchema"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "idsClientesQuePuedenAtender": {
      "x-bson": "objectId",
@@ -51996,6 +52091,44 @@
    },
    "additionalProperties": false
   },
+  "UpdateSimSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdateSimSchema",
+   "type": "object",
+   "properties": {
+    "iccid": {
+     "type": "string"
+    },
+    "imsi": {
+     "type": "string"
+    },
+    "numero": {
+     "type": "string"
+    },
+    "operador": {
+     "$ref": "#/$defs/OperadorSchema"
+    },
+    "apn": {
+     "type": "string"
+    },
+    "usuario": {
+     "type": "string"
+    },
+    "password": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "fechaUltimoReporte": {
+     "x-bson": "date",
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "UpdateSirenaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/UpdateSirenaSchema",
@@ -52523,11 +52656,13 @@
     "numeroAbonado": {
      "type": "string"
     },
-    "sim1": {
-     "x-bson": "mixed"
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
     },
-    "sim2": {
-     "x-bson": "mixed"
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
     },
     "frecReporte": {
      "type": "number"

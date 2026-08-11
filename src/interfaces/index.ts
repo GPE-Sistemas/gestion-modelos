@@ -67,6 +67,7 @@ export * from './password-reset';
 export * from './config-perfil';
 export * from './prediccion-cercana';
 export * from './sirena';
+export * from './sim';
 export * from './geo-cache';
 export * from './road-speed-cache';
 export * from './gateway';
