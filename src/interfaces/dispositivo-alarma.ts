@@ -58,9 +58,6 @@ export type CodigoTipoSensor = z.infer<typeof CodigoTipoSensorSchema>;
 export const ModoSensorSchema = z.enum(['Seguidor', 'Demorado', 'Instantaneo']);
 export type ModoSensor = z.infer<typeof ModoSensorSchema>;
 
-// SIM (entidad) + OperadorSchema viven ahora en ./sim. Se reexportan acá para
-// no romper a los consumidores que importaban `ISim`/`SimSchema`/`OperadorSchema`
-// desde 'dispositivo-alarma' (antes eran el sub-objeto embebido, hoy la entidad).
 export {
   OperadorSchema,
   SimSchema,
@@ -223,106 +220,223 @@ export type IConfigComunicadorUnicom = z.infer<
 // SPIKE etapa 1 + tarea 3 (2026-08-06): metadata de persistencia por
 // `.meta()`. Convención documentada arriba de ProveedorSchema
 // (src/interfaces/proveedor.ts) — copiada acá, no reinventada.
-export const DispositivoAlarmaSchema = z.object({
-  _id: z.string().optional(),
-  //
-  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
-  fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
-  // Doble canal (primario/secundario). `reportaDoble` se autodetecta en el gateway
-  // cuando un mismo evento llega por ambos puertos dentro de la ventana de gracia.
-  // `fechaUltimoReporteDoble` marca la última confirmación (para envejecer el flag).
-  // `forzarUnCanal` = escotilla manual: no esperar el 2do canal aunque sea dual.
-  reportaDoble: z.boolean().optional(),
-  // SIN x-bson pese al nombre "fecha*": es Go-nativo (no tiene @Prop en el
-  // schema Mongoose legacy) y gestion-api-alarmas lo escribe como string ISO
-  // (new Date().toISOString()), no como BSON Date. Anotarlo 'date' migraría
-  // el tipo BSON en el próximo write sin que nadie lo decida — el mecanismo
-  // de docs/MIGRACION.md item 12 (valores.timestamp). Decisión pendiente,
-  // ver §7 item 23.
-  fechaUltimoReporteDoble: z.string().optional(),
-  forzarUnCanal: z.boolean().optional(),
-  // Comunicador(es) físicos de la alarma — ver ComunicadorAlarmaSchema.
-  comunicadores: z
-    .array(ComunicadorAlarmaSchema)
-    .optional()
-    .meta({ 'x-bson': 'mixed' }),
-  idUnicoComunicador: z.string().optional(),
-  idModelo: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
-  idDomicilio: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'UbicacionSchema' }),
-  idCliente: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  idsAncestros: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  nombre: z.string().optional(),
-  numeroAbonado: z.string().optional().meta({ 'x-setter': 'uppercase' }),
-  idSim1: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
-  idSim2: z.string().optional().meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
-  idsClientesQuePuedenAtender: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  idsClientesQuePuedenAtenderEventosTecnicos: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  puedeSolicitarServicioTecnico: z.boolean().optional(),
-  // @Prop({type: [Object]}) en el legacy: array real (se inicializa a []) de Mixed.
-  configHorariosAtencion: z.array(ConfigHorarioSchema).optional().meta({ 'x-bson': 'mixed' }),
-  configHorariosAtencionTecnica: z.array(ConfigHorarioSchema).optional().meta({ 'x-bson': 'mixed' }),
-  // @Prop({type: Object}) en el legacy: escalar Mixed pese al tipo TS array.
-  camarasPorZona: z.array(CamaraAlarmaSchema).optional().meta({ 'x-bson': 'mixed' }),
-  idsCamaras: z.array(z.string()).optional(),
-  // @Prop() armado?: boolean[] sin `type` explícito: @nestjs/mongoose refleja
-  // Array y lo resuelve a Mixed (sin caster propio), no a [Boolean]. Medido en
-  // prod: hay documentos con `armado` array Y documentos con `armado` boolean
-  // escalar (heterogéneo de verdad) — ver docs/MIGRACION.md §7 item 23.
-  armado: z.array(z.boolean()).optional().meta({ 'x-bson': 'mixed' }),
-  armadoPor: z.array(z.union([z.string(), z.null()])).optional(),
-  // UNICOM: estado de armado con semántica propia (total/perimetral/selectivo).
-  // Additive — NO reemplaza `armado`/`TiposDeArmado` (uso productivo de otras alarmas).
-  // @Prop({type: Object}) en el legacy: Mixed.
-  estadoArmadoUnicom: EstadoArmadoUnicomSchema.optional().meta({ 'x-bson': 'mixed' }),
-  configUnicom: ConfigComunicadorUnicomSchema.optional().meta({ 'x-bson': 'mixed' }),
-  // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
-  ultimoEstadoUnicom: UltimoEstadoUnicomSchema.optional().meta({ 'x-bson': 'mixed' }),
-  imagenes: z.array(z.string()).optional(),
-  modoDesactivado: ModoDesactivadoSchema.optional().meta({ 'x-bson': 'mixed' }),
-  infoZonas: z.array(ParticionZonaSchema).optional().meta({ 'x-bson': 'mixed' }),
-  controlHorario: ControlHorarioSchema.optional().meta({ 'x-bson': 'mixed' }),
-  //
-  nroDeSistema: z.string().optional(),
-  //
-  estadoCuenta: z.custom<estadoCuenta>().optional(),
-  frecReporte: z.number().optional(),
-  idServiciosContratados: z.array(z.string()).optional().meta({ 'x-bson': 'objectId', 'x-ref': 'ServicioContratadoSchema' }),
-  clave: z.string().optional(),
-  contraClave: z.string().optional(),
-  // undefined = usar credenciales del cliente (config.credencialesAlarmas)
-  // @Prop({type: Object}) en el legacy: Mixed.
-  credencialesAlarma: CredencialesAlarmaSchema.optional().meta({ 'x-bson': 'mixed' }),
-  tipoComercio: z.string().optional(),
-  tipoCategoria: z.string().optional(),
-  // Populate
-  domicilio: z.custom<IUbicacion>().optional().meta({
-    'x-populate': { ref: 'UbicacionSchema', localField: 'idDomicilio', foreignField: '_id', justOne: true },
-  }),
-  modelo: ModeloDispositivoSchema.optional().meta({
-    'x-populate': { ref: 'ModeloDispositivoSchema', localField: 'idModelo', foreignField: '_id', justOne: true },
-  }),
-  cliente: ClienteSchema.optional().meta({
-    'x-populate': { ref: 'ClienteSchema', localField: 'idCliente', foreignField: '_id', justOne: true },
-  }),
-  ancestros: z.array(ClienteSchema).optional().meta({
-    'x-populate': { ref: 'ClienteSchema', localField: 'idsAncestros', foreignField: '_id', justOne: false },
-  }),
-  camaras: z.array(CamaraSchema).optional().meta({
-    'x-populate': { ref: 'CamaraSchema', localField: 'idsCamaras', foreignField: '_id', justOne: false },
-  }),
-  serviciosContratados: z.array(ServicioContratadoSchema).optional().meta({
-    'x-populate': { ref: 'ServicioContratadoSchema', localField: 'idServiciosContratados', foreignField: '_id', justOne: false },
-  }),
-  clientesQuePuedenAtenderEventosTecnicos: z.array(ClienteSchema).optional().meta({
-    'x-populate': { ref: 'ClienteSchema', localField: 'idsClientesQuePuedenAtenderEventosTecnicos', foreignField: '_id', justOne: false },
-  }),
-  sim1: z.custom<ISim>().optional().meta({
-    'x-populate': { ref: 'SimSchema', localField: 'idSim1', foreignField: '_id', justOne: true },
-  }),
-  sim2: z.custom<ISim>().optional().meta({
-    'x-populate': { ref: 'SimSchema', localField: 'idSim2', foreignField: '_id', justOne: true },
-  }),
-}).meta({ 'x-collection': 'dispositivoalarmas' });
+export const DispositivoAlarmaSchema = z
+  .object({
+    _id: z.string().optional(),
+    //
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
+    // Doble canal (primario/secundario). `reportaDoble` se autodetecta en el gateway
+    // cuando un mismo evento llega por ambos puertos dentro de la ventana de gracia.
+    // `fechaUltimoReporteDoble` marca la última confirmación (para envejecer el flag).
+    // `forzarUnCanal` = escotilla manual: no esperar el 2do canal aunque sea dual.
+    reportaDoble: z.boolean().optional(),
+    // SIN x-bson pese al nombre "fecha*": es Go-nativo (no tiene @Prop en el
+    // schema Mongoose legacy) y gestion-api-alarmas lo escribe como string ISO
+    // (new Date().toISOString()), no como BSON Date. Anotarlo 'date' migraría
+    // el tipo BSON en el próximo write sin que nadie lo decida — el mecanismo
+    // de docs/MIGRACION.md item 12 (valores.timestamp). Decisión pendiente,
+    // ver §7 item 23.
+    fechaUltimoReporteDoble: z.string().optional(),
+    forzarUnCanal: z.boolean().optional(),
+    // Comunicador(es) físicos de la alarma — ver ComunicadorAlarmaSchema.
+    comunicadores: z
+      .array(ComunicadorAlarmaSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
+    idUnicoComunicador: z.string().optional(),
+    idModelo: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ModeloDispositivoSchema' }),
+    idDomicilio: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UbicacionSchema' }),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    nombre: z.string().optional(),
+    numeroAbonado: z.string().optional().meta({ 'x-setter': 'uppercase' }),
+    idSim1: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
+    idSim2: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
+    idsClientesQuePuedenAtender: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsClientesQuePuedenAtenderEventosTecnicos: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    puedeSolicitarServicioTecnico: z.boolean().optional(),
+    // @Prop({type: [Object]}) en el legacy: array real (se inicializa a []) de Mixed.
+    configHorariosAtencion: z
+      .array(ConfigHorarioSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
+    configHorariosAtencionTecnica: z
+      .array(ConfigHorarioSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
+    // @Prop({type: Object}) en el legacy: escalar Mixed pese al tipo TS array.
+    camarasPorZona: z
+      .array(CamaraAlarmaSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
+    idsCamaras: z.array(z.string()).optional(),
+    // @Prop() armado?: boolean[] sin `type` explícito: @nestjs/mongoose refleja
+    // Array y lo resuelve a Mixed (sin caster propio), no a [Boolean]. Medido en
+    // prod: hay documentos con `armado` array Y documentos con `armado` boolean
+    // escalar (heterogéneo de verdad) — ver docs/MIGRACION.md §7 item 23.
+    armado: z.array(z.boolean()).optional().meta({ 'x-bson': 'mixed' }),
+    armadoPor: z.array(z.union([z.string(), z.null()])).optional(),
+    // UNICOM: estado de armado con semántica propia (total/perimetral/selectivo).
+    // Additive — NO reemplaza `armado`/`TiposDeArmado` (uso productivo de otras alarmas).
+    // @Prop({type: Object}) en el legacy: Mixed.
+    estadoArmadoUnicom: EstadoArmadoUnicomSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    configUnicom: ConfigComunicadorUnicomSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
+    ultimoEstadoUnicom: UltimoEstadoUnicomSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    imagenes: z.array(z.string()).optional(),
+    modoDesactivado: ModoDesactivadoSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    infoZonas: z
+      .array(ParticionZonaSchema)
+      .optional()
+      .meta({ 'x-bson': 'mixed' }),
+    controlHorario: ControlHorarioSchema.optional().meta({ 'x-bson': 'mixed' }),
+    //
+    nroDeSistema: z.string().optional(),
+    //
+    estadoCuenta: z.custom<estadoCuenta>().optional(),
+    frecReporte: z.number().optional(),
+    idServiciosContratados: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ServicioContratadoSchema' }),
+    clave: z.string().optional(),
+    contraClave: z.string().optional(),
+    // undefined = usar credenciales del cliente (config.credencialesAlarmas)
+    // @Prop({type: Object}) en el legacy: Mixed.
+    credencialesAlarma: CredencialesAlarmaSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    tipoComercio: z.string().optional(),
+    tipoCategoria: z.string().optional(),
+    // Populate
+    domicilio: z
+      .custom<IUbicacion>()
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'UbicacionSchema',
+          localField: 'idDomicilio',
+          foreignField: '_id',
+          justOne: true,
+        },
+      }),
+    modelo: ModeloDispositivoSchema.optional().meta({
+      'x-populate': {
+        ref: 'ModeloDispositivoSchema',
+        localField: 'idModelo',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsAncestros',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    camaras: z
+      .array(CamaraSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'CamaraSchema',
+          localField: 'idsCamaras',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    serviciosContratados: z
+      .array(ServicioContratadoSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ServicioContratadoSchema',
+          localField: 'idServiciosContratados',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    clientesQuePuedenAtenderEventosTecnicos: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsClientesQuePuedenAtenderEventosTecnicos',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    sim1: z
+      .custom<ISim>()
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'SimSchema',
+          localField: 'idSim1',
+          foreignField: '_id',
+          justOne: true,
+        },
+      }),
+    sim2: z
+      .custom<ISim>()
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'SimSchema',
+          localField: 'idSim2',
+          foreignField: '_id',
+          justOne: true,
+        },
+      }),
+  })
+  .meta({ 'x-collection': 'dispositivoalarmas' });
 /**
  * Interface hand-written (misma forma que el schema): los tipos de entidad del
  * SCC no usan z.infer para no arrastrar el ciclo en el declaration emit.
