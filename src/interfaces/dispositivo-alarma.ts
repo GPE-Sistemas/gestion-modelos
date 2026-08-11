@@ -263,14 +263,10 @@ export const DispositivoAlarmaSchema = z
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
     nombre: z.string().optional(),
     numeroAbonado: z.string().optional().meta({ 'x-setter': 'uppercase' }),
-    idSim1: z
-      .string()
-      .optional()
-      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
-    idSim2: z
-      .string()
-      .optional()
-      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
+    // FK plana a `sims` (cast objectId). Populate por virtuals nombrados
+    // sim1/sim2 (x-populate), NO in-place — mismo patrón que `comunicador`. Sin x-ref.
+    idSim1: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    idSim2: z.string().optional().meta({ 'x-bson': 'objectId' }),
     idsClientesQuePuedenAtender: z
       .array(z.string())
       .optional()

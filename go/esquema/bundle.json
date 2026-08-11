@@ -8112,12 +8112,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idsClientesQuePuedenAtender": {
@@ -16373,12 +16371,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "frecReporte": {
@@ -18686,12 +18682,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idsClientesQuePuedenAtender": {
@@ -18906,12 +18900,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idsClientesQuePuedenAtender": {
@@ -40412,12 +40404,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "frecReporte": {
@@ -40543,12 +40533,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "frecReporte": {
@@ -44479,12 +44467,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idsClientesQuePuedenAtender": {
@@ -52672,12 +52658,10 @@
     },
     "idSim1": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "idSim2": {
      "x-bson": "objectId",
-     "x-ref": "SimSchema",
      "type": "string"
     },
     "frecReporte": {

@@ -100,14 +100,11 @@ export const TrackerSchema = z
     telefono: TelefonoSchema.optional().meta({ 'x-bson': 'mixed' }),
     estadoCuenta: z.custom<estadoCuenta>().optional(),
     numeroAbonado: z.string().optional(),
-    idSim1: z
-      .string()
-      .optional()
-      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
-    idSim2: z
-      .string()
-      .optional()
-      .meta({ 'x-bson': 'objectId', 'x-ref': 'SimSchema' }),
+    // FK plana a `sims` (cast objectId para filtros). El populate va por los
+    // virtuals nombrados sim1/sim2 (x-populate), NO in-place — mismo patrón que
+    // `comunicador` y que la SIM de seguridad. Por eso SIN x-ref.
+    idSim1: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    idSim2: z.string().optional().meta({ 'x-bson': 'objectId' }),
     frecReporte: z.number().optional(),
     // Activa/desactiva remotamente el tracking GPS (solo aplica a tipo='Telefono').
     // Post-cutover (comentado/PAUSADO en el legacy archivado); sin @Prop ahí,
