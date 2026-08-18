@@ -244,7 +244,11 @@ export const ReporteTrackerOBDSchema = z
     rpm: z.number().optional(), // Revoluciones del motor
     velocidad: z.number().optional(), // Velocidad del vehículo (km/h) según CAN
     temperaturaRefrigerante: z.number().optional(), // °C
-    consumoCombustible: z.number().optional(), // L/100km o L/h
+    consumoCombustible: z.number().optional(), // Consumo instantáneo
+    // Desambigua `consumoCombustible`: el mismo campo es L/h (consumo por
+    // tiempo, típico de OBD en ralentí) o L/100km (consumo por distancia)
+    // según el equipo. Sin esto un número suelto no se puede interpretar.
+    consumoCombustibleUnidad: z.enum(['L/h', 'L/100km']).optional(),
     nivelCombustible: z.number().optional(), // Nivel de combustible
     nivelCombustibleUnidad: z.enum(['L', '%']).optional(),
     autonomia: z.number().optional(), // Km estimados con el combustible restante (hm)
@@ -255,6 +259,13 @@ export const ReporteTrackerOBDSchema = z
     combustibleRalenti: z.number().optional(), // Combustible consumido en ralentí
     combustibleRalentiUnidad: z.enum(['L', 'K']).optional(),
     temperaturaAmbiente: z.number().optional(), // °C
+    // PIDs estándar de OBD-II que no reporta Queclink pero sí TopFlyTech
+    // (TorchX). Van con el nombre canónico para que un consumidor no tenga
+    // que saber de qué equipo vino el dato.
+    cargaMotor: z.number().optional(), // % de carga del motor (PID 0x04)
+    presionAdmision: z.number().optional(), // kPa, presión del múltiple (PID 0x0B)
+    temperaturaAdmision: z.number().optional(), // °C del aire de admisión (PID 0x0F)
+    flujoAire: z.number().optional(), // g/s del caudalímetro (PID 0x10)
     dtc: z.array(z.string()).optional(), // Códigos de falla activos (DTC)
     canMaskRaw: z.string().optional(), // <CAN Bus Report Mask> crudo (diagnóstico)
     _parcial: z.boolean().optional(), // true si quedó un sub-bloque sin parsear (ver rawTail)
@@ -272,8 +283,9 @@ export const ReporteTracker4GSchema = ReporteTrackerSchema.extend({
   triperoStateDuration: z.number().optional(),
   triperoCurrentTripId: z.string().optional(),
   triperoCurrentTripDistance: z.number().optional(),
-  // Telemetría OBD/CAN del vehículo (ej: Queclink GV350CEU, reporte ERI con
-  // <ERI Mask> bit 2). Presente solo cuando el equipo está cableado al CAN bus.
+  // Telemetría OBD/CAN del vehículo (ej: Queclink GV350CEU con el bit 2 del
+  // <ERI Mask>, o TopFlyTech TorchX enchufado al OBDII). Presente solo cuando
+  // el equipo puede leer el bus del vehículo.
   obd: ReporteTrackerOBDSchema.optional(),
 });
 export type IReporteTracker4G = z.infer<typeof ReporteTracker4GSchema>;
