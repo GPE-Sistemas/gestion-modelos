@@ -246,6 +246,10 @@ export const AccionesRolSchema = z.enum([
   'Luminarias - Crear puestas',
   'Luminarias - Editar puestas',
   'Luminarias - Eliminar puestas',
+  // Zonas
+  'Luminarias - Crear zonas',
+  'Luminarias - Editar zonas',
+  'Luminarias - Eliminar zonas',
   // *******************************************
   // MODULO ACTIVOS
   // *******************************************
@@ -411,14 +415,17 @@ export const RolSchema = z
         justOne: true,
       },
     }),
-    ancestros: z.array(ClienteSchema).optional().meta({
-      'x-populate': {
-        ref: 'ClienteSchema',
-        localField: 'idsAncestros',
-        foreignField: '_id',
-        justOne: false,
-      },
-    }),
+    ancestros: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsAncestros',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
   })
   .meta({ 'x-collection': 'rols' });
 export type IRol = z.infer<typeof RolSchema>;
