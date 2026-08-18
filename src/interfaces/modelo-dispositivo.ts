@@ -46,6 +46,33 @@ export const ProtocoloComunicadorSchema = z.enum([
 ]);
 export type ProtocoloComunicador = z.infer<typeof ProtocoloComunicadorSchema>;
 
+// Puerto (y transporte) donde gestion-api-alarmas escucha cada protocolo —
+// ver la instanciación de cada servidor en src/index.ts de ese repo. Es
+// informativo (para mostrar en el alta de modelo comunicador); no se
+// persiste en ningún documento. `puertoSecundario` es el canal backup,
+// siempre puerto primario + 100, salvo 'unicom' que no expone un puerto
+// propio: se conecta como cliente MQTT saliente a UNICOM_BROKER_URL.
+export const PUERTOS_PROTOCOLO_COMUNICADOR: Record<
+  ProtocoloComunicador,
+  { puerto?: number; puertoSecundario?: number; transporte: string }
+> = {
+  'alarma-irix': { puerto: 6050, puertoSecundario: 6150, transporte: 'TCP' },
+  avatis: { puerto: 6010, puertoSecundario: 6110, transporte: 'UDP' },
+  dahua: { puerto: 6030, puertoSecundario: 6130, transporte: 'TCP' },
+  'garnet-titanium': {
+    puerto: 6020,
+    puertoSecundario: 6120,
+    transporte: 'UDP',
+  },
+  hikvision: { puerto: 6040, puertoSecundario: 6140, transporte: 'TCP' },
+  intelbras: { puerto: 9009, puertoSecundario: 9109, transporte: 'TCP' },
+  kummert: { puerto: 6060, puertoSecundario: 6160, transporte: 'TCP' },
+  lantrix: { puerto: 7000, puertoSecundario: 7100, transporte: 'TCP/UDP' },
+  nanocom: { puerto: 6000, puertoSecundario: 6100, transporte: 'UDP' },
+  netio: { puerto: 6000, puertoSecundario: 6100, transporte: 'TCP' },
+  unicom: { transporte: 'MQTT (saliente, UNICOM_BROKER_URL)' },
+};
+
 export const NivelDimerizacionSchema = z.enum([
   'dim10',
   'dim20',
