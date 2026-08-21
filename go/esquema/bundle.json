@@ -13571,6 +13571,22 @@
      "x-bson": "mixed",
      "$ref": "#/$defs/ConfigCumplimientoRecorridoSchema"
     },
+    "tipoMedicion": {
+     "type": "string",
+     "enum": [
+      "traza",
+      "puntos"
+     ]
+    },
+    "idActivo": {
+     "x-bson": "objectId",
+     "x-ref": "ActivoSchema",
+     "type": "string"
+    },
+    "ventana": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/VentanaRecorridoSchema"
+    },
     "ancestros": {
      "x-populate": {
       "ref": "ClienteSchema",
@@ -31402,6 +31418,9 @@
     },
     "tiempoParada": {
      "type": "number"
+    },
+    "radioMetros": {
+     "type": "number"
     }
    },
    "additionalProperties": false
@@ -32686,6 +32705,22 @@
     "geometria": {
      "x-bson": "mixed",
      "$ref": "#/$defs/GeometriaRecorridoSchema"
+    },
+    "tipoMedicion": {
+     "type": "string",
+     "enum": [
+      "traza",
+      "puntos"
+     ]
+    },
+    "idActivo": {
+     "x-bson": "objectId",
+     "x-ref": "ActivoSchema",
+     "type": "string"
+    },
+    "ventana": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/VentanaRecorridoSchema"
     },
     "cliente": {
      "x-populate": {
@@ -49915,6 +49950,22 @@
      "x-bson": "mixed",
      "$ref": "#/$defs/ConfigCumplimientoRecorridoSchema"
     },
+    "tipoMedicion": {
+     "type": "string",
+     "enum": [
+      "traza",
+      "puntos"
+     ]
+    },
+    "idActivo": {
+     "x-bson": "objectId",
+     "x-ref": "ActivoSchema",
+     "type": "string"
+    },
+    "ventana": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/VentanaRecorridoSchema"
+    },
     "ancestros": {
      "x-populate": {
       "ref": "ClienteSchema",
@@ -54133,6 +54184,20 @@
     },
     "eliminarUsuario": {
      "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
+  "VentanaRecorridoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/VentanaRecorridoSchema",
+   "type": "object",
+   "properties": {
+    "fechaDesde": {
+     "type": "string"
+    },
+    "fechaHasta": {
+     "type": "string"
     }
    },
    "additionalProperties": false
