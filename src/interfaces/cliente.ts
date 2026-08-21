@@ -42,6 +42,41 @@ export const IntegracionSoflexSchema = z.object({
 });
 export type IIntegracionSoflex = z.infer<typeof IntegracionSoflexSchema>;
 
+/** Integración con el esquema "Objetivos AVL" de la DGSPCB (Ciudad de Buenos
+ *  Aires). Ante una emergencia declarada por el operador de monitoreo (Carta
+ *  Policial generada en e911), se reenvían las posiciones del vehículo a la
+ *  API de Suite911 hasta que Policía de la Ciudad cierra el evento.
+ *
+ *  Va en el cliente y no en una env var del servicio porque el token lo emite
+ *  Soflex S.A. (proveedor de Suite911) por Prestador de Seguridad Privada
+ *  habilitado: cada prestador que opera sobre la plataforma tiene el suyo.
+ *
+ *  Los datos que cambian en cada emergencia (deviceid, nro de carta, ventana
+ *  de reenvío) NO van acá: viven en la ConfigReenvio del vehículo
+ *  (`opcionesReenvio.opcionesObjetivoAVL` + `periodoInicio`/`periodoFin`). */
+export const IntegracionObjetivosAVLSchema = z.object({
+  /** Habilita el módulo para el cliente. Sin esto no se puede declarar una
+   *  emergencia AVL ni crear la config de reenvío. */
+  activo: z.boolean().optional(),
+  /** URL base de la API de recepción de posiciones. El POST se arma como
+   *  `{url}/posicion`.
+   *  QA (compartida entre todos los prestadores, coordinar antes de usar):
+   *  https://objetivosmoviles.seguridadciudad.gob.ar/ws_alarmasMoviles_QA/index.php */
+  url: z.string().optional(),
+  /** Token otorgado por Soflex S.A. Viaja en el header `token` de cada
+   *  request (no es `Authorization: Bearer`). */
+  token: z.string().optional(),
+  /** Corte automático del reenvío: minutos desde la declaración de la
+   *  emergencia. Se usa como default de `periodoFin` al crear la config.
+   *  El cierre real lo decide Policía de la Ciudad; esto es la red de
+   *  seguridad que pide el instructivo para no transmitir indefinidamente.
+   *  Ausente = default del backend. */
+  minutosDuracion: z.number().optional(),
+});
+export type IIntegracionObjetivosAVL = z.infer<
+  typeof IntegracionObjetivosAVLSchema
+>;
+
 /** Control de inactividad de operadores (popup de confirmación de actividad
  *  en gestion-web-cliente). Aplica a usuarios con rol Operador. */
 export const ControlInactividadSchema = z.object({
@@ -328,6 +363,7 @@ export const ConfigClienteSchema = z.object({
   solicitantePredeterminado: z.string().optional(),
   credencialesAlarmas: z.array(CredencialesAlarmaSchema).optional(),
   integracionSoflex: IntegracionSoflexSchema.optional(),
+  integracionObjetivosAVL: IntegracionObjetivosAVLSchema.optional(),
   verTrafico: z.boolean().optional(),
   controlInactividad: ControlInactividadSchema.optional(),
   controlActividad: ControlActividadSchema.optional(),

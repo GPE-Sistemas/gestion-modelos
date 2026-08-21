@@ -11,6 +11,7 @@ export const MetodoReenvioSchema = z.enum([
   'Cersat',
   'Iron Tracking',
   'Logictracker',
+  'Objetivo AVL',
 ]);
 export type MetodoReenvio = z.infer<typeof MetodoReenvioSchema>;
 
@@ -39,6 +40,21 @@ export const SoflexConfigSchema = z.object({
 });
 export type ISoflexConfig = z.infer<typeof SoflexConfigSchema>;
 
+/** Datos propios de cada emergencia declarada en el esquema "Objetivos AVL"
+ *  de la DGSPCB. Las credenciales (url + token) NO van acá: son del prestador
+ *  y viven en `cliente.config.integracionObjetivosAVL`. */
+export const ObjetivoAVLConfigSchema = z.object({
+  /** Identificador del dispositivo que reporta la posición. Tiene que ser
+   *  EXACTAMENTE el mismo que el operador cargó al dar de alta el Suceso en
+   *  e911, o Suite911 no puede vincular la posición a la Carta Policial. */
+  deviceid: z.string().optional(),
+  /** Número de Carta Policial que originó la emergencia. La API de posiciones
+   *  no lo exige, pero el instructivo lo recomienda para trazabilidad y es lo
+   *  que se usa para cualquier gestión posterior con Policía de la Ciudad. */
+  nroCarta: z.string().optional(),
+});
+export type IObjetivoAVLConfig = z.infer<typeof ObjetivoAVLConfigSchema>;
+
 export const OpcionesReenvioSchema = z.object({
   metodo: MetodoReenvioSchema.optional(),
   host: z.string().optional(),
@@ -50,6 +66,7 @@ export const OpcionesReenvioSchema = z.object({
   usaReglaReenvio: z.boolean().optional(),
   reglasReenvio: z.array(ReglaReenvioSchema).optional(), //Especifica condiciones de cómo reenviar, dependiendo de cómo llegó la data recibida
   opcionesSoflex: SoflexConfigSchema.optional(),
+  opcionesObjetivoAVL: ObjetivoAVLConfigSchema.optional(),
 });
 export type IOpcionesReenvio = z.infer<typeof OpcionesReenvioSchema>;
 
