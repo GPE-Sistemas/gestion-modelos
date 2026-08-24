@@ -13495,6 +13495,52 @@
    },
    "additionalProperties": false
   },
+  "CreateRecorridoDinamicoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateRecorridoDinamicoSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "color": {
+     "type": "string"
+    },
+    "geojson": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/GeoJSONLineStringSchema"
+    },
+    "paradas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ParadaDinamicaSchema"
+     }
+    },
+    "idActivo": {
+     "x-bson": "objectId",
+     "x-ref": "ActivoSchema",
+     "type": "string"
+    },
+    "ventana": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/VentanaRecorridoSchema"
+    }
+   },
+   "additionalProperties": false
+  },
   "CreateRecorridoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/CreateRecorridoSchema",
@@ -13570,22 +13616,6 @@
     "cumplimiento": {
      "x-bson": "mixed",
      "$ref": "#/$defs/ConfigCumplimientoRecorridoSchema"
-    },
-    "tipoMedicion": {
-     "type": "string",
-     "enum": [
-      "traza",
-      "puntos"
-     ]
-    },
-    "idActivo": {
-     "x-bson": "objectId",
-     "x-ref": "ActivoSchema",
-     "type": "string"
-    },
-    "ventana": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/VentanaRecorridoSchema"
     },
     "ancestros": {
      "x-populate": {
@@ -18169,6 +18199,27 @@
    ],
    "additionalProperties": false
   },
+  "DetalleCumplimientoDinamicoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DetalleCumplimientoDinamicoSchema",
+   "type": "object",
+   "properties": {
+    "cumplio": {
+     "type": "boolean"
+    },
+    "calculadoEn": {
+     "type": "string"
+    },
+    "puntos": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/DetallePuntoCumplimientoSchema"
+     }
+    }
+   },
+   "additionalProperties": false,
+   "x-bson": "mixed"
+  },
   "DetalleGastoCategoriaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/DetalleGastoCategoriaSchema",
@@ -18181,6 +18232,40 @@
      "type": "number"
     }
    },
+   "additionalProperties": false
+  },
+  "DetallePuntoCumplimientoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DetallePuntoCumplimientoSchema",
+   "type": "object",
+   "properties": {
+    "nombre": {
+     "type": "string"
+    },
+    "direccion": {
+     "type": "string"
+    },
+    "coordenadas": {
+     "$ref": "#/$defs/CoordenadasSchema"
+    },
+    "visitado": {
+     "type": "boolean"
+    },
+    "horaLlegada": {
+     "type": "string"
+    },
+    "horaSalida": {
+     "type": "string"
+    },
+    "permanenciaSegundos": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "coordenadas",
+    "visitado",
+    "permanenciaSegundos"
+   ],
    "additionalProperties": false
   },
   "DetallesEmergenciasSchema": {
@@ -31375,6 +31460,31 @@
    },
    "additionalProperties": false
   },
+  "ParadaDinamicaSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ParadaDinamicaSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "geojson": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/GeoJSONPointSchema"
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "direccion": {
+     "type": "string"
+    },
+    "radioMetros": {
+     "type": "number"
+    }
+   },
+   "additionalProperties": false
+  },
   "ParadaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ParadaSchema",
@@ -31417,9 +31527,6 @@
      "$ref": "#/$defs/TipoParadaSchema"
     },
     "tiempoParada": {
-     "type": "number"
-    },
-    "radioMetros": {
      "type": "number"
     }
    },
@@ -32623,6 +32730,88 @@
    "additionalProperties": false,
    "x-collection": "recordatorios"
   },
+  "RecorridoDinamicoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/RecorridoDinamicoSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "color": {
+     "type": "string"
+    },
+    "geojson": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/GeoJSONLineStringSchema"
+    },
+    "paradas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ParadaDinamicaSchema"
+     }
+    },
+    "idActivo": {
+     "x-bson": "objectId",
+     "x-ref": "ActivoSchema",
+     "type": "string"
+    },
+    "ventana": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/VentanaRecorridoSchema"
+    },
+    "detalleCumplimiento": {
+     "$ref": "#/$defs/DetalleCumplimientoDinamicoSchema"
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "ancestros": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idsAncestros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ClienteSchema"
+     }
+    },
+    "activo": {
+     "x-populate": {
+      "ref": "ActivoSchema",
+      "localField": "idActivo",
+      "foreignField": "_id",
+      "justOne": true
+     }
+    }
+   },
+   "additionalProperties": false,
+   "x-collection": "recorridosdinamicos"
+  },
   "RecorridoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/RecorridoSchema",
@@ -32705,22 +32894,6 @@
     "geometria": {
      "x-bson": "mixed",
      "$ref": "#/$defs/GeometriaRecorridoSchema"
-    },
-    "tipoMedicion": {
-     "type": "string",
-     "enum": [
-      "traza",
-      "puntos"
-     ]
-    },
-    "idActivo": {
-     "x-bson": "objectId",
-     "x-ref": "ActivoSchema",
-     "type": "string"
-    },
-    "ventana": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/VentanaRecorridoSchema"
     },
     "cliente": {
      "x-populate": {
@@ -49874,6 +50047,55 @@
    },
    "additionalProperties": false
   },
+  "UpdateRecorridoDinamicoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdateRecorridoDinamicoSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "color": {
+     "type": "string"
+    },
+    "geojson": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/GeoJSONLineStringSchema"
+    },
+    "paradas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ParadaDinamicaSchema"
+     }
+    },
+    "idActivo": {
+     "x-bson": "objectId",
+     "x-ref": "ActivoSchema",
+     "type": "string"
+    },
+    "ventana": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/VentanaRecorridoSchema"
+    },
+    "detalleCumplimiento": {
+     "$ref": "#/$defs/DetalleCumplimientoDinamicoSchema"
+    }
+   },
+   "additionalProperties": false
+  },
   "UpdateRecorridoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/UpdateRecorridoSchema",
@@ -49949,22 +50171,6 @@
     "cumplimiento": {
      "x-bson": "mixed",
      "$ref": "#/$defs/ConfigCumplimientoRecorridoSchema"
-    },
-    "tipoMedicion": {
-     "type": "string",
-     "enum": [
-      "traza",
-      "puntos"
-     ]
-    },
-    "idActivo": {
-     "x-bson": "objectId",
-     "x-ref": "ActivoSchema",
-     "type": "string"
-    },
-    "ventana": {
-     "x-bson": "mixed",
-     "$ref": "#/$defs/VentanaRecorridoSchema"
     },
     "ancestros": {
      "x-populate": {
@@ -54059,6 +54265,11 @@
      "x-ref": "RecorridoSchema",
      "type": "string"
     },
+    "idRecorridoDinamico": {
+     "x-bson": "objectId",
+     "x-ref": "RecorridoDinamicoSchema",
+     "type": "string"
+    },
     "idsRecorridos": {
      "x-bson": "objectId",
      "x-ref": "RecorridoSchema",
@@ -54122,6 +54333,11 @@
      "x-ref": "RecorridoSchema",
      "type": "string"
     },
+    "idRecorridoDinamico": {
+     "x-bson": "objectId",
+     "x-ref": "RecorridoDinamicoSchema",
+     "type": "string"
+    },
     "idsRecorridos": {
      "x-bson": "objectId",
      "x-ref": "RecorridoSchema",
@@ -54151,6 +54367,14 @@
      "x-populate": {
       "ref": "RecorridoSchema",
       "localField": "idRecorrido",
+      "foreignField": "_id",
+      "justOne": true
+     }
+    },
+    "recorridoDinamico": {
+     "x-populate": {
+      "ref": "RecorridoDinamicoSchema",
+      "localField": "idRecorridoDinamico",
       "foreignField": "_id",
       "justOne": true
      }

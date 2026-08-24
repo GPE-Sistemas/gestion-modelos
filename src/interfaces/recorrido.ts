@@ -36,12 +36,6 @@ export const ParadaSchema = z.object({
    * Tiempo que se suma al recorrido, es lo que se estima que tarda el colectivo en esa parada
    */
   tiempoParada: z.number().optional(),
-  /**
-   * Radio en metros del geofence del punto, usado por el cumplimiento por
-   * puntos (categoría 'Vehiculo', `tipoMedicion: 'puntos'`). Sin este campo
-   * no hay geofence: el punto no aplica a esa medición.
-   */
-  radioMetros: z.number().optional(),
 });
 export type IParada = z.infer<typeof ParadaSchema>;
 
@@ -52,16 +46,6 @@ export const FranjaHorariaSchema = z.object({
   frecuenciaMinutos: z.number().optional(),
 });
 export type IFranjaHoraria = z.infer<typeof FranjaHorariaSchema>;
-
-/**
- * Ventana de fecha/hora puntual (no recurrente) en la que se espera que un
- * vehículo haga un recorrido de puntos (`tipoMedicion: 'puntos'`).
- */
-export const VentanaRecorridoSchema = z.object({
-  fechaDesde: z.string().optional(),
-  fechaHasta: z.string().optional(),
-});
-export type IVentanaRecorrido = z.infer<typeof VentanaRecorridoSchema>;
 
 export const CategoriaRecorridoSchema = z.enum(['Colectivo', 'Vehiculo']);
 export type ICategoriaRecorrido = z.infer<typeof CategoriaRecorridoSchema>;
@@ -212,28 +196,6 @@ export const RecorridoSchema = z.object({
     'x-bson': 'mixed',
   }),
   geometria: GeometriaRecorridoSchema.optional().meta({ 'x-bson': 'mixed' }),
-  /**
-   * Distingue el cumplimiento por cobertura de la traza completa (`'traza'`,
-   * el histórico, mide con `cumplimiento`/`geometria`) del cumplimiento por
-   * visita a cada parada (`'puntos'`, mide tiempo de permanencia por punto
-   * contra `paradas[].radioMetros` y la `ventana`). Sólo aplica a categoría
-   * 'Vehiculo'. Sin este campo se asume `'traza'` (comportamiento actual).
-   */
-  tipoMedicion: z.enum(['traza', 'puntos']).optional(),
-  /**
-   * Vehículo dueño de este recorrido de puntos (1:1, no es una plantilla
-   * reusable como los recorridos de colectivo). Sólo aplica cuando
-   * `tipoMedicion === 'puntos'`.
-   */
-  idActivo: z
-    .string()
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ActivoSchema' }),
-  /**
-   * Ventana de fecha/hora puntual en la que se espera que el vehículo haga
-   * este recorrido de puntos. Sólo aplica cuando `tipoMedicion === 'puntos'`.
-   */
-  ventana: VentanaRecorridoSchema.optional().meta({ 'x-bson': 'mixed' }),
   // Populate
   cliente: ClienteSchema.optional().meta({
     'x-populate': {
@@ -305,9 +267,6 @@ export interface IRecorrido {
   // Cumplimiento (categoría 'Vehiculo')
   cumplimiento?: IConfigCumplimientoRecorrido;
   geometria?: IGeometriaRecorrido;
-  tipoMedicion?: 'traza' | 'puntos';
-  idActivo?: string;
-  ventana?: IVentanaRecorrido;
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
