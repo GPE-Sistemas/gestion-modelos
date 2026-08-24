@@ -202,6 +202,25 @@ export const UltimoEstadoUnicomSchema = z.object({
 });
 export type IUltimoEstadoUnicom = z.infer<typeof UltimoEstadoUnicomSchema>;
 
+/// UNICOM: walk test de sensores. Con el diagnóstico encendido (CONFIG,171) el panel
+/// reporta, por cada sensor que se dispara, su entrada REAL de la tabla — `crf` =
+/// código RF (3 bytes) + atributo (1 byte). Es la única forma de verificar que la
+/// base coincide con el equipo: el panel no expone lectura de su tabla.
+export const ReporteWalkTestSchema = z.object({
+  slot: z.number().optional(), // índice en la tabla del panel (zona = slot + 1)
+  crf: z.string().optional(), // 8 hex, minúscula
+  fecha: z.string().optional(), // ISO
+});
+export type IReporteWalkTest = z.infer<typeof ReporteWalkTestSchema>;
+
+export const WalkTestUnicomSchema = z.object({
+  activo: z.boolean().optional(),
+  iniciado: z.string().optional(), // ISO
+  vence: z.string().optional(), // ISO, iniciado + 5 min
+  reportes: z.array(ReporteWalkTestSchema).optional(), // dedup por crf, tope 32
+});
+export type IWalkTestUnicom = z.infer<typeof WalkTestUnicomSchema>;
+
 /// Config por dispositivo del comunicador UNICOM. La identidad es el devid
 /// (= idUnicoComunicador, "uw"+MAC). El broker/credenciales son de flota y
 /// viven a nivel backend (env), NO por dispositivo en DB. Los topics se
@@ -308,6 +327,10 @@ export const DispositivoAlarmaSchema = z
     }),
     // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
     ultimoEstadoUnicom: UltimoEstadoUnicomSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    // UNICOM: último walk test de sensores (persistido por el gateway).
+    ultimoWalkTest: WalkTestUnicomSchema.optional().meta({
       'x-bson': 'mixed',
     }),
     imagenes: z.array(z.string()).optional(),
@@ -472,6 +495,8 @@ export interface IDispositivoAlarma {
   configUnicom?: IConfigComunicadorUnicom;
   // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
   ultimoEstadoUnicom?: IUltimoEstadoUnicom;
+  // UNICOM: último walk test de sensores (persistido por el gateway).
+  ultimoWalkTest?: IWalkTestUnicom;
   imagenes?: string[];
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
