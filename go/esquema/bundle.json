@@ -8202,6 +8202,10 @@
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
     },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
+    },
     "imagenes": {
      "type": "array",
      "items": {
@@ -18772,6 +18776,10 @@
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
     },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
+    },
     "imagenes": {
      "type": "array",
      "items": {
@@ -18989,6 +18997,10 @@
     "ultimoEstadoUnicom": {
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
+    },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
     },
     "imagenes": {
      "type": "array",
@@ -35991,6 +36003,23 @@
    },
    "additionalProperties": false
   },
+  "ReporteWalkTestSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ReporteWalkTestSchema",
+   "type": "object",
+   "properties": {
+    "slot": {
+     "type": "number"
+    },
+    "crf": {
+     "type": "string"
+    },
+    "fecha": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "ResponseAccessoryInfosSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ResponseAccessoryInfosSchema",
@@ -44613,6 +44642,10 @@
     "ultimoEstadoUnicom": {
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
+    },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
     },
     "imagenes": {
      "type": "array",
@@ -54278,6 +54311,29 @@
     },
     "movingDegraded": {
      "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
+  "WalkTestUnicomSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/WalkTestUnicomSchema",
+   "type": "object",
+   "properties": {
+    "activo": {
+     "type": "boolean"
+    },
+    "iniciado": {
+     "type": "string"
+    },
+    "vence": {
+     "type": "string"
+    },
+    "reportes": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ReporteWalkTestSchema"
+     }
     }
    },
    "additionalProperties": false
