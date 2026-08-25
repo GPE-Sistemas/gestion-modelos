@@ -1,10 +1,9 @@
 import { z } from 'zod';
 import {
-  CoordenadasSchema,
   GeoJSONLineStringSchema,
   GeoJSONPointSchema,
-  ICoordenadas,
   IGeoJSONLineString,
+  PuntoCoord,
 } from '../auxiliares';
 import { ClienteSchema, ICliente } from './cliente';
 import type { IActivo } from './activo';
@@ -40,11 +39,20 @@ export type IVentanaRecorrido = z.infer<typeof VentanaRecorridoSchema>;
 export const DetallePuntoCumplimientoSchema = z.object({
   nombre: z.string().optional(),
   direccion: z.string().optional(),
-  coordenadas: CoordenadasSchema,
+  /** [longitud, latitud] */
+  coordenadas: PuntoCoord,
   visitado: z.boolean(),
   horaLlegada: z.string().optional(),
   horaSalida: z.string().optional(),
   permanenciaSegundos: z.number(),
+  /**
+   * El vehículo seguía dentro del radio de la parada en el último reporte
+   * evaluado (todavía no salió, o la ventana terminó con el vehículo ahí
+   * adentro): `horaSalida`/`permanenciaSegundos` reflejan el último reporte
+   * recibido, no una salida real. Si se recalcula más tarde (con más
+   * reportes, o después de que termine la ventana) el valor puede cambiar.
+   */
+  siguioEnZona: z.boolean().optional(),
 });
 export type IDetallePuntoCumplimiento = z.infer<
   typeof DetallePuntoCumplimientoSchema
