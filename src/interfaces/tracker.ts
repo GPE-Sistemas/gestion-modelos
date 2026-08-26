@@ -7,6 +7,10 @@ import {
   IConfigHorario,
 } from './cliente';
 import type { estadoCuenta } from './estado-entidad';
+import {
+  PaquetesDispositivoLorawanSchema,
+  UltimoGatewaySchema,
+} from './dispositivo-lorawan';
 import { ISim, SimSchema } from './sim';
 import {
   IModeloDispositivo,
@@ -26,7 +30,33 @@ export const TipoTrackerSchema = z.enum([
 export type TipoTracker = z.infer<typeof TipoTrackerSchema>;
 
 export const T100bDeviceSchema = z.object({
-  deveui: z.string().optional(),
+  // ── Provisioning en el Network Server (ChirpStack) ───────────────────────
+  deveui: z.string().optional().meta({ 'x-setter': 'uppercase' }),
+  joineui: z.string().optional(),
+  /** OTAA: con esta se completan appKey y nwkKey en deviceKeys. */
+  appkey: z.string().optional(),
+  applicationId: z.string().optional(),
+  deviceProfileId: z.string().optional(),
+  isDisabled: z.boolean().optional(),
+  skipFcntCheck: z.boolean().optional(),
+  tags: z.record(z.string(), z.string()).optional().meta({ 'x-bson': 'mixed' }),
+  variables: z
+    .record(z.string(), z.string())
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
+  servidorLora: z.string().optional(),
+  // ── Telemetría de radio ───────────
+  fechaUltimaComunicacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  /** Horas sin reportar antes de generar el evento "Sin Comunicación". */
+  tiempoLimiteComunicacion: z.number().optional(),
+  /** Señal del dispositivo, expresada en dB. */
+  margin: z.number().optional(),
+  /** Información para calcular la pérdida de paquetes. */
+  paquetes: PaquetesDispositivoLorawanSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
+  /** Gateway con mejor señal en el último uplink capturado. */
+  ultimoGateway: UltimoGatewaySchema.optional().meta({ 'x-bson': 'mixed' }),
 });
 export type IT100bDevice = z.infer<typeof T100bDeviceSchema>;
 
@@ -96,8 +126,11 @@ export const TrackerSchema = z
     uniqueId: z.string().optional(),
     // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
     qualcomm: QualcommDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
-    t1000b: T100bDeviceSchema.optional().meta({ 'x-bson': 'mixed' }),
+    // SIN x-bson: sub-schema REAL, para que sus paths casteen y para que los
+    // updates parciales no pisen el sub-documento entero. Ver T100bDeviceSchema.
+    t1000b: T100bDeviceSchema.optional(),
     telefono: TelefonoSchema.optional().meta({ 'x-bson': 'mixed' }),
+
     estadoCuenta: z.custom<estadoCuenta>().optional(),
     numeroAbonado: z.string().optional(),
     // FK plana a `sims` (cast objectId para filtros). El populate va por los

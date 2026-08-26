@@ -16368,7 +16368,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
@@ -39281,7 +39280,67 @@
    "type": "object",
    "properties": {
     "deveui": {
+     "x-setter": "uppercase",
      "type": "string"
+    },
+    "joineui": {
+     "type": "string"
+    },
+    "appkey": {
+     "type": "string"
+    },
+    "applicationId": {
+     "type": "string"
+    },
+    "deviceProfileId": {
+     "type": "string"
+    },
+    "isDisabled": {
+     "type": "boolean"
+    },
+    "skipFcntCheck": {
+     "type": "boolean"
+    },
+    "tags": {
+     "x-bson": "mixed",
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "variables": {
+     "x-bson": "mixed",
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "servidorLora": {
+     "type": "string"
+    },
+    "fechaUltimaComunicacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "tiempoLimiteComunicacion": {
+     "type": "number"
+    },
+    "margin": {
+     "type": "number"
+    },
+    "paquetes": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/PaquetesDispositivoLorawanSchema"
+    },
+    "ultimoGateway": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/UltimoGatewaySchema"
     }
    },
    "additionalProperties": false
@@ -40483,7 +40542,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
@@ -40612,7 +40670,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
@@ -52741,7 +52798,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
