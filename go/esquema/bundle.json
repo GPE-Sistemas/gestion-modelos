@@ -39321,9 +39321,6 @@
       "type": "string"
      }
     },
-    "servidorLora": {
-     "type": "string"
-    },
     "fechaUltimaComunicacion": {
      "x-bson": "date",
      "type": "string"

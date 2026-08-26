@@ -44,7 +44,6 @@ export const T100bDeviceSchema = z.object({
     .record(z.string(), z.string())
     .optional()
     .meta({ 'x-bson': 'mixed' }),
-  servidorLora: z.string().optional(),
   // ── Telemetría de radio ───────────
   fechaUltimaComunicacion: z.string().optional().meta({ 'x-bson': 'date' }),
   /** Horas sin reportar antes de generar el evento "Sin Comunicación". */
