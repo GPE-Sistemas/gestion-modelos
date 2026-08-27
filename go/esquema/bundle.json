@@ -3963,6 +3963,9 @@
     },
     "controlActividad": {
      "$ref": "#/$defs/ControlActividadSchema"
+    },
+    "tenant": {
+     "$ref": "#/$defs/TenantSchema"
     }
    },
    "additionalProperties": false
@@ -39636,6 +39639,17 @@
     "Equipos fuera de línea",
     "Batería baja"
    ]
+  },
+  "TenantSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TenantSchema",
+   "type": "object",
+   "properties": {
+    "numero": {
+     "type": "number"
+    }
+   },
+   "additionalProperties": false
   },
   "TimingSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",

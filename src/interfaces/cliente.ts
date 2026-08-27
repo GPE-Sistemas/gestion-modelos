@@ -325,6 +325,46 @@ export type ILayerMapaPersonalizado = z.infer<
   typeof LayerMapaPersonalizadoSchema
 >;
 
+/** Separa al cliente en `gestion-api-alarmas`: IP pública propia y bloque de
+ *  puertos internos propio, para que el `idUnicoComunicador` de sus paneles no
+ *  colisione con el de otro cliente.
+ *
+ *  Ser tenant no es lo mismo que estar separado. Todo cliente de nivel 1 es un
+ *  tenant por identidad; solo los que tienen esta config bindean puertos
+ *  propios. Ausente = no separado: el cliente entra por el ingreso original,
+ *  que sigue escuchando en los puertos externos de siempre, y ahí se distingue
+ *  por `idCliente`. */
+export const TenantSchema = z.object({
+  /** Número de bloque de puertos internos. El puerto donde bindea cada
+   *  servidor sale de `numero * 1000 + canal * 100 + marca`, que es el puerto
+   *  externo de la marca con el primer dígito reemplazado por este número:
+   *  dahua primario es 6030 afuera, 1030 adentro para el tenant 1 y 2030 para
+   *  el tenant 2. El puerto externo no cambia nunca — está grabado en el
+   *  firmware del panel — y la traducción la hace el `targetPort` del Service.
+   *
+   *  Arranca en 1, así que 1000 es el primer puerto usable. `6`, `7` y `9`
+   *  están reservados: sus bloques contienen los puertos externos reales
+   *  (6000-6160, 7000, 7100, 9009 y siguientes) que el mismo proceso ya bindea
+   *  para el ingreso original, y bindear dos veces el mismo puerto en el mismo
+   *  netns falla. Quedan 1, 2, 3, 4, 5 y 8.
+   *
+   *  El bloque del tenant 1 arranca abajo de 1024, así que depende de que el
+   *  contenedor conserve `CAP_NET_BIND_SERVICE` — hoy lo tiene porque corre
+   *  como root. Si eso cambia hay que agregarle al pod el sysctl
+   *  `net.ipv4.ip_unprivileged_port_start`.
+   *
+   *  El rango vigente, la unicidad y que el cliente sea de nivel 1 se validan
+   *  en `gestion-api-gestion`: acá no se fijan para no atar el modelo a una
+   *  decisión de infraestructura que puede correrse.
+   *
+   *  Asignarlo o cambiarlo es un cambio de ruteo, no de presentación: necesita
+   *  Service nuevo en el manifest y reinicio del pod para bindear. Renumerar,
+   *  en cambio, es barato: no toca ni la IP ni los puertos externos, así que
+   *  ningún panel instalado se entera. */
+  numero: z.number().optional(),
+});
+export type ITenant = z.infer<typeof TenantSchema>;
+
 export const ConfigClienteSchema = z.object({
   imagenes: ImagenesClienteSchema.optional(),
   tema: TemaClienteSchema.optional(),
@@ -367,6 +407,7 @@ export const ConfigClienteSchema = z.object({
   verTrafico: z.boolean().optional(),
   controlInactividad: ControlInactividadSchema.optional(),
   controlActividad: ControlActividadSchema.optional(),
+  tenant: TenantSchema.optional(),
 });
 export type IConfigCliente = z.infer<typeof ConfigClienteSchema>;
 
