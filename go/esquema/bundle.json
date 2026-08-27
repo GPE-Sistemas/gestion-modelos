@@ -3963,6 +3963,9 @@
     },
     "controlActividad": {
      "$ref": "#/$defs/ControlActividadSchema"
+    },
+    "tenant": {
+     "$ref": "#/$defs/TenantSchema"
     }
    },
    "additionalProperties": false
@@ -8201,6 +8204,10 @@
     "ultimoEstadoUnicom": {
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
+    },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
     },
     "imagenes": {
      "type": "array",
@@ -16410,7 +16417,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
@@ -18884,6 +18890,10 @@
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
     },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
+    },
     "imagenes": {
      "type": "array",
      "items": {
@@ -19101,6 +19111,10 @@
     "ultimoEstadoUnicom": {
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
+    },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
     },
     "imagenes": {
      "type": "array",
@@ -36210,6 +36224,23 @@
    },
    "additionalProperties": false
   },
+  "ReporteWalkTestSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ReporteWalkTestSchema",
+   "type": "object",
+   "properties": {
+    "slot": {
+     "type": "number"
+    },
+    "crf": {
+     "type": "string"
+    },
+    "fecha": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "ResponseAccessoryInfosSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ResponseAccessoryInfosSchema",
@@ -39471,7 +39502,64 @@
    "type": "object",
    "properties": {
     "deveui": {
+     "x-setter": "uppercase",
      "type": "string"
+    },
+    "joineui": {
+     "type": "string"
+    },
+    "appkey": {
+     "type": "string"
+    },
+    "applicationId": {
+     "type": "string"
+    },
+    "deviceProfileId": {
+     "type": "string"
+    },
+    "isDisabled": {
+     "type": "boolean"
+    },
+    "skipFcntCheck": {
+     "type": "boolean"
+    },
+    "tags": {
+     "x-bson": "mixed",
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "variables": {
+     "x-bson": "mixed",
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "fechaUltimaComunicacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "tiempoLimiteComunicacion": {
+     "type": "number"
+    },
+    "margin": {
+     "type": "number"
+    },
+    "paquetes": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/PaquetesDispositivoLorawanSchema"
+    },
+    "ultimoGateway": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/UltimoGatewaySchema"
     }
    },
    "additionalProperties": false
@@ -39770,6 +39858,17 @@
     "Equipos fuera de línea",
     "Batería baja"
    ]
+  },
+  "TenantSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TenantSchema",
+   "type": "object",
+   "properties": {
+    "numero": {
+     "type": "number"
+    }
+   },
+   "additionalProperties": false
   },
   "TimingSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -40673,7 +40772,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
@@ -40802,7 +40900,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
@@ -44832,6 +44929,10 @@
     "ultimoEstadoUnicom": {
      "x-bson": "mixed",
      "$ref": "#/$defs/UltimoEstadoUnicomSchema"
+    },
+    "ultimoWalkTest": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/WalkTestUnicomSchema"
     },
     "imagenes": {
      "type": "array",
@@ -52976,7 +53077,6 @@
      "$ref": "#/$defs/QualcommDeviceSchema"
     },
     "t1000b": {
-     "x-bson": "mixed",
      "$ref": "#/$defs/T100bDeviceSchema"
     },
     "telefono": {
@@ -54578,6 +54678,29 @@
     },
     "movingDegraded": {
      "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
+  "WalkTestUnicomSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/WalkTestUnicomSchema",
+   "type": "object",
+   "properties": {
+    "activo": {
+     "type": "boolean"
+    },
+    "iniciado": {
+     "type": "string"
+    },
+    "vence": {
+     "type": "string"
+    },
+    "reportes": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ReporteWalkTestSchema"
+     }
     }
    },
    "additionalProperties": false

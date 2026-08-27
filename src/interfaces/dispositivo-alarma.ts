@@ -134,6 +134,48 @@ export const SensorPorZonaSchema = z.object({
 });
 export type ISensorPorZona = z.infer<typeof SensorPorZonaSchema>;
 
+/// Modos de zona de un sensor RF UNICOM: el `modoRf` de SensorPorZona ("R###") a su
+/// nombre legible. El panel guarda por sensor un byte de atributo `attr = 0x10 + code`,
+/// donde `code` es el número del modo (R003 -> code 3 -> attr 0x13). Es SUMA, no OR: con
+/// OR los modos altos colisionarían (code 12 y 28 darían ambos 0x1C).
+/// Fuente: gestion-irix-mobile/CONFIGURACION-SERVIDOR.md §3.3 (tabla validada en hardware).
+export const MODOS_ZONA_UNICOM: Record<string, string> = {
+  R000: 'Deshabilitado',
+  R001: 'Interior',
+  R002: 'Perimetral',
+  R003: 'Entrada/Salida',
+  R004: 'Sabotaje',
+  R005: '24Hs Bip de sirena',
+  R006: '24Hs Silencioso',
+  R007: 'Arme/Desarme Perimetral',
+  R008: 'Arme/Desarme Total',
+  R010: 'Ambiente entrada',
+  R011: 'Arme/Desarme Temporizado',
+  R012: '24Hs Invertir PGM',
+  R013: '24Hs Pánico policial',
+  R014: '24Hs Médico',
+  R023: '24Hs beep PGM',
+  R028: 'Pre alarma perimetral',
+  R032: '24Hs Incendio',
+  R033: 'Interior seguidor',
+  R034: 'Activación total',
+  R035: 'Activación perimetral',
+  R036: 'Desactivación',
+  R037: 'Ent/Sal c/campanilla',
+  R040: 'Encender PGM',
+  R041: 'Entrada de usuario',
+  R042: 'Salida de usuario',
+  R044: 'Cruce interior',
+  R045: 'Desarmar c/cód. Asalto',
+  R049: 'Caja fuerte / Int. Silencioso',
+};
+
+/// Nombre del modo a partir del `modoRf` guardado. Devuelve undefined si no está en la
+/// tabla — el llamador decide qué mostrar; nunca inventes un nombre.
+export function nombreModoZonaUnicom(modoRf?: string): string | undefined {
+  return modoRf ? MODOS_ZONA_UNICOM[modoRf] : undefined;
+}
+
 export const ParticionZonaSchema = z.object({
   nombre: z.string().optional(),
   particion: z.number().optional(),
@@ -201,6 +243,25 @@ export const UltimoEstadoUnicomSchema = z.object({
   fecha: z.string().optional(), // ISO del último sts procesado
 });
 export type IUltimoEstadoUnicom = z.infer<typeof UltimoEstadoUnicomSchema>;
+
+/// UNICOM: walk test de sensores. Con el diagnóstico encendido (CONFIG,171) el panel
+/// reporta, por cada sensor que se dispara, su entrada REAL de la tabla — `crf` =
+/// código RF (3 bytes) + atributo (1 byte). Es la única forma de verificar que la
+/// base coincide con el equipo: el panel no expone lectura de su tabla.
+export const ReporteWalkTestSchema = z.object({
+  slot: z.number().optional(), // índice en la tabla del panel (zona = slot + 1)
+  crf: z.string().optional(), // 8 hex, minúscula
+  fecha: z.string().optional(), // ISO
+});
+export type IReporteWalkTest = z.infer<typeof ReporteWalkTestSchema>;
+
+export const WalkTestUnicomSchema = z.object({
+  activo: z.boolean().optional(),
+  iniciado: z.string().optional(), // ISO
+  vence: z.string().optional(), // ISO, iniciado + 5 min
+  reportes: z.array(ReporteWalkTestSchema).optional(), // dedup por crf, tope 32
+});
+export type IWalkTestUnicom = z.infer<typeof WalkTestUnicomSchema>;
 
 /// Config por dispositivo del comunicador UNICOM. La identidad es el devid
 /// (= idUnicoComunicador, "uw"+MAC). El broker/credenciales son de flota y
@@ -308,6 +369,10 @@ export const DispositivoAlarmaSchema = z
     }),
     // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
     ultimoEstadoUnicom: UltimoEstadoUnicomSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
+    // UNICOM: último walk test de sensores (persistido por el gateway).
+    ultimoWalkTest: WalkTestUnicomSchema.optional().meta({
       'x-bson': 'mixed',
     }),
     imagenes: z.array(z.string()).optional(),
@@ -472,6 +537,8 @@ export interface IDispositivoAlarma {
   configUnicom?: IConfigComunicadorUnicom;
   // UNICOM: último estado de energía/panel decodificado del `sts` (persistido por el gateway).
   ultimoEstadoUnicom?: IUltimoEstadoUnicom;
+  // UNICOM: último walk test de sensores (persistido por el gateway).
+  ultimoWalkTest?: IWalkTestUnicom;
   imagenes?: string[];
   modoDesactivado?: IModoDesactivado;
   infoZonas?: IParticionZona[];
