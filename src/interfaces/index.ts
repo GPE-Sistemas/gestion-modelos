@@ -36,6 +36,7 @@ export * from './notificacion';
 export * from './proveedor';
 export * from './recordatorio';
 export * from './recorrido';
+export * from './recorrido-dinamico';
 export * from './servicio';
 export * from './servicio-contratado';
 export * from './facturacion-cliente';

@@ -9,6 +9,7 @@ import type { IModoDesactivado } from './dispositivo-alarma';
 import type { estadoCuenta } from './estado-entidad';
 import type { IGrupo } from './grupo';
 import type { IRecorrido } from './recorrido';
+import type { IRecorridoDinamico } from './recorrido-dinamico';
 import type { ITracker } from './tracker';
 import type { IUsuario } from './usuario';
 
@@ -72,6 +73,15 @@ export const VehiculoSchema = z.object({
     .string()
     .optional()
     .meta({ 'x-bson': 'objectId', 'x-ref': 'RecorridoSchema' }),
+  /**
+   * Recorrido dinámico (por puntos) asignado a este vehículo. Separado de
+   * `idRecorrido` (que es solo para el recorrido de traza/cobertura): un
+   * vehículo puede tener los dos a la vez sin que se pisen.
+   */
+  idRecorridoDinamico: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'RecorridoDinamicoSchema' }),
   idsRecorridos: z
     .array(z.string())
     .optional()
@@ -93,6 +103,14 @@ export const VehiculoSchema = z.object({
     'x-populate': {
       ref: 'RecorridoSchema',
       localField: 'idRecorrido',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  recorridoDinamico: z.custom<IRecorridoDinamico>().optional().meta({
+    'x-populate': {
+      ref: 'RecorridoDinamicoSchema',
+      localField: 'idRecorridoDinamico',
       foreignField: '_id',
       justOne: true,
     },
@@ -124,6 +142,7 @@ export interface IVehiculo {
   //
   idChofer?: string;
   idRecorrido?: string;
+  idRecorridoDinamico?: string;
   idsRecorridos?: string[];
   dentroDelRecorrido?: boolean; // Para seguir el estado de los eventos
   ignicion?: boolean;
@@ -132,17 +151,19 @@ export interface IVehiculo {
   // Populate
   chofer?: IUsuario;
   recorrido?: IRecorrido;
+  recorridoDinamico?: IRecorridoDinamico;
   recorridos?: IRecorrido[];
 }
 
 export const VehiculoCacheSchema = VehiculoSchema.omit({
   chofer: true,
   recorrido: true,
+  recorridoDinamico: true,
   recorridos: true,
 });
 export interface IVehiculoCache extends Omit<
   IVehiculo,
-  'chofer' | 'recorrido' | 'recorridos'
+  'chofer' | 'recorrido' | 'recorridoDinamico' | 'recorridos'
 > {}
 
 export const ActivoSchema = z.object({
