@@ -10,3 +10,4 @@ export * from './update-many';
 export * from './counters';
 // Eventos
 export * from './eventos';
+export * from './tenant';
