@@ -34,7 +34,9 @@ export type OrigenDownlinkJob = z.infer<typeof OrigenDownlinkJobSchema>;
 
 // Una entrada por intento de TRANSPORTE (reintento BullMQ del MISMO job). Es
 // append-only: el processor la agrega en cada outcome (Enviado/Descartado/Error)
-// vía $push, para que la UI muestre qué se intentó y cuándo, no solo el contador.
+// reescribiendo el array completo (no con $push: gestion-datos-go envuelve el
+// body en un $set y filtra por schema, así que un operador Mongo se descarta en
+// silencio), para que la UI muestre qué se intentó y cuándo, no solo el contador.
 // Los reintentos del RECONCILIADOR son jobs distintos → nodos propios, no entran acá.
 export const IntentoDownlinkSchema = z.object({
   numero: z.number(), // 1..N (attemptsMade + 1)
@@ -42,6 +44,14 @@ export const IntentoDownlinkSchema = z.object({
   resultado: z.enum(['Enviado', 'Descartado', 'Error']),
   error: z.string().optional(), // mensaje si falló o motivo de descarte
   idComando: z.string().optional(), // IComando creado en este intento (si hubo)
+  // Desglose de la latencia de este envío.
+  //  - esperaColaSeg: encolado por el secuenciador → a punto de despachar
+  //    (rebotes de rate limit + espera de worker). Si supera el deadline del
+  //    paso, el ACK del device nunca podía llegar en plazo.
+  //  - despachoSeg: duración de la llamada a api-gestion (crea el IComando y
+  //    encola en Chirpstack).
+  esperaColaSeg: z.number().optional(),
+  despachoSeg: z.number().optional(),
 });
 export type IIntentoDownlink = z.infer<typeof IntentoDownlinkSchema>;
 
