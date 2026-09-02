@@ -335,18 +335,15 @@ export type ILayerMapaPersonalizado = z.infer<
  *  que sigue escuchando en los puertos externos de siempre, y ahí se distingue
  *  por `idCliente`. */
 export const TenantSchema = z.object({
-  /** Número de bloque de puertos internos. El puerto donde bindea cada
-   *  servidor sale de `numero * 1000 + canal * 100 + marca`, que es el puerto
-   *  externo de la marca con el primer dígito reemplazado por este número:
-   *  dahua primario es 6030 afuera, 1030 adentro para el tenant 1 y 2030 para
-   *  el tenant 2. El puerto externo no cambia nunca — está grabado en el
-   *  firmware del panel — y la traducción la hace el `targetPort` del Service.
+  /** Número de bloque de puertos internos, del 1 al 9. El puerto donde bindea
+   *  cada servidor sale de `numero * 1000 + canal * 100 + marca`, con el código
+   *  de marca correlativo desde 1: dahua primario del tenant 1 es el 1005.
    *
-   *  Arranca en 1, así que 1000 es el primer puerto usable. `6`, `7` y `9`
-   *  están reservados: sus bloques contienen los puertos externos reales
-   *  (6000-6160, 7000, 7100, 9009 y siguientes) que el mismo proceso ya bindea
-   *  para el ingreso original, y bindear dos veces el mismo puerto en el mismo
-   *  netns falla. Quedan 1, 2, 3, 4, 5 y 8.
+   *  Los puertos internos no se parecen a los externos y no tienen por qué: el
+   *  externo está grabado en el firmware del panel y no cambia nunca, y la
+   *  traducción la hace el `targetPort` del Service.
+   *
+   *  El 0 no se guarda: es el ingreso compartido, o sea este campo ausente.
    *
    *  El bloque del tenant 1 arranca abajo de 1024, así que depende de que el
    *  contenedor conserve `CAP_NET_BIND_SERVICE` — hoy lo tiene porque corre
