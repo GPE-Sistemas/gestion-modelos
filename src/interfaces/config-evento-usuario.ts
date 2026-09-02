@@ -60,6 +60,10 @@ export const CondicionNotificacionSchema = z.object({
       velocidad: z
         .object({
           'superior a': z.number(),
+          // Minutos que debe sostenerse la velocidad por encima del umbral
+          // antes de generar el evento; sin configurar = dispara al instante
+          // (comportamiento previo).
+          tiempoMinimo: z.number().optional(),
         })
         .optional(),
       // Exceso de velocidad según el límite legal de la calle/ruta (no un umbral fijo).
@@ -68,6 +72,9 @@ export const CondicionNotificacionSchema = z.object({
         .object({
           tolerancia: z.number().optional(), // ej. 0.1 (+10%) sobre el límite antes de generar; default 0.1
           umbralFallback: z.number().optional(), // km/h a usar si la vía no tiene dato de límite
+          // Minutos que debe sostenerse el exceso antes de generar el evento;
+          // sin configurar = dispara al instante (comportamiento previo).
+          tiempoMinimo: z.number().optional(),
         })
         .optional(),
       estacionado: z
@@ -159,12 +166,19 @@ export interface CondicionNotificacion {
   activo?: {
     velocidad?: {
       'superior a': number;
+      // Minutos que debe sostenerse la velocidad por encima del umbral
+      // antes de generar el evento; sin configurar = dispara al instante
+      // (comportamiento previo).
+      tiempoMinimo?: number;
     };
     // Exceso de velocidad según el límite legal de la calle/ruta (no un umbral fijo).
     // El límite se resuelve por backend (TomTom/OSM, ver feature exceso de velocidad).
     excesoVelocidadCalle?: {
       tolerancia?: number; // ej. 0.1 (+10%) sobre el límite antes de generar; default 0.1
       umbralFallback?: number; // km/h a usar si la vía no tiene dato de límite
+      // Minutos que debe sostenerse el exceso antes de generar el evento;
+      // sin configurar = dispara al instante (comportamiento previo).
+      tiempoMinimo?: number;
     };
     estacionado?: {
       ubicacionEstacionado?: IGeoJSONPoint;
@@ -222,12 +236,14 @@ export const CondicionNotificacionCacheSchema = z.object({
       velocidad: z
         .object({
           'superior a': z.number(),
+          tiempoMinimo: z.number().optional(),
         })
         .optional(),
       excesoVelocidadCalle: z
         .object({
           tolerancia: z.number().optional(),
           umbralFallback: z.number().optional(),
+          tiempoMinimo: z.number().optional(),
         })
         .optional(),
       estacionado: z
@@ -297,10 +313,12 @@ export interface CondicionNotificacionCache {
   activo?: {
     velocidad?: {
       'superior a': number;
+      tiempoMinimo?: number;
     };
     excesoVelocidadCalle?: {
       tolerancia?: number;
       umbralFallback?: number;
+      tiempoMinimo?: number;
     };
     estacionado?: {
       ubicacionEstacionado?: IGeoJSONPoint;
