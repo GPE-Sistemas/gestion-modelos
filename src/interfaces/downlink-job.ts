@@ -55,6 +55,28 @@ export const IntentoDownlinkSchema = z.object({
 });
 export type IIntentoDownlink = z.infer<typeof IntentoDownlinkSchema>;
 
+// Cómo se resolvió el PASO que este job representa. Es el VEREDICTO, y hasta
+// ahora vivía solo en el plan de Redis (que se borra al finalizar) — o sea que
+// después de la campaña no había forma de reconstruir por qué cerró cada paso
+// sin cruzar comandos a mano.
+//  - 'ack'            : ACK del device y lora aplicó la config del patch (fast-path).
+//  - 'ack-no-aplicado': llegó el ACK pero la config no se escribió (hace falta el eco).
+//  - 'eco'            : cerró con los uplinks de eco del GET (verificado).
+//  - 'timeout'        : agotó los reintentos sin ACK/eco y se forzó el avance.
+//  - 'descartado'     : device offline / sin sesión NS.
+//  - 'abortado'       : el plan se cortó (breaker, reemplazo, cancelación).
+export const VeredictoPasoDownlinkSchema = z.enum([
+  'ack',
+  'ack-no-aplicado',
+  'eco',
+  'timeout',
+  'descartado',
+  'abortado',
+]);
+export type VeredictoPasoDownlink = z.infer<
+  typeof VeredictoPasoDownlinkSchema
+>;
+
 // Mapa de eco por SET confirmado. Lo emite api-gestion para el auto-GET
 // coalescido: liga cada SET del grupo a su contribución en el byte selector del
 // GET y a los puertos de uplink-eco que provoca. Permite al secuenciador
@@ -126,6 +148,19 @@ export const DownlinkJobSchema = z.object({
   }), // historial append-only por intento de transporte
   // Sin ref en el legacy (@Prop sin `ref`), por eso sin x-ref acá.
   idComando: z.string().optional().meta({ 'x-bson': 'objectId' }), // se llena al crear el IComando real en BD
+
+  // ── Veredicto del paso (auditoría posterior a la campaña) ──
+  // Sin estos tres campos, "cuántos pasos agotaron sus envíos", "cuántos
+  // downlinks salieron después de que el paso ya había cerrado" (huérfanos) y
+  // "cómo cerró cada paso" solo se podían calcular cruzando comandos a mano
+  // contra el intentosLog: el plan que tenía el dato se borra al finalizar.
+  veredictoPor: VeredictoPasoDownlinkSchema.optional(),
+  fechaVeredicto: z.string().optional().meta({ 'x-bson': 'date' }), // cuándo cerró el paso
+  agotoReintentos: z.boolean().optional(), // el paso consumió TODOS sus envíos (ack false definitivo)
+  // Gateway al que el plan de este paso le ocupó cupo (o 'nogw'). Se CONGELA al
+  // armar el plan. Es la única forma de reconstruir métricas por gateway después
+  // (el plan vive en Redis y se borra; `dispositivo.ultimoGateway` ya cambió).
+  gatewayEui: z.string().optional(),
 
   // Auto-get encadenado (ACTIS)
   // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.

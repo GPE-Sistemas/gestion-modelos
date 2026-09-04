@@ -2761,6 +2761,9 @@
        "properties": {
         "superior a": {
          "type": "number"
+        },
+        "tiempoMinimo": {
+         "type": "number"
         }
        },
        "required": [
@@ -2775,6 +2778,9 @@
          "type": "number"
         },
         "umbralFallback": {
+         "type": "number"
+        },
+        "tiempoMinimo": {
          "type": "number"
         }
        },
@@ -2932,6 +2938,9 @@
        "properties": {
         "superior a": {
          "type": "number"
+        },
+        "tiempoMinimo": {
+         "type": "number"
         }
        },
        "required": [
@@ -2946,6 +2955,9 @@
          "type": "number"
         },
         "umbralFallback": {
+         "type": "number"
+        },
+        "tiempoMinimo": {
          "type": "number"
         }
        },
@@ -8965,6 +8977,19 @@
     },
     "idComando": {
      "x-bson": "objectId",
+     "type": "string"
+    },
+    "veredictoPor": {
+     "$ref": "#/$defs/VeredictoPasoDownlinkSchema"
+    },
+    "fechaVeredicto": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "agotoReintentos": {
+     "type": "boolean"
+    },
+    "gatewayEui": {
      "type": "string"
     },
     "proximoGet": {
@@ -20504,6 +20529,19 @@
      "x-bson": "objectId",
      "type": "string"
     },
+    "veredictoPor": {
+     "$ref": "#/$defs/VeredictoPasoDownlinkSchema"
+    },
+    "fechaVeredicto": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "agotoReintentos": {
+     "type": "boolean"
+    },
+    "gatewayEui": {
+     "type": "string"
+    },
     "proximoGet": {
      "x-bson": "mixed",
      "$ref": "#/$defs/ProximoGetDownlinkJobSchema"
@@ -27856,6 +27894,12 @@
     },
     "idComando": {
      "type": "string"
+    },
+    "esperaColaSeg": {
+     "type": "number"
+    },
+    "despachoSeg": {
+     "type": "number"
     }
    },
    "required": [
@@ -37517,6 +37561,27 @@
     },
     "cambiosDeseada": {
      "type": "number"
+    },
+    "pasos": {
+     "type": "number"
+    },
+    "pasosAgotados": {
+     "type": "number"
+    },
+    "convergenciaPlanSeg": {
+     "type": "number"
+    },
+    "puertosSet": {
+     "type": "number"
+    },
+    "puertosSetOk": {
+     "type": "number"
+    },
+    "huerfanos": {
+     "type": "number"
+    },
+    "esperaFilaSegMax": {
+     "type": "number"
     }
    },
    "additionalProperties": false
@@ -45690,6 +45755,19 @@
     },
     "idComando": {
      "x-bson": "objectId",
+     "type": "string"
+    },
+    "veredictoPor": {
+     "$ref": "#/$defs/VeredictoPasoDownlinkSchema"
+    },
+    "fechaVeredicto": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "agotoReintentos": {
+     "type": "boolean"
+    },
+    "gatewayEui": {
      "type": "string"
     },
     "proximoGet": {
@@ -54536,6 +54614,19 @@
     }
    },
    "additionalProperties": false
+  },
+  "VeredictoPasoDownlinkSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/VeredictoPasoDownlinkSchema",
+   "type": "string",
+   "enum": [
+    "ack",
+    "ack-no-aplicado",
+    "eco",
+    "timeout",
+    "descartado",
+    "abortado"
+   ]
   },
   "VisitaTripSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
