@@ -338,6 +338,17 @@ export const ResumenDownlinksLuminariaSchema = z.object({
   reconciliaciones: z.number().optional(), // ciclos que actuaron sobre esta luminaria
   convergenciaSeg: z.number().optional(), // tiempo divergencia→Coincide en la franja
   cambiosDeseada: z.number().optional(), // ediciones de la config deseada (blanco móvil)
+  // ── Costo de la tanda para ESTA luminaria (por franja) ──
+  // `enviados` (arriba) cuenta downlinks; `pasos` cuenta pasos del plan. El
+  // cociente es "envíos por paso": 1,0 es el piso teórico y 2,3 significa que
+  // cada aspecto se mandó más de dos veces (P1 del 01/09).
+  pasos: z.number().optional(), // pasos del plan resueltos en la franja
+  pasosAgotados: z.number().optional(), // pasos que consumieron TODOS sus envíos sin señal
+  convergenciaPlanSeg: z.number().optional(), // primer envío → último downlink del nodo (plan cerrado)
+  puertosSet: z.number().optional(), // puertos SET distintos que el nodo recorrió
+  puertosSetOk: z.number().optional(), // de esos, los que cerraron con veredicto favorable
+  huerfanos: z.number().optional(), // downlinks emitidos después del veredicto de su paso
+  esperaFilaSegMax: z.number().optional(), // peor espera en NUESTRA fila de envío (gauge de la franja)
 });
 export type IResumenDownlinksLuminaria = z.infer<
   typeof ResumenDownlinksLuminariaSchema
