@@ -60,7 +60,7 @@ export const CondicionNotificacionSchema = z.object({
       velocidad: z
         .object({
           'superior a': z.number(),
-          // Minutos que debe sostenerse la velocidad por encima del umbral
+          // Segundos que debe sostenerse la velocidad por encima del umbral
           // antes de generar el evento; sin configurar = dispara al instante
           // (comportamiento previo).
           tiempoMinimo: z.number().optional(),
@@ -72,7 +72,7 @@ export const CondicionNotificacionSchema = z.object({
         .object({
           tolerancia: z.number().optional(), // ej. 0.1 (+10%) sobre el límite antes de generar; default 0.1
           umbralFallback: z.number().optional(), // km/h a usar si la vía no tiene dato de límite
-          // Minutos que debe sostenerse el exceso antes de generar el evento;
+          // Segundos que debe sostenerse el exceso antes de generar el evento;
           // sin configurar = dispara al instante (comportamiento previo).
           tiempoMinimo: z.number().optional(),
         })
@@ -166,7 +166,7 @@ export interface CondicionNotificacion {
   activo?: {
     velocidad?: {
       'superior a': number;
-      // Minutos que debe sostenerse la velocidad por encima del umbral
+      // Segundos que debe sostenerse la velocidad por encima del umbral
       // antes de generar el evento; sin configurar = dispara al instante
       // (comportamiento previo).
       tiempoMinimo?: number;
@@ -176,7 +176,7 @@ export interface CondicionNotificacion {
     excesoVelocidadCalle?: {
       tolerancia?: number; // ej. 0.1 (+10%) sobre el límite antes de generar; default 0.1
       umbralFallback?: number; // km/h a usar si la vía no tiene dato de límite
-      // Minutos que debe sostenerse el exceso antes de generar el evento;
+      // Segundos que debe sostenerse el exceso antes de generar el evento;
       // sin configurar = dispara al instante (comportamiento previo).
       tiempoMinimo?: number;
     };
