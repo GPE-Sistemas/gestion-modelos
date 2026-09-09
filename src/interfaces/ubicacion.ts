@@ -16,6 +16,7 @@ export const CategoriaUbicacionSchema = z.enum([
   'Destino Emergencia',
   'Vehiculos',
   'Luminarias',
+  'Alarmas',
 ]);
 // Discriminante de la union IUbicacion: DEBE ser un type alias de literales
 // plano, NO z.infer<typeof CategoriaUbicacionSchema>. TS no reconoce el tipo
@@ -31,7 +32,8 @@ export type ICategoriaUbicacion =
   | 'Hospital'
   | 'Destino Emergencia'
   | 'Vehiculos'
-  | 'Luminarias';
+  | 'Luminarias'
+  | 'Alarmas';
 
 /* ────────────────────────────────────────────────
  *  VALORES POR CATEGORÍA
@@ -74,6 +76,10 @@ export const ValoresUbicacionLuminariasSchema = z.object({});
 // consumidores (doc Mongoose → IUbicacion). Ver ICategoriaUbicacion.
 export interface IValoresUbicacionLuminarias {}
 
+export const ValoresUbicacionAlarmasSchema = z.object({});
+
+export interface IValoresUbicacionAlarmas {}
+
 export const ValoresUbicacionCentroAtencionSchema = z.object({
   telefono: z.string().optional(),
   email: z.string().optional(),
@@ -115,6 +121,7 @@ export type MapaValoresUbicacion = {
   'Destino Emergencia': IValoresUbicacionDestinoEmergencia;
   Vehiculos: IValoresUbicacionVehiculos;
   Luminarias: IValoresUbicacionLuminarias;
+  Alarmas: IValoresUbicacionAlarmas;
 };
 
 /* ────────────────────────────────────────────────
@@ -170,14 +177,17 @@ const UbicacionCamposSchema = z.object({
       justOne: true,
     },
   }),
-  ancestros: z.array(ClienteSchema).optional().meta({
-    'x-populate': {
-      ref: 'ClienteSchema',
-      localField: 'idsAncestros',
-      foreignField: '_id',
-      justOne: false,
-    },
-  }),
+  ancestros: z
+    .array(ClienteSchema)
+    .optional()
+    .meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idsAncestros',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
 });
 
 // `valores` es @Prop({type: Object}) en el legacy (Mixed) para las OCHO
@@ -231,21 +241,30 @@ const VarianteUbicacionLuminarias = UbicacionCamposSchema.extend({
     'x-bson': 'mixed',
   }),
 });
+const VarianteUbicacionAlarmas = UbicacionCamposSchema.extend({
+  categoria: z.literal('Alarmas').optional(),
+  valores: ValoresUbicacionAlarmasSchema.optional().meta({
+    'x-bson': 'mixed',
+  }),
+});
 
 /* ────────────────────────────────────────────────
  *  TIPO DISCRIMINADO - READ
  * ────────────────────────────────────────────────*/
 
-export const UbicacionSchema = z.union([
-  VarianteUbicacionTerminal,
-  VarianteUbicacionDomicilio,
-  VarianteUbicacionActivos,
-  VarianteUbicacionCentroAtencion,
-  VarianteUbicacionHospital,
-  VarianteUbicacionDestinoEmergencia,
-  VarianteUbicacionVehiculos,
-  VarianteUbicacionLuminarias,
-]).meta({ 'x-collection': 'ubicacions' });
+export const UbicacionSchema = z
+  .union([
+    VarianteUbicacionTerminal,
+    VarianteUbicacionDomicilio,
+    VarianteUbicacionActivos,
+    VarianteUbicacionCentroAtencion,
+    VarianteUbicacionHospital,
+    VarianteUbicacionDestinoEmergencia,
+    VarianteUbicacionVehiculos,
+    VarianteUbicacionLuminarias,
+    VarianteUbicacionAlarmas,
+  ])
+  .meta({ 'x-collection': 'ubicacions' });
 
 /**
  * Tipo hand-written (misma forma que el schema): los tipos de entidad del
@@ -259,7 +278,8 @@ export type IUbicacion =
   | IUbicacionBase<'Hospital'>
   | IUbicacionBase<'Destino Emergencia'>
   | IUbicacionBase<'Vehiculos'>
-  | IUbicacionBase<'Luminarias'>;
+  | IUbicacionBase<'Luminarias'>
+  | IUbicacionBase<'Alarmas'>;
 
 /* ────────────────────────────────────────────────
  *  CREATE / UPDATE
@@ -280,6 +300,7 @@ export const CreateUbicacionSchema = z.union([
   VarianteUbicacionDestinoEmergencia.omit(camposOmitidos),
   VarianteUbicacionVehiculos.omit(camposOmitidos),
   VarianteUbicacionLuminarias.omit(camposOmitidos),
+  VarianteUbicacionAlarmas.omit(camposOmitidos),
 ]);
 
 type Omitir = '_id' | 'cliente' | 'ancestros';
@@ -292,7 +313,8 @@ export type ICreateUbicacion =
   | Omit<IUbicacionBase<'Hospital'>, Omitir>
   | Omit<IUbicacionBase<'Destino Emergencia'>, Omitir>
   | Omit<IUbicacionBase<'Vehiculos'>, Omitir>
-  | Omit<IUbicacionBase<'Luminarias'>, Omitir>;
+  | Omit<IUbicacionBase<'Luminarias'>, Omitir>
+  | Omit<IUbicacionBase<'Alarmas'>, Omitir>;
 
 export const UpdateUbicacionSchema = z.union([
   VarianteUbicacionTerminal.omit(camposOmitidos).required({ categoria: true }),
@@ -307,6 +329,9 @@ export const UpdateUbicacionSchema = z.union([
   }),
   VarianteUbicacionVehiculos.omit(camposOmitidos).required({ categoria: true }),
   VarianteUbicacionLuminarias.omit(camposOmitidos).required({
+    categoria: true,
+  }),
+  VarianteUbicacionAlarmas.omit(camposOmitidos).required({
     categoria: true,
   }),
 ]);
@@ -335,6 +360,9 @@ export type IUpdateUbicacion =
     >)
   | ({ categoria: 'Luminarias' } & Partial<
       Omit<IUbicacionBase<'Luminarias'>, Omitir | 'categoria'>
+    >)
+  | ({ categoria: 'Alarmas' } & Partial<
+      Omit<IUbicacionBase<'Alarmas'>, Omitir | 'categoria'>
     >);
 
 /* ────────────────────────────────────────────────
@@ -355,6 +383,7 @@ export const UbicacionCacheSchema = z.union([
   VarianteUbicacionDestinoEmergencia.omit(camposOmitidosCache),
   VarianteUbicacionVehiculos.omit(camposOmitidosCache),
   VarianteUbicacionLuminarias.omit(camposOmitidosCache),
+  VarianteUbicacionAlarmas.omit(camposOmitidosCache),
 ]);
 
 export type IUbicacionCache = Omit<IUbicacion, 'cliente' | 'ancestros'>;

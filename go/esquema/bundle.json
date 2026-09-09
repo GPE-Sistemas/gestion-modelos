@@ -225,6 +225,9 @@
     "Alarmas - Editar notas",
     "Alarmas - Asignar cámaras",
     "Alarmas - Enviar comandos",
+    "Alarmas - Crear zonas",
+    "Alarmas - Editar zonas",
+    "Alarmas - Eliminar zonas",
     "Vehículos - Crear",
     "Vehículos - Editar",
     "Vehículos - Eliminar",
@@ -1847,7 +1850,8 @@
     "Hospital",
     "Destino Emergencia",
     "Vehiculos",
-    "Luminarias"
+    "Luminarias",
+    "Alarmas"
    ]
   },
   "CercanaSchema": {
@@ -16937,6 +16941,56 @@
       "valores": {
        "x-bson": "mixed",
        "$ref": "#/$defs/ValoresUbicacionLuminariasSchema"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "identificacion": {
+       "type": "string"
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "direccion": {
+       "type": "string"
+      },
+      "geojson": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/GeoJSONSchema"
+      },
+      "fotos": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "color": {
+       "type": "string"
+      },
+      "categoria": {
+       "type": "string",
+       "const": "Alarmas"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ValoresUbicacionAlarmasSchema"
       }
      },
      "additionalProperties": false
@@ -41951,6 +42005,59 @@
       }
      },
      "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "_id": {
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "identificacion": {
+       "type": "string"
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "direccion": {
+       "type": "string"
+      },
+      "geojson": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/GeoJSONSchema"
+      },
+      "fotos": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "color": {
+       "type": "string"
+      },
+      "categoria": {
+       "type": "string",
+       "const": "Alarmas"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ValoresUbicacionAlarmasSchema"
+      }
+     },
+     "additionalProperties": false
     }
    ]
   },
@@ -42578,6 +42685,80 @@
       "valores": {
        "x-bson": "mixed",
        "$ref": "#/$defs/ValoresUbicacionLuminariasSchema"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "_id": {
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "identificacion": {
+       "type": "string"
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "direccion": {
+       "type": "string"
+      },
+      "geojson": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/GeoJSONSchema"
+      },
+      "fotos": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "color": {
+       "type": "string"
+      },
+      "cliente": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idCliente",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/ClienteSchema"
+      },
+      "ancestros": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idsAncestros",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ClienteSchema"
+       }
+      },
+      "categoria": {
+       "type": "string",
+       "const": "Alarmas"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ValoresUbicacionAlarmasSchema"
       }
      },
      "additionalProperties": false
@@ -53677,6 +53858,59 @@
       "categoria"
      ],
      "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "identificacion": {
+       "type": "string"
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "direccion": {
+       "type": "string"
+      },
+      "geojson": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/GeoJSONSchema"
+      },
+      "fotos": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "color": {
+       "type": "string"
+      },
+      "categoria": {
+       "type": "string",
+       "const": "Alarmas"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ValoresUbicacionAlarmasSchema"
+      }
+     },
+     "required": [
+      "categoria"
+     ],
+     "additionalProperties": false
     }
    ]
   },
@@ -54327,6 +54561,13 @@
   "ValoresUbicacionActivosSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ValoresUbicacionActivosSchema",
+   "type": "object",
+   "properties": {},
+   "additionalProperties": false
+  },
+  "ValoresUbicacionAlarmasSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ValoresUbicacionAlarmasSchema",
    "type": "object",
    "properties": {},
    "additionalProperties": false
