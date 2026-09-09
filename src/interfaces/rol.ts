@@ -182,6 +182,10 @@ export const AccionesRolSchema = z.enum([
   'Alarmas - Editar notas',
   'Alarmas - Asignar cámaras',
   'Alarmas - Enviar comandos',
+  // Zonas geográficas (IUbicacion categoria 'Alarmas')
+  'Alarmas - Crear zonas',
+  'Alarmas - Editar zonas',
+  'Alarmas - Eliminar zonas',
   // *******************************************
   // MODULO VEHÍCULOS
   // *******************************************
