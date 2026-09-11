@@ -39,6 +39,14 @@ export const CredencialesDahuaSchema = z.object({
 });
 export type ICredencialesDahua = z.infer<typeof CredencialesDahuaSchema>;
 
+export const CredencialesHikvisionSchema = z.object({
+  appKey: z.string().optional(),
+  secretKey: z.string().optional(),
+});
+export type ICredencialesHikvision = z.infer<
+  typeof CredencialesHikvisionSchema
+>;
+
 // Metadata de persistencia por `.meta()` — convención documentada arriba de
 // `ProveedorSchema` en proveedor.ts.
 export const CamaraSchema = z
@@ -75,6 +83,9 @@ export const CamaraSchema = z
     credencialesDahua: CredencialesDahuaSchema.optional().meta({
       'x-bson': 'mixed',
     }),
+    credencialesHikvision: CredencialesHikvisionSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
     // Populate
     cliente: ClienteSchema.optional().meta({
       'x-populate': {
@@ -84,14 +95,17 @@ export const CamaraSchema = z
         justOne: true,
       },
     }),
-    ancestros: z.array(ClienteSchema).optional().meta({
-      'x-populate': {
-        ref: 'ClienteSchema',
-        localField: 'idsAncestros',
-        foreignField: '_id',
-        justOne: false,
-      },
-    }),
+    ancestros: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsAncestros',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
     modeloDispositivo: ModeloDispositivoSchema.optional().meta({
       'x-populate': {
         ref: 'ModeloDispositivoSchema',

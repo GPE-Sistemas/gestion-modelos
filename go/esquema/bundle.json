@@ -1469,6 +1469,10 @@
      "x-bson": "mixed",
      "$ref": "#/$defs/CredencialesDahuaSchema"
     },
+    "credencialesHikvision": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/CredencialesHikvisionSchema"
+    },
     "cliente": {
      "x-populate": {
       "ref": "ClienteSchema",
@@ -6615,6 +6619,10 @@
     "credencialesDahua": {
      "x-bson": "mixed",
      "$ref": "#/$defs/CredencialesDahuaSchema"
+    },
+    "credencialesHikvision": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/CredencialesHikvisionSchema"
     },
     "ancestros": {
      "x-populate": {
@@ -17481,6 +17489,20 @@
      "type": "string"
     },
     "productID": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "CredencialesHikvisionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CredencialesHikvisionSchema",
+   "type": "object",
+   "properties": {
+    "appKey": {
+     "type": "string"
+    },
+    "secretKey": {
      "type": "string"
     }
    },
@@ -43528,6 +43550,10 @@
     "credencialesDahua": {
      "x-bson": "mixed",
      "$ref": "#/$defs/CredencialesDahuaSchema"
+    },
+    "credencialesHikvision": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/CredencialesHikvisionSchema"
     },
     "ancestros": {
      "x-populate": {
