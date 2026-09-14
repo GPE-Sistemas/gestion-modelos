@@ -1,5 +1,10 @@
 import { z } from 'zod';
 import { ClienteSchema, ICliente } from './cliente';
+import {
+  DispositivoAlarmaSchema,
+  IDispositivoAlarma,
+} from './dispositivo-alarma';
+import { ITracker, TrackerSchema } from './tracker';
 
 export const TipoEntidadLogSchema = z.enum([
   'Luminaria',
@@ -7,18 +12,38 @@ export const TipoEntidadLogSchema = z.enum([
   'Activo',
   'Tracker',
   'Vehiculo',
+  'Alarma',
 ]);
 export type TipoEntidadLog = z.infer<typeof TipoEntidadLogSchema>;
+
+export const DireccionLogSchema = z.enum(['Entrada', 'Salida']);
+export type DireccionLog = z.infer<typeof DireccionLogSchema>;
+
+export const ResultadoParseoLogSchema = z.enum([
+  'OK',
+  'Error',
+  'No configurado',
+]);
+export type ResultadoParseoLog = z.infer<typeof ResultadoParseoLogSchema>;
 
 /* ────────────────────────────────────────────────
  *  REPORTES POR TIPO
  * ────────────────────────────────────────────────*/
 
 export const LogMensajeSchema = z.object({
+  /** Frame tal cual llegó, interpretado como texto (ASCII). */
   mensaje: z.string().optional(),
+  /** El mismo frame en hexadecimal, para los protocolos binarios. */
+  hex: z.string().optional(),
   protocolo: z.enum(['UDP', 'TCP']).optional(),
   origen: z.string().optional(),
   puerto: z.number().optional(),
+  puertoLocal: z.number().optional(),
+  direccion: DireccionLogSchema.optional(),
+  idUnico: z.string().optional(),
+  nombreProtocolo: z.string().optional(),
+  codigo: z.string().optional(),
+  parseo: ResultadoParseoLogSchema.optional(),
 });
 export type ILogMensaje = z.infer<typeof LogMensajeSchema>;
 
@@ -36,12 +61,15 @@ export interface ILogBase<T extends keyof MapaValoresLog> {
   expireAt?: string;
   //
   idsAncestros?: string[];
+  idEntidad?: string;
   tipoEntidad?: TipoEntidadLog;
   tipoReporte?: T;
   valores?: MapaValoresLog[T];
   // Populate
   cliente?: ICliente;
   ancestros?: ICliente[];
+  tracker?: ITracker;
+  dispositivoAlarma?: IDispositivoAlarma;
 }
 
 export const LogGenericoSchema = z
@@ -58,6 +86,7 @@ export const LogGenericoSchema = z
       .array(z.string())
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }),
     tipoEntidad: TipoEntidadLogSchema.optional(),
     tipoReporte: TipoLogsSchema.optional(),
     // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
@@ -71,12 +100,31 @@ export const LogGenericoSchema = z
         justOne: true,
       },
     }),
-    ancestros: z.array(ClienteSchema).optional().meta({
+    ancestros: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsAncestros',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    tracker: TrackerSchema.optional().meta({
       'x-populate': {
-        ref: 'ClienteSchema',
-        localField: 'idsAncestros',
+        ref: 'TrackerSchema',
+        localField: 'idEntidad',
         foreignField: '_id',
-        justOne: false,
+        justOne: true,
+      },
+    }),
+    dispositivoAlarma: DispositivoAlarmaSchema.optional().meta({
+      'x-populate': {
+        ref: 'DispositivoAlarmaSchema',
+        localField: 'idEntidad',
+        foreignField: '_id',
+        justOne: true,
       },
     }),
   })
@@ -89,6 +137,8 @@ export const CreateLogGenericoSchema = LogGenericoSchema.omit({
   idsAncestros: true,
   cliente: true,
   ancestros: true,
+  tracker: true,
+  dispositivoAlarma: true,
 });
 export type ICreateLogGenerico = z.infer<typeof CreateLogGenericoSchema>;
 
@@ -98,5 +148,7 @@ export const UpdateLogGenericoSchema = LogGenericoSchema.omit({
   idsAncestros: true,
   cliente: true,
   ancestros: true,
+  tracker: true,
+  dispositivoAlarma: true,
 });
 export type IUpdateLogGenerico = z.infer<typeof UpdateLogGenericoSchema>;

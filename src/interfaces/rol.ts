@@ -20,6 +20,8 @@ export const AccionesRolSchema = z.enum([
   'Logs - Ver logs eventos trackers test',
   'Logs - Ver logs reenvios',
   'Logs - Ver métricas downlinks',
+  'Logs - Ver logs crudos alarmas',
+  'Logs - Ver logs crudos trackers',
   // *******************************************
   // MODULO ADMINISTRACIÓN
   // *******************************************
