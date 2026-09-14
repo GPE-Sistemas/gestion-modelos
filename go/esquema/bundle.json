@@ -93,6 +93,8 @@
     "Logs - Ver logs eventos trackers test",
     "Logs - Ver logs reenvios",
     "Logs - Ver métricas downlinks",
+    "Logs - Ver logs crudos alarmas",
+    "Logs - Ver logs crudos trackers",
     "Administración - Ver clientes",
     "Administración - Crear clientes",
     "Administración - Editar clientes",
@@ -12145,6 +12147,10 @@
      "x-bson": "date",
      "type": "string"
     },
+    "idEntidad": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
     "tipoEntidad": {
      "$ref": "#/$defs/TipoEntidadLogSchema"
     },
@@ -18798,6 +18804,15 @@
     "porcentajeDefecto"
    ],
    "additionalProperties": false
+  },
+  "DireccionLogSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DireccionLogSchema",
+   "type": "string",
+   "enum": [
+    "Entrada",
+    "Salida"
+   ]
   },
   "DireccionV2Schema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -28557,6 +28572,10 @@
       "type": "string"
      }
     },
+    "idEntidad": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
     "tipoEntidad": {
      "$ref": "#/$defs/TipoEntidadLogSchema"
     },
@@ -28587,6 +28606,24 @@
      "items": {
       "$ref": "#/$defs/ClienteSchema"
      }
+    },
+    "tracker": {
+     "x-populate": {
+      "ref": "TrackerSchema",
+      "localField": "idEntidad",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/TrackerSchema"
+    },
+    "dispositivoAlarma": {
+     "x-populate": {
+      "ref": "DispositivoAlarmaSchema",
+      "localField": "idEntidad",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/DispositivoAlarmaSchema"
     }
    },
    "required": [
@@ -28644,6 +28681,9 @@
     "mensaje": {
      "type": "string"
     },
+    "hex": {
+     "type": "string"
+    },
     "protocolo": {
      "type": "string",
      "enum": [
@@ -28656,6 +28696,24 @@
     },
     "puerto": {
      "type": "number"
+    },
+    "puertoLocal": {
+     "type": "number"
+    },
+    "direccion": {
+     "$ref": "#/$defs/DireccionLogSchema"
+    },
+    "idUnico": {
+     "type": "string"
+    },
+    "nombreProtocolo": {
+     "type": "string"
+    },
+    "codigo": {
+     "type": "string"
+    },
+    "parseo": {
+     "$ref": "#/$defs/ResultadoParseoLogSchema"
     }
    },
    "additionalProperties": false
@@ -36459,6 +36517,16 @@
    },
    "additionalProperties": false
   },
+  "ResultadoParseoLogSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ResultadoParseoLogSchema",
+   "type": "string",
+   "enum": [
+    "OK",
+    "Error",
+    "No configurado"
+   ]
+  },
   "ResumenCortesEnergiaSemanaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ResumenCortesEnergiaSemanaSchema",
@@ -40185,7 +40253,8 @@
     "Colectivo",
     "Activo",
     "Tracker",
-    "Vehiculo"
+    "Vehiculo",
+    "Alarma"
    ]
   },
   "TipoEntidadPermisoSchema": {
@@ -49110,6 +49179,10 @@
     },
     "expireAt": {
      "x-bson": "date",
+     "type": "string"
+    },
+    "idEntidad": {
+     "x-bson": "objectId",
      "type": "string"
     },
     "tipoEntidad": {
