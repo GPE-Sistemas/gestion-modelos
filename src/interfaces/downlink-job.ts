@@ -61,6 +61,8 @@ export type IIntentoDownlink = z.infer<typeof IntentoDownlinkSchema>;
 // sin cruzar comandos a mano.
 //  - 'ack'            : ACK del device y lora aplicó la config del patch (fast-path).
 //  - 'ack-no-aplicado': llegó el ACK pero la config no se escribió (hace falta el eco).
+//  - 'rechazado'      : el device RECIBIÓ la trama y la DESCARTÓ (FFxx en ACTIS,
+//                       ERROR_DL en GPE).
 //  - 'eco'            : cerró con los uplinks de eco del GET (verificado).
 //  - 'timeout'        : agotó los reintentos sin ACK/eco y se forzó el avance.
 //  - 'descartado'     : device offline / sin sesión NS.
@@ -68,14 +70,13 @@ export type IIntentoDownlink = z.infer<typeof IntentoDownlinkSchema>;
 export const VeredictoPasoDownlinkSchema = z.enum([
   'ack',
   'ack-no-aplicado',
+  'rechazado',
   'eco',
   'timeout',
   'descartado',
   'abortado',
 ]);
-export type VeredictoPasoDownlink = z.infer<
-  typeof VeredictoPasoDownlinkSchema
->;
+export type VeredictoPasoDownlink = z.infer<typeof VeredictoPasoDownlinkSchema>;
 
 // Mapa de eco por SET confirmado. Lo emite api-gestion para el auto-GET
 // coalescido: liga cada SET del grupo a su contribución en el byte selector del
@@ -104,107 +105,112 @@ export type IProximoGetDownlinkJob = z.infer<
 
 // Metadata de persistencia por `.meta()` — convención documentada arriba de
 // `ProveedorSchema` en proveedor.ts.
-export const DownlinkJobSchema = z.object({
-  _id: z.string().optional(),
-  idCliente: z
-    .string()
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
-  idsAncestros: z
-    .array(z.string())
-    .optional()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+export const DownlinkJobSchema = z
+  .object({
+    _id: z.string().optional(),
+    idCliente: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    idsAncestros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
 
-  idDispositivoLorawan: z
-    .string()
-    .meta({ 'x-bson': 'objectId', 'x-ref': 'DispositivoLorawanSchema' }),
-  deveui: z.string().meta({ 'x-setter': 'uppercase' }),
-  tipoDispositivo: TipoDispositivoLorawanSchema.optional(),
+    idDispositivoLorawan: z
+      .string()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'DispositivoLorawanSchema' }),
+    deveui: z.string().meta({ 'x-setter': 'uppercase' }),
+    tipoDispositivo: TipoDispositivoLorawanSchema.optional(),
 
-  origen: OrigenDownlinkJobSchema,
-  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
-  objetivo: ObjetivoComandoSchema.optional().meta({ 'x-bson': 'mixed' }), // Procedencia: desde qué nivel/entidad se originó (se propaga al IComando)
-  idEjecucion: z.string().optional(), // batch id (uuid) — agrupa todos los jobs de una acción
-  idJobBull: z.string().optional(), // BullMQ job id
-  indicePaso: z.number().optional(), //posición de este downlink dentro del plan ordenado del dispositivo
+    origen: OrigenDownlinkJobSchema,
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    objetivo: ObjetivoComandoSchema.optional().meta({ 'x-bson': 'mixed' }), // Procedencia: desde qué nivel/entidad se originó (se propaga al IComando)
+    idEjecucion: z.string().optional(), // batch id (uuid) — agrupa todos los jobs de una acción
+    idJobBull: z.string().optional(), // BullMQ job id
+    indicePaso: z.number().optional(), //posición de este downlink dentro del plan ordenado del dispositivo
 
-  puerto: z.number(),
-  payload: z.string(),
-  nombre: z.string(),
-  descripcion: z.string().optional(),
+    puerto: z.number(),
+    payload: z.string(),
+    nombre: z.string(),
+    descripcion: z.string().optional(),
 
-  // Idempotencia / superseding. Default '<deveui>:<puerto>' o
-  // '<deveui>:<puerto>:<sha1(payload)[:8]>' si distintos payloads coexisten (Ej: perfiles de dimerizado ACTIS).
-  claveDedup: z.string().optional(), //Si dos downlinks tienen la misma claveDedup, el segundo cancela al primero (si no se ejecutó aún) y lo reemplaza en la cola de BullMQ. El processor siempre procesa el más reciente.
-  //Ej de uso: se envía un downlink de cambio de configuración, se encola con clave, si después se envía otro downlink de cambio de configuración, con la misma clave, el primer downlink se cancela si aún no se ejecutó. Se prioriza el último
+    // Idempotencia / superseding. Default '<deveui>:<puerto>' o
+    // '<deveui>:<puerto>:<sha1(payload)[:8]>' si distintos payloads coexisten (Ej: perfiles de dimerizado ACTIS).
+    claveDedup: z.string().optional(), //Si dos downlinks tienen la misma claveDedup, el segundo cancela al primero (si no se ejecutó aún) y lo reemplaza en la cola de BullMQ. El processor siempre procesa el más reciente.
+    //Ej de uso: se envía un downlink de cambio de configuración, se encola con clave, si después se envía otro downlink de cambio de configuración, con la misma clave, el primer downlink se cancela si aún no se ejecutó. Se prioriza el último
 
-  // Estado
-  estado: EstadoDownlinkJobSchema,
-  intentos: z.number(),
-  ultimoError: z.string().optional(),
-  // @Prop({type: [Object]}) en el legacy: Mixed, sin casteo adentro.
-  intentosLog: z.array(IntentoDownlinkSchema).optional().meta({
-    'x-bson': 'mixed',
-  }), // historial append-only por intento de transporte
-  // Sin ref en el legacy (@Prop sin `ref`), por eso sin x-ref acá.
-  idComando: z.string().optional().meta({ 'x-bson': 'objectId' }), // se llena al crear el IComando real en BD
+    // Estado
+    estado: EstadoDownlinkJobSchema,
+    intentos: z.number(),
+    ultimoError: z.string().optional(),
+    // @Prop({type: [Object]}) en el legacy: Mixed, sin casteo adentro.
+    intentosLog: z.array(IntentoDownlinkSchema).optional().meta({
+      'x-bson': 'mixed',
+    }), // historial append-only por intento de transporte
+    // Sin ref en el legacy (@Prop sin `ref`), por eso sin x-ref acá.
+    idComando: z.string().optional().meta({ 'x-bson': 'objectId' }), // se llena al crear el IComando real en BD
 
-  // ── Veredicto del paso (auditoría posterior a la campaña) ──
-  // Sin estos tres campos, "cuántos pasos agotaron sus envíos", "cuántos
-  // downlinks salieron después de que el paso ya había cerrado" (huérfanos) y
-  // "cómo cerró cada paso" solo se podían calcular cruzando comandos a mano
-  // contra el intentosLog: el plan que tenía el dato se borra al finalizar.
-  veredictoPor: VeredictoPasoDownlinkSchema.optional(),
-  fechaVeredicto: z.string().optional().meta({ 'x-bson': 'date' }), // cuándo cerró el paso
-  agotoReintentos: z.boolean().optional(), // el paso consumió TODOS sus envíos (ack false definitivo)
-  // Gateway al que el plan de este paso le ocupó cupo (o 'nogw'). Se CONGELA al
-  // armar el plan. Es la única forma de reconstruir métricas por gateway después
-  // (el plan vive en Redis y se borra; `dispositivo.ultimoGateway` ya cambió).
-  gatewayEui: z.string().optional(),
+    // ── Veredicto del paso (auditoría posterior a la campaña) ──
+    // Sin estos tres campos, "cuántos pasos agotaron sus envíos", "cuántos
+    // downlinks salieron después de que el paso ya había cerrado" (huérfanos) y
+    // "cómo cerró cada paso" solo se podían calcular cruzando comandos a mano
+    // contra el intentosLog: el plan que tenía el dato se borra al finalizar.
+    veredictoPor: VeredictoPasoDownlinkSchema.optional(),
+    fechaVeredicto: z.string().optional().meta({ 'x-bson': 'date' }), // cuándo cerró el paso
+    agotoReintentos: z.boolean().optional(), // el paso consumió TODOS sus envíos (ack false definitivo)
+    // Gateway al que el plan de este paso le ocupó cupo (o 'nogw'). Se CONGELA al
+    // armar el plan. Es la única forma de reconstruir métricas por gateway después
+    // (el plan vive en Redis y se borra; `dispositivo.ultimoGateway` ya cambió).
+    gatewayEui: z.string().optional(),
 
-  // Auto-get encadenado (ACTIS)
-  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
-  proximoGet: ProximoGetDownlinkJobSchema.optional().meta({
-    'x-bson': 'mixed',
-  }),
+    // Auto-get encadenado (ACTIS)
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    proximoGet: ProximoGetDownlinkJobSchema.optional().meta({
+      'x-bson': 'mixed',
+    }),
 
-  // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
-  datosExtra: z.record(z.string(), z.any()).optional().meta({
-    'x-bson': 'mixed',
-  }),
+    // @Prop({type: Object}) en el legacy: Mixed, Mongoose no castea adentro.
+    datosExtra: z.record(z.string(), z.any()).optional().meta({
+      'x-bson': 'mixed',
+    }),
 
-  //Fechas
-  fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
-  fechaProgramada: z.string().optional().meta({ 'x-bson': 'date' }), // cuando se encola en BullMQ con delay
-  fechaEnviado: z.string().optional().meta({ 'x-bson': 'date' }),
-  fechaConfirmado: z.string().optional().meta({ 'x-bson': 'date' }),
+    //Fechas
+    fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaProgramada: z.string().optional().meta({ 'x-bson': 'date' }), // cuando se encola en BullMQ con delay
+    fechaEnviado: z.string().optional().meta({ 'x-bson': 'date' }),
+    fechaConfirmado: z.string().optional().meta({ 'x-bson': 'date' }),
 
-  //Populate
-  cliente: ClienteSchema.optional().meta({
-    'x-populate': {
-      ref: 'ClienteSchema',
-      localField: 'idCliente',
-      foreignField: '_id',
-      justOne: true,
-    },
-  }),
-  ancestros: z.array(ClienteSchema).optional().meta({
-    'x-populate': {
-      ref: 'ClienteSchema',
-      localField: 'idsAncestros',
-      foreignField: '_id',
-      justOne: false,
-    },
-  }),
-  dispositivo: DispositivoLorawanSchema.optional().meta({
-    'x-populate': {
-      ref: 'DispositivoLorawanSchema',
-      localField: 'idDispositivoLorawan',
-      foreignField: '_id',
-      justOne: true,
-    },
-  }),
-}).meta({ 'x-collection': 'downlinkjobs' });
+    //Populate
+    cliente: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idCliente',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    ancestros: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsAncestros',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
+    dispositivo: DispositivoLorawanSchema.optional().meta({
+      'x-populate': {
+        ref: 'DispositivoLorawanSchema',
+        localField: 'idDispositivoLorawan',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+  })
+  .meta({ 'x-collection': 'downlinkjobs' });
 export type IDownlinkJob = z.infer<typeof DownlinkJobSchema>;
 
 // El original era Omit<Partial<IDownlinkJob>, OmitirCreate> re-declarando como
@@ -228,7 +234,6 @@ export const UpdateDownlinkJobSchema = DownlinkJobSchema.omit({
   idsAncestros: true,
 }).partial();
 export type IUpdateDownlinkJob = z.infer<typeof UpdateDownlinkJobSchema>;
-
 
 // DTO de Request individual de un downlink que se va a encolar en el secuenciador.
 // Lleva el dispositivo populado (al menos los campos necesarios para el
