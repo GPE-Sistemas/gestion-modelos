@@ -23,7 +23,20 @@ export const LogReenvioSchema = z
     // "tracker" (virtuals con nombre distinto al path).
     idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }),
 
-    protocolo: z.enum(['UDP', 'TCP']).optional(),
+    // Los reenvíos por socket guardan el protocolo real; los que van por HTTP
+    // guardan el nombre de la integración (así los escribe gestion-trackers-go
+    // desde siempre para Soflex e Iron Tracking). Es lo que usa el filtro
+    // "Tipo de reenvío" del listado de logs.
+    protocolo: z
+      .enum([
+        'UDP',
+        'TCP',
+        'Soflex',
+        'Iron Tracking',
+        'Logictracker',
+        'Objetivo AVL',
+      ])
+      .optional(),
     host: z.string().optional(),
     puerto: z.number().optional(),
     body: z.string().optional(),
