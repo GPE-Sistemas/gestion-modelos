@@ -12231,7 +12231,11 @@
      "type": "string",
      "enum": [
       "UDP",
-      "TCP"
+      "TCP",
+      "Soflex",
+      "Iron Tracking",
+      "Logictracker",
+      "Objetivo AVL"
      ]
     },
     "host": {
@@ -26822,6 +26826,100 @@
    ],
    "additionalProperties": false
   },
+  "FilaNSDeviceSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/FilaNSDeviceSchema",
+   "type": "object",
+   "properties": {
+    "idDispositivo": {
+     "type": "string"
+    },
+    "deveui": {
+     "type": "string"
+    },
+    "name": {
+     "type": "string"
+    },
+    "tipo": {
+     "type": "string"
+    },
+    "claseBC": {
+     "type": "boolean"
+    },
+    "offline": {
+     "type": "boolean"
+    },
+    "motivoOffline": {
+     "type": "string"
+    },
+    "fechaUltimaComunicacion": {
+     "type": "string"
+    },
+    "totalItems": {
+     "type": "number"
+    },
+    "itemsVencidos": {
+     "type": "number"
+    },
+    "itemsSinVencimiento": {
+     "type": "number"
+    },
+    "todosDescartables": {
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "idDispositivo",
+    "deveui",
+    "totalItems",
+    "itemsVencidos",
+    "itemsSinVencimiento",
+    "todosDescartables"
+   ],
+   "additionalProperties": false
+  },
+  "FilaNSSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/FilaNSSchema",
+   "type": "object",
+   "properties": {
+    "deveui": {
+     "type": "string"
+    },
+    "totalItems": {
+     "type": "number"
+    },
+    "itemsVencidos": {
+     "type": "number"
+    },
+    "itemsSinVencimiento": {
+     "type": "number"
+    },
+    "claseBC": {
+     "type": "boolean"
+    },
+    "offline": {
+     "type": "boolean"
+    },
+    "motivoOffline": {
+     "type": "string"
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ItemFilaNSSchema"
+     }
+    }
+   },
+   "required": [
+    "deveui",
+    "totalItems",
+    "itemsVencidos",
+    "itemsSinVencimiento",
+    "items"
+   ],
+   "additionalProperties": false
+  },
   "FlagsTrackersSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/FlagsTrackersSchema",
@@ -28037,6 +28135,44 @@
    ],
    "additionalProperties": false
   },
+  "ItemFilaNSSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ItemFilaNSSchema",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "devEui": {
+     "type": "string"
+    },
+    "confirmed": {
+     "type": "boolean"
+    },
+    "fCntDown": {
+     "type": "number"
+    },
+    "fPort": {
+     "type": "number"
+    },
+    "payloadHex": {
+     "type": "string"
+    },
+    "isPending": {
+     "type": "boolean"
+    },
+    "expiresAt": {
+     "type": "string"
+    },
+    "vencido": {
+     "type": "boolean"
+    },
+    "sinVencimiento": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
   "JerarquiaAscendenteLuminariaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/JerarquiaAscendenteLuminariaSchema",
@@ -28755,7 +28891,11 @@
      "type": "string",
      "enum": [
       "UDP",
-      "TCP"
+      "TCP",
+      "Soflex",
+      "Iron Tracking",
+      "Logictracker",
+      "Objetivo AVL"
      ]
     },
     "host": {
@@ -36517,6 +36657,104 @@
    },
    "additionalProperties": false
   },
+  "ResultadoBarridoFilaNSSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ResultadoBarridoFilaNSSchema",
+   "type": "object",
+   "properties": {
+    "candidatos": {
+     "type": "number"
+    },
+    "revisados": {
+     "type": "number"
+    },
+    "sucios": {
+     "type": "number"
+    },
+    "flusheados": {
+     "type": "number"
+    },
+    "itemsBorrados": {
+     "type": "number"
+    },
+    "omitidosPorVigentes": {
+     "type": "number"
+    },
+    "errores": {
+     "type": "number"
+    },
+    "deveuisFlusheados": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "required": [
+    "candidatos",
+    "revisados",
+    "sucios",
+    "flusheados",
+    "itemsBorrados",
+    "omitidosPorVigentes",
+    "errores",
+    "deveuisFlusheados"
+   ],
+   "additionalProperties": false
+  },
+  "ResultadoFlushMasivoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ResultadoFlushMasivoSchema",
+   "type": "object",
+   "properties": {
+    "pedidos": {
+     "type": "number"
+    },
+    "flusheados": {
+     "type": "number"
+    },
+    "itemsBorrados": {
+     "type": "number"
+    },
+    "errores": {
+     "type": "number"
+    },
+    "detalle": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "deveui": {
+        "type": "string"
+       },
+       "ok": {
+        "type": "boolean"
+       },
+       "itemsBorrados": {
+        "type": "number"
+       },
+       "error": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "deveui",
+       "ok",
+       "itemsBorrados"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   "required": [
+    "pedidos",
+    "flusheados",
+    "itemsBorrados",
+    "errores",
+    "detalle"
+   ],
+   "additionalProperties": false
+  },
   "ResultadoParseoLogSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ResultadoParseoLogSchema",
@@ -37748,6 +37986,47 @@
      "type": "number"
     }
    },
+   "additionalProperties": false
+  },
+  "ResumenFilasNSSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ResumenFilasNSSchema",
+   "type": "object",
+   "properties": {
+    "escaneados": {
+     "type": "number"
+    },
+    "conItems": {
+     "type": "number"
+    },
+    "totalItems": {
+     "type": "number"
+    },
+    "totalVencidos": {
+     "type": "number"
+    },
+    "totalSinVencimiento": {
+     "type": "number"
+    },
+    "errores": {
+     "type": "number"
+    },
+    "devices": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/FilaNSDeviceSchema"
+     }
+    }
+   },
+   "required": [
+    "escaneados",
+    "conItems",
+    "totalItems",
+    "totalVencidos",
+    "totalSinVencimiento",
+    "errores",
+    "devices"
+   ],
    "additionalProperties": false
   },
   "ResumenGastosClienteSchema": {
@@ -49265,7 +49544,11 @@
      "type": "string",
      "enum": [
       "UDP",
-      "TCP"
+      "TCP",
+      "Soflex",
+      "Iron Tracking",
+      "Logictracker",
+      "Objetivo AVL"
      ]
     },
     "host": {
@@ -54962,6 +55245,7 @@
    "enum": [
     "ack",
     "ack-no-aplicado",
+    "rechazado",
     "eco",
     "timeout",
     "descartado",
