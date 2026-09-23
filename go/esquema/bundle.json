@@ -21458,6 +21458,9 @@
     "litrosCargados": {
      "type": "number"
     },
+    "litrosConsumidos": {
+     "type": "number"
+    },
     "rendimientoL100km": {
      "type": "number"
     },
@@ -28042,6 +28045,9 @@
      "type": "number"
     },
     "litrosTotales": {
+     "type": "number"
+    },
+    "litrosConsumidosTotales": {
      "type": "number"
     },
     "rendimientoPromedio": {

@@ -218,7 +218,8 @@ export const EstadisticaVehiculoCombustibleSchema = z.object({
   nombreActivo: z.string().optional(),
   kmRecorridos: z.number().optional(),
   litrosCargados: z.number().optional(),
-  rendimientoL100km: z.number().optional(), // L/100km (null si sin datos de odómetro)
+  litrosConsumidos: z.number().optional(), // balance del nivel (ver RendimientoCombustibleVehiculoSchema)
+  rendimientoL100km: z.number().optional(), // litrosConsumidos / km (sin valor si no hay datos suficientes)
   cantidadCargas: z.number().optional(),
   cantidadEventosSospechosos: z.number().optional(),
 });
@@ -229,8 +230,9 @@ export type IEstadisticaVehiculoCombustible = z.infer<
 export const InformeMensualFlotaCombustibleSchema = z.object({
   totalVehiculos: z.number().optional(),
   kmTotales: z.number().optional(),
-  litrosTotales: z.number().optional(),
-  rendimientoPromedio: z.number().optional(),
+  litrosTotales: z.number().optional(), // cargados
+  litrosConsumidosTotales: z.number().optional(),
+  rendimientoPromedio: z.number().optional(), // L/100km ponderado: consumidos / km de los vehículos con rendimiento
   cantidadCargas: z.number().optional(),
   cantidadEventosSospechosos: z.number().optional(),
   vehiculos: z.array(EstadisticaVehiculoCombustibleSchema).optional(),
