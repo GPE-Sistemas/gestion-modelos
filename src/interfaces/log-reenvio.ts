@@ -39,6 +39,13 @@ export const LogReenvioSchema = z
       .optional(),
     host: z.string().optional(),
     puerto: z.number().optional(),
+    // Solo reenvíos HTTP: método y headers tal cual salieron, credenciales
+    // incluidas (decisión explícita: es lo que se le pasa al proveedor para
+    // validar la autenticación). Mixed: el nombre de cada header es la clave.
+    metodoHttp: z.string().optional(),
+    headers: z.record(z.string(), z.string()).optional().meta({
+      'x-bson': 'mixed',
+    }),
     body: z.string().optional(),
     ack: z.boolean().optional(),
     error: z.string().optional(),
