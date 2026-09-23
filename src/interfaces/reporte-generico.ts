@@ -322,6 +322,24 @@ export type IReporteTrackerTemperatura = z.infer<
   typeof ReporteTrackerTemperaturaSchema
 >;
 
+// Resultado de contrastar una variación negativa (FVAR) del sensor contra el
+// nivel periódico medido alrededor del evento. El firmware manda como
+// "descarga" caídas que el nivel no muestra (consumo gradual acumulado,
+// oleaje): se descartan si la caída medida no llega al umbral o si el nivel
+// rebota. Lo escribe gestion-cron sobre el mismo reporte.
+export const ValidacionDescargaCombustibleSchema = z.object({
+  estado: z.enum(['real', 'falsaAlarma']).optional(),
+  nivelAntes: z.number().optional(), // mediana del nivel previo al evento
+  nivelDespues: z.number().optional(), // mediana del nivel posterior
+  caidaMedida: z.number().optional(), // nivelAntes − nivelDespues (litros)
+  motivo: z.string().optional(),
+  fecha: z.string().optional(), // cuándo se validó
+  definitiva: z.boolean().optional(), // false = se vuelve a chequear rebote más tarde
+});
+export type IValidacionDescargaCombustible = z.infer<
+  typeof ValidacionDescargaCombustibleSchema
+>;
+
 export const ReporteTrackerCombustibleSchema = z.object({
   uniqueId: z.string().optional(),
   // Nivel por tanque (litros). Solo se incluyen los sensores conectados.
@@ -337,6 +355,7 @@ export const ReporteTrackerCombustibleSchema = z.object({
   variacionCombustible: z.number().optional(), // Litros con signo (+carga / -descarga)
   idSensorVariacion: z.number().optional(), // ID del sensor que detectó la variación
   nivelPostVariacion: z.number().optional(), // Litros en tanque después de la variación
+  validacionDescarga: ValidacionDescargaCombustibleSchema.optional(), // solo variaciones negativas
   // Debug / diagnóstico
   debugValue: z.string().optional(), // Valor lógico crudo del sensor
   tramaRaw: z.string().optional(), // Trama completa para diagnóstico

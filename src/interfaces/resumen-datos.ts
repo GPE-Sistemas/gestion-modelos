@@ -29,6 +29,7 @@ export const TipoResumenDatosSchema = z.enum([
   'Informe Cargas Combustible',
   'Informe Eventos Sospechosos Combustible',
   'Informe Mensual Flota Combustible',
+  'Rendimiento Combustible Vehículos',
   'Gastos del Cliente',
   //Downlinks: métricas de sistema (bolsa de samples) + detalle por luminaria ──
   'Downlinks Métricas Sistema',
@@ -132,6 +133,7 @@ export const CombustibleHorarioVehiculoSchema = z.object({
   nivelMin4: z.number().optional(),
   nivelMax4: z.number().optional(),
   cantidadReportes: z.number().optional(), // cantidad de reportes procesados (del Total)
+  minutosIgnicion: z.number().optional(), // minutos con motor encendido en la hora (ignición del Tracker 4G)
 });
 export type ICombustibleHorarioVehiculo = z.infer<
   typeof CombustibleHorarioVehiculoSchema
@@ -186,15 +188,21 @@ export const EventoDescargaCombustibleSchema = z.object({
   geojson: PuntoGeojsonSchema.optional(),
   direccion: z.string().optional(),
   idSensor: z.number().optional(),
+  // Validación contra el nivel medido (ver ValidacionDescargaCombustibleSchema
+  // en reporte-generico.ts). Una falsa alarma no suma a los totales.
+  falsaAlarma: z.boolean().optional(),
+  caidaMedida: z.number().optional(), // litros que bajó de verdad el nivel
 });
 export type IEventoDescargaCombustible = z.infer<
   typeof EventoDescargaCombustibleSchema
 >;
 
 export const InformeEventosSospechososSchema = z.object({
-  totalEventos: z.number().optional(),
-  totalLitrosDescargados: z.number().optional(),
+  totalEventos: z.number().optional(), // solo descargas reales
+  totalLitrosDescargados: z.number().optional(), // solo descargas reales
   vehiculosAfectados: z.number().optional(),
+  totalFalsasAlarmas: z.number().optional(), // descartadas por la validación de nivel
+  // Todas las descargas del período, reales y falsas alarmas (con `falsaAlarma`)
   eventos: z.array(EventoDescargaCombustibleSchema).optional(),
 });
 export type IInformeEventosSospechosos = z.infer<
@@ -243,6 +251,39 @@ export const ConsumoCombustibleVehiculosSchema = z.object({
 });
 export type IConsumoCombustibleVehiculos = z.infer<
   typeof ConsumoCombustibleVehiculosSchema
+>;
+
+/* ────────────────────────────────────────────────
+ *  COMBUSTIBLE — RENDIMIENTO (VENTANA MÓVIL)
+ * ────────────────────────────────────────────────*/
+
+// Un documento por vehículo (agrupacion 'Individual', agrupacionTiempo
+// 'Rango', rangoMinutos = largo de la ventana) que el cron reescribe cada
+// hora con los últimos N días. Método balance sobre 'Combustible Horario
+// Vehículos': consumo = nivel inicial − nivel final + cargas − descargas
+// reales. Los rendimientos quedan sin valor si no hay datos suficientes.
+export const RendimientoCombustibleVehiculoSchema = z.object({
+  diasVentana: z.number().optional(),
+  litrosConsumidos: z.number().optional(),
+  kmRecorridos: z.number().optional(), // diferencia de odómetro
+  horasMotor: z.number().optional(), // suma de minutosIgnicion / 60
+  rendimientoL100km: z.number().optional(),
+  rendimientoKmL: z.number().optional(),
+  rendimientoLh: z.number().optional(),
+  nivelInicial: z.number().optional(),
+  nivelFinal: z.number().optional(),
+  cantidadCargas: z.number().optional(),
+  litrosCargados: z.number().optional(),
+  cantidadDescargas: z.number().optional(), // reales
+  litrosDescargados: z.number().optional(), // reales
+  cantidadFalsasAlarmas: z.number().optional(),
+  coberturaHoras: z.number().optional(), // 0..1: horas con resumen / horas de la ventana
+  datosSuficientes: z.boolean().optional(),
+  // Motivo cuando datosSuficientes es false (poca cobertura, pocos km, odómetro anómalo…)
+  motivoSinDatos: z.string().optional(),
+});
+export type IRendimientoCombustibleVehiculo = z.infer<
+  typeof RendimientoCombustibleVehiculoSchema
 >;
 
 /* ────────────────────────────────────────────────
@@ -393,6 +434,7 @@ export type MapaResumenDatos = {
   'Informe Cargas Combustible': IInformeCargasCombustible;
   'Informe Eventos Sospechosos Combustible': IInformeEventosSospechosos;
   'Informe Mensual Flota Combustible': IInformeMensualFlotaCombustible;
+  'Rendimiento Combustible Vehículos': IRendimientoCombustibleVehiculo;
   'Gastos del Cliente': IResumenGastosCliente;
   'Downlinks Métricas Sistema': IResumenDownlinksSistema;
   'Downlinks Luminaria': IResumenDownlinksLuminaria;
@@ -427,7 +469,7 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
 
 // Metadata de persistencia por `.meta()` — convención documentada arriba de
 // `ProveedorSchema` en proveedor.ts. `x-collection` va en el z.union() de
-// ResumenDatosSchema más abajo (una sola colección para las 13 variantes).
+// ResumenDatosSchema más abajo (una sola colección para las 14 variantes).
 // Campos comunes a todas las variantes (sin tipo/resumen, que discriminan)
 const ResumenDatosCamposSchema = z.object({
   _id: z.string().optional(),
@@ -477,7 +519,7 @@ const ResumenDatosCamposSchema = z.object({
 
 // `resumen` es @Prop({type: Object}) en el schema Mongoose legacy: adentro de
 // un Mixed, Mongoose no declara NADA — no castea ni inicializa esos paths. Va
-// anotado en las 13 variantes: el chequeo de drift hace la unión de las
+// anotado en las 14 variantes: el chequeo de drift hace la unión de las
 // properties de la unión y avisa si dos variantes discrepan en la anotación.
 const VarianteConsumoMensualLuminarias = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Consumo Mensual Luminarias').optional(),
@@ -517,6 +559,11 @@ const VarianteInformeMensualFlotaCombustible = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Informe Mensual Flota Combustible').optional(),
   resumen: InformeMensualFlotaCombustibleSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
+const VarianteRendimientoCombustibleVehiculos =
+  ResumenDatosCamposSchema.extend({
+    tipo: z.literal('Rendimiento Combustible Vehículos').optional(),
+    resumen: RendimientoCombustibleVehiculoSchema.optional().meta({ 'x-bson': 'mixed' }),
+  });
 const VarianteGastosDelCliente = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Gastos del Cliente').optional(),
   resumen: ResumenGastosClienteSchema.optional().meta({ 'x-bson': 'mixed' }),
@@ -549,6 +596,7 @@ export const ResumenDatosSchema = z
     VarianteInformeCargasCombustible,
     VarianteInformeEventosSospechososCombustible,
     VarianteInformeMensualFlotaCombustible,
+    VarianteRendimientoCombustibleVehiculos,
     VarianteGastosDelCliente,
     VarianteDownlinksSistema,
     VarianteDownlinksLuminaria,

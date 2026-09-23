@@ -2731,6 +2731,9 @@
     },
     "cantidadReportes": {
      "type": "number"
+    },
+    "minutosIgnicion": {
+     "type": "number"
     }
    },
    "additionalProperties": false
@@ -14748,6 +14751,9 @@
         "nivelPostVariacion": {
          "type": "number"
         },
+        "validacionDescarga": {
+         "$ref": "#/$defs/ValidacionDescargaCombustibleSchema"
+        },
         "debugValue": {
          "type": "string"
         },
@@ -22156,6 +22162,12 @@
     },
     "idSensor": {
      "type": "number"
+    },
+    "falsaAlarma": {
+     "type": "boolean"
+    },
+    "caidaMedida": {
+     "type": "number"
     }
    },
    "additionalProperties": false
@@ -28006,6 +28018,9 @@
     "vehiculosAfectados": {
      "type": "number"
     },
+    "totalFalsasAlarmas": {
+     "type": "number"
+    },
     "eventos": {
      "type": "array",
      "items": {
@@ -30646,6 +30661,15 @@
     "Perimetral",
     "Selectivo",
     "Desarmado"
+   ]
+  },
+  "ModoConsumoVehiculoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ModoConsumoVehiculoSchema",
+   "type": "string",
+   "enum": [
+    "km",
+    "hora"
    ]
   },
   "ModoDesactivadoSchema": {
@@ -33356,6 +33380,65 @@
    },
    "additionalProperties": false
   },
+  "RendimientoCombustibleVehiculoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/RendimientoCombustibleVehiculoSchema",
+   "type": "object",
+   "properties": {
+    "diasVentana": {
+     "type": "number"
+    },
+    "litrosConsumidos": {
+     "type": "number"
+    },
+    "kmRecorridos": {
+     "type": "number"
+    },
+    "horasMotor": {
+     "type": "number"
+    },
+    "rendimientoL100km": {
+     "type": "number"
+    },
+    "rendimientoKmL": {
+     "type": "number"
+    },
+    "rendimientoLh": {
+     "type": "number"
+    },
+    "nivelInicial": {
+     "type": "number"
+    },
+    "nivelFinal": {
+     "type": "number"
+    },
+    "cantidadCargas": {
+     "type": "number"
+    },
+    "litrosCargados": {
+     "type": "number"
+    },
+    "cantidadDescargas": {
+     "type": "number"
+    },
+    "litrosDescargados": {
+     "type": "number"
+    },
+    "cantidadFalsasAlarmas": {
+     "type": "number"
+    },
+    "coberturaHoras": {
+     "type": "number"
+    },
+    "datosSuficientes": {
+     "type": "boolean"
+    },
+    "motivoSinDatos": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "ReporteGenericoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ReporteGenericoSchema",
@@ -35473,6 +35556,9 @@
         "nivelPostVariacion": {
          "type": "number"
         },
+        "validacionDescarga": {
+         "$ref": "#/$defs/ValidacionDescargaCombustibleSchema"
+        },
         "debugValue": {
          "type": "string"
         },
@@ -36271,6 +36357,9 @@
     },
     "nivelPostVariacion": {
      "type": "number"
+    },
+    "validacionDescarga": {
+     "$ref": "#/$defs/ValidacionDescargaCombustibleSchema"
     },
     "debugValue": {
      "type": "string"
@@ -37585,6 +37674,91 @@
       "resumen": {
        "x-bson": "mixed",
        "$ref": "#/$defs/InformeMensualFlotaCombustibleSchema"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "_id": {
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadResumenSchema"
+      },
+      "agrupacion": {
+       "$ref": "#/$defs/AgrupacionResumenSchema"
+      },
+      "agrupacionTiempo": {
+       "$ref": "#/$defs/AgrupacionTiempoSchema"
+      },
+      "rangoMinutos": {
+       "type": "number"
+      },
+      "idsAsignados": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "periodoInicio": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "periodoFin": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "cerrado": {
+       "type": "boolean"
+      },
+      "cliente": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idCliente",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/ClienteSchema"
+      },
+      "ancestros": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idsAncestros",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ClienteSchema"
+       }
+      },
+      "tipo": {
+       "type": "string",
+       "const": "Rendimiento Combustible Vehículos"
+      },
+      "resumen": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/RendimientoCombustibleVehiculoSchema"
       }
      },
      "additionalProperties": false
@@ -40877,6 +41051,7 @@
     "Informe Cargas Combustible",
     "Informe Eventos Sospechosos Combustible",
     "Informe Mensual Flota Combustible",
+    "Rendimiento Combustible Vehículos",
     "Gastos del Cliente",
     "Downlinks Métricas Sistema",
     "Downlinks Luminaria",
@@ -52040,6 +52215,9 @@
         "nivelPostVariacion": {
          "type": "number"
         },
+        "validacionDescarga": {
+         "$ref": "#/$defs/ValidacionDescargaCombustibleSchema"
+        },
         "debugValue": {
          "type": "string"
         },
@@ -54661,6 +54839,39 @@
    "additionalProperties": false,
    "x-collection": "usuarios"
   },
+  "ValidacionDescargaCombustibleSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ValidacionDescargaCombustibleSchema",
+   "type": "object",
+   "properties": {
+    "estado": {
+     "type": "string",
+     "enum": [
+      "real",
+      "falsaAlarma"
+     ]
+    },
+    "nivelAntes": {
+     "type": "number"
+    },
+    "nivelDespues": {
+     "type": "number"
+    },
+    "caidaMedida": {
+     "type": "number"
+    },
+    "motivo": {
+     "type": "string"
+    },
+    "fecha": {
+     "type": "string"
+    },
+    "definitiva": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
   "ValoresEventoAlarmaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ValoresEventoAlarmaSchema",
@@ -54993,6 +55204,12 @@
     },
     "direccion": {
      "type": "string"
+    },
+    "falsaAlarma": {
+     "type": "boolean"
+    },
+    "motivoFalsaAlarma": {
+     "type": "string"
     }
    },
    "additionalProperties": false
@@ -55124,6 +55341,9 @@
     "capacidadCombustible": {
      "type": "number"
     },
+    "modoConsumo": {
+     "$ref": "#/$defs/ModoConsumoVehiculoSchema"
+    },
     "idChofer": {
      "x-bson": "objectId",
      "x-ref": "UsuarioSchema",
@@ -55191,6 +55411,9 @@
     },
     "capacidadCombustible": {
      "type": "number"
+    },
+    "modoConsumo": {
+     "$ref": "#/$defs/ModoConsumoVehiculoSchema"
     },
     "idChofer": {
      "x-bson": "objectId",
