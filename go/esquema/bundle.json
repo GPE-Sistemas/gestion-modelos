@@ -12244,6 +12244,19 @@
     "puerto": {
      "type": "number"
     },
+    "metodoHttp": {
+     "type": "string"
+    },
+    "headers": {
+     "x-bson": "mixed",
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
     "body": {
      "type": "string"
     },
@@ -28903,6 +28916,19 @@
     },
     "puerto": {
      "type": "number"
+    },
+    "metodoHttp": {
+     "type": "string"
+    },
+    "headers": {
+     "x-bson": "mixed",
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "string"
+     }
     },
     "body": {
      "type": "string"
@@ -49556,6 +49582,19 @@
     },
     "puerto": {
      "type": "number"
+    },
+    "metodoHttp": {
+     "type": "string"
+    },
+    "headers": {
+     "x-bson": "mixed",
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "string"
+     }
     },
     "body": {
      "type": "string"
