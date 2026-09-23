@@ -47,6 +47,11 @@ export const LogReenvioSchema = z
       'x-bson': 'mixed',
     }),
     body: z.string().optional(),
+    // Solo reenvíos HTTP: lo que contestó el destino. Sin esto el log decía
+    // "code 1:" sin el status ni el cuerpo, y no había cómo saber qué pasó.
+    // El cuerpo va acotado (los primeros KB) por si es una página de error.
+    respuestaStatus: z.number().optional(),
+    respuesta: z.string().optional(),
     ack: z.boolean().optional(),
     error: z.string().optional(),
 

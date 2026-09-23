@@ -12260,6 +12260,12 @@
     "body": {
      "type": "string"
     },
+    "respuestaStatus": {
+     "type": "number"
+    },
+    "respuesta": {
+     "type": "string"
+    },
     "ack": {
      "type": "boolean"
     },
@@ -28931,6 +28937,12 @@
      }
     },
     "body": {
+     "type": "string"
+    },
+    "respuestaStatus": {
+     "type": "number"
+    },
+    "respuesta": {
      "type": "string"
     },
     "ack": {
@@ -49597,6 +49609,12 @@
      }
     },
     "body": {
+     "type": "string"
+    },
+    "respuestaStatus": {
+     "type": "number"
+    },
+    "respuesta": {
      "type": "string"
     },
     "ack": {
