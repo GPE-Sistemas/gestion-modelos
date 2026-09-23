@@ -44,6 +44,12 @@ export const EstadoVehiculoSchema = z.enum([
 ]);
 export type EstadoVehiculo = z.infer<typeof EstadoVehiculoSchema>;
 
+// Cómo se expresa el consumo promedio de combustible del vehículo: por
+// distancia (L/100km y km/L) o por horas de motor (L/h, para maquinaria).
+// Sin valor se toma 'km'.
+export const ModoConsumoVehiculoSchema = z.enum(['km', 'hora']);
+export type ModoConsumoVehiculo = z.infer<typeof ModoConsumoVehiculoSchema>;
+
 export const CategoriaActivoSchema = z.enum([
   'Normal',
   'Vehículo',
@@ -64,6 +70,7 @@ export const VehiculoSchema = z.object({
   consumoRuta: z.number().optional(), // litros cada 100 km
   consumoCiudad: z.number().optional(), // litros cada 100 km
   capacidadCombustible: z.number().optional(), // litros
+  modoConsumo: ModoConsumoVehiculoSchema.optional(), // default 'km'
   //
   idChofer: z
     .string()
@@ -139,6 +146,7 @@ export interface IVehiculo {
   consumoRuta?: number; // litros cada 100 km
   consumoCiudad?: number; // litros cada 100 km
   capacidadCombustible?: number; // litros
+  modoConsumo?: ModoConsumoVehiculo; // default 'km'
   //
   idChofer?: string;
   idRecorrido?: string;

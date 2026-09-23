@@ -164,6 +164,10 @@ export const ValoresEventoTrackerSchema = ValoresEventoBaseSchema.extend({
   geojson: GeoJSONPointSchema.optional(),
   codigoTracker: z.string().optional(),
   direccion: z.string().optional(), // Coordenadas traducidas a dirección legible
+  // Descarga de combustible (22D) descartada por gestion-cron al contrastarla
+  // con el nivel medido: el evento se cierra como 'Finalizada'.
+  falsaAlarma: z.boolean().optional(),
+  motivoFalsaAlarma: z.string().optional(),
 });
 export type IValoresEventoTracker = z.infer<typeof ValoresEventoTrackerSchema>;
 
