@@ -14,7 +14,7 @@ import { BotonBluetoothSchema, IBotonBluetooth } from './boton-bluetooth';
 import type { IReporteGenerico } from './reporte-generico';
 import type { IDestinatarioAsistencia } from './destinatario-asistencia';
 import type { IEmergencia } from './emergencias';
-import { PersonalSaludSchema, IPersonalSalud } from './personal-salud';
+import { PersonalSaludSchema } from './personal-salud';
 import { GeoJSONPointSchema } from '../auxiliares';
 import { SirenaSchema, ISirena } from './sirena';
 import type { IUbicacion } from './ubicacion';
