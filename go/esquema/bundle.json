@@ -933,6 +933,56 @@
    "additionalProperties": false,
    "x-collection": "apikeys"
   },
+  "AplicacionConfigDeseadaSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/AplicacionConfigDeseadaSchema",
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "fecha": {
+     "type": "string"
+    },
+    "motivo": {
+     "$ref": "#/$defs/MotivoAplicacionSchema"
+    },
+    "idUsuario": {
+     "type": "string"
+    },
+    "fuente": {
+     "type": "object",
+     "properties": {
+      "nivel": {
+       "$ref": "#/$defs/NivelFuenteAplicacionSchema"
+      },
+      "id": {
+       "type": "string"
+      },
+      "nombre": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "nivel",
+      "id"
+     ],
+     "additionalProperties": false
+    },
+    "idPerfil": {
+     "type": "string"
+    },
+    "nombrePerfil": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "fecha",
+    "motivo"
+   ],
+   "additionalProperties": false
+  },
   "ArchivosAdjuntosSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ArchivosAdjuntosSchema",
@@ -4361,6 +4411,10 @@
        "x-bson": "date",
        "type": "string"
       },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
+      },
       "idEntidad": {
        "type": "string"
       },
@@ -4463,6 +4517,10 @@
       "fechaAplicacion": {
        "x-bson": "date",
        "type": "string"
+      },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
       },
       "idEntidad": {
        "type": "string"
@@ -4567,6 +4625,10 @@
        "x-bson": "date",
        "type": "string"
       },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
+      },
       "idEntidad": {
        "type": "string"
       },
@@ -4669,6 +4731,10 @@
       "fechaAplicacion": {
        "x-bson": "date",
        "type": "string"
+      },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
       },
       "idEntidad": {
        "type": "string"
@@ -7086,6 +7152,10 @@
        "x-bson": "date",
        "type": "string"
       },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
+      },
       "idEntidad": {
        "type": "string"
       },
@@ -7140,6 +7210,10 @@
       "fechaAplicacion": {
        "x-bson": "date",
        "type": "string"
+      },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
       },
       "idEntidad": {
        "type": "string"
@@ -7196,6 +7270,10 @@
        "x-bson": "date",
        "type": "string"
       },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
+      },
       "idEntidad": {
        "type": "string"
       },
@@ -7250,6 +7328,10 @@
       "fechaAplicacion": {
        "x-bson": "date",
        "type": "string"
+      },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
       },
       "idEntidad": {
        "type": "string"
@@ -31303,6 +31385,19 @@
     "USD"
    ]
   },
+  "MotivoAplicacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/MotivoAplicacionSchema",
+   "type": "string",
+   "enum": [
+    "Asignación",
+    "Edición de perfil",
+    "Desvinculación",
+    "Alta de nodo",
+    "Reaplicación",
+    "Aplicación de dimming"
+   ]
+  },
   "MotivoCierreCumplimientoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/MotivoCierreCumplimientoSchema",
@@ -31390,6 +31485,19 @@
     "dim80",
     "dim90",
     "dim100"
+   ]
+  },
+  "NivelFuenteAplicacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/NivelFuenteAplicacionSchema",
+   "type": "string",
+   "enum": [
+    "luminaria",
+    "grupo",
+    "puesta",
+    "grupoPuesta",
+    "perfil",
+    "dispositivo"
    ]
   },
   "NivelJerarquiaLuminariaSchema": {
@@ -44569,6 +44677,10 @@
        "x-bson": "date",
        "type": "string"
       },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
+      },
       "idEntidad": {
        "type": "string"
       },
@@ -44626,6 +44738,10 @@
       "fechaAplicacion": {
        "x-bson": "date",
        "type": "string"
+      },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
       },
       "idEntidad": {
        "type": "string"
@@ -44685,6 +44801,10 @@
        "x-bson": "date",
        "type": "string"
       },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
+      },
       "idEntidad": {
        "type": "string"
       },
@@ -44742,6 +44862,10 @@
       "fechaAplicacion": {
        "x-bson": "date",
        "type": "string"
+      },
+      "aplicacion": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/AplicacionConfigDeseadaSchema"
       },
       "idEntidad": {
        "type": "string"

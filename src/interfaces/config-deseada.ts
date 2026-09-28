@@ -104,6 +104,70 @@ export const DiffConfigSchema = z.object({
 export type IDiffConfig = z.infer<typeof DiffConfigSchema>;
 
 /* ────────────────────────────────────────────────
+ *  APLICACIÓN: QUÉ ACCIÓN DEL USUARIO CAMBIÓ LA DESEADA
+ * ────────────────────────────────────────────────*/
+
+// Por qué cambió la deseada. Toda acción que termina mandando un perfil a un
+// dispositivo, directa o indirectamente, cae en uno de éstos.
+export const MotivoAplicacionSchema = z.enum([
+  'Asignación', // se asignó o cambió el perfil (o la prioridad) de la fuente
+  'Edición de perfil', // cambió el contenido del perfil (o de su perfil de dimming)
+  'Desvinculación', // se borró o desvinculó la fuente: el perfil efectivo pasó a ser otro
+  'Alta de nodo', // un nodo nuevo heredó el perfil de su luminaria
+  'Reaplicación', // se reaplicó el perfil sin cambiarlo (se invalidó la config real)
+  'Aplicación de dimming', // comando que manda el perfil de dimming ACTIS directo
+]);
+export type MotivoAplicacion = z.infer<typeof MotivoAplicacionSchema>;
+
+// Dónde tocó el usuario. Es más amplio que NivelObjetivo (comando.ts): una
+// edición de perfil tiene de fuente al perfil, y un alta de nodo al dispositivo.
+export const NivelFuenteAplicacionSchema = z.enum([
+  'luminaria',
+  'grupo',
+  'puesta',
+  'grupoPuesta',
+  'perfil',
+  'dispositivo',
+]);
+export type NivelFuenteAplicacion = z.infer<typeof NivelFuenteAplicacionSchema>;
+
+// Marca que deja en la deseada la ÚLTIMA acción que la cambió. Todas las
+// deseadas que tocó una misma acción comparten `id`: agrupándolas se sabe
+// cuántas ya coinciden (el avance de esa aplicación del perfil).
+export const AplicacionConfigDeseadaSchema = z.object({
+  id: z.string(), // uuid de la acción
+  fecha: z.string(), // ISO, inicio de la acción
+  motivo: MotivoAplicacionSchema,
+  idUsuario: z.string().optional(), // vacío si no la disparó un usuario
+  fuente: z
+    .object({
+      nivel: NivelFuenteAplicacionSchema,
+      id: z.string(),
+      nombre: z.string().optional(), // denormalizado para mostrar sin populate
+    })
+    .optional(),
+  idPerfil: z.string().optional(), // perfil efectivo que resultó
+  nombrePerfil: z.string().optional(),
+});
+export type IAplicacionConfigDeseada = z.infer<
+  typeof AplicacionConfigDeseadaSchema
+>;
+
+// Resumen de una aplicación: lo que devuelve la agregación de deseadas por
+// `aplicacion.id` (no se persiste).
+export interface IResumenAplicacionPerfil {
+  aplicacion: IAplicacionConfigDeseada;
+  idCliente?: string;
+  total: number; // deseadas que todavía llevan esta marca
+  coincide: number;
+  noCoincide: number;
+  pendiente: number;
+  bloqueadas: number; // bloqueadoHasta en el futuro: agotó el backoff
+  primeraAplicacion?: string; // ISO, primera fechaAplicacion
+  ultimaAplicacion?: string; // ISO, última fechaAplicacion
+}
+
+/* ────────────────────────────────────────────────
  *  BASE CONFIG DESEADA (GENÉRICO)
  * ────────────────────────────────────────────────*/
 
@@ -121,10 +185,11 @@ export interface IConfigDeseadaBase<T extends keyof MapaConfigDeseada> {
   // Info de carga
   fechaCreacion?: string; // Default: Date.now
   fechaActualizacion?: string; // Última vez que cambió el contenido de la configuración deseada
-  fechaAplicacion?: string;
+  fechaAplicacion?: string; // Cuándo pasó a Coincide por última vez (se limpia al cambiar el contenido)
   idEntidad?: string;
   config?: MapaConfigDeseada[T];
   estado?: Estado;
+  aplicacion?: IAplicacionConfigDeseada; // Última acción que la cambió
 
   // Reconciliación (escritos por el cron reconciliador)
   diffs?: IDiffConfig[]; // campos en discrepancia tras la última comparación
@@ -158,7 +223,10 @@ const ConfigDeseadaCamposSchema = z.object({
   // Info de carga
   fechaCreacion: z.string().optional().meta({ 'x-bson': 'date' }), // Default: Date.now
   fechaActualizacion: z.string().optional().meta({ 'x-bson': 'date' }), // Última vez que cambió el contenido de la configuración deseada
-  fechaAplicacion: z.string().optional().meta({ 'x-bson': 'date' }),
+  fechaAplicacion: z.string().optional().meta({ 'x-bson': 'date' }), // Cuándo pasó a Coincide por última vez (se limpia al cambiar el contenido)
+  // Última acción que la cambió. Mixed: `fecha` queda como string ISO (igual
+  // que `diffs`), y la agregación por `aplicacion.id` no necesita casteo.
+  aplicacion: AplicacionConfigDeseadaSchema.optional().meta({ 'x-bson': 'mixed' }),
   // String plano (unique sparse — ver comentario de configdeseadas/meta.go
   // en gestion-datos-go): sin x-bson. Se popula bajo el nombre "dispositivo"
   // (virtual con nombre distinto al path) matcheando contra
