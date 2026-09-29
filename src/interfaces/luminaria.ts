@@ -38,7 +38,8 @@ export type CodigoEstadoLuminaria = z.infer<typeof CodigoEstadoLuminariaSchema>;
 export const EstadoLuminariaCalculadoSchema = z.object({
   codigo: CodigoEstadoLuminariaSchema,
   encendida: z.boolean().nullable(),
-  motivo: z.string().optional(), // ej. 'Desenergizada (horario diurno)' — flag persistido hasta el próximo reporte
+  motivo: z.string().optional(), // ej. 'Desenergizada (horario diurno)' — sólo mientras dura la ventana diurna
+  esperandoEnergizado: z.boolean().optional(), // nocturna que se dio por desenergizada y todavía no volvió a reportar. Se apaga con el primer reporte (no por horario). Gate de downlinks de config
   alarmas: z.array(z.string()).optional(), // snapshot de valores.alarmas al momento de evaluar (drilldown)
   fechaEvaluacion: z.string(), // ISO — última vez que se evaluó
   fechaCambio: z.string(), // ISO — desde cuándo está en este código
