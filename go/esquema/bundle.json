@@ -21992,6 +21992,9 @@
     "motivo": {
      "type": "string"
     },
+    "esperandoEnergizado": {
+     "type": "boolean"
+    },
     "alarmas": {
      "type": "array",
      "items": {
@@ -31156,6 +31159,12 @@
     },
     "usaPuestas": {
      "type": "boolean"
+    },
+    "idsPerfilConfigPorDefecto": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
     },
     "informe": {
      "$ref": "#/$defs/ConfigInformesSchema"
