@@ -54,6 +54,11 @@ export const AccionesRolSchema = z.enum([
   'Administración - Crear trackers',
   'Administración - Editar trackers',
   'Administración - Eliminar trackers',
+  // SIMs
+  'Administración - Ver SIMs',
+  'Administración - Crear SIMs',
+  'Administración - Editar SIMs',
+  'Administración - Eliminar SIMs',
   // Servicios Ofrecidos
   'Administración - Ver servicios ofrecidos',
   'Administración - Crear servicios ofrecidos',

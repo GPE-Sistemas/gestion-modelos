@@ -118,6 +118,10 @@
     "Administración - Crear trackers",
     "Administración - Editar trackers",
     "Administración - Eliminar trackers",
+    "Administración - Ver SIMs",
+    "Administración - Crear SIMs",
+    "Administración - Editar SIMs",
+    "Administración - Eliminar SIMs",
     "Administración - Ver servicios ofrecidos",
     "Administración - Crear servicios ofrecidos",
     "Administración - Editar servicios ofrecidos",
@@ -1198,6 +1202,14 @@
      },
      "$ref": "#/$defs/TrackerSchema"
     },
+    "alarmaModificada": {
+     "x-populate": {
+      "ref": "DispositivoAlarmaSchema",
+      "localField": "idEntidadModificada",
+      "foreignField": "_id",
+      "justOne": true
+     }
+    },
     "choferAsignado": {
      "x-populate": {
       "ref": "UsuarioSchema",
@@ -1224,6 +1236,14 @@
       "justOne": true
      },
      "$ref": "#/$defs/TrackerSchema"
+    },
+    "simAsignado": {
+     "x-populate": {
+      "ref": "SimSchema",
+      "localField": "idEntidadAsignada",
+      "foreignField": "_id",
+      "justOne": true
+     }
     }
    },
    "additionalProperties": false,
@@ -16048,6 +16068,14 @@
      "x-ref": "ClienteSchema",
      "type": "string"
     },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
     "fechaUltimoReporte": {
      "x-bson": "date",
      "type": "string"
@@ -21400,7 +21428,9 @@
     "Dispositivo Lorawan",
     "Puesta",
     "Grupo",
-    "Configuración de Perfil"
+    "Configuración de Perfil",
+    "SIM",
+    "Sirena"
    ]
   },
   "EnvioVehiculoSchema": {
@@ -38987,6 +39017,14 @@
      "x-ref": "ClienteSchema",
      "type": "string"
     },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
     "fechaUltimoReporte": {
      "x-bson": "date",
      "type": "string"
@@ -53568,6 +53606,14 @@
      "x-bson": "objectId",
      "x-ref": "ClienteSchema",
      "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
     },
     "fechaUltimoReporte": {
      "x-bson": "date",
