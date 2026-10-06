@@ -25,6 +25,10 @@ export const SimSchema = z
     idCliente: z
       .string()
       .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }), // Cliente que creó la SIM
+    idsAncestros: z
+      .array(z.string())
+      .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
     fechaUltimoReporte: z.string().optional().meta({ 'x-bson': 'date' }), //En caso de que sea cargada por reporte
   })
