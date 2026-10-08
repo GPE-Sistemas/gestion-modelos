@@ -245,6 +245,7 @@ export const AccionesRolSchema = z.enum([
   'Luminarias - Crear',
   'Luminarias - Editar',
   'Luminarias - Eliminar',
+  'Luminarias - Cambiar cliente', // Mueve la luminaria (y su nodo e historial) a otro cliente
   'Luminarias - Enviar comandos',
   'Luminarias - Solicitar servicio técnico',
   'Luminarias - Editar contactos ',
