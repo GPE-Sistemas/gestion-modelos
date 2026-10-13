@@ -790,6 +790,48 @@
     "Rango"
    ]
   },
+  "AjustePrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/AjustePrecioSchema",
+   "type": "object",
+   "properties": {
+    "tipo": {
+     "$ref": "#/$defs/TipoAjustePrecioSchema"
+    },
+    "valor": {
+     "type": "number"
+    },
+    "frecuencia": {
+     "$ref": "#/$defs/FrecuenciaAjustePrecioSchema"
+    },
+    "proximoAjuste": {
+     "x-bson": "date",
+     "type": "string"
+    }
+   },
+   "required": [
+    "tipo",
+    "frecuencia"
+   ],
+   "additionalProperties": false
+  },
+  "AlcanceContratacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/AlcanceContratacionSchema",
+   "type": "object",
+   "properties": {
+    "categorias": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CategoriaDispositivoSchema"
+     }
+    },
+    "requiereAlMenosUno": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
   "AlertaBotonBLESchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/AlertaBotonBLESchema",
@@ -870,6 +912,33 @@
    },
    "additionalProperties": false,
    "x-collection": "alertabotonbles"
+  },
+  "AlicuotaLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/AlicuotaLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "alicuota": {
+     "type": "number"
+    },
+    "base": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "alicuota",
+    "base"
+   ],
+   "additionalProperties": false
+  },
+  "AnclaCicloSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/AnclaCicloSchema",
+   "type": "string",
+   "enum": [
+    "Calendario",
+    "FechaAlta"
+   ]
   },
   "ApikeySchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1684,6 +1753,21 @@
     "Colectivo"
    ]
   },
+  "CategoriaDispositivoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CategoriaDispositivoSchema",
+   "type": "string",
+   "enum": [
+    "alarmas",
+    "trackers",
+    "sirenas",
+    "camaras",
+    "luminarias",
+    "dispositivosLorawan",
+    "gateways",
+    "botonesBluetooth"
+   ]
+  },
   "CategoriaEventoCacheSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/CategoriaEventoCacheSchema",
@@ -2183,6 +2267,74 @@
    },
    "additionalProperties": false,
    "x-collection": "clients"
+  },
+  "ClienteExternoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ClienteExternoSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "cuit": {
+     "type": "string"
+    },
+    "idClienteIrix": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "ancestros": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idsAncestros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ClienteSchema"
+     }
+    },
+    "clienteIrix": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idClienteIrix",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    }
+   },
+   "required": [
+    "nombre"
+   ],
+   "additionalProperties": false,
+   "x-collection": "clientesexternos"
   },
   "ClienteSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2805,6 +2957,24 @@
     },
     "minutosIgnicion": {
      "type": "number"
+    }
+   },
+   "additionalProperties": false
+  },
+  "ComponenteLineaLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ComponenteLineaLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "idServicioOfrecido": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "concepto": {
+     "type": "string"
+    },
+    "codigoExterno": {
+     "type": "string"
     }
    },
    "additionalProperties": false
@@ -6035,6 +6205,154 @@
    },
    "additionalProperties": false
   },
+  "ContratacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ContratacionSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idClienteDestino": {
+     "type": "string",
+     "x-bson": "objectId"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "idServicioOfrecido": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema"
+    },
+    "idEntidad": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "categoria": {
+     "$ref": "#/$defs/CategoriaDispositivoSchema"
+    },
+    "fechaAlta": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "fechaBaja": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "estado": {
+     "$ref": "#/$defs/EstadoContratacionSchema"
+    },
+    "idPrecioAlContratar": {
+     "x-bson": "objectId",
+     "x-ref": "PrecioSchema",
+     "type": "string"
+    },
+    "precioPactado": {
+     "type": "number"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "precioCongelado": {
+     "type": "boolean"
+    },
+    "cargoUnicoFacturado": {
+     "type": "boolean"
+    },
+    "alcance": {
+     "$ref": "#/$defs/AlcanceContratacionSchema"
+    },
+    "idContratacionOrigen": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "motivoOrigen": {
+     "$ref": "#/$defs/MotivoOrigenContratacionSchema"
+    },
+    "modalidadEquipo": {
+     "$ref": "#/$defs/ModalidadEquipoSchema"
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "ancestros": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idsAncestros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ClienteSchema"
+     }
+    },
+    "servicioOfrecido": {
+     "x-populate": {
+      "ref": "ServicioOfrecidoSchema",
+      "localField": "idServicioOfrecido",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ServicioOfrecidoSchema"
+    },
+    "precioAlContratar": {
+     "x-populate": {
+      "ref": "PrecioSchema",
+      "localField": "idPrecioAlContratar",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/PrecioSchema"
+    },
+    "clienteDestino": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "clienteExternoDestino": {
+     "x-populate": {
+      "ref": "ClienteExternoSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteExternoSchema"
+    }
+   },
+   "required": [
+    "idClienteDestino",
+    "idServicioOfrecido",
+    "fechaAlta",
+    "estado"
+   ],
+   "additionalProperties": false,
+   "x-collection": "contrataciones"
+  },
   "ControlActividadSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ControlActividadSchema",
@@ -6928,6 +7246,40 @@
      "type": "number"
     }
    },
+   "additionalProperties": false
+  },
+  "CreateClienteExternoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateClienteExternoSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "cuit": {
+     "type": "string"
+    },
+    "idClienteIrix": {
+     "x-bson": "objectId",
+     "type": "string"
+    }
+   },
+   "required": [
+    "nombre"
+   ],
    "additionalProperties": false
   },
   "CreateClienteSchema": {
@@ -7836,6 +8188,93 @@
      "$ref": "#/$defs/ClienteSchema"
     }
    },
+   "additionalProperties": false
+  },
+  "CreateContratacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateContratacionSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idClienteDestino": {
+     "type": "string",
+     "x-bson": "objectId"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "idServicioOfrecido": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema"
+    },
+    "idEntidad": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "categoria": {
+     "$ref": "#/$defs/CategoriaDispositivoSchema"
+    },
+    "fechaAlta": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "fechaBaja": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "estado": {
+     "$ref": "#/$defs/EstadoContratacionSchema"
+    },
+    "idPrecioAlContratar": {
+     "x-bson": "objectId",
+     "x-ref": "PrecioSchema",
+     "type": "string"
+    },
+    "precioPactado": {
+     "type": "number"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "precioCongelado": {
+     "type": "boolean"
+    },
+    "cargoUnicoFacturado": {
+     "type": "boolean"
+    },
+    "alcance": {
+     "$ref": "#/$defs/AlcanceContratacionSchema"
+    },
+    "idContratacionOrigen": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "motivoOrigen": {
+     "$ref": "#/$defs/MotivoOrigenContratacionSchema"
+    },
+    "modalidadEquipo": {
+     "$ref": "#/$defs/ModalidadEquipoSchema"
+    }
+   },
+   "required": [
+    "idClienteDestino",
+    "idServicioOfrecido",
+    "fechaAlta",
+    "estado"
+   ],
    "additionalProperties": false
   },
   "CreateCounterSchema": {
@@ -11779,11 +12218,52 @@
       "type": "string"
      }
     },
+    "idClienteDestino": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
     "activa": {
      "type": "boolean"
     },
     "bonificado": {
      "type": "boolean"
+    },
+    "pagadoPor": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "diasMaxEsperaCargoUnico": {
+     "type": "number"
+    },
+    "momento": {
+     "$ref": "#/$defs/MomentoFacturacionSchema"
+    },
+    "diasVencimiento": {
+     "type": "number"
+    },
+    "condicionPago": {
+     "type": "string"
+    },
+    "prorratearAltas": {
+     "type": "boolean"
+    },
+    "prorratearBajas": {
+     "type": "boolean"
+    },
+    "prorratearCambiosDePrecio": {
+     "type": "boolean"
+    },
+    "permitirVisibilidadPlataforma": {
+     "type": "boolean"
+    },
+    "datosFiscales": {
+     "$ref": "#/$defs/DatosFiscalesFacturacionSchema"
     }
    },
    "additionalProperties": false
@@ -12067,6 +12547,122 @@
      }
     }
    },
+   "additionalProperties": false
+  },
+  "CreateLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idClienteDestino": {
+     "type": "string",
+     "x-bson": "objectId"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "numero": {
+     "type": "string"
+    },
+    "tipo": {
+     "$ref": "#/$defs/TipoLiquidacionSchema"
+    },
+    "idLiquidacionOrigen": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "periodoInicio": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "periodoFin": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "fechaEmision": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaVencimiento": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaCobro": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "cotizacion": {
+     "type": "number"
+    },
+    "emisor": {
+     "$ref": "#/$defs/EmisorLiquidacionSchema"
+    },
+    "destino": {
+     "$ref": "#/$defs/DestinoLiquidacionSchema"
+    },
+    "lineas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/LineaLiquidacionSchema"
+     }
+    },
+    "subtotal": {
+     "type": "number"
+    },
+    "descuentos": {
+     "type": "number"
+    },
+    "neto": {
+     "type": "number"
+    },
+    "porAlicuota": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/AlicuotaLiquidacionSchema"
+     }
+    },
+    "estado": {
+     "$ref": "#/$defs/EstadoLiquidacionSchema"
+    },
+    "nroComprobanteExterno": {
+     "type": "string"
+    },
+    "advertencias": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "required": [
+    "idClienteDestino",
+    "tipo",
+    "periodoInicio",
+    "periodoFin",
+    "moneda",
+    "lineas",
+    "subtotal",
+    "descuentos",
+    "neto",
+    "porAlicuota",
+    "estado"
+   ],
    "additionalProperties": false
   },
   "CreateListadoCategoriaSchema": {
@@ -13498,6 +14094,87 @@
      }
     }
    },
+   "additionalProperties": false
+  },
+  "CreatePrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreatePrecioSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idServicioOfrecido": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema"
+    },
+    "idClienteDestino": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "tipoCargo": {
+     "$ref": "#/$defs/TipoCargoSchema"
+    },
+    "periodicidad": {
+     "$ref": "#/$defs/PeriodicidadPrecioSchema"
+    },
+    "anclaCiclo": {
+     "$ref": "#/$defs/AnclaCicloSchema"
+    },
+    "modo": {
+     "$ref": "#/$defs/ModoPrecioSchema"
+    },
+    "precio": {
+     "type": "number"
+    },
+    "escalas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/EscalaPrecioSchema"
+     }
+    },
+    "minimoFacturable": {
+     "type": "number"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "descuento": {
+     "$ref": "#/$defs/DescuentoPrecioSchema"
+    },
+    "ajuste": {
+     "$ref": "#/$defs/AjustePrecioSchema"
+    },
+    "vigenciaDesde": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "vigenciaHasta": {
+     "x-bson": "date",
+     "type": "string"
+    }
+   },
+   "required": [
+    "idServicioOfrecido",
+    "tipoCargo",
+    "modo",
+    "moneda",
+    "vigenciaDesde"
+   ],
    "additionalProperties": false
   },
   "CreateProveedorSchema": {
@@ -15954,6 +16631,62 @@
    },
    "additionalProperties": false
   },
+  "CreateServicioOfrecidoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateServicioOfrecidoSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "icono": {
+     "type": "string"
+    },
+    "global": {
+     "type": "boolean"
+    },
+    "categorias": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CategoriaDispositivoSchema"
+     }
+    },
+    "alicuotaIVA": {
+     "type": "number"
+    },
+    "codigoExterno": {
+     "type": "string"
+    },
+    "unidadMedida": {
+     "type": "string"
+    },
+    "componentes": {
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "required": [
+    "nombre"
+   ],
+   "additionalProperties": false
+  },
   "CreateServicioSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/CreateServicioSchema",
@@ -18036,6 +18769,29 @@
     "$ref": "#/$defs/PuntoCurvaLuminariaSchema"
    }
   },
+  "DatosFiscalesFacturacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DatosFiscalesFacturacionSchema",
+   "type": "object",
+   "properties": {
+    "razonSocial": {
+     "type": "string"
+    },
+    "cuit": {
+     "type": "string"
+    },
+    "condicionIVA": {
+     "type": "string"
+    },
+    "domicilio": {
+     "type": "string"
+    },
+    "codigoExterno": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "DatosPersonalesSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/DatosPersonalesSchema",
@@ -18085,6 +18841,55 @@
    },
    "required": [
     "urlAsset"
+   ],
+   "additionalProperties": false
+  },
+  "DescuentoLineaLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DescuentoLineaLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "motivo": {
+     "type": "string"
+    },
+    "importe": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "importe"
+   ],
+   "additionalProperties": false
+  },
+  "DescuentoPrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DescuentoPrecioSchema",
+   "type": "object",
+   "properties": {
+    "tipo": {
+     "$ref": "#/$defs/TipoDescuentoSchema"
+    },
+    "valor": {
+     "type": "number"
+    },
+    "motivo": {
+     "type": "string"
+    },
+    "desde": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "hasta": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "porCantidadDesde": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "tipo",
+    "valor"
    ],
    "additionalProperties": false
   },
@@ -18324,6 +19129,33 @@
    "additionalProperties": false,
    "x-collection": "destinatarioasistencias"
   },
+  "DestinoLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DestinoLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "razonSocial": {
+     "type": "string"
+    },
+    "cuit": {
+     "type": "string"
+    },
+    "condicionIVA": {
+     "type": "string"
+    },
+    "domicilio": {
+     "type": "string"
+    },
+    "codigoExterno": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "DetalleClienteFacturacionSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/DetalleClienteFacturacionSchema",
@@ -18482,6 +19314,40 @@
      "type": "number"
     },
     "cantidadFacturada": {
+     "type": "number"
+    }
+   },
+   "additionalProperties": false
+  },
+  "DetalleLineaLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DetalleLineaLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "categoria": {
+     "$ref": "#/$defs/CategoriaDispositivoSchema"
+    },
+    "idClienteDestino": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "idsContrataciones": {
+     "x-bson": "objectId",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "componentes": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ComponenteLineaLiquidacionSchema"
+     }
+    },
+    "cubre": {
      "type": "number"
     }
    },
@@ -21396,6 +22262,23 @@
    "additionalProperties": false,
    "x-collection": "emergencias"
   },
+  "EmisorLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/EmisorLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "razonSocial": {
+     "type": "string"
+    },
+    "cuit": {
+     "type": "string"
+    },
+    "codigoExterno": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "EncendidoDiarioLuminariasSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/EncendidoDiarioLuminariasSchema",
@@ -21553,6 +22436,27 @@
    },
    "additionalProperties": false,
    "x-collection": "enviovehiculos"
+  },
+  "EscalaPrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/EscalaPrecioSchema",
+   "type": "object",
+   "properties": {
+    "desde": {
+     "type": "number"
+    },
+    "hasta": {
+     "type": "number"
+    },
+    "precio": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "desde",
+    "precio"
+   ],
+   "additionalProperties": false
   },
   "EstadisticaVehiculoCombustibleSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -21765,6 +22669,15 @@
     "En Cola",
     "No Ejecutado",
     "Descartado"
+   ]
+  },
+  "EstadoContratacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/EstadoContratacionSchema",
+   "type": "string",
+   "enum": [
+    "Activa",
+    "Baja"
    ]
   },
   "EstadoCuentaEntidadSchema": {
@@ -22000,6 +22913,17 @@
     "procesando",
     "completado",
     "error"
+   ]
+  },
+  "EstadoLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/EstadoLiquidacionSchema",
+   "type": "string",
+   "enum": [
+    "Borrador",
+    "Emitida",
+    "Cobrada",
+    "Anulada"
    ]
   },
   "EstadoLuminariaCalculadoSchema": {
@@ -26831,11 +27755,52 @@
       "type": "string"
      }
     },
+    "idClienteDestino": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
     "activa": {
      "type": "boolean"
     },
     "bonificado": {
      "type": "boolean"
+    },
+    "pagadoPor": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "diasMaxEsperaCargoUnico": {
+     "type": "number"
+    },
+    "momento": {
+     "$ref": "#/$defs/MomentoFacturacionSchema"
+    },
+    "diasVencimiento": {
+     "type": "number"
+    },
+    "condicionPago": {
+     "type": "string"
+    },
+    "prorratearAltas": {
+     "type": "boolean"
+    },
+    "prorratearBajas": {
+     "type": "boolean"
+    },
+    "prorratearCambiosDePrecio": {
+     "type": "boolean"
+    },
+    "permitirVisibilidadPlataforma": {
+     "type": "boolean"
+    },
+    "datosFiscales": {
+     "$ref": "#/$defs/DatosFiscalesFacturacionSchema"
     },
     "cliente": {
      "x-populate": {
@@ -26857,6 +27822,24 @@
      "items": {
       "$ref": "#/$defs/ClienteSchema"
      }
+    },
+    "clienteDestino": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "clienteExternoDestino": {
+     "x-populate": {
+      "ref": "ClienteExternoSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteExternoSchema"
     }
    },
    "additionalProperties": false,
@@ -27116,6 +28099,16 @@
     }
    },
    "additionalProperties": false
+  },
+  "FrecuenciaAjustePrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/FrecuenciaAjustePrecioSchema",
+   "type": "string",
+   "enum": [
+    "Trimestral",
+    "Semestral",
+    "Anual"
+   ]
   },
   "FrecuenciaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -28554,6 +29547,237 @@
     "weight"
    ],
    "additionalProperties": false
+  },
+  "LineaLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/LineaLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "idServicioOfrecido": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "codigoExterno": {
+     "type": "string"
+    },
+    "concepto": {
+     "type": "string"
+    },
+    "unidad": {
+     "type": "string"
+    },
+    "tipoCargo": {
+     "$ref": "#/$defs/TipoCargoSchema"
+    },
+    "cantidad": {
+     "type": "number"
+    },
+    "precioUnitario": {
+     "type": "number"
+    },
+    "subtotal": {
+     "type": "number"
+    },
+    "alicuotaIVA": {
+     "type": "number"
+    },
+    "descuento": {
+     "$ref": "#/$defs/DescuentoLineaLiquidacionSchema"
+    },
+    "periodoInicio": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "periodoFin": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "detalle": {
+     "$ref": "#/$defs/DetalleLineaLiquidacionSchema"
+    },
+    "esAjuste": {
+     "type": "boolean"
+    },
+    "motivoAjuste": {
+     "type": "string"
+    },
+    "idUsuarioAjuste": {
+     "x-bson": "objectId",
+     "type": "string"
+    }
+   },
+   "required": [
+    "concepto",
+    "cantidad",
+    "precioUnitario",
+    "subtotal",
+    "periodoInicio",
+    "periodoFin"
+   ],
+   "additionalProperties": false
+  },
+  "LiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/LiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "fechaCreacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idClienteDestino": {
+     "type": "string",
+     "x-bson": "objectId"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "numero": {
+     "type": "string"
+    },
+    "tipo": {
+     "$ref": "#/$defs/TipoLiquidacionSchema"
+    },
+    "idLiquidacionOrigen": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "periodoInicio": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "periodoFin": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "fechaEmision": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaVencimiento": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaCobro": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "cotizacion": {
+     "type": "number"
+    },
+    "emisor": {
+     "$ref": "#/$defs/EmisorLiquidacionSchema"
+    },
+    "destino": {
+     "$ref": "#/$defs/DestinoLiquidacionSchema"
+    },
+    "lineas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/LineaLiquidacionSchema"
+     }
+    },
+    "subtotal": {
+     "type": "number"
+    },
+    "descuentos": {
+     "type": "number"
+    },
+    "neto": {
+     "type": "number"
+    },
+    "porAlicuota": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/AlicuotaLiquidacionSchema"
+     }
+    },
+    "estado": {
+     "$ref": "#/$defs/EstadoLiquidacionSchema"
+    },
+    "nroComprobanteExterno": {
+     "type": "string"
+    },
+    "advertencias": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "ancestros": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idsAncestros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ClienteSchema"
+     }
+    },
+    "clienteDestino": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "clienteExternoDestino": {
+     "x-populate": {
+      "ref": "ClienteExternoSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteExternoSchema"
+    }
+   },
+   "required": [
+    "idClienteDestino",
+    "tipo",
+    "periodoInicio",
+    "periodoFin",
+    "moneda",
+    "lineas",
+    "subtotal",
+    "descuentos",
+    "neto",
+    "porAlicuota",
+    "estado"
+   ],
+   "additionalProperties": false,
+   "x-collection": "liquidaciones"
   },
   "ListadoCategoriaCacheSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -30633,6 +31857,16 @@
    ],
    "additionalProperties": false
   },
+  "ModalidadEquipoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ModalidadEquipoSchema",
+   "type": "string",
+   "enum": [
+    "Comodato",
+    "Venta",
+    "DelCliente"
+   ]
+  },
   "ModeSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ModeSchema",
@@ -30871,6 +32105,17 @@
     "Astronómico",
     "Por Defecto",
     "Manual"
+   ]
+  },
+  "ModoPrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ModoPrecioSchema",
+   "type": "string",
+   "enum": [
+    "PorUnidad",
+    "PorCliente",
+    "Escalonado",
+    "Volumen"
    ]
   },
   "ModoSensorSchema": {
@@ -31407,6 +32652,15 @@
    },
    "additionalProperties": false
   },
+  "MomentoFacturacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/MomentoFacturacionSchema",
+   "type": "string",
+   "enum": [
+    "Adelantado",
+    "Vencido"
+   ]
+  },
   "MonedaFacturacionSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/MonedaFacturacionSchema",
@@ -31450,6 +32704,16 @@
     "Fin de dia",
     "Geometria modificada",
     "Reinicio manual"
+   ]
+  },
+  "MotivoOrigenContratacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/MotivoOrigenContratacionSchema",
+   "type": "string",
+   "enum": [
+    "Recambio",
+    "Rehabilitacion",
+    "Traspaso"
    ]
   },
   "MotorEfectoFullscreenSchema": {
@@ -32391,6 +33655,18 @@
    },
    "additionalProperties": false
   },
+  "PeriodicidadPrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/PeriodicidadPrecioSchema",
+   "type": "string",
+   "enum": [
+    "Mensual",
+    "Bimestral",
+    "Trimestral",
+    "Semestral",
+    "Anual"
+   ]
+  },
   "PeriodoMetricaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/PeriodoMetricaSchema",
@@ -32697,6 +33973,139 @@
     }
    },
    "additionalProperties": false
+  },
+  "PrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/PrecioSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idServicioOfrecido": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema"
+    },
+    "idClienteDestino": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "tipoCargo": {
+     "$ref": "#/$defs/TipoCargoSchema"
+    },
+    "periodicidad": {
+     "$ref": "#/$defs/PeriodicidadPrecioSchema"
+    },
+    "anclaCiclo": {
+     "$ref": "#/$defs/AnclaCicloSchema"
+    },
+    "modo": {
+     "$ref": "#/$defs/ModoPrecioSchema"
+    },
+    "precio": {
+     "type": "number"
+    },
+    "escalas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/EscalaPrecioSchema"
+     }
+    },
+    "minimoFacturable": {
+     "type": "number"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "descuento": {
+     "$ref": "#/$defs/DescuentoPrecioSchema"
+    },
+    "ajuste": {
+     "$ref": "#/$defs/AjustePrecioSchema"
+    },
+    "vigenciaDesde": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "vigenciaHasta": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "ancestros": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idsAncestros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ClienteSchema"
+     }
+    },
+    "servicioOfrecido": {
+     "x-populate": {
+      "ref": "ServicioOfrecidoSchema",
+      "localField": "idServicioOfrecido",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ServicioOfrecidoSchema"
+    },
+    "clienteDestino": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "clienteExternoDestino": {
+     "x-populate": {
+      "ref": "ClienteExternoSchema",
+      "localField": "idClienteDestino",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteExternoSchema"
+    }
+   },
+   "required": [
+    "idServicioOfrecido",
+    "tipoCargo",
+    "modo",
+    "moneda",
+    "vigenciaDesde"
+   ],
+   "additionalProperties": false,
+   "x-collection": "precios"
   },
   "PrediccionCercanaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -38836,6 +40245,87 @@
    "additionalProperties": false,
    "x-collection": "serviciocontratados"
   },
+  "ServicioOfrecidoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ServicioOfrecidoSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "icono": {
+     "type": "string"
+    },
+    "global": {
+     "type": "boolean"
+    },
+    "categorias": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CategoriaDispositivoSchema"
+     }
+    },
+    "alicuotaIVA": {
+     "type": "number"
+    },
+    "codigoExterno": {
+     "type": "string"
+    },
+    "unidadMedida": {
+     "type": "string"
+    },
+    "componentes": {
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "ancestros": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idsAncestros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ClienteSchema"
+     }
+    }
+   },
+   "required": [
+    "nombre"
+   ],
+   "additionalProperties": false,
+   "x-collection": "serviciosofrecidos"
+  },
   "ServicioSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ServicioSchema",
@@ -40763,6 +42253,15 @@
     "Actividad"
    ]
   },
+  "TipoAjustePrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TipoAjustePrecioSchema",
+   "type": "string",
+   "enum": [
+    "PorcentajeFijo",
+    "IPC"
+   ]
+  },
   "TipoCamaraSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/TipoCamaraSchema",
@@ -40772,6 +42271,16 @@
     "Dahua",
     "Hikvision P2P",
     "Dahua P2P"
+   ]
+  },
+  "TipoCargoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TipoCargoSchema",
+   "type": "string",
+   "enum": [
+    "Recurrente",
+    "UnicaVez",
+    "PorUso"
    ]
   },
   "TipoCategoriaSchema": {
@@ -40813,6 +42322,24 @@
    "enum": [
     "despacho",
     "turnos"
+   ]
+  },
+  "TipoDescuentoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TipoDescuentoSchema",
+   "type": "string",
+   "enum": [
+    "Porcentaje",
+    "ImporteFijo"
+   ]
+  },
+  "TipoDestinoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TipoDestinoSchema",
+   "type": "string",
+   "enum": [
+    "Cliente",
+    "Externo"
    ]
   },
   "TipoDetectorHikvisionSchema": {
@@ -41106,6 +42633,15 @@
    "enum": [
     "Siempre",
     "Con Evento"
+   ]
+  },
+  "TipoLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TipoLiquidacionSchema",
+   "type": "string",
+   "enum": [
+    "Liquidacion",
+    "NotaCredito"
    ]
   },
   "TipoListadoCategoriaSchema": {
@@ -44492,6 +46028,37 @@
    },
    "additionalProperties": false
   },
+  "UpdateClienteExternoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdateClienteExternoSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "cuit": {
+     "type": "string"
+    },
+    "idClienteIrix": {
+     "x-bson": "objectId",
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
   "UpdateClienteSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/UpdateClienteSchema",
@@ -45413,6 +46980,67 @@
       "justOne": true
      },
      "$ref": "#/$defs/ClienteSchema"
+    }
+   },
+   "additionalProperties": false
+  },
+  "UpdateContratacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdateContratacionSchema",
+   "type": "object",
+   "properties": {
+    "idServicioOfrecido": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema"
+    },
+    "idEntidad": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "categoria": {
+     "$ref": "#/$defs/CategoriaDispositivoSchema"
+    },
+    "fechaAlta": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "fechaBaja": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "estado": {
+     "$ref": "#/$defs/EstadoContratacionSchema"
+    },
+    "idPrecioAlContratar": {
+     "x-bson": "objectId",
+     "x-ref": "PrecioSchema",
+     "type": "string"
+    },
+    "precioPactado": {
+     "type": "number"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "precioCongelado": {
+     "type": "boolean"
+    },
+    "cargoUnicoFacturado": {
+     "type": "boolean"
+    },
+    "alcance": {
+     "$ref": "#/$defs/AlcanceContratacionSchema"
+    },
+    "idContratacionOrigen": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "motivoOrigen": {
+     "$ref": "#/$defs/MotivoOrigenContratacionSchema"
+    },
+    "modalidadEquipo": {
+     "$ref": "#/$defs/ModalidadEquipoSchema"
     }
    },
    "additionalProperties": false
@@ -49377,11 +51005,52 @@
       "type": "string"
      }
     },
+    "idClienteDestino": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
     "activa": {
      "type": "boolean"
     },
     "bonificado": {
      "type": "boolean"
+    },
+    "pagadoPor": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "diasMaxEsperaCargoUnico": {
+     "type": "number"
+    },
+    "momento": {
+     "$ref": "#/$defs/MomentoFacturacionSchema"
+    },
+    "diasVencimiento": {
+     "type": "number"
+    },
+    "condicionPago": {
+     "type": "string"
+    },
+    "prorratearAltas": {
+     "type": "boolean"
+    },
+    "prorratearBajas": {
+     "type": "boolean"
+    },
+    "prorratearCambiosDePrecio": {
+     "type": "boolean"
+    },
+    "permitirVisibilidadPlataforma": {
+     "type": "boolean"
+    },
+    "datosFiscales": {
+     "$ref": "#/$defs/DatosFiscalesFacturacionSchema"
     }
    },
    "additionalProperties": false
@@ -49662,6 +51331,96 @@
      "type": "array",
      "items": {
       "$ref": "#/$defs/InfoEndPointSchema"
+     }
+    }
+   },
+   "additionalProperties": false
+  },
+  "UpdateLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdateLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "idClienteDestino": {
+     "type": "string",
+     "x-bson": "objectId"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "numero": {
+     "type": "string"
+    },
+    "tipo": {
+     "$ref": "#/$defs/TipoLiquidacionSchema"
+    },
+    "idLiquidacionOrigen": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "periodoInicio": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "periodoFin": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "fechaEmision": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaVencimiento": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaCobro": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "cotizacion": {
+     "type": "number"
+    },
+    "emisor": {
+     "$ref": "#/$defs/EmisorLiquidacionSchema"
+    },
+    "destino": {
+     "$ref": "#/$defs/DestinoLiquidacionSchema"
+    },
+    "lineas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/LineaLiquidacionSchema"
+     }
+    },
+    "subtotal": {
+     "type": "number"
+    },
+    "descuentos": {
+     "type": "number"
+    },
+    "neto": {
+     "type": "number"
+    },
+    "porAlicuota": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/AlicuotaLiquidacionSchema"
+     }
+    },
+    "estado": {
+     "$ref": "#/$defs/EstadoLiquidacionSchema"
+    },
+    "nroComprobanteExterno": {
+     "type": "string"
+    },
+    "advertencias": {
+     "type": "array",
+     "items": {
+      "type": "string"
      }
     }
    },
@@ -51032,6 +52791,80 @@
      "items": {
       "$ref": "#/$defs/ClienteSchema"
      }
+    }
+   },
+   "additionalProperties": false
+  },
+  "UpdatePrecioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdatePrecioSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idServicioOfrecido": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema"
+    },
+    "idClienteDestino": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "tipoCargo": {
+     "$ref": "#/$defs/TipoCargoSchema"
+    },
+    "periodicidad": {
+     "$ref": "#/$defs/PeriodicidadPrecioSchema"
+    },
+    "anclaCiclo": {
+     "$ref": "#/$defs/AnclaCicloSchema"
+    },
+    "modo": {
+     "$ref": "#/$defs/ModoPrecioSchema"
+    },
+    "precio": {
+     "type": "number"
+    },
+    "escalas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/EscalaPrecioSchema"
+     }
+    },
+    "minimoFacturable": {
+     "type": "number"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "descuento": {
+     "$ref": "#/$defs/DescuentoPrecioSchema"
+    },
+    "ajuste": {
+     "$ref": "#/$defs/AjustePrecioSchema"
+    },
+    "vigenciaDesde": {
+     "type": "string",
+     "x-bson": "date"
+    },
+    "vigenciaHasta": {
+     "x-bson": "date",
+     "type": "string"
     }
    },
    "additionalProperties": false
@@ -53488,6 +55321,59 @@
      "type": "array",
      "items": {
       "$ref": "#/$defs/ClienteSchema"
+     }
+    }
+   },
+   "additionalProperties": false
+  },
+  "UpdateServicioOfrecidoSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdateServicioOfrecidoSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "icono": {
+     "type": "string"
+    },
+    "global": {
+     "type": "boolean"
+    },
+    "categorias": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CategoriaDispositivoSchema"
+     }
+    },
+    "alicuotaIVA": {
+     "type": "number"
+    },
+    "codigoExterno": {
+     "type": "string"
+    },
+    "unidadMedida": {
+     "type": "string"
+    },
+    "componentes": {
+     "x-bson": "objectId",
+     "x-ref": "ServicioOfrecidoSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
      }
     }
    },
