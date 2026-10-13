@@ -212,15 +212,40 @@ func TestSubSchemasSonSoloLosSubDocumentosReales(t *testing.T) {
 		t.Errorf("temas.SubSchemas = %v; `payload` es Mixed, no un sub-schema", temas.SubSchemas)
 	}
 
-	// Y en TODO el bundle no puede haber más de esos dos: si aparece un
-	// tercero, el motor de gestion-datos-go va a empezar a aplanar un objeto
-	// que hoy reemplaza entero, que es un cambio de comportamiento de escritura.
-	var total int
-	for _, m := range r.Todas() {
-		total += len(m.SubSchemas)
+	// Y en TODO el bundle no puede haber otros que estos: si aparece uno
+	// nuevo, el motor de gestion-datos-go va a empezar a aplanar un objeto que
+	// hoy reemplaza entero, que es un cambio de comportamiento de escritura.
+	// Sumar uno a la lista es una decisión, no un trámite.
+	//
+	// Los de facturación (contrataciones, facturacionclientes.datosFiscales,
+	// liquidaciones, precios) son sub-schemas reales a propósito: llevan
+	// fechas y ObjectIds adentro que tienen que castearse. Como Mixed
+	// quedarían string y una comparación contra Date daría siempre falso.
+	permitidos := []string{
+		"activos.vehiculo",
+		"contrataciones.alcance",
+		"facturacionclientes.datosFiscales",
+		"liquidaciones.destino",
+		"liquidaciones.emisor",
+		"liquidaciones.lineas",
+		"liquidaciones.porAlicuota",
+		"precios.ajuste",
+		"precios.descuento",
+		"precios.escalas",
+		"recorridos.paradas",
+		"recorridosdinamicos.detalleCumplimiento",
+		"recorridosdinamicos.paradas",
+		"trackers.t1000b",
 	}
-	if total != 2 {
-		t.Errorf("hay %d SubSchemas en todo el bundle; esperaba 2 (activos.vehiculo y recorridos.paradas)", total)
+	var hay []string
+	for _, m := range r.Todas() {
+		for _, s := range m.SubSchemas {
+			hay = append(hay, m.Collection+"."+s)
+		}
+	}
+	slices.Sort(hay)
+	if !slices.Equal(hay, permitidos) {
+		t.Errorf("SubSchemas del bundle = %v; esperaba %v", hay, permitidos)
 	}
 }
 

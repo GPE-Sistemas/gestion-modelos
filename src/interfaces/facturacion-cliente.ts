@@ -1,13 +1,45 @@
 import { z } from 'zod';
 import { ClienteSchema, TipoClienteSchema } from './cliente';
+import { ClienteExternoSchema, TipoDestinoSchema } from './cliente-externo';
 
 export const MonedaFacturacionSchema = z.enum(['ARS', 'USD']);
 export type MonedaFacturacion = z.infer<typeof MonedaFacturacionSchema>;
 
+/**
+ * Adelantado: el documento se emite al INICIO del ciclo del cargo.
+ * Vencido: al FINAL.
+ */
+export const MomentoFacturacionSchema = z.enum(['Adelantado', 'Vencido']);
+export type MomentoFacturacion = z.infer<typeof MomentoFacturacionSchema>;
+
+/**
+ * Datos fiscales del destino en la relación (emisor, destino). `codigoExterno`
+ * es el código del destino en el ERP de ESTE emisor. Los del propio emisor
+ * salen de su config consigo mismo (idCliente = idClienteDestino = emisor).
+ */
+export const DatosFiscalesFacturacionSchema = z.object({
+  razonSocial: z.string().optional(),
+  cuit: z.string().optional(),
+  condicionIVA: z.string().optional(),
+  domicilio: z.string().optional(),
+  codigoExterno: z.string().optional(),
+});
+export type IDatosFiscalesFacturacion = z.infer<
+  typeof DatosFiscalesFacturacionSchema
+>;
+
+/**
+ * Configuración de facturación de UNA relación (emisor, destino).
+ * - idCliente + idsAncestros: el EMISOR, quien ofrece y cobra.
+ * - idClienteDestino (+ tipoDestino): el cliente al que se le presta el
+ *   servicio.
+ * Si `pagadoPor` está seteado, de esta config sólo cuentan idClienteDestino,
+ * pagadoPor y activa: el resto lo define la config (emisor, pagador).
+ */
 export const FacturacionClienteSchema = z
   .object({
     _id: z.string().optional(),
-    idCliente: z
+    idCliente: z //El EMISOR, quien ofrece y cobra
       .string()
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
@@ -15,6 +47,11 @@ export const FacturacionClienteSchema = z
       .array(z.string())
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
+    // El DESTINO: ICliente o IClienteExterno según tipoDestino (sin x-ref:
+    // apunta a dos colecciones; ver los populates clienteDestino /
+    // clienteExternoDestino)
+    idClienteDestino: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    tipoDestino: TipoDestinoSchema.optional(), // Default 'Cliente'
     activa: z.boolean().optional(),
     /**
      * Si true, el cliente no se cobra: su costo se descuenta del cliente
@@ -22,6 +59,32 @@ export const FacturacionClienteSchema = z
      * cliente no es nivel 1, se considera raíz independiente de facturación.
      */
     bonificado: z.boolean().optional(),
+
+    // — Quién paga —
+    // "Esta facturación la paga otro destino" (ICliente o IClienteExterno).
+    // Ausente = la paga el propio destino. Sin cadenas: un pagador no puede
+    // tener a su vez pagadoPor.
+    pagadoPor: z.string().optional().meta({ 'x-bson': 'objectId' }),
+
+    // — Cómo se le factura (rige sólo en la config del pagador) —
+    moneda: MonedaFacturacionSchema.optional(),
+    // Tope de espera de un cargo UnicaVez pendiente sin documento a la vista.
+    // Pasado el plazo se emite un documento sólo con el cargo. Default 30.
+    diasMaxEsperaCargoUnico: z.number().optional(),
+    momento: MomentoFacturacionSchema.optional(),
+    diasVencimiento: z.number().optional(), // Días desde la emisión hasta el vencimiento de pago
+    condicionPago: z.string().optional(), // Texto libre para el ERP: "30 días", "contado"
+    prorratearAltas: z.boolean().optional(),
+    prorratearBajas: z.boolean().optional(),
+    // Precio con vigencia a mitad de período: false (default) = rige el
+    // precio vigente al inicio; true = la línea se parte por tramos
+    prorratearCambiosDePrecio: z.boolean().optional(),
+    // Habilita al nivel 0 a ver el detalle con importes. Default false
+    permitirVisibilidadPlataforma: z.boolean().optional(),
+
+    // — Fiscal —
+    datosFiscales: DatosFiscalesFacturacionSchema.optional(),
+
     // Populate
     cliente: ClienteSchema.optional().meta({
       'x-populate': {
@@ -39,6 +102,23 @@ export const FacturacionClienteSchema = z
         justOne: false,
       },
     }),
+    // Sólo uno de los dos resuelve, según tipoDestino
+    clienteDestino: ClienteSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteSchema',
+        localField: 'idClienteDestino',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
+    clienteExternoDestino: ClienteExternoSchema.optional().meta({
+      'x-populate': {
+        ref: 'ClienteExternoSchema',
+        localField: 'idClienteDestino',
+        foreignField: '_id',
+        justOne: true,
+      },
+    }),
   })
   .meta({ 'x-collection': 'facturacionclientes' });
 export type IFacturacionCliente = z.infer<typeof FacturacionClienteSchema>;
@@ -47,6 +127,8 @@ export const CreateFacturacionClienteSchema = FacturacionClienteSchema.omit({
   _id: true,
   cliente: true,
   ancestros: true,
+  clienteDestino: true,
+  clienteExternoDestino: true,
 });
 export type ICreateFacturacionCliente = z.infer<
   typeof CreateFacturacionClienteSchema
@@ -56,6 +138,8 @@ export const UpdateFacturacionClienteSchema = FacturacionClienteSchema.omit({
   _id: true,
   cliente: true,
   ancestros: true,
+  clienteDestino: true,
+  clienteExternoDestino: true,
 });
 export type IUpdateFacturacionCliente = z.infer<
   typeof UpdateFacturacionClienteSchema

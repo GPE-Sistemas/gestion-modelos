@@ -25,14 +25,17 @@ export const ServicioContratadoSchema = z
         justOne: true,
       },
     }),
-    ancestros: z.array(ClienteSchema).optional().meta({
-      'x-populate': {
-        ref: 'ClienteSchema',
-        localField: 'idsAncestros',
-        foreignField: '_id',
-        justOne: false,
-      },
-    }),
+    ancestros: z
+      .array(ClienteSchema)
+      .optional()
+      .meta({
+        'x-populate': {
+          ref: 'ClienteSchema',
+          localField: 'idsAncestros',
+          foreignField: '_id',
+          justOne: false,
+        },
+      }),
   })
   .meta({ 'x-collection': 'serviciocontratados' });
 export type IServicioContratado = z.infer<typeof ServicioContratadoSchema>;
