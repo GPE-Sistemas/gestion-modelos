@@ -16,11 +16,18 @@ export const GrupoUsuarioSchema = z
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }),
     nombre: z.string().optional(),
+    // Creador del grupo: uno solo, no cambia, y siempre es admin. El nombre
+    // quedó de cuando era el único admin.
     idAdmin: z
       .string()
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
     idsMiembros: z
+      .array(z.string())
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
+    // Admins además del creador. Son miembros: también están en idsMiembros.
+    idsAdmins: z
       .array(z.string())
       .optional()
       .meta({ 'x-bson': 'objectId', 'x-ref': 'UsuarioSchema' }),
@@ -59,6 +66,14 @@ export const GrupoUsuarioSchema = z
         justOne: false,
       },
     }),
+    admins: z.array(UsuarioSchema).optional().meta({
+      'x-populate': {
+        ref: 'UsuarioSchema',
+        localField: 'idsAdmins',
+        foreignField: '_id',
+        justOne: false,
+      },
+    }),
   })
   .meta({ 'x-collection': 'grupousuarios' });
 export type IGrupoUsuario = z.infer<typeof GrupoUsuarioSchema>;
@@ -68,6 +83,7 @@ export const CreateGrupoUsuarioSchema = GrupoUsuarioSchema.omit({
   cliente: true,
   admin: true,
   miembros: true,
+  admins: true,
   fechaCreacion: true,
 });
 export type ICreateGrupoUsuario = z.infer<typeof CreateGrupoUsuarioSchema>;
@@ -77,6 +93,7 @@ export const UpdateGrupoUsuarioSchema = GrupoUsuarioSchema.omit({
   cliente: true,
   admin: true,
   miembros: true,
+  admins: true,
   fechaCreacion: true,
 });
 export type IUpdateGrupoUsuario = z.infer<typeof UpdateGrupoUsuarioSchema>;

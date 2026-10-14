@@ -12513,6 +12513,14 @@
       "type": "string"
      }
     },
+    "idsAdmins": {
+     "x-bson": "objectId",
+     "x-ref": "UsuarioSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
     "ancestros": {
      "x-populate": {
       "ref": "ClienteSchema",
@@ -28782,6 +28790,14 @@
       "type": "string"
      }
     },
+    "idsAdmins": {
+     "x-bson": "objectId",
+     "x-ref": "UsuarioSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
     "fechaCreacion": {
      "x-bson": "date",
      "type": "string"
@@ -28820,6 +28836,18 @@
      "x-populate": {
       "ref": "UsuarioSchema",
       "localField": "idsMiembros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/UsuarioSchema"
+     }
+    },
+    "admins": {
+     "x-populate": {
+      "ref": "UsuarioSchema",
+      "localField": "idsAdmins",
       "foreignField": "_id",
       "justOne": false
      },
@@ -51293,6 +51321,14 @@
      "type": "string"
     },
     "idsMiembros": {
+     "x-bson": "objectId",
+     "x-ref": "UsuarioSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsAdmins": {
      "x-bson": "objectId",
      "x-ref": "UsuarioSchema",
      "type": "array",
