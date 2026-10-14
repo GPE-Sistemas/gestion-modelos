@@ -376,6 +376,24 @@
     "Cámaras - Solicitar servicio técnico",
     "Cámaras - Ver streaming",
     "Cámaras - Descargar grabaciones",
+    "Facturación - Ver panel",
+    "Facturación - Ver productos",
+    "Facturación - Crear productos",
+    "Facturación - Editar productos",
+    "Facturación - Ver precios",
+    "Facturación - Crear precios",
+    "Facturación - Ver contrataciones",
+    "Facturación - Crear contrataciones",
+    "Facturación - Dar de baja contrataciones",
+    "Facturación - Asignar masivamente",
+    "Facturación - Importar contrataciones",
+    "Facturación - Ver liquidaciones",
+    "Facturación - Emitir liquidaciones",
+    "Facturación - Aplicar ajustes",
+    "Facturación - Anular liquidaciones",
+    "Facturación - Exportar liquidaciones",
+    "Facturación - Editar configuración de facturación",
+    "Facturación - Ver importes",
     "Auditorías - Ver auditorías",
     "Alertas Seguridad - Crear",
     "Alertas Seguridad - Atender",
@@ -2643,6 +2661,20 @@
     "DTS",
     "SIS",
     "AMK"
+   ]
+  },
+  "CodigoValidacionLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CodigoValidacionLiquidacionSchema",
+   "type": "string",
+   "enum": [
+    "SinPrecio",
+    "CategoriaEnCero",
+    "Variacion",
+    "SinDatosFiscales",
+    "TotalCero",
+    "Duplicado",
+    "CadenaPagadores"
    ]
   },
   "CodigosDispositivoCacheSchema": {
@@ -12235,6 +12267,12 @@
      "x-bson": "objectId",
      "type": "string"
     },
+    "pagadoresPorServicio": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/PagadorPorServicioSchema"
+     }
+    },
     "moneda": {
      "$ref": "#/$defs/MonedaFacturacionSchema"
     },
@@ -16317,6 +16355,67 @@
       "resumen": {
        "x-bson": "mixed",
        "$ref": "#/$defs/ResumenGastosClienteSchema"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadResumenSchema"
+      },
+      "agrupacion": {
+       "$ref": "#/$defs/AgrupacionResumenSchema"
+      },
+      "agrupacionTiempo": {
+       "$ref": "#/$defs/AgrupacionTiempoSchema"
+      },
+      "rangoMinutos": {
+       "type": "number"
+      },
+      "idsAsignados": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "periodoInicio": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "periodoFin": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "cerrado": {
+       "type": "boolean"
+      },
+      "tipo": {
+       "type": "string",
+       "const": "Liquidación del Cliente"
+      },
+      "resumen": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ResumenLiquidacionClienteSchema"
       }
      },
      "additionalProperties": false
@@ -27780,6 +27879,12 @@
      "x-bson": "objectId",
      "type": "string"
     },
+    "pagadoresPorServicio": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/PagadorPorServicioSchema"
+     }
+    },
     "moneda": {
      "$ref": "#/$defs/MonedaFacturacionSchema"
     },
@@ -33289,6 +33394,26 @@
     "AutoGet",
     "ConsultaConfig"
    ]
+  },
+  "PagadorPorServicioSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/PagadorPorServicioSchema",
+   "type": "object",
+   "properties": {
+    "idServicioOfrecido": {
+     "type": "string",
+     "x-bson": "objectId"
+    },
+    "pagadoPor": {
+     "type": "string",
+     "x-bson": "objectId"
+    }
+   },
+   "required": [
+    "idServicioOfrecido",
+    "pagadoPor"
+   ],
+   "additionalProperties": false
   },
   "PaquetesDispositivoLorawanSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -39515,6 +39640,91 @@
       },
       "tipo": {
        "type": "string",
+       "const": "Liquidación del Cliente"
+      },
+      "resumen": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ResumenLiquidacionClienteSchema"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "_id": {
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadResumenSchema"
+      },
+      "agrupacion": {
+       "$ref": "#/$defs/AgrupacionResumenSchema"
+      },
+      "agrupacionTiempo": {
+       "$ref": "#/$defs/AgrupacionTiempoSchema"
+      },
+      "rangoMinutos": {
+       "type": "number"
+      },
+      "idsAsignados": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "periodoInicio": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "periodoFin": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "cerrado": {
+       "type": "boolean"
+      },
+      "cliente": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idCliente",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/ClienteSchema"
+      },
+      "ancestros": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idsAncestros",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ClienteSchema"
+       }
+      },
+      "tipo": {
+       "type": "string",
        "const": "Downlinks Métricas Sistema"
       },
       "resumen": {
@@ -39889,6 +40099,77 @@
     "estadoSaludStats",
     "statsIntervalSeg"
    ],
+   "additionalProperties": false
+  },
+  "ResumenLiquidacionClienteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ResumenLiquidacionClienteSchema",
+   "type": "object",
+   "properties": {
+    "idClienteDestino": {
+     "type": "string"
+    },
+    "tipoDestino": {
+     "$ref": "#/$defs/TipoDestinoSchema"
+    },
+    "idsClientesDestino": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "fechaCierre": {
+     "type": "string"
+    },
+    "moneda": {
+     "$ref": "#/$defs/MonedaFacturacionSchema"
+    },
+    "lineas": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/LineaLiquidacionSchema"
+     }
+    },
+    "subtotal": {
+     "type": "number"
+    },
+    "descuentos": {
+     "type": "number"
+    },
+    "neto": {
+     "type": "number"
+    },
+    "porAlicuota": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/AlicuotaLiquidacionSchema"
+     }
+    },
+    "porCategoria": {
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {
+      "type": "number"
+     }
+    },
+    "validaciones": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ValidacionLiquidacionSchema"
+     }
+    },
+    "advertencias": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idLiquidacionEmitida": {
+     "type": "string"
+    }
+   },
    "additionalProperties": false
   },
   "RoadSpeedCacheSchema": {
@@ -42779,6 +43060,7 @@
     "Informe Mensual Flota Combustible",
     "Rendimiento Combustible Vehículos",
     "Gastos del Cliente",
+    "Liquidación del Cliente",
     "Downlinks Métricas Sistema",
     "Downlinks Luminaria",
     "Gateway Stats"
@@ -51050,6 +51332,12 @@
      "x-bson": "objectId",
      "type": "string"
     },
+    "pagadoresPorServicio": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/PagadorPorServicioSchema"
+     }
+    },
     "moneda": {
      "$ref": "#/$defs/MonedaFacturacionSchema"
     },
@@ -55096,6 +55384,67 @@
       },
       "tipo": {
        "type": "string",
+       "const": "Liquidación del Cliente"
+      },
+      "resumen": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ResumenLiquidacionClienteSchema"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadResumenSchema"
+      },
+      "agrupacion": {
+       "$ref": "#/$defs/AgrupacionResumenSchema"
+      },
+      "agrupacionTiempo": {
+       "$ref": "#/$defs/AgrupacionTiempoSchema"
+      },
+      "rangoMinutos": {
+       "type": "number"
+      },
+      "idsAsignados": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "periodoInicio": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "periodoFin": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "cerrado": {
+       "type": "boolean"
+      },
+      "tipo": {
+       "type": "string",
        "const": "Downlinks Métricas Sistema"
       },
       "resumen": {
@@ -56978,6 +57327,37 @@
      "type": "boolean"
     }
    },
+   "additionalProperties": false
+  },
+  "ValidacionLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ValidacionLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "codigo": {
+     "$ref": "#/$defs/CodigoValidacionLiquidacionSchema"
+    },
+    "mensaje": {
+     "type": "string"
+    },
+    "confirmable": {
+     "type": "boolean"
+    },
+    "confirmada": {
+     "type": "boolean"
+    },
+    "motivoConfirmacion": {
+     "type": "string"
+    },
+    "idUsuarioConfirmacion": {
+     "x-bson": "objectId",
+     "type": "string"
+    }
+   },
+   "required": [
+    "codigo",
+    "mensaje"
+   ],
    "additionalProperties": false
   },
   "ValoresEventoAlarmaSchema": {

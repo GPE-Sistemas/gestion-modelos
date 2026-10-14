@@ -18,7 +18,7 @@ export const CategoriaDispositivoSchema = z.enum([
 export type CategoriaDispositivo = z.infer<typeof CategoriaDispositivoSchema>;
 
 /**
- * Catálogo comercial (ProductOffering, TMF620): define QUÉ se vende.
+ * Catálogo comercial: define QUÉ se vende.
  * El precio NO vive acá: está en IPrecio (por emisor, destino y vigencia).
  * idCliente + idsAncestros: el EMISOR dueño del catálogo; con `global` lo pueden vender sus descendientes.
  */
@@ -38,7 +38,7 @@ export const ServicioOfrecidoSchema = z
     global: z.boolean().optional(), // Visible (y vendible) para toda la jerarquía
     categorias: z.array(CategoriaDispositivoSchema).optional(), // A qué tipos de dispositivo aplica
     alicuotaIVA: z.number().optional(), // 21 · 10.5 · 0
-    codigoExterno: z.string().optional(), // El artículo en el ERP del emisor: "SERV-001"
+    codigoExterno: z.string().optional(), // El código del artículo en el ERP del emisor
     unidadMedida: z.string().optional(), // Default "unidad"
     // Pack: servicio compuesto por otros. Se factura como una línea al precio
     // del pack; los componentes quedan en el detalle de la línea.

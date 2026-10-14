@@ -1,6 +1,13 @@
 import { z } from 'zod';
 import { ClienteSchema, ICliente } from './cliente';
 import { PuntoCoord } from '../auxiliares/geojson';
+import { TipoDestinoSchema } from './cliente-externo';
+import { MonedaFacturacionSchema } from './facturacion-cliente';
+import {
+  AlicuotaLiquidacionSchema,
+  LineaLiquidacionSchema,
+  ValidacionLiquidacionSchema,
+} from './liquidacion';
 
 export const AgrupacionTiempoSchema = z.enum([
   'Diario',
@@ -31,6 +38,7 @@ export const TipoResumenDatosSchema = z.enum([
   'Informe Mensual Flota Combustible',
   'Rendimiento Combustible Vehículos',
   'Gastos del Cliente',
+  'Liquidación del Cliente', // Borrador de ILiquidacion, recalculable
   //Downlinks: métricas de sistema (bolsa de samples) + detalle por luminaria ──
   'Downlinks Métricas Sistema',
   'Downlinks Luminaria',
@@ -330,6 +338,36 @@ export const ResumenGastosClienteSchema = z.object({
 export type IResumenGastosCliente = z.infer<typeof ResumenGastosClienteSchema>;
 
 /* ────────────────────────────────────────────────
+ *  LIQUIDACIÓN DEL CLIENTE — el borrador
+ *  Una por (emisor, pagador, día de cierre). idCliente del resumen = EMISOR.
+ *  Se recalcula y se pisa; al emitir se copia a ILiquidacion. Las líneas de
+ *  ajuste (esAjuste) las carga una persona y sobreviven al recálculo.
+ * ────────────────────────────────────────────────*/
+
+export const ResumenLiquidacionClienteSchema = z.object({
+  // El PAGADOR del grupo
+  idClienteDestino: z.string().optional(),
+  tipoDestino: TipoDestinoSchema.optional(),
+  // Los destinos que agrupa (el pagador más los que lo declaran en pagadoPor)
+  idsClientesDestino: z.array(z.string()).optional(),
+  fechaCierre: z.string().optional(), // El día que disparó el borrador (ISO)
+  moneda: MonedaFacturacionSchema.optional(),
+  lineas: z.array(LineaLiquidacionSchema).optional(),
+  subtotal: z.number().optional(),
+  descuentos: z.number().optional(),
+  neto: z.number().optional(),
+  porAlicuota: z.array(AlicuotaLiquidacionSchema).optional(),
+  // Neto por categoría, para comparar contra el período anterior (#2 y #3)
+  porCategoria: z.record(z.string(), z.number()).optional(),
+  validaciones: z.array(ValidacionLiquidacionSchema).optional(), // Frenan la emisión
+  advertencias: z.array(z.string()).optional(), // Informativas, no frenan
+  idLiquidacionEmitida: z.string().optional(), // Seteado al emitir
+});
+export type IResumenLiquidacionCliente = z.infer<
+  typeof ResumenLiquidacionClienteSchema
+>;
+
+/* ────────────────────────────────────────────────
  *  DOWNLINKS — métricas por franja de tiempo
  *  'Downlinks Métricas Sistema': bolsa de samples que ESPEJA las métricas que
  *  emite el servicio en vivo (mismos nombres/labels que MetricasEstado). Cada
@@ -438,6 +476,7 @@ export type MapaResumenDatos = {
   'Informe Mensual Flota Combustible': IInformeMensualFlotaCombustible;
   'Rendimiento Combustible Vehículos': IRendimientoCombustibleVehiculo;
   'Gastos del Cliente': IResumenGastosCliente;
+  'Liquidación del Cliente': IResumenLiquidacionCliente;
   'Downlinks Métricas Sistema': IResumenDownlinksSistema;
   'Downlinks Luminaria': IResumenDownlinksLuminaria;
   'Gateway Stats': IResumenGatewayStats;
@@ -471,7 +510,7 @@ export interface IResumenDatosBase<T extends keyof MapaResumenDatos> {
 
 // Metadata de persistencia por `.meta()` — convención documentada arriba de
 // `ProveedorSchema` en proveedor.ts. `x-collection` va en el z.union() de
-// ResumenDatosSchema más abajo (una sola colección para las 14 variantes).
+// ResumenDatosSchema más abajo (una sola colección para las 15 variantes).
 // Campos comunes a todas las variantes (sin tipo/resumen, que discriminan)
 const ResumenDatosCamposSchema = z.object({
   _id: z.string().optional(),
@@ -521,7 +560,7 @@ const ResumenDatosCamposSchema = z.object({
 
 // `resumen` es @Prop({type: Object}) en el schema Mongoose legacy: adentro de
 // un Mixed, Mongoose no declara NADA — no castea ni inicializa esos paths. Va
-// anotado en las 14 variantes: el chequeo de drift hace la unión de las
+// anotado en las 15 variantes: el chequeo de drift hace la unión de las
 // properties de la unión y avisa si dos variantes discrepan en la anotación.
 const VarianteConsumoMensualLuminarias = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Consumo Mensual Luminarias').optional(),
@@ -570,6 +609,10 @@ const VarianteGastosDelCliente = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Gastos del Cliente').optional(),
   resumen: ResumenGastosClienteSchema.optional().meta({ 'x-bson': 'mixed' }),
 });
+const VarianteLiquidacionDelCliente = ResumenDatosCamposSchema.extend({
+  tipo: z.literal('Liquidación del Cliente').optional(),
+  resumen: ResumenLiquidacionClienteSchema.optional().meta({ 'x-bson': 'mixed' }),
+});
 const VarianteDownlinksSistema = ResumenDatosCamposSchema.extend({
   tipo: z.literal('Downlinks Métricas Sistema').optional(),
   resumen: ResumenDownlinksSistemaSchema.optional().meta({ 'x-bson': 'mixed' }),
@@ -600,6 +643,7 @@ export const ResumenDatosSchema = z
     VarianteInformeMensualFlotaCombustible,
     VarianteRendimientoCombustibleVehiculos,
     VarianteGastosDelCliente,
+    VarianteLiquidacionDelCliente,
     VarianteDownlinksSistema,
     VarianteDownlinksLuminaria,
     VarianteGatewayStats,
@@ -628,6 +672,7 @@ export const CreateResumenDatosSchema = z.union([
   VarianteInformeEventosSospechososCombustible.omit(camposOmitidos),
   VarianteInformeMensualFlotaCombustible.omit(camposOmitidos),
   VarianteGastosDelCliente.omit(camposOmitidos),
+  VarianteLiquidacionDelCliente.omit(camposOmitidos),
   VarianteDownlinksSistema.omit(camposOmitidos),
   VarianteDownlinksLuminaria.omit(camposOmitidos),
   VarianteGatewayStats.omit(camposOmitidos),
@@ -645,6 +690,7 @@ export const UpdateResumenDatosSchema = z.union([
   VarianteInformeEventosSospechososCombustible.omit(camposOmitidos),
   VarianteInformeMensualFlotaCombustible.omit(camposOmitidos),
   VarianteGastosDelCliente.omit(camposOmitidos),
+  VarianteLiquidacionDelCliente.omit(camposOmitidos),
   VarianteDownlinksSistema.omit(camposOmitidos),
   VarianteDownlinksLuminaria.omit(camposOmitidos),
   VarianteGatewayStats.omit(camposOmitidos),
