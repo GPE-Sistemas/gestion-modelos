@@ -29,12 +29,27 @@ export type IDatosFiscalesFacturacion = z.infer<
 >;
 
 /**
+ * Excepción de pago por servicio: "este servicio lo paga otro". Gana sobre
+ * `pagadoPor` para las contrataciones de ese servicio.
+ */
+export const PagadorPorServicioSchema = z.object({
+  idServicioOfrecido: z.string().meta({ 'x-bson': 'objectId' }),
+  // ICliente o IClienteExterno; su tipo sale de su propia config
+  pagadoPor: z.string().meta({ 'x-bson': 'objectId' }),
+});
+export type IPagadorPorServicio = z.infer<typeof PagadorPorServicioSchema>;
+
+/**
  * Configuración de facturación de UNA relación (emisor, destino).
  * - idCliente + idsAncestros: el EMISOR, quien ofrece y cobra.
  * - idClienteDestino (+ tipoDestino): el cliente al que se le presta el
  *   servicio.
  * Si `pagadoPor` está seteado, de esta config sólo cuentan idClienteDestino,
- * pagadoPor y activa: el resto lo define la config (emisor, pagador).
+ * pagadoPor, pagadoresPorServicio y activa: el resto lo define la config
+ * (emisor, pagador).
+ *
+ * El pagador de cada contratación se resuelve por servicio: primero
+ * `pagadoresPorServicio`, después `pagadoPor`, y si no, el propio destino.
  */
 export const FacturacionClienteSchema = z
   .object({
@@ -65,6 +80,9 @@ export const FacturacionClienteSchema = z
     // Ausente = la paga el propio destino. Sin cadenas: un pagador no puede
     // tener a su vez pagadoPor.
     pagadoPor: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    // Excepciones por servicio: "la limpieza la paga otro". Mismas reglas que
+    // pagadoPor: el pagador necesita config activa propia y sin pagadoPor.
+    pagadoresPorServicio: z.array(PagadorPorServicioSchema).optional(),
 
     // — Cómo se le factura (rige sólo en la config del pagador) —
     moneda: MonedaFacturacionSchema.optional(),

@@ -66,7 +66,7 @@ export const DescuentoPrecioSchema = z.object({
   // Bonificación temporal
   desde: z.string().optional().meta({ 'x-bson': 'date' }),
   hasta: z.string().optional().meta({ 'x-bson': 'date' }),
-  // "10% a partir de 100 dispositivos": el umbral se evalúa sobre el total del
+  // Umbral de cantidad: se evalúa sobre el total del
   // servicio, no por línea
   porCantidadDesde: z.number().optional(),
 });
@@ -97,7 +97,7 @@ export const AjustePrecioSchema = z.object({
 export type IAjustePrecio = z.infer<typeof AjustePrecioSchema>;
 
 /**
- * Cuánto cuesta un servicio y cómo se calcula (ProductOfferingPrice, TMF620).
+ * Cuánto cuesta un servicio y cómo se calcula.
  * - idCliente + idsAncestros: el EMISOR que publica el precio.
  * - idClienteDestino (+ tipoDestino): a quién. Ausente = precio de lista del
  *   emisor.

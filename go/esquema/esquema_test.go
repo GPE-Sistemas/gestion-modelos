@@ -225,6 +225,7 @@ func TestSubSchemasSonSoloLosSubDocumentosReales(t *testing.T) {
 		"activos.vehiculo",
 		"contrataciones.alcance",
 		"facturacionclientes.datosFiscales",
+		"facturacionclientes.pagadoresPorServicio",
 		"liquidaciones.destino",
 		"liquidaciones.emisor",
 		"liquidaciones.lineas",

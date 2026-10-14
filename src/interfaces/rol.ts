@@ -378,6 +378,29 @@ export const AccionesRolSchema = z.enum([
   'Cámaras - Ver streaming',
   'Cámaras - Descargar grabaciones',
   // *******************************************
+  // MÓDULO FACTURACIÓN
+  // *******************************************
+  // Sin "Editar precios" ni "Editar liquidaciones": un precio se versiona y una
+  // liquidación emitida se corrige con nota de crédito.
+  'Facturación - Ver panel',
+  'Facturación - Ver productos',
+  'Facturación - Crear productos',
+  'Facturación - Editar productos',
+  'Facturación - Ver precios',
+  'Facturación - Crear precios',
+  'Facturación - Ver contrataciones',
+  'Facturación - Crear contrataciones',
+  'Facturación - Dar de baja contrataciones',
+  'Facturación - Asignar masivamente',
+  'Facturación - Importar contrataciones',
+  'Facturación - Ver liquidaciones',
+  'Facturación - Emitir liquidaciones',
+  'Facturación - Aplicar ajustes',
+  'Facturación - Anular liquidaciones',
+  'Facturación - Exportar liquidaciones',
+  'Facturación - Editar configuración de facturación',
+  'Facturación - Ver importes', // Nivel 0 no lo tiene por defecto
+  // *******************************************
   // MÓDULO AUDITORÍAS
   // *******************************************
   'Auditorías - Ver auditorías',

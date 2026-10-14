@@ -114,7 +114,36 @@ export const AlicuotaLiquidacionSchema = z.object({
 export type IAlicuotaLiquidacion = z.infer<typeof AlicuotaLiquidacionSchema>;
 
 /**
- * El documento cobrable (Customer Bill, TMF678). Autosuficiente: una vez
+ * Los frenos de la validación del borrador. Impiden emitir; sólo `Variacion` se
+ * levanta confirmando con motivo.
+ */
+export const CodigoValidacionLiquidacionSchema = z.enum([
+  'SinPrecio', // Alguna línea sin precio resuelto
+  'CategoriaEnCero', // Una categoría cae a 0 teniendo dispositivos
+  'Variacion', // Variación contra el período anterior mayor al umbral
+  'SinDatosFiscales', // Falta CUIT o condición IVA del pagador
+  'TotalCero', // Total 0 con contrataciones activas
+  'Duplicado', // Una contratación ya cobrada por el mismo lapso
+  'CadenaPagadores', // pagadoPor apunta a un pagador que a su vez tiene pagadoPor
+]);
+export type CodigoValidacionLiquidacion = z.infer<
+  typeof CodigoValidacionLiquidacionSchema
+>;
+
+export const ValidacionLiquidacionSchema = z.object({
+  codigo: CodigoValidacionLiquidacionSchema,
+  mensaje: z.string(),
+  confirmable: z.boolean().optional(), // Se puede levantar confirmando con motivo
+  confirmada: z.boolean().optional(),
+  motivoConfirmacion: z.string().optional(),
+  idUsuarioConfirmacion: z.string().optional().meta({ 'x-bson': 'objectId' }),
+});
+export type IValidacionLiquidacion = z.infer<
+  typeof ValidacionLiquidacionSchema
+>;
+
+/**
+ * El documento cobrable. Autosuficiente: una vez
  * emitida se lee, no se recalcula.
  * - idCliente + idsAncestros: el EMISOR.
  * - idClienteDestino (+ tipoDestino): el PAGADOR, a quién se le emite.
@@ -138,7 +167,7 @@ export const LiquidacionSchema = z
     idClienteDestino: z.string().meta({ 'x-bson': 'objectId' }),
     tipoDestino: TipoDestinoSchema.optional(), // Default 'Cliente'
 
-    // "0001-00000042". Sale de la colección `counters`
+    // Lo asigna gestion-datos-go al crear (colección `counters`)
     numero: z.string().optional(),
     tipo: TipoLiquidacionSchema,
     // Si es nota de crédito: la liquidación que corrige

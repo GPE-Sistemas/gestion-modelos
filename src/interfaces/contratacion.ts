@@ -45,7 +45,7 @@ export const AlcanceContratacionSchema = z.object({
 export type IAlcanceContratacion = z.infer<typeof AlcanceContratacionSchema>;
 
 /**
- * Quién tiene qué (Product, TMF637): la relación emisor ↔ destino ↔ servicio
+ * Quién tiene qué: la relación emisor ↔ destino ↔ servicio
  * ↔ dispositivo, con sus fechas. NO guarda el precio: se resuelve en cada
  * tarifación contra IPrecio.
  * - idCliente + idsAncestros: el EMISOR, quien ofrece y cobra.
