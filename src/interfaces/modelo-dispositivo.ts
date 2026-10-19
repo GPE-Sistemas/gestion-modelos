@@ -46,6 +46,26 @@ export const ProtocoloComunicadorSchema = z.enum([
 ]);
 export type ProtocoloComunicador = z.infer<typeof ProtocoloComunicadorSchema>;
 
+// Por qué protocolo (y por lo tanto a qué puerto) reportan los trackers de este
+// modelo. Los valores son los nombres internos de gestion-trackers-go
+// (`PROTOCOLOS` en internal/config/puertos.go, `msg.Protocol`), así se
+// comparan directo con el que estampa cada reporte "Tracker 4G" en
+// `valores.protocolo`. Es atributo del MODELO por el mismo motivo que
+// `protocolo` en comunicadores. Opcional: los modelos viejos no lo tienen.
+export const ProtocoloTrackerSchema = z.enum([
+  'gps103',
+  'rinho',
+  'huabao',
+  'gt06',
+  'gs10g',
+  'gs12',
+  'trax',
+  'queclink',
+  'topflytech',
+  'h02',
+]);
+export type ProtocoloTracker = z.infer<typeof ProtocoloTrackerSchema>;
+
 export const NivelDimerizacionSchema = z.enum([
   'dim10',
   'dim20',
@@ -111,6 +131,8 @@ export const ModeloDispositivoSchema = z.object({
   formatoMensaje: FormatosMensajeComunicadorSchema.optional(),
   // Solo aplica a modelos tipo="Comunicador". Ver ProtocoloComunicadorSchema.
   protocolo: ProtocoloComunicadorSchema.optional(),
+  // Solo aplica a modelos tipo="Tracker". Ver ProtocoloTrackerSchema.
+  protocoloTracker: ProtocoloTrackerSchema.optional(),
   idCodigos: z
     .string()
     .optional()

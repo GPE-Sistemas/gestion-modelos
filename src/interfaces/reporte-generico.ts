@@ -6,6 +6,7 @@ import { ClienteSchema, ICliente } from './cliente';
 import type { IDispositivoLorawan } from './dispositivo-lorawan';
 import type { IGrupo } from './grupo';
 import type { ILuminaria } from './luminaria';
+import { ProtocoloTrackerSchema } from './modelo-dispositivo';
 import type { IRecorrido } from './recorrido';
 import type { ITracker } from './tracker';
 import type { IUsuario } from './usuario';
@@ -283,6 +284,15 @@ export const ReporteTracker4GSchema = ReporteTrackerSchema.extend({
   triperoStateDuration: z.number().optional(),
   triperoCurrentTripId: z.string().optional(),
   triperoCurrentTripDistance: z.number().optional(),
+  // Por dónde entró la trama, lo estampa gestion-trackers-go en cada reporte.
+  // Es el protocolo DETECTADO: se compara con el DECLARADO del modelo
+  // (`ModeloDispositivo.protocoloTracker`) para ver equipos mal apuntados.
+  // `puerto` es el externo (el que carga el instalador), no el bind interno;
+  // `tenant` es el del servidor que lo recibió (0 = ingreso compartido).
+  protocolo: ProtocoloTrackerSchema.optional(),
+  transporte: z.enum(['TCP', 'UDP']).optional(),
+  puerto: z.number().optional(),
+  tenant: z.number().optional(),
   // Telemetría OBD/CAN del vehículo (ej: Queclink GV350CEU con el bit 2 del
   // <ERI Mask>, o TopFlyTech TorchX enchufado al OBDII). Presente solo cuando
   // el equipo puede leer el bus del vehículo.
