@@ -6,6 +6,7 @@ import { MonedaFacturacionSchema } from './facturacion-cliente';
 import {
   AlicuotaLiquidacionSchema,
   LineaLiquidacionSchema,
+  TipoCambioLiquidacionSchema,
   ValidacionLiquidacionSchema,
 } from './liquidacion';
 
@@ -362,6 +363,10 @@ export const ResumenLiquidacionClienteSchema = z.object({
   validaciones: z.array(ValidacionLiquidacionSchema).optional(), // Frenan la emisión
   advertencias: z.array(z.string()).optional(), // Informativas, no frenan
   idLiquidacionEmitida: z.string().optional(), // Seteado al emitir
+  // El tipo de cambio que se usó al convertir (oficial o el manual)
+  tipoCambio: TipoCambioLiquidacionSchema.optional(),
+  // Cargado por una persona: pisa al oficial y sobrevive al recálculo
+  tipoCambioManual: TipoCambioLiquidacionSchema.optional(),
 });
 export type IResumenLiquidacionCliente = z.infer<
   typeof ResumenLiquidacionClienteSchema

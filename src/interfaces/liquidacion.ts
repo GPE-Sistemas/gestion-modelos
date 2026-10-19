@@ -25,6 +25,8 @@ export type EstadoLiquidacion = z.infer<typeof EstadoLiquidacionSchema>;
 export const EmisorLiquidacionSchema = z.object({
   razonSocial: z.string().optional(),
   cuit: z.string().optional(),
+  condicionIVA: z.string().optional(),
+  domicilio: z.string().optional(),
   codigoExterno: z.string().optional(),
 });
 export type IEmisorLiquidacion = z.infer<typeof EmisorLiquidacionSchema>;
@@ -63,6 +65,16 @@ export const DetalleLineaLiquidacionSchema = z.object({
   componentes: z.array(ComponenteLineaLiquidacionSchema).optional(),
   // PorCliente: dispositivos que cubre el cargo fijo. Informativo, no multiplica
   cubre: z.number().optional(),
+  // Grupo y Todos: la foto de los dispositivos cobrados por esta línea
+  idsEntidades: z.array(z.string()).optional().meta({ 'x-bson': 'objectId' }),
+  // Precio en otra moneda que la del pagador: el precio unitario original. La
+  // línea ya está convertida con el tipo de cambio del documento
+  conversion: z
+    .object({
+      moneda: MonedaFacturacionSchema,
+      precioUnitario: z.number(),
+    })
+    .optional(),
 });
 export type IDetalleLineaLiquidacion = z.infer<
   typeof DetalleLineaLiquidacionSchema
@@ -106,6 +118,22 @@ export const LineaLiquidacionSchema = z.object({
 });
 export type ILineaLiquidacion = z.infer<typeof LineaLiquidacionSchema>;
 
+/**
+ * Tipo de cambio con que se convirtieron los precios en otra moneda: pesos
+ * por dólar. Oficial (Comunicación A3500 del BCRA, día hábil anterior al
+ * cierre) o cargado a mano en el borrador.
+ */
+export const TipoCambioLiquidacionSchema = z.object({
+  valor: z.number(),
+  fecha: z.string(), // Día de la cotización (YYYY-MM-DD)
+  fuente: z.enum(['A3500', 'Manual']),
+  motivo: z.string().optional(), // Sólo el manual
+  idUsuario: z.string().optional().meta({ 'x-bson': 'objectId' }), // Quién lo cargó
+});
+export type ITipoCambioLiquidacion = z.infer<
+  typeof TipoCambioLiquidacionSchema
+>;
+
 /** Base imponible por alícuota. El IVA lo calcula el ERP, no Irix. */
 export const AlicuotaLiquidacionSchema = z.object({
   alicuota: z.number(),
@@ -125,6 +153,9 @@ export const CodigoValidacionLiquidacionSchema = z.enum([
   'TotalCero', // Total 0 con contrataciones activas
   'Duplicado', // Una contratación ya cobrada por el mismo lapso
   'CadenaPagadores', // pagadoPor apunta a un pagador que a su vez tiene pagadoPor
+  'SinCotizacion', // Hay precios en otra moneda y no hay tipo de cambio para convertirlos
+  'Conversion', // Se convirtieron precios de otra moneda: se confirma que corresponde
+  'NetoNegativo', // Los descuentos superan a lo facturado
 ]);
 export type CodigoValidacionLiquidacion = z.infer<
   typeof CodigoValidacionLiquidacionSchema
@@ -137,6 +168,14 @@ export const ValidacionLiquidacionSchema = z.object({
   confirmada: z.boolean().optional(),
   motivoConfirmacion: z.string().optional(),
   idUsuarioConfirmacion: z.string().optional().meta({ 'x-bson': 'objectId' }),
+  // Qué hay que abrir para resolverla: el producto sin precio, la liquidación
+  // que ya cobró lo mismo o el destino sin datos fiscales
+  ref: z
+    .object({
+      tipo: z.enum(['producto', 'liquidacion', 'destino']),
+      id: z.string(),
+    })
+    .optional(),
 });
 export type IValidacionLiquidacion = z.infer<
   typeof ValidacionLiquidacionSchema
@@ -195,6 +234,7 @@ export const LiquidacionSchema = z
     estado: EstadoLiquidacionSchema,
     nroComprobanteExterno: z.string().optional(), // Para conciliar con el ERP
     advertencias: z.array(z.string()).optional(),
+    tipoCambio: TipoCambioLiquidacionSchema.optional(), // Si se convirtió algún precio
 
     // Populate
     cliente: ClienteSchema.optional().meta({
