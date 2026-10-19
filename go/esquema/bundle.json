@@ -2674,7 +2674,10 @@
     "SinDatosFiscales",
     "TotalCero",
     "Duplicado",
-    "CadenaPagadores"
+    "CadenaPagadores",
+    "SinCotizacion",
+    "Conversion",
+    "NetoNegativo"
    ]
   },
   "CodigosDispositivoCacheSchema": {
@@ -6277,6 +6280,14 @@
     "categoria": {
      "$ref": "#/$defs/CategoriaDispositivoSchema"
     },
+    "forma": {
+     "$ref": "#/$defs/FormaContratacionSchema"
+    },
+    "idGrupo": {
+     "x-bson": "objectId",
+     "x-ref": "GrupoSchema",
+     "type": "string"
+    },
     "fechaAlta": {
      "type": "string",
      "x-bson": "date"
@@ -8258,6 +8269,14 @@
     },
     "categoria": {
      "$ref": "#/$defs/CategoriaDispositivoSchema"
+    },
+    "forma": {
+     "$ref": "#/$defs/FormaContratacionSchema"
+    },
+    "idGrupo": {
+     "x-bson": "objectId",
+     "x-ref": "GrupoSchema",
+     "type": "string"
     },
     "fechaAlta": {
      "type": "string",
@@ -12694,6 +12713,9 @@
      "items": {
       "type": "string"
      }
+    },
+    "tipoCambio": {
+     "$ref": "#/$defs/TipoCambioLiquidacionSchema"
     }
    },
    "required": [
@@ -19456,6 +19478,29 @@
     },
     "cubre": {
      "type": "number"
+    },
+    "idsEntidades": {
+     "x-bson": "objectId",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "conversion": {
+     "type": "object",
+     "properties": {
+      "moneda": {
+       "$ref": "#/$defs/MonedaFacturacionSchema"
+      },
+      "precioUnitario": {
+       "type": "number"
+      }
+     },
+     "required": [
+      "moneda",
+      "precioUnitario"
+     ],
+     "additionalProperties": false
     }
    },
    "additionalProperties": false
@@ -22378,6 +22423,12 @@
      "type": "string"
     },
     "cuit": {
+     "type": "string"
+    },
+    "condicionIVA": {
+     "type": "string"
+    },
+    "domicilio": {
      "type": "string"
     },
     "codigoExterno": {
@@ -28177,6 +28228,17 @@
     "Batería"
    ]
   },
+  "FormaContratacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/FormaContratacionSchema",
+   "type": "string",
+   "enum": [
+    "Individual",
+    "Grupo",
+    "Todos",
+    "Cliente"
+   ]
+  },
   "FormatosMensajeComunicadorSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/FormatosMensajeComunicadorSchema",
@@ -29855,6 +29917,9 @@
      "items": {
       "type": "string"
      }
+    },
+    "tipoCambio": {
+     "$ref": "#/$defs/TipoCambioLiquidacionSchema"
     },
     "cliente": {
      "x-populate": {
@@ -40168,6 +40233,12 @@
     },
     "idLiquidacionEmitida": {
      "type": "string"
+    },
+    "tipoCambio": {
+     "$ref": "#/$defs/TipoCambioLiquidacionSchema"
+    },
+    "tipoCambioManual": {
+     "$ref": "#/$defs/TipoCambioLiquidacionSchema"
     }
    },
    "additionalProperties": false
@@ -42581,6 +42652,39 @@
     "Hikvision P2P",
     "Dahua P2P"
    ]
+  },
+  "TipoCambioLiquidacionSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TipoCambioLiquidacionSchema",
+   "type": "object",
+   "properties": {
+    "valor": {
+     "type": "number"
+    },
+    "fecha": {
+     "type": "string"
+    },
+    "fuente": {
+     "type": "string",
+     "enum": [
+      "A3500",
+      "Manual"
+     ]
+    },
+    "motivo": {
+     "type": "string"
+    },
+    "idUsuario": {
+     "x-bson": "objectId",
+     "type": "string"
+    }
+   },
+   "required": [
+    "valor",
+    "fecha",
+    "fuente"
+   ],
+   "additionalProperties": false
   },
   "TipoCargoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -47311,6 +47415,14 @@
     "categoria": {
      "$ref": "#/$defs/CategoriaDispositivoSchema"
     },
+    "forma": {
+     "$ref": "#/$defs/FormaContratacionSchema"
+    },
+    "idGrupo": {
+     "x-bson": "objectId",
+     "x-ref": "GrupoSchema",
+     "type": "string"
+    },
     "fechaAlta": {
      "type": "string",
      "x-bson": "date"
@@ -51746,6 +51858,9 @@
      "items": {
       "type": "string"
      }
+    },
+    "tipoCambio": {
+     "$ref": "#/$defs/TipoCambioLiquidacionSchema"
     }
    },
    "additionalProperties": false
@@ -57352,6 +57467,27 @@
     "idUsuarioConfirmacion": {
      "x-bson": "objectId",
      "type": "string"
+    },
+    "ref": {
+     "type": "object",
+     "properties": {
+      "tipo": {
+       "type": "string",
+       "enum": [
+        "producto",
+        "liquidacion",
+        "destino"
+       ]
+      },
+      "id": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "tipo",
+      "id"
+     ],
+     "additionalProperties": false
     }
    },
    "required": [

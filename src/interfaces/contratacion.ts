@@ -35,6 +35,25 @@ export const ModalidadEquipoSchema = z.enum(['Comodato', 'Venta', 'DelCliente'])
 export type ModalidadEquipo = z.infer<typeof ModalidadEquipoSchema>;
 
 /**
+ * Qué cubre una contratación:
+ * - Individual: un dispositivo (idEntidad). Se mide con historia: alta, baja
+ *   y suspensión prorratean.
+ * - Grupo: los trackers de los vehículos de un IGrupo de activos (idGrupo).
+ * - Todos: todos los dispositivos de una categoría (categoria) del destino.
+ * - Cliente: cargo fijo, sin dispositivo (precio PorCliente).
+ * Grupo y Todos se miden con una foto de los dispositivos activos al
+ * facturar, sin prorrateo. Ausente = Individual si hay idEntidad, si no
+ * Cliente (contrataciones anteriores a este campo).
+ */
+export const FormaContratacionSchema = z.enum([
+  'Individual',
+  'Grupo',
+  'Todos',
+  'Cliente',
+]);
+export type FormaContratacion = z.infer<typeof FormaContratacionSchema>;
+
+/**
  * Sólo para precios en modo PorCliente: qué cubre el cargo fijo. No cambia el
  * importe.
  */
@@ -76,7 +95,14 @@ export const ContratacionSchema = z
     // servicio sin equipo o precio PorCliente. Siempre ausente con destino
     // Externo.
     idEntidad: z.string().optional().meta({ 'x-bson': 'objectId' }),
+    // En Todos: la categoría que cubre. En Grupo: 'trackers'
     categoria: CategoriaDispositivoSchema.optional(),
+    forma: FormaContratacionSchema.optional(),
+    // Grupo: IGrupo de activos (flota, línea de colectivo, ...)
+    idGrupo: z
+      .string()
+      .optional()
+      .meta({ 'x-bson': 'objectId', 'x-ref': 'GrupoSchema' }),
 
     fechaAlta: z.string().meta({ 'x-bson': 'date' }),
     fechaBaja: z.string().optional().meta({ 'x-bson': 'date' }),
