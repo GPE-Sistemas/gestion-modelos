@@ -13765,6 +13765,9 @@
     "protocolo": {
      "$ref": "#/$defs/ProtocoloComunicadorSchema"
     },
+    "protocoloTracker": {
+     "$ref": "#/$defs/ProtocoloTrackerSchema"
+    },
     "idCodigos": {
      "x-bson": "objectId",
      "x-ref": "CodigosDispositivoSchema",
@@ -15317,6 +15320,22 @@
          "type": "string"
         },
         "triperoCurrentTripDistance": {
+         "type": "number"
+        },
+        "protocolo": {
+         "$ref": "#/$defs/ProtocoloTrackerSchema"
+        },
+        "transporte": {
+         "type": "string",
+         "enum": [
+          "TCP",
+          "UDP"
+         ]
+        },
+        "puerto": {
+         "type": "number"
+        },
+        "tenant": {
          "type": "number"
         },
         "obd": {
@@ -32031,6 +32050,9 @@
     "protocolo": {
      "$ref": "#/$defs/ProtocoloComunicadorSchema"
     },
+    "protocoloTracker": {
+     "$ref": "#/$defs/ProtocoloTrackerSchema"
+    },
     "idCodigos": {
      "x-bson": "objectId",
      "x-ref": "CodigosDispositivoSchema",
@@ -32081,6 +32103,9 @@
     },
     "protocolo": {
      "$ref": "#/$defs/ProtocoloComunicadorSchema"
+    },
+    "protocoloTracker": {
+     "$ref": "#/$defs/ProtocoloTrackerSchema"
     },
     "idCodigos": {
      "x-bson": "objectId",
@@ -34367,6 +34392,23 @@
    "enum": [
     "UDP",
     "TCP"
+   ]
+  },
+  "ProtocoloTrackerSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ProtocoloTrackerSchema",
+   "type": "string",
+   "enum": [
+    "gps103",
+    "rinho",
+    "huabao",
+    "gt06",
+    "gs10g",
+    "gs12",
+    "trax",
+    "queclink",
+    "topflytech",
+    "h02"
    ]
   },
   "ProveedorSchema": {
@@ -36744,6 +36786,22 @@
         "triperoCurrentTripDistance": {
          "type": "number"
         },
+        "protocolo": {
+         "$ref": "#/$defs/ProtocoloTrackerSchema"
+        },
+        "transporte": {
+         "type": "string",
+         "enum": [
+          "TCP",
+          "UDP"
+         ]
+        },
+        "puerto": {
+         "type": "number"
+        },
+        "tenant": {
+         "type": "number"
+        },
         "obd": {
          "$ref": "#/$defs/ReporteTrackerOBDSchema"
         },
@@ -38025,6 +38083,22 @@
      "type": "string"
     },
     "triperoCurrentTripDistance": {
+     "type": "number"
+    },
+    "protocolo": {
+     "$ref": "#/$defs/ProtocoloTrackerSchema"
+    },
+    "transporte": {
+     "type": "string",
+     "enum": [
+      "TCP",
+      "UDP"
+     ]
+    },
+    "puerto": {
+     "type": "number"
+    },
+    "tenant": {
      "type": "number"
     },
     "obd": {
@@ -52742,6 +52816,9 @@
     "protocolo": {
      "$ref": "#/$defs/ProtocoloComunicadorSchema"
     },
+    "protocoloTracker": {
+     "$ref": "#/$defs/ProtocoloTrackerSchema"
+    },
     "idCodigos": {
      "x-bson": "objectId",
      "x-ref": "CodigosDispositivoSchema",
@@ -54290,6 +54367,22 @@
          "type": "string"
         },
         "triperoCurrentTripDistance": {
+         "type": "number"
+        },
+        "protocolo": {
+         "$ref": "#/$defs/ProtocoloTrackerSchema"
+        },
+        "transporte": {
+         "type": "string",
+         "enum": [
+          "TCP",
+          "UDP"
+         ]
+        },
+        "puerto": {
+         "type": "number"
+        },
+        "tenant": {
          "type": "number"
         },
         "obd": {
