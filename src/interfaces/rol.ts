@@ -399,7 +399,9 @@ export const AccionesRolSchema = z.enum([
   'Facturación - Anular liquidaciones',
   'Facturación - Exportar liquidaciones',
   'Facturación - Editar configuración de facturación',
-  'Facturación - Ver importes', // Nivel 0 no lo tiene por defecto
+  // Sin esta acción la API omite los montos (y /liquidaciones/totales da 403).
+  // Nivel 0 los ve siempre, como el resto de las acciones.
+  'Facturación - Ver importes',
   // *******************************************
   // MÓDULO AUDITORÍAS
   // *******************************************
