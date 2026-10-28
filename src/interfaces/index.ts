@@ -52,6 +52,7 @@ export * from './token-push';
 export * from './trackeo';
 export * from './ultimo-trackeo';
 export * from './tracker';
+export * from './dashcam';
 export * from './tratamiento-evento';
 export * from './twilio-templates';
 export * from './ubicacion';

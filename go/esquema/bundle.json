@@ -95,6 +95,7 @@
     "Logs - Ver métricas downlinks",
     "Logs - Ver logs crudos alarmas",
     "Logs - Ver logs crudos trackers",
+    "Logs - Ver logs crudos dashcams",
     "Administración - Ver clientes",
     "Administración - Crear clientes",
     "Administración - Editar clientes",
@@ -122,6 +123,13 @@
     "Administración - Crear SIMs",
     "Administración - Editar SIMs",
     "Administración - Eliminar SIMs",
+    "Administración - Ver dashcams",
+    "Administración - Crear dashcams",
+    "Administración - Editar dashcams",
+    "Administración - Eliminar dashcams",
+    "Dashcams - Ver en vivo",
+    "Dashcams - Ver grabaciones",
+    "Dashcams - Ver evidencias",
     "Administración - Ver servicios ofrecidos",
     "Administración - Crear servicios ofrecidos",
     "Administración - Editar servicios ofrecidos",
@@ -200,6 +208,12 @@
     "Configuraciones - Crear modelos trackers",
     "Configuraciones - Editar modelos trackers",
     "Configuraciones - Eliminar modelos trackers",
+    "Configuraciones - Crear codigos dashcams",
+    "Configuraciones - Editar codigos dashcams",
+    "Configuraciones - Eliminar codigos dashcams",
+    "Configuraciones - Crear modelos dashcams",
+    "Configuraciones - Editar modelos dashcams",
+    "Configuraciones - Eliminar modelos dashcams",
     "Configuraciones - Crear iconos vehículos",
     "Configuraciones - Editar iconos vehículos",
     "Configuraciones - Eliminar iconos vehículos",
@@ -521,6 +535,11 @@
      "x-ref": "TrackerSchema",
      "type": "string"
     },
+    "idDashcam": {
+     "x-bson": "objectId",
+     "x-ref": "DashcamSchema",
+     "type": "string"
+    },
     "fechaAlta": {
      "x-bson": "date",
      "type": "string"
@@ -616,6 +635,11 @@
     "idTracker": {
      "x-bson": "objectId",
      "x-ref": "TrackerSchema",
+     "type": "string"
+    },
+    "idDashcam": {
+     "x-bson": "objectId",
+     "x-ref": "DashcamSchema",
      "type": "string"
     },
     "fechaAlta": {
@@ -714,6 +738,14 @@
      "x-populate": {
       "ref": "GrupoSchema",
       "localField": "idGrupo",
+      "foreignField": "_id",
+      "justOne": true
+     }
+    },
+    "dashcam": {
+     "x-populate": {
+      "ref": "DashcamSchema",
+      "localField": "idDashcam",
       "foreignField": "_id",
       "justOne": true
      }
@@ -831,6 +863,57 @@
     "tipo",
     "frecuencia"
    ],
+   "additionalProperties": false
+  },
+  "AlarmaSeguridadActivaSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/AlarmaSeguridadActivaSchema",
+   "type": "object",
+   "properties": {
+    "modulo": {
+     "$ref": "#/$defs/ModuloSeguridadActivaSchema"
+    },
+    "tipo": {
+     "type": "number"
+    },
+    "nivel": {
+     "type": "number"
+    },
+    "bandera": {
+     "$ref": "#/$defs/BanderaAlarmaDashcamSchema"
+    },
+    "idAlarmaEquipo": {
+     "type": "number"
+    },
+    "identificacion": {
+     "type": "string"
+    },
+    "numeroAlarma": {
+     "type": "string"
+    },
+    "velocidad": {
+     "type": "number"
+    },
+    "separacionSegundos": {
+     "type": "number"
+    },
+    "lado": {
+     "type": "string",
+     "enum": [
+      "Izquierda",
+      "Derecha"
+     ]
+    },
+    "gradoFatiga": {
+     "type": "number"
+    },
+    "adjuntosAnunciados": {
+     "type": "number"
+    },
+    "fechaFin": {
+     "type": "string"
+    }
+   },
    "additionalProperties": false
   },
   "AlcanceContratacionSchema": {
@@ -1444,6 +1527,16 @@
    "additionalProperties": false,
    "x-collection": "auditorias"
   },
+  "BanderaAlarmaDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/BanderaAlarmaDashcamSchema",
+   "type": "string",
+   "enum": [
+    "Inicio",
+    "Fin",
+    "No aplica"
+   ]
+  },
   "BatchRequestSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/BatchRequestSchema",
@@ -1698,6 +1791,29 @@
     },
     "fechaAplicado": {
      "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "CanalDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CanalDashcamSchema",
+   "type": "object",
+   "properties": {
+    "numero": {
+     "type": "number"
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "funcion": {
+     "$ref": "#/$defs/FuncionCanalDashcamSchema"
+    },
+    "habilitado": {
+     "type": "boolean"
+    },
+    "audio": {
+     "type": "boolean"
     }
    },
    "additionalProperties": false
@@ -6117,6 +6233,23 @@
    },
    "additionalProperties": false
   },
+  "ConfigVideoDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ConfigVideoDashcamSchema",
+   "type": "object",
+   "properties": {
+    "flujoEnVivo": {
+     "$ref": "#/$defs/FlujoVideoDashcamSchema"
+    },
+    "duracionMaximaEnVivo": {
+     "type": "number"
+    },
+    "solicitarEvidencia": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
   "ConfigVoltajeLuminariaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ConfigVoltajeLuminariaSchema",
@@ -6592,6 +6725,11 @@
     "idTracker": {
      "x-bson": "objectId",
      "x-ref": "TrackerSchema",
+     "type": "string"
+    },
+    "idDashcam": {
+     "x-bson": "objectId",
+     "x-ref": "DashcamSchema",
      "type": "string"
     },
     "fechaAlta": {
@@ -8512,6 +8650,132 @@
    },
    "additionalProperties": false
   },
+  "CreateDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateDashcamSchema",
+   "type": "object",
+   "properties": {
+    "fechaCreacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaAlta": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "imagenes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventosTecnicos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "puedeSolicitarServicioTecnico": {
+     "type": "boolean"
+    },
+    "configHorariosAtencion": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "configHorariosAtencionTecnica": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "idModelo": {
+     "x-bson": "objectId",
+     "x-ref": "ModeloDispositivoSchema",
+     "type": "string"
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "identificacion": {
+     "type": "string"
+    },
+    "uniqueId": {
+     "type": "string"
+    },
+    "numeroSerie": {
+     "type": "string"
+    },
+    "asignadoA": {
+     "type": "string"
+    },
+    "canales": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CanalDashcamSchema"
+     }
+    },
+    "configVideo": {
+     "$ref": "#/$defs/ConfigVideoDashcamSchema"
+    },
+    "equipo": {
+     "$ref": "#/$defs/EquipoDashcamSchema"
+    },
+    "husoHorarioEquipo": {
+     "type": "number"
+    },
+    "estadoCuenta": {},
+    "numeroAbonado": {
+     "type": "string"
+    },
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "frecReporte": {
+     "type": "number"
+    },
+    "idServiciosContratados": {
+     "x-bson": "objectId",
+     "x-ref": "ServicioContratadoSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "additionalProperties": false
+  },
   "CreateDespachoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/CreateDespachoSchema",
@@ -10092,7 +10356,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -10219,7 +10483,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -10473,7 +10737,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -11109,6 +11373,133 @@
       "valores": {
        "x-bson": "mixed",
        "$ref": "#/$defs/ValoresEventoSirenaSchema"
+      }
+     },
+     "required": [
+      "tipoEvento"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "expireAt": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "filtrador": {
+       "$ref": "#/$defs/CategoriaSchema"
+      },
+      "notificar": {
+       "type": "boolean"
+      },
+      "atender": {
+       "type": "boolean"
+      },
+      "noDerivar": {
+       "type": "boolean"
+      },
+      "posponerHasta": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "categoria": {
+       "type": "string"
+      },
+      "prioridad": {
+       "type": "number"
+      },
+      "repetido": {
+       "type": "number"
+      },
+      "fechaUltimoRepetido": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "tiempoRespuesta": {
+       "type": "number"
+      },
+      "idEntidad": {
+       "x-bson": "objectId",
+       "type": "string"
+      },
+      "idReporte": {
+       "x-bson": "objectId",
+       "x-ref": "ReporteGenericoSchema",
+       "type": "string"
+      },
+      "idConfigEventoUsuario": {
+       "x-bson": "objectId",
+       "x-ref": "ConfigEventoUsuarioSchema",
+       "type": "string"
+      },
+      "detallesTecnicos": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/DetallesTecnicosSchema"
+      },
+      "detallesEmergencias": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/DetallesEmergenciasSchema"
+      },
+      "idsClientesQuePuedenAtender": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "configHorariosAtencion": {
+       "x-bson": "mixed",
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ConfigHorarioSchema"
+       }
+      },
+      "idsClientesAtendiendo": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsUsuariosAtendiendo": {
+       "x-bson": "objectId",
+       "x-ref": "UsuarioSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "sirena": {
+       "x-populate": {
+        "ref": "SirenaSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/SirenaSchema"
+      },
+      "tipoEvento": {
+       "type": "string",
+       "const": "Evento Dashcam"
+      },
+      "estado": {
+       "$ref": "#/$defs/EstadoEventoSchema"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -13790,6 +14181,9 @@
     "protocoloTracker": {
      "$ref": "#/$defs/ProtocoloTrackerSchema"
     },
+    "protocoloDashcam": {
+     "$ref": "#/$defs/ProtocoloDashcamSchema"
+    },
     "idCodigos": {
      "x-bson": "objectId",
      "x-ref": "CodigosDispositivoSchema",
@@ -15362,6 +15756,124 @@
         },
         "obd": {
          "$ref": "#/$defs/ReporteTrackerOBDSchema"
+        },
+        "timestamp": {
+         "type": "string"
+        }
+       },
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "tipoReporte"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "expireAt": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idEntidad": {
+       "x-bson": "objectId",
+       "type": "string"
+      },
+      "idsAsignados": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadReporteSchema"
+      },
+      "tipoReporte": {
+       "type": "string",
+       "const": "Dashcam 4G"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "type": "object",
+       "properties": {
+        "fechaDevice": {
+         "type": "string"
+        },
+        "geojson": {
+         "$ref": "#/$defs/GeoJSONPointSchema"
+        },
+        "snappedGeojson": {
+         "$ref": "#/$defs/GeoJSONPointSchema"
+        },
+        "snapDivergence": {
+         "type": "number"
+        },
+        "direccion": {
+         "type": "string"
+        },
+        "velocidad": {
+         "type": "number"
+        },
+        "orientacion": {
+         "type": "number"
+        },
+        "ignicion": {
+         "type": "boolean"
+        },
+        "raw": {
+         "type": "string"
+        },
+        "uniqueId": {
+         "type": "string"
+        },
+        "odometro": {
+         "type": "number"
+        },
+        "triperoState": {
+         "type": "string",
+         "enum": [
+          "STOPPED",
+          "IDLE",
+          "MOVING",
+          "UNKNOWN",
+          "OFFLINE"
+         ]
+        },
+        "triperoStateDuration": {
+         "type": "number"
+        },
+        "triperoCurrentTripId": {
+         "type": "string"
+        },
+        "triperoCurrentTripDistance": {
+         "type": "number"
+        },
+        "protocoloDashcam": {
+         "$ref": "#/$defs/ProtocoloDashcamSchema"
+        },
+        "transporte": {
+         "type": "string",
+         "enum": [
+          "TCP",
+          "UDP"
+         ]
+        },
+        "puerto": {
+         "type": "number"
+        },
+        "tenant": {
+         "type": "number"
         },
         "timestamp": {
          "type": "string"
@@ -18916,6 +19428,333 @@
    "additionalProperties": {
     "$ref": "#/$defs/PuntoCurvaLuminariaSchema"
    }
+  },
+  "DashcamCacheSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DashcamCacheSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "fechaCreacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaAlta": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "imagenes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventosTecnicos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "puedeSolicitarServicioTecnico": {
+     "type": "boolean"
+    },
+    "configHorariosAtencion": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "configHorariosAtencionTecnica": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "idModelo": {
+     "x-bson": "objectId",
+     "x-ref": "ModeloDispositivoSchema",
+     "type": "string"
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "identificacion": {
+     "type": "string"
+    },
+    "uniqueId": {
+     "type": "string"
+    },
+    "numeroSerie": {
+     "type": "string"
+    },
+    "asignadoA": {
+     "type": "string"
+    },
+    "canales": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CanalDashcamSchema"
+     }
+    },
+    "configVideo": {
+     "$ref": "#/$defs/ConfigVideoDashcamSchema"
+    },
+    "equipo": {
+     "$ref": "#/$defs/EquipoDashcamSchema"
+    },
+    "husoHorarioEquipo": {
+     "type": "number"
+    },
+    "estadoCuenta": {},
+    "numeroAbonado": {
+     "type": "string"
+    },
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "frecReporte": {
+     "type": "number"
+    },
+    "idServiciosContratados": {
+     "x-bson": "objectId",
+     "x-ref": "ServicioContratadoSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "additionalProperties": false
+  },
+  "DashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/DashcamSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "fechaCreacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaAlta": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "imagenes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventosTecnicos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "puedeSolicitarServicioTecnico": {
+     "type": "boolean"
+    },
+    "configHorariosAtencion": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "configHorariosAtencionTecnica": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "idModelo": {
+     "x-bson": "objectId",
+     "x-ref": "ModeloDispositivoSchema",
+     "type": "string"
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "identificacion": {
+     "type": "string"
+    },
+    "uniqueId": {
+     "type": "string"
+    },
+    "numeroSerie": {
+     "type": "string"
+    },
+    "asignadoA": {
+     "type": "string"
+    },
+    "canales": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CanalDashcamSchema"
+     }
+    },
+    "configVideo": {
+     "$ref": "#/$defs/ConfigVideoDashcamSchema"
+    },
+    "equipo": {
+     "$ref": "#/$defs/EquipoDashcamSchema"
+    },
+    "husoHorarioEquipo": {
+     "type": "number"
+    },
+    "estadoCuenta": {},
+    "numeroAbonado": {
+     "type": "string"
+    },
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "frecReporte": {
+     "type": "number"
+    },
+    "idServiciosContratados": {
+     "x-bson": "objectId",
+     "x-ref": "ServicioContratadoSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    },
+    "ancestros": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idsAncestros",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ClienteSchema"
+     }
+    },
+    "activo": {
+     "x-populate": {
+      "ref": "ActivoSchema",
+      "localField": "asignadoA",
+      "foreignField": "_id",
+      "justOne": true
+     }
+    },
+    "modelo": {
+     "x-populate": {
+      "ref": "ModeloDispositivoSchema",
+      "localField": "idModelo",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ModeloDispositivoSchema"
+    },
+    "serviciosContratados": {
+     "x-populate": {
+      "ref": "ServicioContratadoSchema",
+      "localField": "idServiciosContratados",
+      "foreignField": "_id",
+      "justOne": false
+     },
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ServicioContratadoSchema"
+     }
+    },
+    "sim1": {
+     "x-populate": {
+      "ref": "SimSchema",
+      "localField": "idSim1",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/SimSchema"
+    },
+    "sim2": {
+     "x-populate": {
+      "ref": "SimSchema",
+      "localField": "idSim2",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/SimSchema"
+    }
+   },
+   "additionalProperties": false,
+   "x-collection": "dashcams"
   },
   "DatosFiscalesFacturacionSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -22491,7 +23330,8 @@
     "Grupo",
     "Configuración de Perfil",
     "SIM",
-    "Sirena"
+    "Sirena",
+    "Dashcam"
    ]
   },
   "EnvioVehiculoSchema": {
@@ -22613,6 +23453,36 @@
    },
    "additionalProperties": false,
    "x-collection": "enviovehiculos"
+  },
+  "EquipoDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/EquipoDashcamSchema",
+   "type": "object",
+   "properties": {
+    "fabricante": {
+     "type": "string"
+    },
+    "modelo": {
+     "type": "string"
+    },
+    "idTerminal": {
+     "type": "string"
+    },
+    "imei": {
+     "type": "string"
+    },
+    "versionFirmware": {
+     "type": "string"
+    },
+    "versionProtocolo": {
+     "type": "string"
+    },
+    "fechaRegistro": {
+     "x-bson": "date",
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
   },
   "EscalaPrecioSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -23079,6 +23949,17 @@
     "Pendiente de Aprobación",
     "Firma Cliente",
     "Finalizado"
+   ]
+  },
+  "EstadoEvidenciaDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/EstadoEvidenciaDashcamSchema",
+   "type": "string",
+   "enum": [
+    "Pendiente",
+    "Recibiendo",
+    "Completa",
+    "Error"
    ]
   },
   "EstadoExportJobSchema": {
@@ -23616,6 +24497,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -23641,7 +24530,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -23864,6 +24753,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -23894,7 +24791,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -24117,6 +25014,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -24375,6 +25280,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -24400,7 +25313,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -24623,6 +25536,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -24881,6 +25802,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -25129,6 +26058,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -25387,6 +26324,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -25635,6 +26580,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -25893,6 +26846,275 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "configEventoUsuario": {
+       "x-populate": {
+        "ref": "ConfigEventoUsuarioSchema",
+        "localField": "idConfigEventoUsuario",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "reporte": {
+       "x-populate": {
+        "ref": "ReporteGenericoSchema",
+        "localField": "idReporte",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "tipoEvento": {
+       "type": "string",
+       "const": "Evento Dashcam"
+      },
+      "estado": {
+       "$ref": "#/$defs/EstadoEventoSchema"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
+      }
+     },
+     "required": [
+      "tipoEvento"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "_id": {
+       "type": "string"
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "expireAt": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "filtrador": {
+       "$ref": "#/$defs/CategoriaSchema"
+      },
+      "notificar": {
+       "type": "boolean"
+      },
+      "atender": {
+       "type": "boolean"
+      },
+      "requiereAtencion": {
+       "type": "boolean"
+      },
+      "noDerivar": {
+       "type": "boolean"
+      },
+      "posponerHasta": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "categoria": {
+       "type": "string"
+      },
+      "prioridad": {
+       "type": "number"
+      },
+      "repetido": {
+       "type": "number"
+      },
+      "fechaUltimoRepetido": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "tiempoRespuesta": {
+       "type": "number"
+      },
+      "idEntidad": {
+       "x-bson": "objectId",
+       "type": "string"
+      },
+      "idReporte": {
+       "x-bson": "objectId",
+       "x-ref": "ReporteGenericoSchema",
+       "type": "string"
+      },
+      "idConfigEventoUsuario": {
+       "x-bson": "objectId",
+       "x-ref": "ConfigEventoUsuarioSchema",
+       "type": "string"
+      },
+      "detallesTecnicos": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/DetallesTecnicosSchema"
+      },
+      "detallesEmergencias": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/DetallesEmergenciasSchema"
+      },
+      "idsClientesQuePuedenAtender": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsClientesQueVen": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "configHorariosAtencion": {
+       "x-bson": "mixed",
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ConfigHorarioSchema"
+       }
+      },
+      "idsClientesAtendiendo": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsUsuariosAtendiendo": {
+       "x-bson": "objectId",
+       "x-ref": "UsuarioSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "cliente": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idCliente",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/ClienteSchema"
+      },
+      "ancestros": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idsAncestros",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ClienteSchema"
+       }
+      },
+      "botonBluetooth": {
+       "x-populate": {
+        "ref": "BotonBluetoothSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/BotonBluetoothSchema"
+      },
+      "sirena": {
+       "x-populate": {
+        "ref": "SirenaSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/SirenaSchema"
+      },
+      "gateway": {
+       "x-populate": {
+        "ref": "GatewaySchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/GatewaySchema"
+      },
+      "usuariosAtendiendo": {
+       "x-populate": {
+        "ref": "UsuarioSchema",
+        "localField": "idsUsuariosAtendiendo",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {}
+      },
+      "tracker": {
+       "x-populate": {
+        "ref": "TrackerSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "alarma": {
+       "x-populate": {
+        "ref": "DispositivoAlarmaSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "luminaria": {
+       "x-populate": {
+        "ref": "LuminariaSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "usuario": {
+       "x-populate": {
+        "ref": "UsuarioSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "activo": {
+       "x-populate": {
+        "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -26141,6 +27363,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -26399,6 +27629,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -26647,6 +27885,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -26905,6 +28151,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -27153,6 +28407,14 @@
       "activo": {
        "x-populate": {
         "ref": "ActivoSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
         "localField": "idEntidad",
         "foreignField": "_id",
         "justOne": true
@@ -27411,6 +28673,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -27664,6 +28934,14 @@
         "justOne": true
        }
       },
+      "dashcam": {
+       "x-populate": {
+        "ref": "DashcamSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
       "configEventoUsuario": {
        "x-populate": {
         "ref": "ConfigEventoUsuarioSchema",
@@ -27699,6 +28977,38 @@
     }
    ],
    "x-collection": "eventogenericos"
+  },
+  "EvidenciaDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/EvidenciaDashcamSchema",
+   "type": "object",
+   "properties": {
+    "tipo": {
+     "$ref": "#/$defs/TipoEvidenciaDashcamSchema"
+    },
+    "canal": {
+     "type": "number"
+    },
+    "nombreArchivo": {
+     "type": "string"
+    },
+    "ruta": {
+     "type": "string"
+    },
+    "contentType": {
+     "type": "string"
+    },
+    "tamanio": {
+     "type": "number"
+    },
+    "estado": {
+     "$ref": "#/$defs/EstadoEvidenciaDashcamSchema"
+    },
+    "fechaRecepcion": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
   },
   "ExcepcionCacheSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -28247,6 +29557,15 @@
     "Batería"
    ]
   },
+  "FlujoVideoDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/FlujoVideoDashcamSchema",
+   "type": "string",
+   "enum": [
+    "Principal",
+    "Secundario"
+   ]
+  },
   "FormaContratacionSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/FormaContratacionSchema",
@@ -28330,6 +29649,19 @@
     "Servicio Técnico",
     "Transporte",
     "Otro"
+   ]
+  },
+  "FuncionCanalDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/FuncionCanalDashcamSchema",
+   "type": "string",
+   "enum": [
+    "Frontal",
+    "Cabina",
+    "Trasera",
+    "Lateral",
+    "Carga",
+    "Otra"
    ]
   },
   "FuncionesRolSchema": {
@@ -32118,6 +33450,9 @@
     "protocoloTracker": {
      "$ref": "#/$defs/ProtocoloTrackerSchema"
     },
+    "protocoloDashcam": {
+     "$ref": "#/$defs/ProtocoloDashcamSchema"
+    },
     "idCodigos": {
      "x-bson": "objectId",
      "x-ref": "CodigosDispositivoSchema",
@@ -32171,6 +33506,9 @@
     },
     "protocoloTracker": {
      "$ref": "#/$defs/ProtocoloTrackerSchema"
+    },
+    "protocoloDashcam": {
+     "$ref": "#/$defs/ProtocoloDashcamSchema"
     },
     "idCodigos": {
      "x-bson": "objectId",
@@ -32678,6 +34016,17 @@
    "enum": [
     "flotas",
     "alarmas"
+   ]
+  },
+  "ModuloSeguridadActivaSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ModuloSeguridadActivaSchema",
+   "type": "string",
+   "enum": [
+    "ADAS",
+    "DSM",
+    "TPMS",
+    "BSD"
    ]
   },
   "ModuloSendgridSchema": {
@@ -34450,6 +35799,14 @@
     "unicom"
    ]
   },
+  "ProtocoloDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ProtocoloDashcamSchema",
+   "type": "string",
+   "enum": [
+    "jt808"
+   ]
+  },
   "ProtocoloSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ProtocoloSchema",
@@ -35258,6 +36615,82 @@
     },
     "motivoSinDatos": {
      "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "ReporteDashcam4GSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ReporteDashcam4GSchema",
+   "type": "object",
+   "properties": {
+    "fechaDevice": {
+     "type": "string"
+    },
+    "geojson": {
+     "$ref": "#/$defs/GeoJSONPointSchema"
+    },
+    "snappedGeojson": {
+     "$ref": "#/$defs/GeoJSONPointSchema"
+    },
+    "snapDivergence": {
+     "type": "number"
+    },
+    "direccion": {
+     "type": "string"
+    },
+    "velocidad": {
+     "type": "number"
+    },
+    "orientacion": {
+     "type": "number"
+    },
+    "ignicion": {
+     "type": "boolean"
+    },
+    "raw": {
+     "type": "string"
+    },
+    "uniqueId": {
+     "type": "string"
+    },
+    "odometro": {
+     "type": "number"
+    },
+    "triperoState": {
+     "type": "string",
+     "enum": [
+      "STOPPED",
+      "IDLE",
+      "MOVING",
+      "UNKNOWN",
+      "OFFLINE"
+     ]
+    },
+    "triperoStateDuration": {
+     "type": "number"
+    },
+    "triperoCurrentTripId": {
+     "type": "string"
+    },
+    "triperoCurrentTripDistance": {
+     "type": "number"
+    },
+    "protocoloDashcam": {
+     "$ref": "#/$defs/ProtocoloDashcamSchema"
+    },
+    "transporte": {
+     "type": "string",
+     "enum": [
+      "TCP",
+      "UDP"
+     ]
+    },
+    "puerto": {
+     "type": "number"
+    },
+    "tenant": {
+     "type": "number"
     }
    },
    "additionalProperties": false
@@ -36869,6 +38302,214 @@
         },
         "obd": {
          "$ref": "#/$defs/ReporteTrackerOBDSchema"
+        },
+        "timestamp": {
+         "type": "string"
+        }
+       },
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "tipoReporte"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "_id": {
+       "type": "string"
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "expireAt": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idEntidad": {
+       "x-bson": "objectId",
+       "type": "string"
+      },
+      "idsAsignados": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadReporteSchema"
+      },
+      "cliente": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idCliente",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/ClienteSchema"
+      },
+      "ancestros": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idsAncestros",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ClienteSchema"
+       }
+      },
+      "dispositivoLora": {
+       "x-populate": {
+        "ref": "DispositivoLorawanSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "tracker": {
+       "x-populate": {
+        "ref": "TrackerSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       }
+      },
+      "grupos": {
+       "x-populate": {
+        "ref": "GrupoSchema",
+        "localField": "idsAsignados",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {}
+      },
+      "activo": {
+       "x-populate": {
+        "ref": "ActivoSchema",
+        "localField": "idsAsignados",
+        "foreignField": "_id",
+        "justOne": false
+       }
+      },
+      "recorrido": {
+       "x-populate": {
+        "ref": "RecorridoSchema",
+        "localField": "idsAsignados",
+        "foreignField": "_id",
+        "justOne": false
+       }
+      },
+      "usuario": {
+       "x-populate": {
+        "ref": "UsuarioSchema",
+        "localField": "idsAsignados",
+        "foreignField": "_id",
+        "justOne": false
+       }
+      },
+      "luminaria": {
+       "x-populate": {
+        "ref": "LuminariaSchema",
+        "localField": "idsAsignados",
+        "foreignField": "_id",
+        "justOne": false
+       }
+      },
+      "tipoReporte": {
+       "type": "string",
+       "const": "Dashcam 4G"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "type": "object",
+       "properties": {
+        "fechaDevice": {
+         "type": "string"
+        },
+        "geojson": {
+         "$ref": "#/$defs/GeoJSONPointSchema"
+        },
+        "snappedGeojson": {
+         "$ref": "#/$defs/GeoJSONPointSchema"
+        },
+        "snapDivergence": {
+         "type": "number"
+        },
+        "direccion": {
+         "type": "string"
+        },
+        "velocidad": {
+         "type": "number"
+        },
+        "orientacion": {
+         "type": "number"
+        },
+        "ignicion": {
+         "type": "boolean"
+        },
+        "raw": {
+         "type": "string"
+        },
+        "uniqueId": {
+         "type": "string"
+        },
+        "odometro": {
+         "type": "number"
+        },
+        "triperoState": {
+         "type": "string",
+         "enum": [
+          "STOPPED",
+          "IDLE",
+          "MOVING",
+          "UNKNOWN",
+          "OFFLINE"
+         ]
+        },
+        "triperoStateDuration": {
+         "type": "number"
+        },
+        "triperoCurrentTripId": {
+         "type": "string"
+        },
+        "triperoCurrentTripDistance": {
+         "type": "number"
+        },
+        "protocoloDashcam": {
+         "$ref": "#/$defs/ProtocoloDashcamSchema"
+        },
+        "transporte": {
+         "type": "string",
+         "enum": [
+          "TCP",
+          "UDP"
+         ]
+        },
+        "puerto": {
+         "type": "number"
+        },
+        "tenant": {
+         "type": "number"
         },
         "timestamp": {
          "type": "string"
@@ -42859,7 +44500,8 @@
     "Luminaria",
     "DispositivoLorawan",
     "BotonBLE",
-    "Sirena"
+    "Sirena",
+    "Dashcam"
    ]
   },
   "TipoDocumentacionSchema": {
@@ -42921,7 +44563,8 @@
     "Activo",
     "Tracker",
     "Vehiculo",
-    "Alarma"
+    "Alarma",
+    "Dashcam"
    ]
   },
   "TipoEntidadPermisoSchema": {
@@ -42946,7 +44589,8 @@
     "Colectivo",
     "Activo",
     "Tracker",
-    "Vehiculo"
+    "Vehiculo",
+    "Dashcam"
    ]
   },
   "TipoEntidadResumenSchema": {
@@ -43034,6 +44678,7 @@
     "Evento Gateway",
     "Evento BotonBLE",
     "Evento Sirena",
+    "Evento Dashcam",
     "Evento Técnico Alarma",
     "Evento Técnico Tracker",
     "Evento Técnico Vehículo",
@@ -43101,6 +44746,18 @@
    },
    "additionalProperties": false,
    "x-collection": "tipoeventos"
+  },
+  "TipoEvidenciaDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/TipoEvidenciaDashcamSchema",
+   "type": "string",
+   "enum": [
+    "Imagen",
+    "Audio",
+    "Video",
+    "Texto",
+    "Otro"
+   ]
   },
   "TipoExportJobSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -43292,7 +44949,8 @@
     "Tracker 4G Temperatura",
     "Tracker T1000B",
     "Tracker Qualcomm",
-    "Tracker Telefono"
+    "Tracker Telefono",
+    "Dashcam 4G"
    ]
   },
   "TipoVehiculoSchema": {
@@ -45921,6 +47579,11 @@
      "x-ref": "TrackerSchema",
      "type": "string"
     },
+    "idDashcam": {
+     "x-bson": "objectId",
+     "x-ref": "DashcamSchema",
+     "type": "string"
+    },
     "fechaAlta": {
      "x-bson": "date",
      "type": "string"
@@ -47750,6 +49413,132 @@
    },
    "additionalProperties": false
   },
+  "UpdateDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/UpdateDashcamSchema",
+   "type": "object",
+   "properties": {
+    "fechaCreacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "fechaAlta": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "imagenes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idsClientesQuePuedenAtenderEventosTecnicos": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "puedeSolicitarServicioTecnico": {
+     "type": "boolean"
+    },
+    "configHorariosAtencion": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "configHorariosAtencionTecnica": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/ConfigHorarioSchema"
+     }
+    },
+    "idModelo": {
+     "x-bson": "objectId",
+     "x-ref": "ModeloDispositivoSchema",
+     "type": "string"
+    },
+    "nombre": {
+     "type": "string"
+    },
+    "identificacion": {
+     "type": "string"
+    },
+    "uniqueId": {
+     "type": "string"
+    },
+    "numeroSerie": {
+     "type": "string"
+    },
+    "asignadoA": {
+     "type": "string"
+    },
+    "canales": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/CanalDashcamSchema"
+     }
+    },
+    "configVideo": {
+     "$ref": "#/$defs/ConfigVideoDashcamSchema"
+    },
+    "equipo": {
+     "$ref": "#/$defs/EquipoDashcamSchema"
+    },
+    "husoHorarioEquipo": {
+     "type": "number"
+    },
+    "estadoCuenta": {},
+    "numeroAbonado": {
+     "type": "string"
+    },
+    "idSim1": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "idSim2": {
+     "x-bson": "objectId",
+     "type": "string"
+    },
+    "frecReporte": {
+     "type": "number"
+    },
+    "idServiciosContratados": {
+     "x-bson": "objectId",
+     "x-ref": "ServicioContratadoSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "additionalProperties": false
+  },
   "UpdateDespachoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/UpdateDespachoSchema",
@@ -49328,7 +51117,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -49455,7 +51244,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -49709,7 +51498,7 @@
       },
       "valores": {
        "x-bson": "mixed",
-       "$ref": "#/$defs/ValoresEventoTrackerSchema"
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -50345,6 +52134,133 @@
       "valores": {
        "x-bson": "mixed",
        "$ref": "#/$defs/ValoresEventoSirenaSchema"
+      }
+     },
+     "required": [
+      "tipoEvento"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "expireAt": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "filtrador": {
+       "$ref": "#/$defs/CategoriaSchema"
+      },
+      "notificar": {
+       "type": "boolean"
+      },
+      "atender": {
+       "type": "boolean"
+      },
+      "noDerivar": {
+       "type": "boolean"
+      },
+      "posponerHasta": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "categoria": {
+       "type": "string"
+      },
+      "prioridad": {
+       "type": "number"
+      },
+      "repetido": {
+       "type": "number"
+      },
+      "fechaUltimoRepetido": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "tiempoRespuesta": {
+       "type": "number"
+      },
+      "idEntidad": {
+       "x-bson": "objectId",
+       "type": "string"
+      },
+      "idReporte": {
+       "x-bson": "objectId",
+       "x-ref": "ReporteGenericoSchema",
+       "type": "string"
+      },
+      "idConfigEventoUsuario": {
+       "x-bson": "objectId",
+       "x-ref": "ConfigEventoUsuarioSchema",
+       "type": "string"
+      },
+      "detallesTecnicos": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/DetallesTecnicosSchema"
+      },
+      "detallesEmergencias": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/DetallesEmergenciasSchema"
+      },
+      "idsClientesQuePuedenAtender": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "configHorariosAtencion": {
+       "x-bson": "mixed",
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ConfigHorarioSchema"
+       }
+      },
+      "idsClientesAtendiendo": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "idsUsuariosAtendiendo": {
+       "x-bson": "objectId",
+       "x-ref": "UsuarioSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "sirena": {
+       "x-populate": {
+        "ref": "SirenaSchema",
+        "localField": "idEntidad",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/SirenaSchema"
+      },
+      "tipoEvento": {
+       "type": "string",
+       "const": "Evento Dashcam"
+      },
+      "estado": {
+       "$ref": "#/$defs/EstadoEventoSchema"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "$ref": "#/$defs/ValoresEventoDashcamSchema"
       }
      },
      "required": [
@@ -52934,6 +54850,9 @@
     "protocoloTracker": {
      "$ref": "#/$defs/ProtocoloTrackerSchema"
     },
+    "protocoloDashcam": {
+     "$ref": "#/$defs/ProtocoloDashcamSchema"
+    },
     "idCodigos": {
      "x-bson": "objectId",
      "x-ref": "CodigosDispositivoSchema",
@@ -54502,6 +56421,124 @@
         },
         "obd": {
          "$ref": "#/$defs/ReporteTrackerOBDSchema"
+        },
+        "timestamp": {
+         "type": "string"
+        }
+       },
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "tipoReporte"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "expireAt": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idEntidad": {
+       "x-bson": "objectId",
+       "type": "string"
+      },
+      "idsAsignados": {
+       "x-bson": "objectId",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadReporteSchema"
+      },
+      "tipoReporte": {
+       "type": "string",
+       "const": "Dashcam 4G"
+      },
+      "valores": {
+       "x-bson": "mixed",
+       "type": "object",
+       "properties": {
+        "fechaDevice": {
+         "type": "string"
+        },
+        "geojson": {
+         "$ref": "#/$defs/GeoJSONPointSchema"
+        },
+        "snappedGeojson": {
+         "$ref": "#/$defs/GeoJSONPointSchema"
+        },
+        "snapDivergence": {
+         "type": "number"
+        },
+        "direccion": {
+         "type": "string"
+        },
+        "velocidad": {
+         "type": "number"
+        },
+        "orientacion": {
+         "type": "number"
+        },
+        "ignicion": {
+         "type": "boolean"
+        },
+        "raw": {
+         "type": "string"
+        },
+        "uniqueId": {
+         "type": "string"
+        },
+        "odometro": {
+         "type": "number"
+        },
+        "triperoState": {
+         "type": "string",
+         "enum": [
+          "STOPPED",
+          "IDLE",
+          "MOVING",
+          "UNKNOWN",
+          "OFFLINE"
+         ]
+        },
+        "triperoStateDuration": {
+         "type": "number"
+        },
+        "triperoCurrentTripId": {
+         "type": "string"
+        },
+        "triperoCurrentTripDistance": {
+         "type": "number"
+        },
+        "protocoloDashcam": {
+         "$ref": "#/$defs/ProtocoloDashcamSchema"
+        },
+        "transporte": {
+         "type": "string",
+         "enum": [
+          "TCP",
+          "UDP"
+         ]
+        },
+        "puerto": {
+         "type": "number"
+        },
+        "tenant": {
+         "type": "number"
         },
         "timestamp": {
          "type": "string"
@@ -57690,6 +59727,53 @@
     },
     "geojson": {
      "$ref": "#/$defs/GeoJSONPointSchema"
+    }
+   },
+   "additionalProperties": false
+  },
+  "ValoresEventoDashcamSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ValoresEventoDashcamSchema",
+   "type": "object",
+   "properties": {
+    "titulo": {
+     "type": "string"
+    },
+    "mensaje": {
+     "type": "string"
+    },
+    "color": {
+     "type": "string"
+    },
+    "sonido": {
+     "$ref": "#/$defs/SonidoEventoSchema"
+    },
+    "geojson": {
+     "$ref": "#/$defs/GeoJSONPointSchema"
+    },
+    "codigoTracker": {
+     "type": "string"
+    },
+    "direccion": {
+     "type": "string"
+    },
+    "falsaAlarma": {
+     "type": "boolean"
+    },
+    "motivoFalsaAlarma": {
+     "type": "string"
+    },
+    "idDashcam": {
+     "type": "string"
+    },
+    "alarma": {
+     "$ref": "#/$defs/AlarmaSeguridadActivaSchema"
+    },
+    "evidencias": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/EvidenciaDashcamSchema"
+     }
     }
    },
    "additionalProperties": false

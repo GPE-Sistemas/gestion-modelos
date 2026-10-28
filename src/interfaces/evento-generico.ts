@@ -3,6 +3,7 @@ import { IEntidades } from './asignacion';
 import { z } from 'zod';
 import { ClienteSchema, ConfigHorarioSchema, ICliente, IConfigHorario } from './cliente';
 import type { ITracker } from './tracker';
+import type { IDashcam } from './dashcam';
 import { ModoArmadoUnicomSchema } from './dispositivo-alarma';
 import type { IDispositivoAlarma } from './dispositivo-alarma';
 import type { IActivo } from './activo';
@@ -34,6 +35,7 @@ export const TipoEventoGenericoSchema = z.enum([
   'Evento Gateway',
   'Evento BotonBLE',
   'Evento Sirena',
+  'Evento Dashcam',
   'Evento Técnico Alarma',
   'Evento Técnico Tracker',
   'Evento Técnico Vehículo',
@@ -170,6 +172,84 @@ export const ValoresEventoTrackerSchema = ValoresEventoBaseSchema.extend({
   motivoFalsaAlarma: z.string().optional(),
 });
 export type IValoresEventoTracker = z.infer<typeof ValoresEventoTrackerSchema>;
+
+// Módulo de seguridad activa que originó la alarma de una dashcam (norma
+// T/JSATL 12 "Su-Biao": ID de información adicional 0x64–0x67 del 0x0200).
+//   - ADAS (0x64): asistencia al conductor, mira la ruta con la cámara
+//     frontal. Colisión frontal, salida de carril, distancia corta con el de
+//     adelante, choque con peatón, cambio de carril brusco, señal de tránsito.
+//   - DSM (0x65): monitoreo del conductor, lo mira con la cámara de cabina.
+//     Fatiga, uso del celular, fumar, distracción, conductor ausente o
+//     cámara tapada.
+//   - TPMS (0x66): presión de neumáticos. Presión alta o baja, temperatura
+//     alta, pérdida rápida, sensor sin señal o con batería baja.
+//   - BSD (0x67): punto ciego, detecta vehículos al costado o detrás. Aproximación
+//     por la izquierda, la derecha o atrás.
+// La G40 trae ADAS y DSM; TPMS y BSD necesitan sensores externos.
+export const ModuloSeguridadActivaSchema = z.enum(['ADAS', 'DSM', 'TPMS', 'BSD']);
+export type ModuloSeguridadActiva = z.infer<typeof ModuloSeguridadActivaSchema>;
+
+// "Indicador de estado" de la alarma (byte de la norma Su-Biao):
+//   - Inicio (0x01): empieza una alarma que dura, como fatiga, distancia
+//     corta o uso del celular.
+//   - Fin (0x02): esa alarma terminó; se completa `fechaFin` en el mismo
+//     evento en vez de crear otro.
+//   - No aplica (0x00): alarma instantánea, sin inicio ni fin, como colisión
+//     frontal o salida de carril.
+export const BanderaAlarmaDashcamSchema = z.enum(['Inicio', 'Fin', 'No aplica']);
+export type BanderaAlarmaDashcam = z.infer<typeof BanderaAlarmaDashcamSchema>;
+
+export const AlarmaSeguridadActivaSchema = z.object({
+  modulo: ModuloSeguridadActivaSchema.optional(),
+  /** Tipo de alarma/evento tal cual lo manda el equipo (ADAS 0x01 = colisión frontal, …). */
+  tipo: z.number().optional(),
+  /** 1 o 2. Nivel 2 = alarma con evidencia. */
+  nivel: z.number().optional(),
+  bandera: BanderaAlarmaDashcamSchema.optional(),
+  idAlarmaEquipo: z.number().optional(),
+  /** Número de identificación de alarma (16 bytes) en hex: clave de deduplicación y de la evidencia. */
+  identificacion: z.string().optional(),
+  /** Número de alarma de 32 bytes enviado al pedir la evidencia (0x9208). */
+  numeroAlarma: z.string().optional(),
+  velocidad: z.number().optional(), // km/h
+  separacionSegundos: z.number().optional(), // ADAS colisión / carril / peatón
+  lado: z.enum(['Izquierda', 'Derecha']).optional(), // ADAS salida de carril
+  gradoFatiga: z.number().optional(), // DSM fatiga (1–10)
+  adjuntosAnunciados: z.number().optional(),
+  fechaFin: z.string().optional(), // al llegar la bandera "Fin"
+});
+export type IAlarmaSeguridadActiva = z.infer<typeof AlarmaSeguridadActivaSchema>;
+
+export const TipoEvidenciaDashcamSchema = z.enum(['Imagen', 'Audio', 'Video', 'Texto', 'Otro']);
+export type TipoEvidenciaDashcam = z.infer<typeof TipoEvidenciaDashcamSchema>;
+
+export const EstadoEvidenciaDashcamSchema = z.enum(['Pendiente', 'Recibiendo', 'Completa', 'Error']);
+export type EstadoEvidenciaDashcam = z.infer<typeof EstadoEvidenciaDashcamSchema>;
+
+export const EvidenciaDashcamSchema = z.object({
+  tipo: TipoEvidenciaDashcamSchema.optional(),
+  canal: z.number().optional(), // 64 = módulo ADAS, 65 = módulo DSM, 1–5 canales de video
+  nombreArchivo: z.string().optional(), // nombre original que manda el equipo
+  /** Ruta dentro del bucket (no URL: la URL firmada la arma la API). */
+  ruta: z.string().optional(),
+  contentType: z.string().optional(),
+  tamanio: z.number().optional(),
+  estado: EstadoEvidenciaDashcamSchema.optional(),
+  fechaRecepcion: z.string().optional(),
+});
+export type IEvidenciaDashcam = z.infer<typeof EvidenciaDashcamSchema>;
+
+// Superconjunto de ValoresEventoTracker (todo opcional): lo usan los eventos de
+// activo/vehículo/colectivo, que pueden venir de un tracker o de una dashcam, y
+// los de una dashcam sin asignar ('Evento Dashcam'). Sin esto, el modo strip de
+// zod descartaría `alarma`/`evidencias` al parsear un evento de vehículo.
+export const ValoresEventoDashcamSchema = ValoresEventoTrackerSchema.extend({
+  /** La dashcam que originó el evento (el evento puede ser del activo). */
+  idDashcam: z.string().optional(),
+  alarma: AlarmaSeguridadActivaSchema.optional(),
+  evidencias: z.array(EvidenciaDashcamSchema).optional(),
+});
+export type IValoresEventoDashcam = z.infer<typeof ValoresEventoDashcamSchema>;
 
 export const ValoresEventoAlarmaSchema = ValoresEventoBaseSchema.extend({
   contactId: ContactIDSchema.optional(),
@@ -401,11 +481,11 @@ export type DetallesEmergencias = z.infer<typeof DetallesEmergenciasSchema>;
 
 export type MapaEventoGenerico = {
   'Evento Colectivo': {
-    valores: IValoresEventoTracker;
+    valores: IValoresEventoDashcam;
     estado: EstadoEvento;
   };
   'Evento Activo': {
-    valores: IValoresEventoTracker;
+    valores: IValoresEventoDashcam;
     estado: EstadoEvento;
   };
   'Evento Tracker': {
@@ -413,7 +493,7 @@ export type MapaEventoGenerico = {
     estado: EstadoEvento;
   };
   'Evento Vehiculo': {
-    valores: IValoresEventoTracker;
+    valores: IValoresEventoDashcam;
     estado: EstadoEvento;
   };
   'Evento Alarma': {
@@ -434,6 +514,10 @@ export type MapaEventoGenerico = {
   };
   'Evento Sirena': {
     valores: IValoresEventoSirena;
+    estado: EstadoEvento;
+  };
+  'Evento Dashcam': {
+    valores: IValoresEventoDashcam;
     estado: EstadoEvento;
   };
   'Evento Técnico Alarma': {
@@ -538,6 +622,7 @@ export interface IEventoBaseGenerico<T extends keyof MapaEventoGenerico> {
   botonBluetooth?: IBotonBluetooth;
   sirena?: ISirena;
   gateway?: IGateway;
+  dashcam?: IDashcam;
   //
   reporte?: IReporteGenerico;
   configEventoUsuario?: IConfigEventoUsuario;
@@ -557,6 +642,7 @@ export type IEventoGenerico =
   | IEventoBaseGenerico<'Evento Gateway'>
   | IEventoBaseGenerico<'Evento BotonBLE'>
   | IEventoBaseGenerico<'Evento Sirena'>
+  | IEventoBaseGenerico<'Evento Dashcam'>
   | IEventoBaseGenerico<'Evento Técnico Alarma'>
   | IEventoBaseGenerico<'Evento Técnico Tracker'>
   | IEventoBaseGenerico<'Evento Técnico Vehículo'>
@@ -585,6 +671,7 @@ type OmitirCreate =
   | 'activo'
   | 'gateway'
   | 'botonBluetooth'
+  | 'dashcam'
   | 'configEventoUsuario'
   | 'reporte';
 
@@ -601,6 +688,7 @@ export type ICreateEventoGenerico =
   | Omit<IEventoBaseGenerico<'Evento Gateway'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento BotonBLE'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Sirena'>, OmitirCreate>
+  | Omit<IEventoBaseGenerico<'Evento Dashcam'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Alarma'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Tracker'>, OmitirCreate>
   | Omit<IEventoBaseGenerico<'Evento Técnico Vehículo'>, OmitirCreate>
@@ -640,6 +728,9 @@ export type IUpdateEventoGenerico =
     >)
   | ({ tipoEvento: 'Evento Sirena' } & Partial<
       Omit<IEventoBaseGenerico<'Evento Sirena'>, OmitirCreate | 'tipoEvento'>
+    >)
+  | ({ tipoEvento: 'Evento Dashcam' } & Partial<
+      Omit<IEventoBaseGenerico<'Evento Dashcam'>, OmitirCreate | 'tipoEvento'>
     >)
   | ({ tipoEvento: 'Evento Técnico Alarma' } & Partial<
       Omit<
@@ -844,6 +935,9 @@ const camposComunesEvento = {
   activo: z.custom<IActivo>().optional().meta({
     'x-populate': { ref: 'ActivoSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
   }),
+  dashcam: z.custom<IDashcam>().optional().meta({
+    'x-populate': { ref: 'DashcamSchema', localField: 'idEntidad', foreignField: '_id', justOne: true },
+  }),
   configEventoUsuario: z.custom<IConfigEventoUsuario>().optional().meta({
     'x-populate': { ref: 'ConfigEventoUsuarioSchema', localField: 'idConfigEventoUsuario', foreignField: '_id', justOne: true },
   }),
@@ -872,15 +966,16 @@ const varianteEvento = <
     valores: valores.optional().meta({ 'x-bson': 'mixed' }),
   });
 
-const vEvtColectivo = varianteEvento('Evento Colectivo', ValoresEventoTrackerSchema, EstadoEventoSchema);
-const vEvtActivo = varianteEvento('Evento Activo', ValoresEventoTrackerSchema, EstadoEventoSchema);
+const vEvtColectivo = varianteEvento('Evento Colectivo', ValoresEventoDashcamSchema, EstadoEventoSchema);
+const vEvtActivo = varianteEvento('Evento Activo', ValoresEventoDashcamSchema, EstadoEventoSchema);
 const vEvtTracker = varianteEvento('Evento Tracker', ValoresEventoTrackerSchema, EstadoEventoSchema);
-const vEvtVehiculo = varianteEvento('Evento Vehiculo', ValoresEventoTrackerSchema, EstadoEventoSchema);
+const vEvtVehiculo = varianteEvento('Evento Vehiculo', ValoresEventoDashcamSchema, EstadoEventoSchema);
 const vEvtAlarma = varianteEvento('Evento Alarma', ValoresEventoAlarmaSchema, EstadoEventoSchema);
 const vEvtLuminaria = varianteEvento('Evento Luminaria', ValoresEventoLuminariaSchema, EstadoEventoSchema);
 const vEvtGateway = varianteEvento('Evento Gateway', ValoresEventoGatewaySchema, EstadoEventoSchema);
 const vEvtBotonBLE = varianteEvento('Evento BotonBLE', ValoresEventoBotonBLESchema, EstadoEventoSchema);
 const vEvtSirena = varianteEvento('Evento Sirena', ValoresEventoSirenaSchema, EstadoEventoSchema);
+const vEvtDashcam = varianteEvento('Evento Dashcam', ValoresEventoDashcamSchema, EstadoEventoSchema);
 const vEvtTecAlarma = varianteEvento('Evento Técnico Alarma', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
 const vEvtTecTracker = varianteEvento('Evento Técnico Tracker', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
 const vEvtTecVehiculo = varianteEvento('Evento Técnico Vehículo', ValoresEventoTecnicoSchema, EstadoEventoTecnicoSchema);
@@ -890,7 +985,7 @@ const vEvtTecGateway = varianteEvento('Evento Técnico Gateway', ValoresEventoTe
 const vEvtEmergenciaMedica = varianteEvento('Evento Emergencia Médica', ValoresEventoEmergenciaSchema, EstadoEmergenciaMedicaSchema);
 const vEvtEmergenciaBomberos = varianteEvento('Evento Emergencia Bomberos', ValoresEventoEmergenciaSchema, EstadoEmergenciaBomberosSchema);
 
-// Anotación explícita: el tipo inferido de una discriminated union de 17
+// Anotación explícita: el tipo inferido de una discriminated union de 18
 // variantes (cada una embebiendo ClienteSchema) excede el límite de
 // serialización de declarations (TS7056). z.ZodType<tipo legacy> es honesto
 // (el parse devuelve esa forma) y se emite por referencia.
@@ -905,6 +1000,7 @@ export const EventoGenericoSchema: z.ZodType<IEventoGenerico> =
   vEvtGateway,
   vEvtBotonBLE,
   vEvtSirena,
+  vEvtDashcam,
   vEvtTecAlarma,
   vEvtTecTracker,
   vEvtTecVehiculo,
@@ -931,6 +1027,7 @@ const omitirCreateUpdateEvento = {
   activo: true,
   gateway: true,
   botonBluetooth: true,
+  dashcam: true,
   configEventoUsuario: true,
   reporte: true,
 } as const;
@@ -946,6 +1043,7 @@ export const CreateEventoGenericoSchema: z.ZodType<ICreateEventoGenerico> =
   vEvtGateway.omit(omitirCreateUpdateEvento),
   vEvtBotonBLE.omit(omitirCreateUpdateEvento),
   vEvtSirena.omit(omitirCreateUpdateEvento),
+  vEvtDashcam.omit(omitirCreateUpdateEvento),
   vEvtTecAlarma.omit(omitirCreateUpdateEvento),
   vEvtTecTracker.omit(omitirCreateUpdateEvento),
   vEvtTecVehiculo.omit(omitirCreateUpdateEvento),
@@ -968,6 +1066,7 @@ export const UpdateEventoGenericoSchema: z.ZodType<IUpdateEventoGenerico> =
   vEvtGateway.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Gateway') }),
   vEvtBotonBLE.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento BotonBLE') }),
   vEvtSirena.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Sirena') }),
+  vEvtDashcam.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Dashcam') }),
   vEvtTecAlarma.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Alarma') }),
   vEvtTecTracker.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Tracker') }),
   vEvtTecVehiculo.omit(omitirCreateUpdateEvento).partial().extend({ tipoEvento: z.literal('Evento Técnico Vehículo') }),

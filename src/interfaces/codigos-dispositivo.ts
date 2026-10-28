@@ -81,6 +81,7 @@ export const TipoDispositivoSchema = z.enum([
   'DispositivoLorawan',
   'BotonBLE',
   'Sirena',
+  'Dashcam',
 ]);
 export type TipoDispositivo = z.infer<typeof TipoDispositivoSchema>;
 
