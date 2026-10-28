@@ -6,7 +6,10 @@ import { ClienteSchema, ICliente } from './cliente';
 import type { IDispositivoLorawan } from './dispositivo-lorawan';
 import type { IGrupo } from './grupo';
 import type { ILuminaria } from './luminaria';
-import { ProtocoloTrackerSchema } from './modelo-dispositivo';
+import {
+  ProtocoloDashcamSchema,
+  ProtocoloTrackerSchema,
+} from './modelo-dispositivo';
 import type { IRecorrido } from './recorrido';
 import type { ITracker } from './tracker';
 import type { IUsuario } from './usuario';
@@ -49,6 +52,7 @@ export const TipoValoresReporteSchema = z.enum([
   'Tracker T1000B',
   'Tracker Qualcomm',
   'Tracker Telefono',
+  'Dashcam 4G',
 ]);
 export type TipoValoresReporte = z.infer<typeof TipoValoresReporteSchema>;
 
@@ -58,6 +62,7 @@ export const TipoEntidadReporteSchema = z.enum([
   'Activo',
   'Tracker',
   'Vehiculo',
+  'Dashcam',
 ]);
 export type TipoEntidadReporte = z.infer<typeof TipoEntidadReporteSchema>;
 
@@ -300,6 +305,29 @@ export const ReporteTracker4GSchema = ReporteTrackerSchema.extend({
 });
 export type IReporteTracker4G = z.infer<typeof ReporteTracker4GSchema>;
 
+// Posición de una dashcam (JT/T 808, mensaje 0x0200).
+export const ReporteDashcam4GSchema = ReporteTrackerSchema.extend({
+  uniqueId: z.string().optional(),
+  // Tripero corre sobre la dashcam sólo cuando es la única fuente de posición
+  // del activo; con tracker asignado estos campos no se escriben.
+  odometro: z.number().optional(),
+  triperoState: z
+    .enum(['STOPPED', 'IDLE', 'MOVING', 'UNKNOWN', 'OFFLINE'])
+    .optional(),
+  triperoStateDuration: z.number().optional(),
+  triperoCurrentTripId: z.string().optional(),
+  triperoCurrentTripDistance: z.number().optional(),
+  // Por dónde entró la trama (lo estampa gestion-trackers-go). Se llama distinto
+  // que `protocolo` del 'Tracker 4G' a propósito: con el mismo nombre y otro
+  // tipo, los valores de ambos reportes dejan de ser compatibles y
+  // `IReporteBase<keyof MapaValoresReporte>` ya no entra en `IReporteGenerico`.
+  protocoloDashcam: ProtocoloDashcamSchema.optional(),
+  transporte: z.enum(['TCP', 'UDP']).optional(),
+  puerto: z.number().optional(),
+  tenant: z.number().optional(),
+});
+export type IReporteDashcam4G = z.infer<typeof ReporteDashcam4GSchema>;
+
 export const ReporteTrackerT1000BSchema = ReporteTrackerSchema.extend({
   devEui: z.string().optional(),
   bateria: z.number().optional(),
@@ -389,6 +417,7 @@ export type MapaValoresReporte = {
   'Luminaria CitiLight Energía': IReporteLuminariaCitiLightEnergia;
   'Luminaria CitiLight Alerta': IReporteLuminariaCitiLightAlerta;
   'Tracker 4G': IReporteTracker4G;
+  'Dashcam 4G': IReporteDashcam4G;
   'Tracker T1000B': IReporteTrackerT1000B;
   'Tracker Qualcomm': IReporteTrackerQualcomm;
   'Tracker 4G Combustible': IReporteTrackerCombustible;
@@ -454,6 +483,7 @@ export type IReporteGenerico =
   | IReporteBase<'Luminaria CitiLight Energía'>
   | IReporteBase<'Luminaria CitiLight Alerta'>
   | IReporteBase<'Tracker 4G'>
+  | IReporteBase<'Dashcam 4G'>
   | IReporteBase<'Tracker T1000B'>
   | IReporteBase<'Tracker Qualcomm'>
   | IReporteBase<'Tracker 4G Combustible'>
@@ -490,6 +520,7 @@ export type ICreateReporteGenerico =
   | Omit<IReporteBase<'Luminaria CitiLight Energía'>, Omitir>
   | Omit<IReporteBase<'Luminaria CitiLight Alerta'>, Omitir>
   | Omit<IReporteBase<'Tracker 4G'>, Omitir>
+  | Omit<IReporteBase<'Dashcam 4G'>, Omitir>
   | Omit<IReporteBase<'Tracker T1000B'>, Omitir>
   | Omit<IReporteBase<'Tracker Qualcomm'>, Omitir>
   | Omit<IReporteBase<'Tracker 4G Combustible'>, Omitir>
@@ -526,6 +557,9 @@ export type IUpdateReporteGenerico =
     >)
   | ({ tipoReporte: 'Tracker 4G' } & Partial<
       Omit<IReporteBase<'Tracker 4G'>, Omitir | 'tipoReporte'>
+    >)
+  | ({ tipoReporte: 'Dashcam 4G' } & Partial<
+      Omit<IReporteBase<'Dashcam 4G'>, Omitir | 'tipoReporte'>
     >)
   | ({ tipoReporte: 'Tracker T1000B' } & Partial<
       Omit<IReporteBase<'Tracker T1000B'>, Omitir | 'tipoReporte'>
@@ -680,6 +714,7 @@ const vRepLumCitiLightEstado = varianteReporte('Luminaria CitiLight Estado', Rep
 const vRepLumCitiLightEnergia = varianteReporte('Luminaria CitiLight Energía', ReporteLuminariaCitiLightEnergiaSchema);
 const vRepLumCitiLightAlerta = varianteReporte('Luminaria CitiLight Alerta', ReporteLuminariaCitiLightAlertaSchema);
 const vRepTracker4G = varianteReporte('Tracker 4G', ReporteTracker4GSchema);
+const vRepDashcam4G = varianteReporte('Dashcam 4G', ReporteDashcam4GSchema);
 const vRepTrackerT1000B = varianteReporte('Tracker T1000B', ReporteTrackerT1000BSchema);
 const vRepTrackerQualcomm = varianteReporte('Tracker Qualcomm', ReporteTrackerQualcommSchema);
 const vRepTrackerCombustible = varianteReporte('Tracker 4G Combustible', ReporteTrackerCombustibleSchema);
@@ -696,6 +731,7 @@ export const ReporteGenericoSchema = z.discriminatedUnion('tipoReporte', [
   vRepLumCitiLightEnergia,
   vRepLumCitiLightAlerta,
   vRepTracker4G,
+  vRepDashcam4G,
   vRepTrackerT1000B,
   vRepTrackerQualcomm,
   vRepTrackerCombustible,
@@ -728,6 +764,7 @@ export const CreateReporteGenericoSchema = z.discriminatedUnion('tipoReporte', [
   vRepLumCitiLightEnergia.omit(omitirCreateUpdateReporte),
   vRepLumCitiLightAlerta.omit(omitirCreateUpdateReporte),
   vRepTracker4G.omit(omitirCreateUpdateReporte),
+  vRepDashcam4G.omit(omitirCreateUpdateReporte),
   vRepTrackerT1000B.omit(omitirCreateUpdateReporte),
   vRepTrackerQualcomm.omit(omitirCreateUpdateReporte),
   vRepTrackerCombustible.omit(omitirCreateUpdateReporte),
@@ -746,6 +783,7 @@ export const UpdateReporteGenericoSchema = z.discriminatedUnion('tipoReporte', [
   vRepLumCitiLightEnergia.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria CitiLight Energía') }),
   vRepLumCitiLightAlerta.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Luminaria CitiLight Alerta') }),
   vRepTracker4G.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Tracker 4G') }),
+  vRepDashcam4G.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Dashcam 4G') }),
   vRepTrackerT1000B.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Tracker T1000B') }),
   vRepTrackerQualcomm.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Tracker Qualcomm') }),
   vRepTrackerCombustible.omit(omitirCreateUpdateReporte).partial().extend({ tipoReporte: z.literal('Tracker 4G Combustible') }),

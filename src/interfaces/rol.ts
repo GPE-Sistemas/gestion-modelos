@@ -22,6 +22,7 @@ export const AccionesRolSchema = z.enum([
   'Logs - Ver métricas downlinks',
   'Logs - Ver logs crudos alarmas',
   'Logs - Ver logs crudos trackers',
+  'Logs - Ver logs crudos dashcams',
   // *******************************************
   // MODULO ADMINISTRACIÓN
   // *******************************************
@@ -59,6 +60,14 @@ export const AccionesRolSchema = z.enum([
   'Administración - Crear SIMs',
   'Administración - Editar SIMs',
   'Administración - Eliminar SIMs',
+  // Dashcams
+  'Administración - Ver dashcams',
+  'Administración - Crear dashcams',
+  'Administración - Editar dashcams',
+  'Administración - Eliminar dashcams',
+  'Dashcams - Ver en vivo',
+  'Dashcams - Ver grabaciones',
+  'Dashcams - Ver evidencias',
   // Servicios Ofrecidos
   'Administración - Ver servicios ofrecidos',
   'Administración - Crear servicios ofrecidos',
@@ -150,6 +159,12 @@ export const AccionesRolSchema = z.enum([
   'Configuraciones - Crear modelos trackers',
   'Configuraciones - Editar modelos trackers',
   'Configuraciones - Eliminar modelos trackers',
+  'Configuraciones - Crear codigos dashcams',
+  'Configuraciones - Editar codigos dashcams',
+  'Configuraciones - Eliminar codigos dashcams',
+  'Configuraciones - Crear modelos dashcams',
+  'Configuraciones - Editar modelos dashcams',
+  'Configuraciones - Eliminar modelos dashcams',
   'Configuraciones - Crear iconos vehículos',
   'Configuraciones - Editar iconos vehículos',
   'Configuraciones - Eliminar iconos vehículos',

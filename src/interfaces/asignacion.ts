@@ -21,6 +21,7 @@ export const EntidadesSchema = z.enum([
   'Configuración de Perfil',
   'SIM',
   'Sirena',
+  'Dashcam',
 ]);
 export type IEntidades = z.infer<typeof EntidadesSchema>;
 

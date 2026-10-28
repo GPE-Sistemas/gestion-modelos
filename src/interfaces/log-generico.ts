@@ -13,6 +13,7 @@ export const TipoEntidadLogSchema = z.enum([
   'Tracker',
   'Vehiculo',
   'Alarma',
+  'Dashcam',
 ]);
 export type TipoEntidadLog = z.infer<typeof TipoEntidadLogSchema>;
 

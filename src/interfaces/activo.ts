@@ -6,6 +6,7 @@ import {
   IConfigHorario,
 } from './cliente';
 import type { IModoDesactivado } from './dispositivo-alarma';
+import type { IDashcam } from './dashcam';
 import type { estadoCuenta } from './estado-entidad';
 import type { IGrupo } from './grupo';
 import type { IRecorrido } from './recorrido';
@@ -193,6 +194,10 @@ export const ActivoSchema = z.object({
     .string()
     .optional()
     .meta({ 'x-bson': 'objectId', 'x-ref': 'TrackerSchema' }),
+  idDashcam: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'DashcamSchema' }),
   ///alta de activo
   fechaAlta: z.string().optional().meta({ 'x-bson': 'date' }),
   imagenes: z.array(z.string()).optional(),
@@ -261,6 +266,14 @@ export const ActivoSchema = z.object({
       justOne: true,
     },
   }),
+  dashcam: z.custom<IDashcam>().optional().meta({
+    'x-populate': {
+      ref: 'DashcamSchema',
+      localField: 'idDashcam',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
 }).meta({ 'x-collection': 'activos' });
 
 /**
@@ -274,6 +287,7 @@ export interface IActivo {
   idsAncestros?: string[];
   idGrupo?: string;
   idTracker?: string;
+  idDashcam?: string;
   ///alta de activo
   fechaAlta?: string;
   imagenes?: string[];
@@ -299,23 +313,26 @@ export interface IActivo {
   ancestros?: ICliente[];
   tracker?: ITracker;
   grupo?: IGrupo;
+  dashcam?: IDashcam;
 }
 
-type OmitirCreate = '_id' | 'cliente' | 'tracker';
+type OmitirCreate = '_id' | 'cliente' | 'tracker' | 'dashcam';
 
 export const CreateActivoSchema = ActivoSchema.omit({
   _id: true,
   cliente: true,
   tracker: true,
+  dashcam: true,
 });
 export interface ICreateActivo extends Omit<Partial<IActivo>, OmitirCreate> {}
 
-type OmitirUpdate = '_id' | 'cliente' | 'tracker';
+type OmitirUpdate = '_id' | 'cliente' | 'tracker' | 'dashcam';
 
 export const UpdateActivoSchema = ActivoSchema.omit({
   _id: true,
   cliente: true,
   tracker: true,
+  dashcam: true,
 });
 export interface IUpdateActivo extends Omit<Partial<IActivo>, OmitirUpdate> {}
 
@@ -323,6 +340,7 @@ export const ActivoCacheSchema = ActivoSchema.omit({
   cliente: true,
   ancestros: true,
   tracker: true,
+  dashcam: true,
   grupo: true,
   vehiculo: true,
 }).extend({
@@ -330,7 +348,7 @@ export const ActivoCacheSchema = ActivoSchema.omit({
 });
 export interface IActivoCache extends Omit<
   IActivo,
-  'cliente' | 'ancestros' | 'tracker' | 'grupo' | 'vehiculo'
+  'cliente' | 'ancestros' | 'tracker' | 'dashcam' | 'grupo' | 'vehiculo'
 > {
   vehiculo?: IVehiculoCache;
 }

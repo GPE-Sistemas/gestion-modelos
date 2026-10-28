@@ -66,6 +66,10 @@ export const ProtocoloTrackerSchema = z.enum([
 ]);
 export type ProtocoloTracker = z.infer<typeof ProtocoloTrackerSchema>;
 
+// Por qué protocolo reportan las dashcams de este modelo.
+export const ProtocoloDashcamSchema = z.enum(['jt808']);
+export type ProtocoloDashcam = z.infer<typeof ProtocoloDashcamSchema>;
+
 export const NivelDimerizacionSchema = z.enum([
   'dim10',
   'dim20',
@@ -133,6 +137,8 @@ export const ModeloDispositivoSchema = z.object({
   protocolo: ProtocoloComunicadorSchema.optional(),
   // Solo aplica a modelos tipo="Tracker". Ver ProtocoloTrackerSchema.
   protocoloTracker: ProtocoloTrackerSchema.optional(),
+  // Solo aplica a modelos tipo="Dashcam". Ver ProtocoloDashcamSchema.
+  protocoloDashcam: ProtocoloDashcamSchema.optional(),
   idCodigos: z
     .string()
     .optional()
