@@ -44421,7 +44421,8 @@
     "Alarma",
     "Luminaria",
     "Sistema",
-    "Otro"
+    "Otro",
+    "Dashcam"
    ]
   },
   "TipoClienteSchema": {

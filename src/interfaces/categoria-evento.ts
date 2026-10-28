@@ -11,6 +11,7 @@ export const TipoCategoriaSchema = z.enum([
   "Luminaria",
   "Sistema",
   "Otro",
+  "Dashcam",
 ]);
 export type TipoCategoria = z.infer<typeof TipoCategoriaSchema>;
 
