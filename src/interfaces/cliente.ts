@@ -282,6 +282,9 @@ export const ModuloAdministracionSchema = z.object({
   //Trackers
   activoTrackers: z.boolean().optional(),
   crearTrackers: z.boolean().optional(),
+  //Dashcams
+  activoDashcams: z.boolean().optional(),
+  crearDashcams: z.boolean().optional(),
   //Botones BLE
   activoBotonesBLE: z.boolean().optional(),
   crearBotonesBLE: z.boolean().optional(),

@@ -33783,6 +33783,12 @@
     "crearTrackers": {
      "type": "boolean"
     },
+    "activoDashcams": {
+     "type": "boolean"
+    },
+    "crearDashcams": {
+     "type": "boolean"
+    },
     "activoBotonesBLE": {
      "type": "boolean"
     },
