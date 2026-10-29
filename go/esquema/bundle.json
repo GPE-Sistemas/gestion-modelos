@@ -31779,6 +31779,9 @@
     },
     "parseo": {
      "$ref": "#/$defs/ResultadoParseoLogSchema"
+    },
+    "repetido": {
+     "type": "number"
     }
    },
    "additionalProperties": false

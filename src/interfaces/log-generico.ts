@@ -45,6 +45,15 @@ export const LogMensajeSchema = z.object({
   nombreProtocolo: z.string().optional(),
   codigo: z.string().optional(),
   parseo: ResultadoParseoLogSchema.optional(),
+  /**
+   * Copias exactas de esta misma trama que el mismo comunicador mandó por el
+   * mismo puerto dentro de los 30 s siguientes y que NO se guardaron (el
+   * panel reintenta porque el ACK le llegó tarde). Lo escribe irix-alarmas-go
+   * al cerrar la ventana; ausente o 0 = llegó una sola vez. La trama llegó
+   * `repetido + 1` veces. Los trackers guardan una fila por frame y no lo
+   * escriben.
+   */
+  repetido: z.number().optional(),
 });
 export type ILogMensaje = z.infer<typeof LogMensajeSchema>;
 
