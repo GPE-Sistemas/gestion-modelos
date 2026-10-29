@@ -29590,7 +29590,8 @@
     "Dahua",
     "Hikvision",
     "Intelbras",
-    "UNICOM"
+    "UNICOM",
+    "DX Control"
    ]
   },
   "FranjaHorariaSchema": {
@@ -35798,6 +35799,7 @@
     "alarma-irix",
     "avatis",
     "dahua",
+    "dx-control",
     "garnet-titanium",
     "hikvision",
     "intelbras",

@@ -18,6 +18,12 @@ export const FormatosMensajeComunicadorSchema = z.enum([
   // contra el broker propio de IRIX. NO usa SIM/GPRS (sim1/sim2/numeroAbonado
   // quedan vacíos); su identidad es el devid en idUnicoComunicador.
   'UNICOM',
+  // DX Control (DX 2S / 3S / SAM2 / 2S MAX / DX HUB): comunicador 2G/3G/4G,
+  // WiFi o Ethernet que reporta Contact ID por UDP (trama `[FG1;…]`) y
+  // acepta comandos "APP" (`[CMDAPP;…]`) por el mismo socket. Su identidad
+  // es el IMEI del módulo en idUnicoComunicador: es lo único que viaja en
+  // los eventos, el keepalive y los comandos.
+  'DX Control',
 ]);
 export type FormatosMensajeComunicador = z.infer<
   typeof FormatosMensajeComunicadorSchema
@@ -35,6 +41,8 @@ export const ProtocoloComunicadorSchema = z.enum([
   'alarma-irix',
   'avatis',
   'dahua',
+  // DX Control: UDP, lo recibe irix-alarmas-go (no existe en el Node).
+  'dx-control',
   'garnet-titanium',
   'hikvision',
   'intelbras',
