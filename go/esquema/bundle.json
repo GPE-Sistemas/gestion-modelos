@@ -4321,9 +4321,6 @@
     "moduloTwilio": {
      "$ref": "#/$defs/ModuloTwilioSchema"
     },
-    "moduloSendgrid": {
-     "$ref": "#/$defs/ModuloSendgridSchema"
-    },
     "moduloSirenas": {
      "$ref": "#/$defs/ModuloSirenasSchema"
     },
@@ -23025,7 +23022,13 @@
      "type": "string"
     },
     "twilio": {
-     "$ref": "#/$defs/ModuloSendgridSchema"
+     "type": "object",
+     "properties": {
+      "senderName": {
+       "type": "string"
+      }
+     },
+     "additionalProperties": false
     },
     "extra": {
      "type": "object",
@@ -34039,47 +34042,6 @@
     "BSD"
    ]
   },
-  "ModuloSendgridSchema": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "$id": "#/$defs/ModuloSendgridSchema",
-   "type": "object",
-   "properties": {
-    "activo": {
-     "type": "boolean"
-    },
-    "senderEmail": {
-     "type": "string"
-    },
-    "senderName": {
-     "type": "string"
-    },
-    "senderAddress": {
-     "type": "string"
-    },
-    "senderCity": {
-     "type": "string"
-    },
-    "senderState": {
-     "type": "string"
-    },
-    "senderZip": {
-     "type": "number"
-    },
-    "sendGridApiKey": {
-     "type": "string"
-    },
-    "templatesMail": {
-     "type": "object",
-     "propertyNames": {
-      "$ref": "#/$defs/TemplatesMailSchema"
-     },
-     "additionalProperties": {
-      "type": "string"
-     }
-    }
-   },
-   "additionalProperties": false
-  },
   "ModuloSirenasSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ModuloSirenasSchema",
@@ -44293,19 +44255,6 @@
     }
    },
    "additionalProperties": false
-  },
-  "TemplatesMailSchema": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "$id": "#/$defs/TemplatesMailSchema",
-   "type": "string",
-   "enum": [
-    "Error de comunicación de alarma",
-    "Equipos fuera de línea",
-    "Batería baja",
-    "Nuevo usuario",
-    "Reset de contraseña",
-    "Cambio de contraseña"
-   ]
   },
   "TemplatesWhatsappSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",

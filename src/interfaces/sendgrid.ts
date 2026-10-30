@@ -1,7 +1,6 @@
 // EMAIL
 
 import { z } from 'zod';
-import { ModuloSendgridSchema } from './cliente';
 
 export const EmailDataBaseSchema = z.object({
   sid: z.string(),
@@ -42,7 +41,9 @@ export const EmailTwilioSchema = z.object({
     .optional(),
   idCliente: z.string().optional(),
   usuario: z.string().optional(),
-  twilio: ModuloSendgridSchema.optional(),
+  // Nombre del remitente que muestra el mensajero. El campo conserva el nombre
+  // de cuando acá viajaba la configuración SendGrid del cliente.
+  twilio: z.object({ senderName: z.string().optional() }).optional(),
   extra: z.record(z.string(), z.any()).optional(),
 });
 export type IEmailTwilio = z.infer<typeof EmailTwilioSchema>;

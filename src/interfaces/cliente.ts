@@ -122,14 +122,6 @@ export const TemplatesWhatsappSchema = z.enum([
 ]);
 export type TemplatesWhatsapp = z.infer<typeof TemplatesWhatsappSchema>;
 
-export const TemplatesMailSchema = z.enum([
-  ...TemplatesWhatsappSchema.options,
-  'Nuevo usuario',
-  'Reset de contraseña',
-  'Cambio de contraseña',
-]);
-export type TemplatesMail = z.infer<typeof TemplatesMailSchema>;
-
 export const ModuloTwilioSchema = z.object({
   activo: z.boolean().optional(),
   accSid: z.string().optional(),
@@ -144,19 +136,6 @@ export const ModuloTwilioSchema = z.object({
     .optional(),
 });
 export type IModuloTwilio = z.infer<typeof ModuloTwilioSchema>;
-
-export const ModuloSendgridSchema = z.object({
-  activo: z.boolean().optional(),
-  senderEmail: z.string().optional(),
-  senderName: z.string().optional(),
-  senderAddress: z.string().optional(),
-  senderCity: z.string().optional(),
-  senderState: z.string().optional(),
-  senderZip: z.number().optional(),
-  sendGridApiKey: z.string().optional(),
-  templatesMail: z.partialRecord(TemplatesMailSchema, z.string()).optional(),
-});
-export type IModuloSendgrid = z.infer<typeof ModuloSendgridSchema>;
 
 export const TipoClienteSchema = z.enum(['Mayorista', 'Minorista', 'Final']);
 export type ITipoCliente = z.infer<typeof TipoClienteSchema>;
@@ -383,7 +362,6 @@ export const ConfigClienteSchema = z.object({
   modulosIntegraciones: ModulosIntegracionesSchema.optional(),
   moduloLogs: ModuloLogsSchema.optional(),
   moduloTwilio: ModuloTwilioSchema.optional(),
-  moduloSendgrid: ModuloSendgridSchema.optional(),
   moduloSirenas: ModuloSirenasSchema.optional(),
   moduloAlertasSeguridad: ModuloAlertasSeguridadSchema.optional(),
   idsClientesQuePuedenAtenderEventos: z.array(z.string()).optional(),
