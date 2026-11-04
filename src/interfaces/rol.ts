@@ -68,6 +68,7 @@ export const AccionesRolSchema = z.enum([
   'Dashcams - Ver en vivo',
   'Dashcams - Ver grabaciones',
   'Dashcams - Ver evidencias',
+  'Dashcams - Enviar comandos',
   // Servicios Ofrecidos
   'Administración - Ver servicios ofrecidos',
   'Administración - Crear servicios ofrecidos',
