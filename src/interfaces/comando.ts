@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ClienteSchema, ICliente } from './cliente';
+import type { IDashcam } from './dashcam';
 import type { IDispositivoLorawan } from './dispositivo-lorawan';
 import type { ITracker } from './tracker';
 import type { IUsuario } from './usuario';
@@ -68,6 +69,12 @@ export const ComandoSchema = z.object({
   // Tracker
   idTracker: z.string().optional(),
   respuesta: z.string().optional(),
+  // Dashcam JT/T 808: la orden y sus argumentos van en datosExtra (orden,
+  // argumentos) y el resultado de la cámara en datosExtra.resultado.
+  idDashcam: z
+    .string()
+    .optional()
+    .meta({ 'x-bson': 'objectId', 'x-ref': 'DashcamSchema' }),
   // lorawan
   // Downlink
   deveui: z.string().optional(),
@@ -88,6 +95,14 @@ export const ComandoSchema = z.object({
     'x-populate': {
       ref: 'TrackerSchema',
       localField: 'idTracker',
+      foreignField: '_id',
+      justOne: true,
+    },
+  }),
+  dashcam: z.custom<IDashcam>().optional().meta({
+    'x-populate': {
+      ref: 'DashcamSchema',
+      localField: 'idDashcam',
       foreignField: '_id',
       justOne: true,
     },
@@ -143,6 +158,8 @@ export interface IComando {
   // Tracker
   idTracker?: string;
   respuesta?: string;
+  // Dashcam
+  idDashcam?: string;
   // lorawan
   // Downlink
   deveui?: string;
@@ -157,6 +174,7 @@ export interface IComando {
 
   // Virtuals
   tracker?: ITracker;
+  dashcam?: IDashcam;
   cliente?: ICliente;
   ancestros?: ICliente[];
   usuario?: IUsuario;
@@ -170,6 +188,7 @@ export const CreateComandoSchema = ComandoSchema.omit({
   ancestros: true,
   usuario: true,
   tracker: true,
+  dashcam: true,
   dispositivo: true,
 });
 
@@ -180,6 +199,7 @@ type OmitirCreate =
   | 'ancestros'
   | 'usuario'
   | 'tracker'
+  | 'dashcam'
   | 'dispositivo';
 export interface ICreateComando extends Omit<Partial<IComando>, OmitirCreate> {}
 
@@ -190,6 +210,7 @@ export const UpdateComandoSchema = ComandoSchema.omit({
   usuario: true,
   ancestros: true,
   tracker: true,
+  dashcam: true,
   dispositivo: true,
 });
 
@@ -200,5 +221,6 @@ type OmitirUpdate =
   | 'usuario'
   | 'ancestros'
   | 'tracker'
+  | 'dashcam'
   | 'dispositivo';
 export interface IUpdateComando extends Omit<Partial<IComando>, OmitirUpdate> {}

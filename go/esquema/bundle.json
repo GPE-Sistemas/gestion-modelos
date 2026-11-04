@@ -130,6 +130,7 @@
     "Dashcams - Ver en vivo",
     "Dashcams - Ver grabaciones",
     "Dashcams - Ver evidencias",
+    "Dashcams - Enviar comandos",
     "Administración - Ver servicios ofrecidos",
     "Administración - Crear servicios ofrecidos",
     "Administración - Editar servicios ofrecidos",
@@ -2977,6 +2978,11 @@
     "respuesta": {
      "type": "string"
     },
+    "idDashcam": {
+     "x-bson": "objectId",
+     "x-ref": "DashcamSchema",
+     "type": "string"
+    },
     "deveui": {
      "type": "string"
     },
@@ -3008,6 +3014,14 @@
      "x-populate": {
       "ref": "TrackerSchema",
       "localField": "idTracker",
+      "foreignField": "_id",
+      "justOne": true
+     }
+    },
+    "dashcam": {
+     "x-populate": {
+      "ref": "DashcamSchema",
+      "localField": "idDashcam",
       "foreignField": "_id",
       "justOne": true
      }
@@ -7655,6 +7669,11 @@
      "type": "string"
     },
     "respuesta": {
+     "type": "string"
+    },
+    "idDashcam": {
+     "x-bson": "objectId",
+     "x-ref": "DashcamSchema",
      "type": "string"
     },
     "deveui": {
@@ -48356,6 +48375,11 @@
      "type": "string"
     },
     "respuesta": {
+     "type": "string"
+    },
+    "idDashcam": {
+     "x-bson": "objectId",
+     "x-ref": "DashcamSchema",
      "type": "string"
     },
     "deveui": {
