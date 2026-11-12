@@ -8781,6 +8781,10 @@
     "frecReporte": {
      "type": "number"
     },
+    "fechaUltimaComunicacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
     "idServiciosContratados": {
      "x-bson": "objectId",
      "x-ref": "ServicioContratadoSchema",
@@ -19563,6 +19567,10 @@
     "frecReporte": {
      "type": "number"
     },
+    "fechaUltimaComunicacion": {
+     "x-bson": "date",
+     "type": "string"
+    },
     "idServiciosContratados": {
      "x-bson": "objectId",
      "x-ref": "ServicioContratadoSchema",
@@ -19691,6 +19699,10 @@
     },
     "frecReporte": {
      "type": "number"
+    },
+    "fechaUltimaComunicacion": {
+     "x-bson": "date",
+     "type": "string"
     },
     "idServiciosContratados": {
      "x-bson": "objectId",
@@ -49512,6 +49524,10 @@
     },
     "frecReporte": {
      "type": "number"
+    },
+    "fechaUltimaComunicacion": {
+     "x-bson": "date",
+     "type": "string"
     },
     "idServiciosContratados": {
      "x-bson": "objectId",
