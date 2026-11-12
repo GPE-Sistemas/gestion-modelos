@@ -143,6 +143,13 @@ export const DashcamSchema = z
     idSim2: z.string().optional().meta({ 'x-bson': 'objectId' }),
     /** Intervalo de reporte esperado, en MINUTOS (igual que tracker.frecReporte: lo usan el estado de conexión y el control de "sin reportar"). */
     frecReporte: z.number().optional(),
+    /**
+     * Última trama recibida de la cámara, tenga o no posición GPS válida. La
+     * escribe gestion-eventos-camaras (como mucho cada pocos minutos). Sin GPS
+     * no hay reporte, así que el último reporte no alcanza para saber si la
+     * cámara está conectada.
+     */
+    fechaUltimaComunicacion: z.string().optional().meta({ 'x-bson': 'date' }),
     idServiciosContratados: z
       .array(z.string())
       .optional()
@@ -251,6 +258,8 @@ export interface IDashcam {
   idSim1?: string;
   idSim2?: string;
   frecReporte?: number;
+  /** Última trama recibida, con o sin GPS (ISO). */
+  fechaUltimaComunicacion?: string;
   idServiciosContratados?: string[];
   // Populate
   cliente?: ICliente;
