@@ -1796,6 +1796,16 @@
    },
    "additionalProperties": false
   },
+  "CanalAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CanalAsistenteSchema",
+   "type": "string",
+   "enum": [
+    "web",
+    "android",
+    "ios"
+   ]
+  },
   "CanalDashcamSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/CanalDashcamSchema",
@@ -6292,6 +6302,132 @@
    },
    "additionalProperties": false
   },
+  "ConsultaAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ConsultaAsistenteSchema",
+   "type": "object",
+   "properties": {
+    "_id": {
+     "type": "string"
+    },
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idUsuario": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "UsuarioSchema"
+    },
+    "idPermiso": {
+     "x-bson": "objectId",
+     "x-ref": "PermisoSchema",
+     "type": "string"
+    },
+    "idConversacion": {
+     "type": "string"
+    },
+    "fecha": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "canal": {
+     "$ref": "#/$defs/CanalAsistenteSchema"
+    },
+    "pregunta": {
+     "type": "string"
+    },
+    "respuesta": {
+     "type": "string"
+    },
+    "herramientas": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/HerramientaConsultaAsistenteSchema"
+     }
+    },
+    "sugerencias": {
+     "$ref": "#/$defs/SugerenciasAsistenteSchema"
+    },
+    "mapa": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/MapaAsistenteSchema"
+    },
+    "modelo": {
+     "type": "string"
+    },
+    "tokensEntrada": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "tokensCache": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "tokensSalida": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "ms": {
+     "type": "number"
+    },
+    "resultado": {
+     "$ref": "#/$defs/ResultadoConsultaAsistenteSchema"
+    },
+    "error": {
+     "type": "string"
+    },
+    "valoracion": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/ValoracionAsistenteSchema"
+    },
+    "cliente": {
+     "x-populate": {
+      "ref": "ClienteSchema",
+      "localField": "idCliente",
+      "foreignField": "_id",
+      "justOne": true
+     },
+     "$ref": "#/$defs/ClienteSchema"
+    }
+   },
+   "required": [
+    "idUsuario",
+    "idConversacion",
+    "pregunta",
+    "resultado"
+   ],
+   "additionalProperties": false,
+   "x-collection": "consultaasistentes"
+  },
   "ConsultaConfigDispositivoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ConsultaConfigDispositivoSchema",
@@ -6624,6 +6760,38 @@
      "type": "number"
     }
    },
+   "additionalProperties": false
+  },
+  "ConversacionAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ConversacionAsistenteSchema",
+   "type": "object",
+   "properties": {
+    "idConversacion": {
+     "type": "string"
+    },
+    "titulo": {
+     "type": "string"
+    },
+    "inicio": {
+     "type": "string"
+    },
+    "ultima": {
+     "type": "string"
+    },
+    "turnos": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 9007199254740991
+    }
+   },
+   "required": [
+    "idConversacion",
+    "titulo",
+    "inicio",
+    "ultima",
+    "turnos"
+   ],
    "additionalProperties": false
   },
   "CoordenadaOLSchema": {
@@ -8385,6 +8553,119 @@
      "$ref": "#/$defs/ClienteSchema"
     }
    },
+   "additionalProperties": false
+  },
+  "CreateConsultaAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/CreateConsultaAsistenteSchema",
+   "type": "object",
+   "properties": {
+    "idCliente": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "string"
+    },
+    "idsAncestros": {
+     "x-bson": "objectId",
+     "x-ref": "ClienteSchema",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "idUsuario": {
+     "type": "string",
+     "x-bson": "objectId",
+     "x-ref": "UsuarioSchema"
+    },
+    "idPermiso": {
+     "x-bson": "objectId",
+     "x-ref": "PermisoSchema",
+     "type": "string"
+    },
+    "idConversacion": {
+     "type": "string"
+    },
+    "fecha": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "canal": {
+     "$ref": "#/$defs/CanalAsistenteSchema"
+    },
+    "pregunta": {
+     "type": "string"
+    },
+    "respuesta": {
+     "type": "string"
+    },
+    "herramientas": {
+     "x-bson": "mixed",
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/HerramientaConsultaAsistenteSchema"
+     }
+    },
+    "sugerencias": {
+     "$ref": "#/$defs/SugerenciasAsistenteSchema"
+    },
+    "mapa": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/MapaAsistenteSchema"
+    },
+    "modelo": {
+     "type": "string"
+    },
+    "tokensEntrada": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "tokensCache": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "tokensSalida": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "ms": {
+     "type": "number"
+    },
+    "resultado": {
+     "$ref": "#/$defs/ResultadoConsultaAsistenteSchema"
+    },
+    "error": {
+     "type": "string"
+    },
+    "valoracion": {
+     "x-bson": "mixed",
+     "$ref": "#/$defs/ValoracionAsistenteSchema"
+    }
+   },
+   "required": [
+    "idUsuario",
+    "idConversacion",
+    "pregunta",
+    "resultado"
+   ],
    "additionalProperties": false
   },
   "CreateContratacionSchema": {
@@ -30413,6 +30694,36 @@
    "additionalProperties": false,
    "x-collection": "grupousuarios"
   },
+  "HerramientaConsultaAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/HerramientaConsultaAsistenteSchema",
+   "type": "object",
+   "properties": {
+    "nombre": {
+     "type": "string"
+    },
+    "titulo": {
+     "type": "string"
+    },
+    "argumentos": {
+     "type": "object",
+     "propertyNames": {
+      "type": "string"
+     },
+     "additionalProperties": {}
+    },
+    "resultado": {
+     "type": "string"
+    },
+    "esError": {
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "nombre"
+   ],
+   "additionalProperties": false
+  },
   "ImagenesClienteSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ImagenesClienteSchema",
@@ -32939,6 +33250,79 @@
    ],
    "additionalProperties": false
   },
+  "MapaAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/MapaAsistenteSchema",
+   "oneOf": [
+    {
+     "type": "object",
+     "properties": {
+      "tipo": {
+       "type": "string",
+       "const": "puntos"
+      },
+      "titulo": {
+       "type": "string"
+      },
+      "puntos": {
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/PuntoMapaAsistenteSchema"
+       }
+      },
+      "sinUbicacion": {
+       "type": "number"
+      }
+     },
+     "required": [
+      "tipo",
+      "titulo",
+      "puntos"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "tipo": {
+       "type": "string",
+       "const": "recorrido"
+      },
+      "titulo": {
+       "type": "string"
+      },
+      "linea": {
+       "type": "array",
+       "items": {
+        "type": "array",
+        "prefixItems": [
+         {
+          "type": "number"
+         },
+         {
+          "type": "number"
+         }
+        ]
+       }
+      },
+      "inicio": {
+       "$ref": "#/$defs/PuntoMapaAsistenteSchema"
+      },
+      "fin": {
+       "$ref": "#/$defs/PuntoMapaAsistenteSchema"
+      }
+     },
+     "required": [
+      "tipo",
+      "titulo",
+      "linea",
+      "inicio",
+      "fin"
+     ],
+     "additionalProperties": false
+    }
+   ]
+  },
   "MapaEcoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/MapaEcoSchema",
@@ -35169,6 +35553,28 @@
    },
    "additionalProperties": false
   },
+  "PedidoValoracionAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/PedidoValoracionAsistenteSchema",
+   "type": "object",
+   "properties": {
+    "voto": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/VotoAsistenteSchema"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "comentario": {}
+   },
+   "required": [
+    "voto"
+   ],
+   "additionalProperties": false
+  },
   "PerfilDiaEspecialSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/PerfilDiaEspecialSchema",
@@ -36078,6 +36484,50 @@
     "hora",
     "porcentaje",
     "activo"
+   ],
+   "additionalProperties": false
+  },
+  "PuntoMapaAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/PuntoMapaAsistenteSchema",
+   "type": "object",
+   "properties": {
+    "lng": {
+     "type": "number"
+    },
+    "lat": {
+     "type": "number"
+    },
+    "nombre": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "detalle": {
+     "type": "string"
+    },
+    "ruta": {
+     "type": "string"
+    },
+    "fecha": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    }
+   },
+   "required": [
+    "lng",
+    "lat"
    ],
    "additionalProperties": false
   },
@@ -40329,6 +40779,15 @@
    ],
    "additionalProperties": false
   },
+  "ResultadoConsultaAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ResultadoConsultaAsistenteSchema",
+   "type": "string",
+   "enum": [
+    "ok",
+    "error"
+   ]
+  },
   "ResultadoFlushMasivoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ResultadoFlushMasivoSchema",
@@ -43946,6 +44405,17 @@
     "Cambio de bujías",
     "Otro"
    ]
+  },
+  "SugerenciasAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/SugerenciasAsistenteSchema",
+   "maxItems": 3,
+   "type": "array",
+   "items": {
+    "type": "string",
+    "minLength": 3,
+    "maxLength": 80
+   }
   },
   "T100bDeviceSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -59627,6 +60097,26 @@
    ],
    "additionalProperties": false
   },
+  "ValoracionAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/ValoracionAsistenteSchema",
+   "type": "object",
+   "properties": {
+    "voto": {
+     "$ref": "#/$defs/VotoAsistenteSchema"
+    },
+    "comentario": {
+     "type": "string"
+    },
+    "fecha": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "voto"
+   ],
+   "additionalProperties": false
+  },
   "ValoresEventoAlarmaSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ValoresEventoAlarmaSchema",
@@ -60478,6 +60968,15 @@
     }
    },
    "additionalProperties": false
+  },
+  "VotoAsistenteSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/VotoAsistenteSchema",
+   "type": "string",
+   "enum": [
+    "positivo",
+    "negativo"
+   ]
   },
   "WalkTestUnicomSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
