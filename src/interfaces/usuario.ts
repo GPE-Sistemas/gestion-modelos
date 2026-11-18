@@ -2,25 +2,6 @@ import { z } from 'zod';
 import { ClienteSchema, ICliente } from './cliente';
 import type { IPermiso } from './permiso';
 
-// Nota: no se llama RolSchema porque rol.ts ya exporta ese nombre (para el
-// type IRol) y el barrel `export *` daría TS2308.
-export const RolUsuarioSchema = z.enum([
-  'Administrador',
-  'Operador',
-  'Conductor',
-  'Chofer Colectivo',
-  'Consultor',
-  'Técnico',
-  'Final',
-  'Administrador Emergencias', //Puede crear/editar emergencias, hospitales, choferes, solicitantes, centros de atención, destinatarios asistencia, personal de salud.
-  // Puede ver todas las solapas del módulo de emergencias.
-  'Registrador Emergencias', //Puede crear/editar emergencias y solicitantes
-  //Puede ver todas las solapas del módulo emergencias, menos el dashboard con estadísticas
-  'Móvil Emergencias', //Usuario de la aplicación móvil, puede editar los eventos de emergencias (seguimiento)
-  //Puede ver todo lo que está en el módulo de emergencias de la aplicación móvil.
-]);
-export type Rol = z.infer<typeof RolUsuarioSchema>;
-
 export const ModulosSchema = z.object({
   moduloColectivos: z.boolean().optional(),
   moduloAlarmasDomiciliarias: z.boolean().optional(),
