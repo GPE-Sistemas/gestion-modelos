@@ -23,6 +23,15 @@ export const ApikeySchema = z.object({
     .meta({ 'x-bson': 'objectId', 'x-ref': 'ClienteSchema' }), // Si no es global, se le asignan clientes
   modulos: z.array(ModuloSchema).optional(), // Flotas - Alarmas - etc
 
+  // Estado (hallazgo ME-10 del pentest). Una apikey sin estos campos —todas las
+  // anteriores— está activa, no vence y nunca registró uso.
+  /** `false` revoca la apikey sin borrarla. Ausente = activa. */
+  activo: z.boolean().optional(),
+  /** Desde esta fecha la apikey deja de aceptarse. Ausente = no vence. */
+  expira: z.string().optional().meta({ 'x-bson': 'date' }),
+  /** Último pedido aceptado. Lo guarda el servicio que recibe los pedidos, como máximo cada 10 minutos. */
+  ultimoUso: z.string().optional().meta({ 'x-bson': 'date' }),
+
   // Populate
   cliente: ClienteSchema.optional().meta({
     'x-populate': {

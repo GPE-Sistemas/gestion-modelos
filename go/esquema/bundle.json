@@ -1078,6 +1078,17 @@
       "$ref": "#/$defs/ModuloSchema"
      }
     },
+    "activo": {
+     "type": "boolean"
+    },
+    "expira": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "ultimoUso": {
+     "x-bson": "date",
+     "type": "string"
+    },
     "cliente": {
      "x-populate": {
       "ref": "ClienteSchema",
@@ -7102,6 +7113,17 @@
      "items": {
       "$ref": "#/$defs/ModuloSchema"
      }
+    },
+    "activo": {
+     "type": "boolean"
+    },
+    "expira": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "ultimoUso": {
+     "x-bson": "date",
+     "type": "string"
     },
     "cliente": {
      "x-populate": {
@@ -48228,6 +48250,17 @@
      "items": {
       "$ref": "#/$defs/ModuloSchema"
      }
+    },
+    "activo": {
+     "type": "boolean"
+    },
+    "expira": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "ultimoUso": {
+     "x-bson": "date",
+     "type": "string"
     },
     "cliente": {
      "x-populate": {
