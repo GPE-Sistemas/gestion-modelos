@@ -228,6 +228,15 @@ export const AccionesRolSchema = z.enum([
   'Vehículos - Editar contactos ',
   'Vehículos - Editar notas',
   'Vehículos - Editar documentos vehículo',
+  // Reglas de eventos de la app (eventos personalizados propios). Separadas de
+  // «Administración - … eventos personalizados» para que un rol las use desde
+  // la app sin que la web le muestre la administración de eventos.
+  'Vehículos - Crear reglas de eventos',
+  'Vehículos - Editar reglas de eventos',
+  'Vehículos - Eliminar reglas de eventos',
+  // Emergencia AVL (Objetivo AVL): declarar, ajustar y finalizar el reenvío de
+  // emergencia de un vehículo, sin poder administrar otros reenvíos.
+  'Vehículos - Declarar emergencia AVL',
   // Conductores
   'Vehículos - Crear conductor',
   'Vehículos - Editar conductor',
