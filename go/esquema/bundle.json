@@ -1078,6 +1078,17 @@
       "$ref": "#/$defs/ModuloSchema"
      }
     },
+    "activo": {
+     "type": "boolean"
+    },
+    "expira": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "ultimoUso": {
+     "x-bson": "date",
+     "type": "string"
+    },
     "cliente": {
      "x-populate": {
       "ref": "ClienteSchema",
@@ -7102,6 +7113,17 @@
      "items": {
       "$ref": "#/$defs/ModuloSchema"
      }
+    },
+    "activo": {
+     "type": "boolean"
+    },
+    "expira": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "ultimoUso": {
+     "x-bson": "date",
+     "type": "string"
     },
     "cliente": {
      "x-populate": {
@@ -14771,10 +14793,6 @@
     },
     "modulos": {
      "x-bson": "mixed"
-    },
-    "roles": {
-     "type": "array",
-     "items": {}
     },
     "idsRoles": {
      "x-bson": "objectId",
@@ -35761,10 +35779,6 @@
     "modulos": {
      "x-bson": "mixed"
     },
-    "roles": {
-     "type": "array",
-     "items": {}
-    },
     "idsRoles": {
      "x-bson": "objectId",
      "x-ref": "RolSchema",
@@ -42582,23 +42596,6 @@
    "additionalProperties": false,
    "x-collection": "rols"
   },
-  "RolUsuarioSchema": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "$id": "#/$defs/RolUsuarioSchema",
-   "type": "string",
-   "enum": [
-    "Administrador",
-    "Operador",
-    "Conductor",
-    "Chofer Colectivo",
-    "Consultor",
-    "Técnico",
-    "Final",
-    "Administrador Emergencias",
-    "Registrador Emergencias",
-    "Móvil Emergencias"
-   ]
-  },
   "RouteResponseSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/RouteResponseSchema",
@@ -48228,6 +48225,17 @@
      "items": {
       "$ref": "#/$defs/ModuloSchema"
      }
+    },
+    "activo": {
+     "type": "boolean"
+    },
+    "expira": {
+     "x-bson": "date",
+     "type": "string"
+    },
+    "ultimoUso": {
+     "x-bson": "date",
+     "type": "string"
     },
     "cliente": {
      "x-populate": {
@@ -55610,10 +55618,6 @@
     },
     "modulos": {
      "x-bson": "mixed"
-    },
-    "roles": {
-     "type": "array",
-     "items": {}
     },
     "idsRoles": {
      "x-bson": "objectId",

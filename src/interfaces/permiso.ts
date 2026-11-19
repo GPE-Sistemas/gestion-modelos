@@ -5,7 +5,7 @@ import type { IDispositivoAlarma } from './dispositivo-alarma';
 import type { IGrupo } from './grupo';
 import type { ILuminaria } from './luminaria';
 import { IRol, RolSchema } from './rol';
-import type { IModulos, IUsuario, Rol } from './usuario';
+import type { IModulos, IUsuario } from './usuario';
 
 export const NivelSchema = z.enum(['Cliente', 'Grupo', 'Entidad']);
 export type Nivel = z.infer<typeof NivelSchema>;
@@ -93,11 +93,6 @@ export const PermisoSchema = z.object({
     'x-bson': 'mixed',
   }),
   modulos: z.custom<IModulos>().optional().meta({ 'x-bson': 'mixed' }),
-
-  /**
-   * @deprecated El campo 'roles' está en desuso. Se eliminará en futuras versiones. Los reemplaza "idsRoles" y el virtual "Rols"
-   */
-  roles: z.array(z.custom<Rol>()).optional(),
 
   idsRoles: z
     .array(z.string())
@@ -207,11 +202,6 @@ export interface IPermiso {
   activo?: boolean; // Si el permiso está activo o no
   vencimiento?: IVencimientoPermisoUsuario;
   modulos?: IModulos;
-
-  /**
-   * @deprecated El campo 'roles' está en desuso. Se eliminará en futuras versiones. Los reemplaza "idsRoles" y el virtual "Rols"
-   */
-  roles?: Rol[];
 
   idsRoles?: string[]; // IDs de los roles asignados al permiso
 
