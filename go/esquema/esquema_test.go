@@ -221,15 +221,24 @@ func TestSubSchemasSonSoloLosSubDocumentosReales(t *testing.T) {
 	// liquidaciones, precios) son sub-schemas reales a propósito: llevan
 	// fechas y ObjectIds adentro que tienen que castearse. Como Mixed
 	// quedarían string y una comparación contra Date daría siempre falso.
+	//
+	// configperfils.migracion ({idsOrigen, pendiente}) es sub-schema real para
+	// que idsOrigen se castee a ObjectId y para poder apagar `pendiente` sin
+	// reescribir idsOrigen.
 	permitidos := []string{
 		"activos.vehiculo",
+		"configperfils.migracion",
 		"contrataciones.alcance",
+		"dashcams.canales",
+		"dashcams.configVideo",
+		"dashcams.equipo",
 		"facturacionclientes.datosFiscales",
 		"facturacionclientes.pagadoresPorServicio",
 		"liquidaciones.destino",
 		"liquidaciones.emisor",
 		"liquidaciones.lineas",
 		"liquidaciones.porAlicuota",
+		"liquidaciones.tipoCambio",
 		"precios.ajuste",
 		"precios.descuento",
 		"precios.escalas",

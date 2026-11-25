@@ -5795,6 +5795,75 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
+      "cliente": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idCliente",
+        "foreignField": "_id",
+        "justOne": true
+       },
+       "$ref": "#/$defs/ClienteSchema"
+      },
+      "ancestros": {
+       "x-populate": {
+        "ref": "ClienteSchema",
+        "localField": "idsAncestros",
+        "foreignField": "_id",
+        "justOne": false
+       },
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/ClienteSchema"
+       }
+      },
+      "tipoConfig": {
+       "type": "string",
+       "const": "Luminaria"
+      },
+      "valores": {
+       "x-bson": "mixed"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "_id": {
+       "type": "string"
+      },
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "nombre": {
+       "type": "string"
+      },
+      "global": {
+       "type": "boolean"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "idsAncestros": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "cliente": {
        "x-populate": {
         "ref": "ClienteSchema",
@@ -5857,6 +5926,9 @@
       },
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
       },
       "cliente": {
        "x-populate": {
@@ -5921,6 +5993,9 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "cliente": {
        "x-populate": {
         "ref": "ClienteSchema",
@@ -5984,6 +6059,9 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "cliente": {
        "x-populate": {
         "ref": "ClienteSchema",
@@ -6046,6 +6124,9 @@
       },
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
       },
       "cliente": {
        "x-populate": {
@@ -8369,6 +8450,43 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
+      "tipoConfig": {
+       "type": "string",
+       "const": "Luminaria"
+      },
+      "valores": {
+       "x-bson": "mixed"
+      }
+     },
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "nombre": {
+       "type": "string"
+      },
+      "global": {
+       "type": "boolean"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "tipoConfig": {
        "type": "string",
        "const": "Luminaria GPE"
@@ -8399,6 +8517,9 @@
       },
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
       },
       "tipoConfig": {
        "type": "string",
@@ -8431,6 +8552,9 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "tipoConfig": {
        "type": "string",
        "const": "Luminaria ACTIS FING General"
@@ -8462,6 +8586,9 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "tipoConfig": {
        "type": "string",
        "const": "Luminaria ACTIS FING Dimming"
@@ -8492,6 +8619,9 @@
       },
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
       },
       "tipoConfig": {
        "type": "string",
@@ -33874,6 +34004,24 @@
    ],
    "additionalProperties": false
   },
+  "MigracionConfigPerfilSchema": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "#/$defs/MigracionConfigPerfilSchema",
+   "type": "object",
+   "properties": {
+    "idsOrigen": {
+     "x-bson": "objectId",
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "pendiente": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
   "ModalidadEquipoSchema": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
    "$id": "#/$defs/ModalidadEquipoSchema",
@@ -49414,6 +49562,46 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
+      "tipoConfig": {
+       "type": "string",
+       "const": "Luminaria"
+      },
+      "valores": {
+       "x-bson": "mixed"
+      }
+     },
+     "required": [
+      "tipoConfig"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "fechaCreacion": {
+       "x-bson": "date",
+       "type": "string"
+      },
+      "nombre": {
+       "type": "string"
+      },
+      "global": {
+       "type": "boolean"
+      },
+      "idCliente": {
+       "x-bson": "objectId",
+       "x-ref": "ClienteSchema",
+       "type": "string"
+      },
+      "tipoEntidad": {
+       "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "tipoConfig": {
        "type": "string",
        "const": "Luminaria GPE"
@@ -49447,6 +49635,9 @@
       },
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
       },
       "tipoConfig": {
        "type": "string",
@@ -49482,6 +49673,9 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "tipoConfig": {
        "type": "string",
        "const": "Luminaria ACTIS FING General"
@@ -49516,6 +49710,9 @@
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
       },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
+      },
       "tipoConfig": {
        "type": "string",
        "const": "Luminaria ACTIS FING Dimming"
@@ -49549,6 +49746,9 @@
       },
       "tipoEntidad": {
        "$ref": "#/$defs/TipoEntidadConfigPerfilSchema"
+      },
+      "migracion": {
+       "$ref": "#/$defs/MigracionConfigPerfilSchema"
       },
       "tipoConfig": {
        "type": "string",
