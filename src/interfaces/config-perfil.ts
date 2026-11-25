@@ -63,10 +63,139 @@ export type IConfigPerfilLuminariaCitiLight = Omit<
   | 'alarma'
 >;
 /* ────────────────────────────────────────────────
+ *  PERFIL ÚNICO DE LUMINARIAS (tipoConfig 'Luminaria')
+ *  Un solo perfil aplicable a cualquier luminaria, sea cual sea su tipo de nodo.
+ *  - `comun`: lo que comparten los tipos de nodo. El backend lo traduce al
+ *    formato de cada tipo al armar la config deseada.
+ *  - `porTipo[tipo].propio`: lo que sólo existe en ese tipo.
+ *  - `porTipo[tipo].reemplaza`: valores en el formato del dispositivo que pisan
+ *    lo que saldría de `comun` para ese tipo (ej.: modo híbrido de ACTIS).
+ *  Lo que no se define no se gobierna: el nodo conserva lo que tiene.
+ * ────────────────────────────────────────────────*/
+
+// 'Sin automatización' equivale a 'Manual' en GPE/Wellness y a relé en ACTIS.
+export type ModoPerfilLuminaria =
+  | 'Fotocélula'
+  | 'Astronómico'
+  | 'Sin automatización';
+
+// Valores de período que admiten todos los tipos de nodo (minutos).
+export type PeriodoReportePerfilLuminaria = 5 | 15 | 30 | 60 | 90 | 120 | 180;
+
+export interface IPuntoCurvaDimming {
+  hora: string; // 'HH:mm', hora local de la luminaria, múltiplo de 10 minutos
+  porcentaje: number; // 0-100
+}
+
+// Curva de un día (0:00 a 24:00) con lazo cerrado: antes del primer punto rige
+// el último. Hasta 8 puntos.
+export interface ICurvaDimming {
+  puntos: IPuntoCurvaDimming[];
+}
+
+export interface IConfigPerfilLuminariaComun {
+  modo?: ModoPerfilLuminaria;
+  husoHorario?: number; // horas respecto de UTC (ej.: -3)
+  astronomico?: {
+    offsetAtardecerMin?: number; // -128 a 127
+    offsetAmanecerMin?: number; // -128 a 127
+  };
+  // Curva diaria. `porDefecto` rige cuando la curva no tiene puntos.
+  dimming?: ICurvaDimming & {
+    habilitado: boolean;
+    porDefecto: number; // 0-100
+  };
+  reportes?: {
+    periodoEstadoMin?: PeriodoReportePerfilLuminaria;
+  };
+}
+
+export interface IConfigPerfilLuminariaPropioGPE {
+  fotocelula?: {
+    limLuzInferior?: number; // 1-3000
+    limLuzSuperior?: number; // 1-3000
+  };
+  radio?: {
+    adrHabilitado?: boolean;
+    dataRate?: number;
+  };
+}
+
+export interface IConfigPerfilLuminariaPropioACTIS {
+  fotocelula?: {
+    umbralSuperior?: number; // 0-255
+    umbralInferior?: number; // 0-255
+  };
+  configACK?: IDispositivoLuminariaACTIS['configACK'];
+  iniciarEncendida?: boolean; // estado al energizarse
+  // Qué cambios informa el nodo además de los reportes periódicos.
+  avisos?: {
+    reportarEncendidoApagado?: boolean;
+    reportarDimerizado?: boolean;
+  };
+  // Cada cuánto informa el consumo (min). Sin definir, el valor habitual: 15.
+  periodoEnergiaMin?: PeriodoReportePerfilLuminaria;
+  // Curvas que se suman a la diaria común. En el nodo mandan, en este orden:
+  // día especial, días de la semana, diarias.
+  dimmingAdicional?: {
+    diaria2?: ICurvaDimming;
+    diasSemana1?: ICurvaDimming & { diasSemana: boolean[] }; // [domingo..sábado]
+    diasSemana2?: ICurvaDimming & { diasSemana: boolean[] };
+    diasEspeciales?: (ICurvaDimming & { diaDelAnio: number })[]; // hasta 4
+  };
+}
+
+export type IConfigPerfilLuminariaPropioCitiLight = Pick<
+  IConfigPerfilLuminariaCitiLight,
+  'systemConfig' | 'addon'
+> & {
+  etapasDimming?: NonNullable<
+    IConfigPerfilLuminariaCitiLight['astronomico']
+  >['etapasDimming'];
+};
+
+export interface IConfigPerfilLuminariaPorTipo {
+  'Luminaria GPE'?: {
+    propio?: IConfigPerfilLuminariaPropioGPE;
+    reemplaza?: IConfigPerfilLuminariaGPE;
+  };
+  'Luminaria ACTIS FING'?: {
+    propio?: IConfigPerfilLuminariaPropioACTIS;
+    reemplaza?: Omit<IDispositivoLuminariaACTIS, 'alarma' | 'reporteFechaHora'>;
+  };
+  'Luminaria Wellness'?: {
+    reemplaza?: IConfigPerfilLuminariaWellness;
+  };
+  'Luminaria CitiLight'?: {
+    propio?: IConfigPerfilLuminariaPropioCitiLight;
+    reemplaza?: IConfigPerfilLuminariaCitiLight;
+  };
+}
+
+export interface IConfigPerfilLuminaria {
+  comun?: IConfigPerfilLuminariaComun;
+  porTipo?: IConfigPerfilLuminariaPorTipo;
+}
+
+// Marca de los perfiles 'Luminaria' creados a partir de perfiles por tipo.
+// Mientras `pendiente` es true el perfil no se puede asignar.
+export const MigracionConfigPerfilSchema = z.object({
+  idsOrigen: z
+    .array(z.string())
+    .optional()
+    .meta({ 'x-bson': 'objectId' }),
+  pendiente: z.boolean().optional(),
+});
+export type IMigracionConfigPerfil = z.infer<
+  typeof MigracionConfigPerfilSchema
+>;
+
+/* ────────────────────────────────────────────────
  *  MAPA TIPO → CONFIG DESEADA
  * ────────────────────────────────────────────────*/
 
 export type MapaConfigPerfil = {
+  Luminaria: IConfigPerfilLuminaria;
   'Luminaria GPE': IConfigPerfilLuminariaGPE;
   'Luminaria Wellness': IConfigPerfilLuminariaWellness;
   'Luminaria ACTIS FING General': IConfigPerfilLuminariaACTISGeneral;
@@ -91,6 +220,7 @@ export interface IConfigPerfilBase<T extends keyof MapaConfigPerfil> {
   tipoEntidad?: TipoEntidadConfigPerfil;
   tipoConfig?: T;
   valores?: MapaConfigPerfil[T];
+  migracion?: IMigracionConfigPerfil;
 
   // Populate
   cliente?: ICliente;
@@ -116,6 +246,7 @@ const ConfigPerfilCamposSchema = z.object({
 
   // Tipo y datos
   tipoEntidad: TipoEntidadConfigPerfilSchema.optional(),
+  migracion: MigracionConfigPerfilSchema.optional(),
 
   // Populate
   cliente: ClienteSchema.optional().meta({
@@ -140,8 +271,15 @@ const ConfigPerfilCamposSchema = z.object({
 // arrastra el shape completo del ciclo y revienta la serialización de
 // declarations (TS7056) acá y en los consumidores NestJS.
 // valores es @Prop({type: Object}) en el legacy (config-perfil/schema.ts): Mixed,
-// Mongoose no castea adentro. Igual en las cuatro variantes.
-const VarianteConfigPerfilLuminariaGPE = ConfigPerfilCamposSchema.extend({
+// Mongoose no castea adentro. Igual en todas las variantes.
+const VarianteConfigPerfilLuminaria = ConfigPerfilCamposSchema.extend({
+  tipoConfig: z.literal('Luminaria').optional(),
+  valores: z
+    .custom<IConfigPerfilLuminaria>()
+    .optional()
+    .meta({ 'x-bson': 'mixed' }),
+});
+const VarianteConfigPerfilLuminariaGPE =ConfigPerfilCamposSchema.extend({
   tipoConfig: z.literal('Luminaria GPE').optional(),
   valores: z
     .custom<IConfigPerfilLuminariaGPE>()
@@ -185,6 +323,7 @@ const VarianteConfigPerfilLuminariaCitiLight = ConfigPerfilCamposSchema.extend({
 
 export const ConfigPerfilSchema = z
   .union([
+    VarianteConfigPerfilLuminaria,
     VarianteConfigPerfilLuminariaGPE,
     VarianteConfigPerfilLuminariaWellness,
     VarianteConfigPerfilLuminariaACTISGeneral,
@@ -194,6 +333,7 @@ export const ConfigPerfilSchema = z
   .meta({ 'x-collection': 'configperfils' });
 
 export type IConfigPerfil =
+  | IConfigPerfilBase<'Luminaria'>
   | IConfigPerfilBase<'Luminaria GPE'>
   | IConfigPerfilBase<'Luminaria Wellness'>
   | IConfigPerfilBase<'Luminaria ACTIS FING General'>
@@ -222,6 +362,7 @@ type Omitir = '_id' | 'idsAncestros' | 'cliente' | 'ancestros';
  *  Mantiene `tipoConfig` como discriminante.
  */
 export const CreateConfigPerfilSchema = z.union([
+  VarianteConfigPerfilLuminaria.omit(camposOmitidos),
   VarianteConfigPerfilLuminariaGPE.omit(camposOmitidos),
   VarianteConfigPerfilLuminariaWellness.omit(camposOmitidos),
   VarianteConfigPerfilLuminariaACTISGeneral.omit(camposOmitidos),
@@ -229,6 +370,7 @@ export const CreateConfigPerfilSchema = z.union([
   VarianteConfigPerfilLuminariaCitiLight.omit(camposOmitidos),
 ]);
 export type ICreateConfigPerfil =
+  | Omit<IConfigPerfilBase<'Luminaria'>, Omitir>
   | Omit<IConfigPerfilBase<'Luminaria GPE'>, Omitir>
   | Omit<IConfigPerfilBase<'Luminaria Wellness'>, Omitir>
   | Omit<IConfigPerfilBase<'Luminaria ACTIS FING General'>, Omitir>
@@ -239,6 +381,9 @@ export type ICreateConfigPerfil =
  *  TS valida que `valores` corresponda al `tipoConfig`.
  */
 export const UpdateConfigPerfilSchema = z.union([
+  VarianteConfigPerfilLuminaria.omit(camposOmitidos).required({
+    tipoConfig: true,
+  }),
   VarianteConfigPerfilLuminariaGPE.omit(camposOmitidos).required({
     tipoConfig: true,
   }),
@@ -256,6 +401,9 @@ export const UpdateConfigPerfilSchema = z.union([
   }),
 ]);
 export type IUpdateConfigPerfil =
+  | ({ tipoConfig: 'Luminaria' } & Partial<
+      Omit<IConfigPerfilBase<'Luminaria'>, Omitir | 'tipoConfig'>
+    >)
   | ({ tipoConfig: 'Luminaria GPE' } & Partial<
       Omit<IConfigPerfilBase<'Luminaria GPE'>, Omitir | 'tipoConfig'>
     >)
