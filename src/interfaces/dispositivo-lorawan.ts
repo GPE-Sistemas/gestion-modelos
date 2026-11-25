@@ -586,6 +586,12 @@ export interface IDispositivoLorawanBase<
   ultimoReporte?: IReporteGenerico;
   margin?: number; //Es la señal del dispositivo, expresada en dB
   tiempoLimiteComunicacion?: number; // Tiempo máximo sin reportar (en horas) antes de generar evento "Sin comunicación".
+  /**
+   * Si se crea sola la luminaria (y su puesta, si el cliente usa puestas) cuando
+   * el nodo empieza a reportar. Manda sobre `cliente.config.moduloLuminarias.autocrearLuminarias`.
+   * Sin valor se usa el del cliente y, sin ese, se crea.
+   */
+  crearLuminariaAlReportar?: boolean;
 
   ubicacion?: IGeoJSONPoint; // GeoJSON de la ubicacion del dispositivo
   ultimoComando?: IComando; //Último downlink enviado a este dispositivo
@@ -639,6 +645,7 @@ const DispositivoLorawanCamposSchema = z.object({
   ultimoReporte: z.custom<IReporteGenerico>().optional().meta({ 'x-bson': 'mixed' }),
   margin: z.number().optional(), //Es la señal del dispositivo, expresada en dB
   tiempoLimiteComunicacion: z.number().optional(), // Tiempo máximo sin reportar (en horas) antes de generar evento "Sin comunicación".
+  crearLuminariaAlReportar: z.boolean().optional(), // Se crea sola la luminaria (y su puesta) cuando el nodo reporta. Manda sobre el flag del cliente.
 
   ubicacion: GeoJSONPointSchema.optional().meta({ 'x-bson': 'mixed' }), // GeoJSON de la ubicacion del dispositivo
   ultimoComando: z.custom<IComando>().optional().meta({ 'x-bson': 'mixed' }), //Último downlink enviado a este dispositivo

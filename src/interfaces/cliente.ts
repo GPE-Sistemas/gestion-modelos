@@ -177,6 +177,7 @@ export const ModuloLuminariasSchema = z.object({
   derivarEventosTecnicos: z.boolean().optional(),
   compartirLuminarias: z.boolean().optional(),
   usaPuestas: z.boolean().optional(), // Habilita la creación de puestas y la relación puesta-luminaria
+  autocrearLuminarias: z.boolean().optional(), // Valor por defecto de «crear la luminaria cuando el nodo reporte» al dar de alta nodos. Sin valor, se crea. No se hereda entre clientes.
   idsPerfilConfigPorDefecto: z.array(z.string()).optional(),
   informe: ConfigInformesSchema.optional(),
 });

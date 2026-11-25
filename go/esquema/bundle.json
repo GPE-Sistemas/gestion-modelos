@@ -9543,6 +9543,9 @@
       "tiempoLimiteComunicacion": {
        "type": "number"
       },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
+      },
       "ubicacion": {
        "x-bson": "mixed",
        "$ref": "#/$defs/GeoJSONPointSchema"
@@ -9673,6 +9676,9 @@
       },
       "tiempoLimiteComunicacion": {
        "type": "number"
+      },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
       },
       "ubicacion": {
        "x-bson": "mixed",
@@ -9805,6 +9811,9 @@
       "tiempoLimiteComunicacion": {
        "type": "number"
       },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
+      },
       "ubicacion": {
        "x-bson": "mixed",
        "$ref": "#/$defs/GeoJSONPointSchema"
@@ -9935,6 +9944,9 @@
       },
       "tiempoLimiteComunicacion": {
        "type": "number"
+      },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
       },
       "ubicacion": {
        "x-bson": "mixed",
@@ -21770,6 +21782,9 @@
       "tiempoLimiteComunicacion": {
        "type": "number"
       },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
+      },
       "ubicacion": {
        "x-bson": "mixed",
        "$ref": "#/$defs/GeoJSONPointSchema"
@@ -21933,6 +21948,9 @@
       },
       "tiempoLimiteComunicacion": {
        "type": "number"
+      },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
       },
       "ubicacion": {
        "x-bson": "mixed",
@@ -22098,6 +22116,9 @@
       "tiempoLimiteComunicacion": {
        "type": "number"
       },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
+      },
       "ubicacion": {
        "x-bson": "mixed",
        "$ref": "#/$defs/GeoJSONPointSchema"
@@ -22261,6 +22282,9 @@
       },
       "tiempoLimiteComunicacion": {
        "type": "number"
+      },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
       },
       "ubicacion": {
        "x-bson": "mixed",
@@ -34445,6 +34469,9 @@
      "type": "boolean"
     },
     "usaPuestas": {
+     "type": "boolean"
+    },
+    "autocrearLuminarias": {
      "type": "boolean"
     },
     "idsPerfilConfigPorDefecto": {
@@ -50462,6 +50489,9 @@
       "tiempoLimiteComunicacion": {
        "type": "number"
       },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
+      },
       "ubicacion": {
        "x-bson": "mixed",
        "$ref": "#/$defs/GeoJSONPointSchema"
@@ -50592,6 +50622,9 @@
       },
       "tiempoLimiteComunicacion": {
        "type": "number"
+      },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
       },
       "ubicacion": {
        "x-bson": "mixed",
@@ -50724,6 +50757,9 @@
       "tiempoLimiteComunicacion": {
        "type": "number"
       },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
+      },
       "ubicacion": {
        "x-bson": "mixed",
        "$ref": "#/$defs/GeoJSONPointSchema"
@@ -50854,6 +50890,9 @@
       },
       "tiempoLimiteComunicacion": {
        "type": "number"
+      },
+      "crearLuminariaAlReportar": {
+       "type": "boolean"
       },
       "ubicacion": {
        "x-bson": "mixed",
