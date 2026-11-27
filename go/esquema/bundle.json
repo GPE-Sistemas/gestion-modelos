@@ -31139,6 +31139,33 @@
     "totalLuminarias": {
      "type": "number"
     },
+    "luminariasPorEstado": {
+     "type": "object",
+     "properties": {
+      "sinNodo": {
+       "type": "number"
+      },
+      "errorComunicacion": {
+       "type": "number"
+      },
+      "errorEncendido": {
+       "type": "number"
+      },
+      "alarma": {
+       "type": "number"
+      },
+      "encendida": {
+       "type": "number"
+      },
+      "apagada": {
+       "type": "number"
+      },
+      "sinCalcular": {
+       "type": "number"
+      }
+     },
+     "additionalProperties": false
+    },
     "luminariasEncendidas": {
      "type": "number"
     },
