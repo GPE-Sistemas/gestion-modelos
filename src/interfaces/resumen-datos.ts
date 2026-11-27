@@ -81,32 +81,56 @@ export type IEncendidoDiarioLuminarias = z.infer<
   typeof EncendidoDiarioLuminariasSchema
 >;
 
+// Foto del parque de un cliente en el momento en que se arma el informe (el
+// cron lo hace a las 7:00 de Argentina). Sale del estado calculado que el
+// backend guarda en cada luminaria (`luminaria.estado`), igual que los tableros.
+// Cada documento cuenta sólo las luminarias propias del cliente: para un cliente
+// con hijos se suman los documentos de toda su jerarquía.
 export const InformeDiarioLuminariasSchema = z.object({
   // Generales
   totalLuminarias: z.number().optional(),
 
-  // Encendido / Apagado (de ultimoReportePeriodico.valores.turnOnOffStatus)
+  // Luminarias por estado calculado (`luminaria.estado.codigo`). La que todavía
+  // no tiene estado calculado va en `sinCalcular`, y no entra en ningún otro.
+  luminariasPorEstado: z
+    .object({
+      sinNodo: z.number().optional(), // 0
+      errorComunicacion: z.number().optional(), // 1
+      errorEncendido: z.number().optional(), // 2
+      alarma: z.number().optional(), // 3
+      encendida: z.number().optional(), // 4
+      apagada: z.number().optional(), // 5
+      sinCalcular: z.number().optional(),
+    })
+    .optional(),
+
+  // Encendido / Apagado (`luminaria.estado.encendida`: true, false o sin dato)
   luminariasEncendidas: z.number().optional(),
   luminariasApagadas: z.number().optional(),
-  sinDatoEncendido: z.number().optional(), // Sin reporte periódico reciente
+  sinDatoEncendido: z.number().optional(),
 
-  // Conectividad (fechaUltimaComunicacion dentro de las últimas 24h)
+  // Conectividad. Desconectadas: las que están en «Error de comunicación»
+  // (pasaron su tiempo límite de comunicación). Conectadas: las demás que
+  // tienen nodo.
   luminariasConectadas: z.number().optional(),
   luminariasDesconectadas: z.number().optional(),
 
-  // Estado operativo (campo `estado` de la luminaria)
+  // Condición administrativa (`luminaria.estadoOperativo`)
   luminariasOperativas: z.number().optional(),
   luminariasEnMantenimiento: z.number().optional(),
-  sinEstado: z.number().optional(), // Sin campo `estado` asignado
+  sinEstado: z.number().optional(), // Sin `estadoOperativo` asignado
 
-  // Consumo energético del día en kWh (reservado para implementación futura)
+  // Sin uso: el consumo se informa desde los resúmenes de consumo
   consumoTotal: z.number().optional(),
 
-  // Alertas (de ultimoReportePeriodico.valores.alarmas)
+  // Alarmas. `luminariasConAlarmas`: las que están en estado «Alarma».
+  // `tiposAlarmas`: luminarias con cada alarma activa, estén en el estado que
+  // estén (una con error de comunicación también puede tener alarmas).
   luminariasConAlarmas: z.number().optional(),
-  tiposAlarmas: z.record(z.string(), z.number()).optional(), // { 'Sobre voltaje': 2, 'Fallo LED': 1 }
+  tiposAlarmas: z.record(z.string(), z.number()).optional(), // { 'Sobretensión': 2, 'Potencia baja': 1 }
 
-  // Cortes de energía (luminarias GPE con energiaExterna === false en último reporte)
+  // Sin energía de red: el último reporte periódico trae energiaExterna === false.
+  // Sólo lo informan los nodos que miden la energía de red.
   luminariasConCortesEnergia: z.number().optional(),
 });
 export type IInformeDiarioLuminarias = z.infer<
